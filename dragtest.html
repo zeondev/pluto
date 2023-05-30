@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .desktop {
+        width: 800px;
+        height: 600px;
+        border: 1px solid #333;
+        background-image: url("https://cdn.discordapp.com/attachments/810362509441368084/981811723445108806/unknown.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        user-select: none;
+        gap: 10px;
+      }
+
+      .selection {
+        position: absolute;
+        border: 1px solid #0078d7;
+        background-color: #15345d;
+        opacity: 0.5;
+        display: none;
+      }
+
+      .item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 10px;
+        width: 74px;
+        height: 86px;
+        border-radius: 5px;
+        position: relative;
+        text-shadow: 0px 0px 3px #000;
+        gap: 6px;
+      }
+
+      .item img {
+        width: 48px;
+        height: 48px;
+      }
+
+      .item:hover {
+        background-color: #ffffff4f;
+      }
+
+      .selected {
+        background-color: #85889184 !important;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background-color: rgb(25, 25, 25);
+        color: white;
+        font-family: "Roboto", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="desktop">
+      <div class="selection" id="selection"></div>
+      <div data-item="item1" class="item">
+        <img
+          ondragstart="return false"
+          src="https://cdn.discordapp.com/attachments/810362509441368084/981823475868114954/unknown.png"
+        />
+        <span>item 1</span>
+      </div>
+      <div data-item="item2" class="item">
+        <img
+          ondragstart="return false"
+          src="https://cdn.discordapp.com/attachments/810362509441368084/981823475868114954/unknown.png"
+        />
+        <span>item 2</span>
+      </div>
+      <div data-item="item3" class="item">
+        <img
+          ondragstart="return false"
+          src="https://cdn.discordapp.com/attachments/810362509441368084/981823475868114954/unknown.png"
+        />
+        <span>item 3</span>
+      </div>
+    </div>
+    <p>current state: <span id="state"></span></p>
+    <script>
+      let apps = [
+        {
+          id: "item1",
+          name: "item 1",
+          launch: function () {
+            console.log("item 1 launched");
+          },
+        },
+        {
+          id: "item2",
+          name: "item 2",
+          launch: function () {
+            console.log("item 2 launched");
+          },
+        },
+        {
+          id: "item3",
+          name: "item 3",
+          launch: function () {
+            console.log("item 3 launched");
+          },
+        },
+      ];
+
+      var desktop = document.querySelector(".desktop");
+      var selection = document.createElement("div");
+      selection.classList.add("selection");
+      desktop.appendChild(selection);
+      var startX, startY;
+      var mouseDown = false;
+      var isSelecting = false;
+      let State = document.getElementById("state");
+      State.innerText = "idle";
+      desktop.addEventListener("mousedown", function (e) {
+        mouseDown = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        selection.style.width = 0;
+        selection.style.height = 0;
+        selection.style.top = startY + "px";
+        selection.style.left = startX + "px";
+        selection.style.display = "block";
+        isSelecting = true;
+        mouseMoveHandler(e); // to update the selection box
+        State.innerText = "selecting";
+      });
+      desktop.addEventListener("mouseup", function (e) {
+        mouseDown = false;
+        isSelecting = false;
+        selection.style.display = "none";
+        State.innerText = "idle";
+      });
+      function mouseMoveHandler(e) {
+        selection.style.width = Math.abs(e.clientX - startX) + "px";
+        selection.style.height = Math.abs(e.clientY - startY) + "px";
+        if (e.clientX > startX) {
+          selection.style.left = startX + "px";
+        } else {
+          selection.style.left = e.clientX + "px";
+        }
+        if (e.clientY > startY) {
+          selection.style.top = startY + "px";
+        } else {
+          selection.style.top = e.clientY + "px";
+        }
+
+        var items = desktop.querySelectorAll(".item");
+        for (var i = 0; i < items.length; i++) {
+          var item = items[i];
+          var itemRect = item.getBoundingClientRect();
+          var selectionRect = selection.getBoundingClientRect();
+          if (
+            /* item is touching selection */ itemRect.top <
+              selectionRect.bottom &&
+            itemRect.bottom > selectionRect.top &&
+            itemRect.left < selectionRect.right &&
+            itemRect.right > selectionRect.left
+          ) {
+            item.classList.add("selected");
+          } else {
+            item.classList.remove("selected");
+          }
+        }
+        State.innerText = "selecting";
+      }
+      desktop.addEventListener("mousemove", function (e) {
+        if (mouseDown) {
+          if (isSelecting) {
+            mouseMoveHandler(e);
+          }
+        }
+      });
+      // dblclick desktop event
+      desktop.addEventListener("dblclick", function (e) {
+        // get the item that was clicked
+        var item = e.target;
+        if (item.classList.contains("item")) {
+          // find
+        }
+      });
+    </script>
+  </body>
+</html>
