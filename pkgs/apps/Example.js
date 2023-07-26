@@ -26,10 +26,10 @@ export default {
     MyWindow = new Win({
       title: "Example App",
       content: "Hello",
+      pid: Root.PID,
       onclose: () => {
         onEnd();
       },
-      s,
     });
 
     wrapper = MyWindow.window.querySelector(".win-content");

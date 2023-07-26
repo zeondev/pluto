@@ -8,8 +8,10 @@ let initialWidth;
 let initialHeight;
 let initialLeft;
 let initialTop;
+let windowPid = -1;
 
 let lib = {};
+let core = {};
 const windowsList = [];
 
 function getWindowObjectById(id) {
@@ -22,8 +24,9 @@ export default {
     "This is the base window system for Pluto. This library includes function to create and destroy windows.",
   ver: 0.1, // Compatible with core 0.1
   type: "library",
-  init: function(l) {
+  init: function (l, c) {
     lib = l;
+    core = c;
   },
   data: {
     // exported functions here
@@ -58,10 +61,10 @@ export default {
           this.options.parent = "body";
         }
         if (!this.options.onclose) {
-          this.options.onclose = function() { };
+          this.options.onclose = function () {};
         }
         if (!this.options.onresize) {
-          this.options.onresize = function() { };
+          this.options.onresize = function () {};
         }
         if (this.options.resizable === undefined) {
           this.options.resizable = true;
@@ -69,6 +72,11 @@ export default {
         if (this.options.autofocus === undefined) {
           this.options.autofocus = true;
         }
+        if (this.options.pid === undefined) {
+          this.options.pid = -1;
+        }
+
+        windowPid = this.options.pid;
         this.init();
 
         // may be useful?
@@ -137,7 +145,7 @@ export default {
         this.window = thisWin;
 
         if (this.options.autofocus === true) {
-          focusWindow(this.window);
+          focusWindow(this.window, this.options.pid);
         }
       }
 
@@ -155,7 +163,7 @@ export default {
           ) {
             if (this.options.resizable === false) return;
             if (this.state !== "min") this.maximize();
-            this.options.onresize && this.options.onresize('max');
+            this.options.onresize && this.options.onresize("max");
           } else {
             lastClickTime = currentTime;
             lastClickCoords.x = e.clientX;
@@ -244,6 +252,7 @@ export default {
         });
       }
     },
+    focusWindow,
   },
 };
 
@@ -264,45 +273,60 @@ function focusWindow(x) {
   }
   x.style.zIndex = zIn + 2;
   x.classList.add("focus");
+
+  // console.log("[WS]", x.id, windowsList);
+
+  core.broadcastEventToProcs({
+    type: "wsEvent",
+    data: {
+      type: "focusedWindow",
+      data: getWindowObjectById(x.id),
+    },
+  });
 }
 
 function BeginWinDrag(e) {
+  // check if window can be selected
+  if (!e.clientX && !e.touches) return;
+  // get pointer position
   mouseX = e.clientX || e.touches[0].clientX;
   mouseY = e.clientY || e.touches[0].clientY;
+  // get window title
   let x = document.elementFromPoint(mouseX, mouseY).closest(".title");
   if (x === null) {
     // Check if it's a resize grip element
     x = document.elementFromPoint(mouseX, mouseY).closest(".resize-grip");
     if (x) {
+      // start resizing
       const windowElement = x.closest(".win-window");
       winRef = windowElement;
       return startResize(e);
-
-      // const windowId = windowElement.dataset.windowId;
-      // const windowObject = getWindowObjectById(windowId);
-
-      // if (windowObject && windowObject.options.resizable === true) {
-      //   winRef = windowElement;
-      //   startResize(e);
-      // }
     }
     return;
   }
+  // get the window
   x = x.closest(".win-window");
-  focusWindow(x); // not part of context on purpose
+  // focus it
+  focusWindow(x);
+  // prep for dragging
   x.classList.add("dragging");
   mouseDown = true;
   winRef = x;
 }
 
 function WinDrag(e) {
+  // if a window is dragging
   if (winRef !== null) {
+    // check if pressed and not resizing
     if (mouseDown && !isResizing) {
+      // get cursor position
       let x = e.clientX || e.touches[0].clientX;
       let y = e.clientY || e.touches[0].clientY;
+      // subtract new position from old
       let dx = x - mouseX;
       let dy = y - mouseY;
 
+      // relative to window?
       let newPositionX = parseInt(winRef.style.left) + dx;
       let newPositionY = parseInt(winRef.style.top) + dy;
       if (newPositionX < 0) {
@@ -312,12 +336,15 @@ function WinDrag(e) {
         newPositionY = 0;
       }
 
+      // actual window position
       let prevPositionX = parseInt(winRef.style.left);
       let prevPositionY = parseInt(winRef.style.top);
 
+      // move window
       winRef.style.left = newPositionX + "px";
       winRef.style.top = newPositionY + "px";
 
+      // if position is different then set it
       if (prevPositionX !== newPositionX) {
         mouseX = x;
       }
@@ -325,9 +352,11 @@ function WinDrag(e) {
         mouseY = y;
       }
 
+      // prevent window from going off screen
       let maxRight = window.innerWidth - parseInt(winRef.clientWidth);
       let maxBottom = window.innerHeight - parseInt(winRef.clientHeight);
 
+      // actually prevent it
       if (parseInt(winRef.style.left) > maxRight) {
         winRef.style.left = maxRight + "px";
       }
@@ -335,6 +364,7 @@ function WinDrag(e) {
         winRef.style.top = maxBottom + "px";
       }
     } else if (isResizing) {
+      // otherwise begin resizing
       resize(e);
     }
   }
@@ -389,7 +419,7 @@ function startResize(event) {
   document.addEventListener("mouseup", stopResize);
   document.addEventListener("touchend", stopResize);
 
-  winRef.classList.add('dragging');
+  winRef.classList.add("dragging");
 }
 
 const minWidth = 185; // Set minimum width (in pixels)
@@ -462,7 +492,7 @@ function resize(event) {
         winRef.style.height = newHeightBottomRight + "px";
         break;
     }
-    
+
     if (wo.options.onresize) {
       wo.options.onresize(resizeType);
     }

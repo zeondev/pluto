@@ -1,5 +1,5 @@
 export default {
-  name: "BuildAKtat",
+  name: "Build A Ktat",
   description: "Build A Ktat app, very nice for some cool characters.",
   ver: 0.1, // Compatible with core 0.1
   type: "process",
@@ -24,8 +24,9 @@ export default {
 
     // Testing the html library
     MyWindow = new Win({
-      title: "Example App",
+      title: "Build A Ktat",
       content: '<iframe src="https://build-a.ktat.repl.co">',
+      pid: Root.PID,
       onclose: () => {
         onEnd();
       },

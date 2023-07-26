@@ -55,6 +55,12 @@ export default {
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
     vfs.importFS();
 
+    vfs.writeFile(
+      "Root/Pluto/panics/pluto_" + makeid(16) + ".panic",
+      err + "\n\n" + err.stack + "\n\n\n" + new Date().toString()
+    );
+    console.log(err);
+
     new Html("button")
       .text("Attempt to launch TaskManager")
       .on("click", (e) => {
@@ -62,22 +68,24 @@ export default {
       })
       .appendTo(wrapper);
 
-    new Html("button")
-      .text("Attempt to save error")
-      .on("click", (e) => {
-        vfs.writeFile(
-          "Root/Pluto/panics/pluto_" + makeid(16) + ".panic",
-          err + "\n\n" + err.stack
-        );
-        console.log(err);
-      })
-      .appendTo(wrapper);
-    
+    // new Html("button")
+    //   .text("Attempt to save error")
+    //   .on("click", (e) => {
+    //     vfs.writeFile(
+    //       "Root/Pluto/panics/pluto_" + makeid(16) + ".panic",
+    //       err + "\n\n" + err.stack + "\n\n\n" + new Date().toString()
+    //     );
+    //     console.log(err);
+    //   })
+    //   .appendTo(wrapper);
+
     new Html("button")
       .text("Attempt filesystem backup and restore")
       .on("click", (e) => {
-        let fs = vfs.exportFs();
-        Root.Modal.alert(JSON.stringify(fs));
+        localStorage.setItem("oldvfs", JSON.stringify(vfs.exportFS()));
+        let fs = vfs.importFS(true);
+        vfs.save();
+        location.reload();
       })
       .appendTo(wrapper);
 

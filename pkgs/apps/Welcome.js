@@ -36,6 +36,7 @@ export default {
     MyWindow = new Win({
       title: "Welcome",
       content: "",
+      pid: Root.PID,
       width,
       height,
       left,

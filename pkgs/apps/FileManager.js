@@ -38,8 +38,12 @@ export default {
 
     win = new Win({
       title: "Files",
-      // onclose: () => {
-      // },
+      pid: Root.PID,
+      width: "468px",
+      height: "320px",
+      onclose: () => {
+        onEnd();
+      },
     });
 
     const setTitle = (t) =>
@@ -61,6 +65,7 @@ export default {
           renderFileList(p);
         },
         html: L.icons.folderUp,
+        title: "Up a directory",
       },
       {
         onclick: async (_) => {
@@ -69,8 +74,12 @@ export default {
             "New folder name",
             "New folder"
           );
+          if (result === false) return;
+          result = result.replace(/\//g, "");
+          vfs.createFolder(path + "/" + result);
         },
         html: L.icons.createFolder,
+        title: "Create Folder",
       },
       {
         onclick: async (_) => {
@@ -79,8 +88,12 @@ export default {
             "New file name",
             "New file"
           );
+          if (result === false) return;
+          result = result.replace(/\//g, "");
+          vfs.writeFile(path + "/" + result, "");
         },
         html: L.icons.createFile,
+        title: "Create File",
       },
       {
         onclick: (_) => {
@@ -127,6 +140,7 @@ export default {
           input.click();
         },
         html: L.icons.fileImport,
+        title: "Import File from yuor system",
       },
       {
         onclick: async (_) => {
@@ -143,6 +157,7 @@ export default {
           }
         },
         html: L.icons.delete,
+        title: "Delete File",
       },
     ]);
 

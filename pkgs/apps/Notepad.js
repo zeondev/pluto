@@ -24,6 +24,7 @@ export default {
       content: "",
       width: 340,
       height: 230,
+      pid: Root.PID,
       onclose: async () => {
         if (currentDocument.dirty === true) {
           let result = await Root.Modal.prompt(

@@ -24,6 +24,7 @@ export default {
     MyWindow = new Win({
       title: "Debug",
       content: "Hello",
+      pid: Root.PID,
       onclose: () => {
         onEnd();
       },

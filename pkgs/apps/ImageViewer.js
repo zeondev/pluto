@@ -1,5 +1,5 @@
 export default {
-  name: "ImageViewer",
+  name: "Image Viewer",
   description: "View your epic images in this smooth app.",
   ver: 0.1, // Compatible with core 0.1
   type: "process",
@@ -25,6 +25,7 @@ export default {
     // Testing the html library
     MyWindow = new Win({
       title: "Image Viewer",
+      pid: Root.PID,
       onclose: () => {
         onEnd();
       },

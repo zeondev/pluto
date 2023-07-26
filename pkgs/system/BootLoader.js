@@ -7,7 +7,7 @@ export default {
   ver: 0.1, // Compatible with core 0.1
   type: "process",
   exec: async function (Root) {
-    const serviceList = ["OpenWeatherMap"];
+    const serviceList = ["Account"];
 
     // Root is just a temp name for the global object the core gives you
     if (pid !== -1) {
@@ -36,10 +36,9 @@ export default {
         localStorage.getItem("error") != null &&
         localStorage.getItem("error") === "force"
       )
-        throw new Error("h");
+        throw new Error("Core forced panicked using error value.");
 
       Root.Core.services = serviceReference;
-      // throw new Error("KERNEL bootloader PANIC")
       // await Root.Core.startPkg('ui:LoginScreen');
 
       // Start of global customisation config
@@ -50,14 +49,34 @@ export default {
       let appearanceConfig = JSON.parse(
         vfs.readFile("Root/Pluto/config/appearanceConfig.json")
       );
-      document.documentElement.dataset.theme = appearanceConfig.theme;
 
-      // End
+      await Root.Core.startPkg("apps:FTGSF");
 
       await Root.Core.startPkg("ui:Desktop", true, true);
-      // await Root.Core.startPkg("apps:Welcome");
-      await Root.Core.startPkg("apps:TaskManager", true, true);
-      await Root.Core.startPkg("apps:FTGSF");
+
+      let themeLib = await Root.Core.startPkg("lib:ThemeLib");
+
+      if (appearanceConfig.theme && appearanceConfig.theme.endsWith(".theme")) {
+        const x = themeLib.validateTheme(
+          vfs.readFile("Root/Pluto/config/themes/" + appearanceConfig.theme)
+        );
+
+        if (x !== undefined && x.success === true) {
+          console.log(x);
+
+          themeLib.setCurrentTheme(x.data);
+        } else {
+          console.log(x.message);
+          document.documentElement.dataset.theme = "dark";
+        }
+      } else {
+        themeLib.setCurrentTheme(
+          '{"version":1,"name":"Dark","description":"A built-in theme.","values":null,"cssThemeDataset":"dark","wallpaper":"/assets/wallpapers/space.png"}'
+        );
+      }
+
+      await Root.Core.startPkg("apps:Welcome");
+      // await Root.Core.startPkg("apps:TaskManager", true, true);
       // destroy loading screen
       lsg.cleanup();
 
@@ -78,11 +97,22 @@ export default {
           "\n\n" +
           "Launching Basic Mode"
       );
+
+      // Console
+      const cnsl = await Root.Core.startPkg("system:Console", true, true);
+
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "`") {
+          e.preventDefault();
+          // send msg
+          cnsl.proc.send({ type: "toggle" });
+        }
+      });
     }
 
     return Root.Lib.setupReturns(
       (_) => {
-        Root.Modal.alert("BootLoader", "No");
+        // Root.Modal.alert("BootLoader", "No");
         // console.log("Bootloader process ended, attempting clean up...");
         // const result = Root.Lib.cleanup(pid, token);
         // if (result === true) {

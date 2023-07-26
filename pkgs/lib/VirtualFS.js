@@ -7,12 +7,28 @@ let templateFsLayout = {
       },
       config: {
         "appearanceConfig.json": JSON.stringify({
-          wallpaper: "/assets/Wallpaper.png",
+          wallpaper: "/assets/wallpapers/space.png",
+          useThemeWallpaper: true,
           theme: "dark",
         }),
+        themes: {
+          "light.theme":
+            '{"version":1,"name":"Light","description":"A built-in theme.","values":null,"cssThemeDataset":"light","wallpaper":"/assets/wallpapers/light.png"}',
+          "dark.theme":
+            '{"version":1,"name":"Dark","description":"A built-in theme.","values":null,"cssThemeDataset":"dark","wallpaper":"/assets/wallpapers/space.png"}',
+          "grey.theme":
+            '{"version":1,"name":"Grey","description":"A built-in theme.","values":null,"cssThemeDataset":"chatify","wallpaper":"/assets/wallpapers/grey.svg"}',
+          "red.theme":
+            '{"version":1,"name":"Red","description":"A built-in theme.","values":null,"cssThemeDataset":"red","wallpaper":"/assets/wallpapers/red.png"}',
+          "green.theme":
+            '{"version":1,"name":"Green","description":"A built-in theme.","values":null,"cssThemeDataset":"green","wallpaper":"/assets/wallpapers/green.jpg"}',
+        },
+      },
+      apps: {
+        "README.MD":
+          "This folder contains all the apps that you have downloaded. If you have any questions about them please contact us.",
       },
     },
-
     Desktop: {
       "Folder 1": {
         "File 1.txt": "File 1.txt in Folder 1",
@@ -25,6 +41,9 @@ let templateFsLayout = {
     },
     Documents: {},
     Downloads: {},
+    Pictures: {},
+    Videos: {},
+    Music: {},
   },
 };
 
@@ -37,7 +56,9 @@ const Vfs = {
     this.fileSystem = JSON.parse(localStorage.getItem("fs"));
   },
   importFS(fsObject = templateFsLayout) {
-    if (!localStorage.getItem("fs") && fsObject === templateFsLayout) {
+    if (fsObject === true) {
+      this.fileSystem = templateFsLayout; 
+    } else if (!localStorage.getItem("fs") && fsObject === templateFsLayout) {
       this.fileSystem = fsObject;
     } else if (fsObject !== templateFsLayout) {
       this.fileSystem = fsObject;
@@ -116,7 +137,7 @@ const Vfs = {
       }
       current = current[part];
     }
-    current[foldername] = {};
+    if (!current[foldername]) current[foldername] = {};
     this.save();
   },
   // Function to delete a file or folder at a given path

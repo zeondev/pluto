@@ -26,6 +26,7 @@ export default {
     MyWindow = new Win({
       title: "Browser",
       content: "",
+      pid: Root.PID,
       onclose: () => {
         onEnd();
       },
@@ -48,7 +49,7 @@ export default {
         // there's a good reason i did this, it's called browser compatiblity
         style:
           "width:-webkit-fill-available;width:-moz-fill-available;height:-webkit-fill-available;height:-moz-fill-available;",
-        src: "https://google.com/",
+        src: "http://frogfind.com/",
       })
       .class('fg')
       .appendTo(wrapper);
@@ -58,7 +59,7 @@ export default {
         type: "search",
         // there's a good reason i did this, it's called browser compatiblity
         style: "width:-webkit-fill-available;width:-moz-fill-available;",
-        value: "https://google.com/",
+        value: "http://frogfind.com/",
       })
       .on("search", async (e) => {
         if (e.target.value.trim() == "") return;

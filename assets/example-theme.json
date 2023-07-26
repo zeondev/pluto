@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "name": "Purple",
+  "description": "A custom theme.",
+  "values": {
+    "primary": "hsl(249, 80%, 40%)",
+    "negative": "hsl(0, 80%, 40%)",
+    "negative-light": "hsl(0, 80%, 73%)",
+    "negative-dark": "hsl(0, 79%, 25%)",
+    "positive": "hsl(133, 80%, 40%)",
+    "positive-light": "hsl(134, 81%, 72%)",
+    "positive-dark": "hsl(133, 79%, 25%)",
+    "root": "hsl(249, 25%, 8%)",
+    "root-rgb": "15, 18, 25",
+    "header": "hsl(249, 28%, 12%)",
+    "unfocused": "hsl(249, 31%, 5%)",
+    "text": "hsl(249, 0%, 100%)",
+    "text-rgb": "255, 255, 255",
+    "text-alt": "hsl(249, 33%, 80%)",
+    "text-light": "hsl(249, 0%, 100%)",
+    "label": "hsl(249, 16%, 38%)",
+    "label-light": "hsl(249, 15%, 50%)",
+    "neutral": "hsl(249, 26%, 18%)",
+    "neutral-focus": "hsl(249, 27%, 20%)",
+    "outline": "hsl(249, 23%, 22%)"
+  },
+  "cssThemeDataset": null,
+  "wallpaper": "https://github.com/itslap.png"
+}

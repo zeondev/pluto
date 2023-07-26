@@ -223,7 +223,7 @@ export default {
           .class("col", "w-100")
           .appendTo(wrapper);
         const wrapperWrapperWrapper = new L.html("div")
-          .class("fg", "w-100")
+          .class("fg", "w-100", "ovh")
           .appendTo(wrapperWrapper);
 
         const attemptClose = async (_) => {
@@ -279,7 +279,10 @@ export default {
         }
         let tableHead = new L.html("thead").appendTo(table);
         let tableHeadRow = new L.html("tr").appendTo(tableHead);
-        new L.html("th").text("Name").appendTo(tableHeadRow);
+        new L.html("th")
+          .text("Name")
+          .attr({ colspan: 2 })
+          .appendTo(tableHeadRow);
         new L.html("th").text("Type").appendTo(tableHeadRow);
 
         let tableBody = new L.html("tbody").appendTo(table);

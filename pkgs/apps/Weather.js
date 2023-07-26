@@ -5,11 +5,11 @@ export default {
   type: "process",
   privileges: [
     {
-      privilege: 'services',
-      description: 'Get information from the weather service'
-    }
+      privilege: "services",
+      description: "Get information from the weather service",
+    },
   ],
-  exec: async function(Root) {
+  exec: async function (Root) {
     let wrapper; // Lib.html | undefined
     let MyWindow;
 
@@ -32,6 +32,7 @@ export default {
     MyWindow = new Win({
       title: "Weather",
       content: "",
+      pid: Root.PID,
       onclose: () => {
         onEnd();
       },
@@ -42,7 +43,14 @@ export default {
     wrapper.classList.add("with-sidebar");
 
     // get the open weather map service, one liner
-    let owm = Root.Core.services.find((s) => s.name === "OpenWeatherMap"); if (owm == undefined) { console.warn("The REQUIRED OpenWeatherMap service was unable to be found, please contact the developers or research the problem!"); return } owm = owm.ref;
+    let owm = Root.Core.services.find((s) => s.name === "OpenWeatherMap");
+    if (owm == undefined) {
+      console.warn(
+        "The REQUIRED OpenWeatherMap service was unable to be found, please contact the developers or research the problem!"
+      );
+      return;
+    }
+    owm = owm.ref;
 
     /*
       // other functions can go here, available in .proc
@@ -90,42 +98,69 @@ export default {
 
     let Html = Root.Lib.html;
 
-    let mainWeatherThing = new Html('div').class('weather-container');
+    let mainWeatherThing = new Html("div").class("weather-container");
 
-    let weatherJumbo = new Html("div").class("weather-jumbo")
+    let weatherJumbo = new Html("div")
+      .class("weather-jumbo")
       .append(mainWeatherThing)
       .appendTo(wrapper);
 
-    let mainWeatherWrapper = new Html('div').class('col', 'wrapper', "gap-mid").appendTo(mainWeatherThing);
+    let mainWeatherWrapper = new Html("div")
+      .class("col", "wrapper", "gap-mid")
+      .appendTo(mainWeatherThing);
 
-    let cityCodeZoneLabel = new Html("span").class("top-label").text(owm.getZone() + " • " + owm.getOffice()).appendTo(mainWeatherWrapper);
+    let cityCodeZoneLabel = new Html("span")
+      .class("top-label")
+      .text(owm.getZone() + " • " + owm.getOffice())
+      .appendTo(mainWeatherWrapper);
 
-    let cityLine = new Html('div').class('label-bar').appendMany(
-      new Html('span').text(owm.getCity()),
-      new Html('span').class('bar')
-    ).appendTo(mainWeatherWrapper);
+    let cityLine = new Html("div")
+      .class("label-bar")
+      .appendMany(
+        new Html("span").text(owm.getCity()),
+        new Html("span").class("bar")
+      )
+      .appendTo(mainWeatherWrapper);
 
-    let dataLine = new Html('div').class('row', 'weather-line').appendTo(mainWeatherWrapper);
+    let dataLine = new Html("div")
+      .class("row", "weather-line")
+      .appendTo(mainWeatherWrapper);
 
-    let emoji = new Html("div").class("weather-emoji").text(owm.codeToEmoji()).appendTo(dataLine);
+    let emoji = new Html("div")
+      .class("weather-emoji")
+      .text(owm.codeToEmoji())
+      .appendTo(dataLine);
 
-    let tempWrapper = new Html('div').class('col', 'gap').appendTo(dataLine);
+    let tempWrapper = new Html("div").class("col", "gap").appendTo(dataLine);
 
-    let temp = new Html("div").class("weather-header").text(owm.weatherTemp().toFixed(0) + '°').append(new Html('sup').text('F')).appendTo(tempWrapper);
+    let temp = new Html("div")
+      .class("weather-header")
+      .text(owm.weatherTemp().toFixed(0) + "°")
+      .append(new Html("sup").text("F"))
+      .appendTo(tempWrapper);
 
-    let hiLo = new Html('span').class('row', 'gap-mid').appendMany(
-      new Html('span').class('row', 'gap-small').appendMany(
-        new Html('sup').text('LO'),
-        new Html('span').text(owm.weatherHi().toFixed(0)),
-      ),
-      new Html('span').class('row', 'gap-small').appendMany(
-        new Html('sup').text('HI'),
-        new Html('span').text(owm.weatherHi().toFixed(0)),
-      ),
-    ).appendTo(tempWrapper);
+    let hiLo = new Html("span")
+      .class("row", "gap-mid")
+      .appendMany(
+        new Html("span")
+          .class("row", "gap-small")
+          .appendMany(
+            new Html("sup").text("LO"),
+            new Html("span").text(owm.weatherHi().toFixed(0))
+          ),
+        new Html("span")
+          .class("row", "gap-small")
+          .appendMany(
+            new Html("sup").text("HI"),
+            new Html("span").text(owm.weatherHi().toFixed(0))
+          )
+      )
+      .appendTo(tempWrapper);
 
     function calc() {
-      let fs = (mainWeatherThing.elm.offsetWidth + mainWeatherThing.elm.offsetHeight) / 1.4;
+      let fs =
+        (mainWeatherThing.elm.offsetWidth + mainWeatherThing.elm.offsetHeight) /
+        1.4;
 
       let minFontSize = 14;
       let maxFontSize = 64;
@@ -134,25 +169,26 @@ export default {
       let hiLoSize = fs * 0.025;
 
       function maxMin(fs) {
-        return Math.max(minFontSize, Math.min(fs, maxFontSize))
+        return Math.max(minFontSize, Math.min(fs, maxFontSize));
       }
 
       if (wrapper.offsetHeight < 174) {
-        weatherJumbo.style({height: '100%'});
+        weatherJumbo.style({ height: "100%" });
       } else {
-        weatherJumbo.style({height: '174px'});
+        weatherJumbo.style({ height: "174px" });
       }
 
-      dataLine.style({ 'font-size': maxMin(dataLineSize) + 'px' });
-      hiLo.style({ 'font-size': maxMin(hiLoSize) + 'px' });
+      dataLine.style({ "font-size": maxMin(dataLineSize) + "px" });
+      hiLo.style({ "font-size": maxMin(hiLoSize) + "px" });
     }
 
     MyWindow.options.onresize = calc;
 
     console.log(owm.activeAlertsInCurrentArea());
 
-    let sunriseSunset = new Html("div").class("row", 'spaced-horizontally').appendTo(wrapper);
-
+    let sunriseSunset = new Html("div")
+      .class("row", "spaced-horizontally")
+      .appendTo(wrapper);
 
     return Root.Lib.setupReturns(onEnd, (m) => {
       console.log("Example recieved message: " + m);

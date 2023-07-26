@@ -1,6 +1,6 @@
 export default {
   name: "Console",
-  description: "Console app based off Source game consoles.",
+  description: "Console app",
   ver: 0.1, // Compatible with core 0.1
   type: "process",
   exec: async function (Root) {

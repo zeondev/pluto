@@ -30,6 +30,7 @@ export default {
     MyWindow = new Win({
       title: "Admin App",
       content: "Hello",
+      pid: Root.PID,
       onclose: () => {
         onEnd();
       },

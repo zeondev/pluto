@@ -1,6 +1,6 @@
 export default {
   name: "Task Manager",
-  description: "Manage, Kill, and Start processes from this simple app.",
+  description: "Examine and manage processes",
   ver: 0.1, // Compatible with core 0.1
   type: "process",
   privileges: [
@@ -34,6 +34,7 @@ export default {
       content: "Loading...",
       width: "468px",
       height: "320px",
+      pid: Root.PID,
       onclose: () => {
         onEnd();
       },
@@ -119,6 +120,7 @@ export default {
 
     if (Root.Core !== null) {
       new Root.Lib.html("button")
+        .class("primary")
         .text("End Process")
         .appendTo(buttonRow)
         .on("click", (e) => {

@@ -108,10 +108,18 @@ export default {
         );
       });
     },
-    input: function (title, description, placeholder, parent = "body") {
+    input: function (
+      title,
+      description,
+      placeholder,
+      parent = "body",
+      isPassword = false
+    ) {
       let wrapper = new lib.html("div").class("col");
       /* span */ new lib.html("span").text(description).appendTo(wrapper);
-      let input = new lib.html("input").attr({ placeholder }).appendTo(wrapper);
+      let input = new lib.html("input")
+        .attr({ placeholder, type: isPassword === true ? "password" : "text" })
+        .appendTo(wrapper);
 
       return new Promise((res, _rej) => {
         this.modal(

@@ -3,7 +3,8 @@ export default {
   description: "Backdrop user interface",
   ver: 0.1, // Compatible with core 0.1
   type: "process",
-  exec: async function(Root) {
+  optInToEvents: true,
+  exec: async function (Root) {
     let wrapper; // Lib.html | undefinedd
     let MyWindow;
 
@@ -12,6 +13,7 @@ export default {
     function onEnd() {
       console.log("Example process ended, attempting clean up...");
       const result = Root.Lib.cleanup(Root.PID, Root.Token);
+      clearInterval(timeInterval);
       if (result === true) {
         wrapper.cleanup();
         console.log("Cleanup Success! Token:", Root.Token);
@@ -21,16 +23,29 @@ export default {
     }
 
     wrapper = new Root.Lib.html("div").appendTo("body").class("desktop");
-    console.log(wrapper);
 
     let Html = Root.Lib.html;
 
+    let vfs = await Root.Core.startPkg("lib:VirtualFS");
+    vfs.importFS();
+
+    let appearanceConfig = JSON.parse(
+      vfs.readFile("Root/Pluto/config/appearanceConfig.json")
+    );
+
+    let wallpaper = "/assets/wallpapers/space.png";
+
+    if (appearanceConfig.wallpaper) {
+      wallpaper = appearanceConfig.wallpaper;
+    }
+
     let background = new Html()
       .style({
-        "background-image": "url(/assets/Wallpaper.png)",
+        "background-image": "url(" + wallpaper + ")",
         "background-size": "cover",
         "background-attachment": "fixed",
         "background-repeat": "no-repeat",
+        "background-position": "center",
         top: "0",
         left: "0",
         right: "0",
@@ -44,9 +59,7 @@ export default {
       })
       .appendTo(wrapper);
 
-    const preloadImage = new Image();
-    preloadImage.src = "/assets/Wallpaper.png";
-    preloadImage.addEventListener("load", async (_) => {
+    async function refresh() {
       background.style({
         opacity: 1,
         display: "block",
@@ -57,18 +70,33 @@ export default {
         x: 0,
         y: 0,
       };
+      if (localStorage.getItem("oldvfs")) {
+        const x = await Root.Modal.prompt(
+          "Filesystem restore",
+          "Looks like you have an old file system.\nWould you like to mount it?",
+          wrapper
+        );
 
-      const fileManager = new Root.Lib.html("div")
-        .style({
-          display: "flex",
-          "flex-direction": "column",
-          "align-items": "center",
-          gap: "8px", // totally not inspired by replit
-          position: "absolute",
-          left: "12px",
-          top: "12px",
-        })
-        .appendTo(wrapper);
+        if (x === true) {
+          // Do the thing the thing
+          // const vfas = await l.loadLibrary("VirtualFS");
+
+          // Root -> oldFs
+          vfs.fileSystem.Root["oldFs"] = JSON.parse(
+            localStorage.getItem("oldvfs")
+          );
+          vfs.save();
+          localStorage.removeItem("oldvfs");
+
+          let fm = await Root.Core.startPkg("apps:FileManager", true, true);
+
+          Root.Modal.alert(
+            "Filesystem restore",
+            "Your old filesystem has been mounted to the 'oldFs' folder.",
+            wrapper
+          );
+        }
+      }
 
       // new Root.Lib.html("div")
       //   .html(`<svg viewBox="0 0 24 24" width="64" height="64" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`)
@@ -90,13 +118,6 @@ export default {
       //   .style({ color: 'white' })
       //   .appendTo(fileManager)
 
-      // ADD .SHRT FILES FOR SHORTCUTS TO APPS
-      const vfs = await Root.Lib.loadLibrary("VirtualFS");
-
-      const menuBar = await Root.Core.startPkg("ui:3x3", true, true);
-      menuBar.proc.send({ type: "append", elm: wrapper });
-
-      vfs.importFS();
       const desktopDirectory = "Root/Desktop";
       const fileList = vfs.list(desktopDirectory);
 
@@ -119,7 +140,7 @@ export default {
           )
           .appendTo(iconsWrapper)
           .on("dblclick", (_) => fn(Root.Core))
-          .on('touchstart', (e) => {
+          .on("touchstart", (e) => {
             const currentTime = new Date().getTime();
             const tapInterval = currentTime - lastTapTime;
 
@@ -155,7 +176,6 @@ export default {
           vfs
         );
 
-        console.log(mapping); // debug test
         createDesktopIcon(mapping.name, mapping.icon, mapping.onClick);
 
         // if (file.item.endsWith(".shrt")) {
@@ -211,42 +231,262 @@ export default {
         //   });
         // }
       }
-    });
-    /*
-    let topBar = new Root.Lib.html("div").appendTo(wrapper).class("topBar");
-    let tab1 = new Root.Lib.html("div")
-      .appendTo(topBar)
-      .class("topBarItem")
-      .html("Pluto");
-    let tab2 = new Root.Lib.html("div")
-      .appendTo(topBar)
-      .class("topBarItem")
-      .html("Application");
+    }
+
+    const preloadImage = new Image();
+    preloadImage.src = wallpaper;
+    preloadImage.addEventListener("load", refresh);
+
+    // let topBar = new Root.Lib.html("div").appendTo(wrapper).class("topBar");
+    // let tab1 = new Root.Lib.html("div")
+    //   .appendTo(topBar)
+    //   .class("topBarItem")
+    //   .html("Pluto");
+    // let tab2 = new Root.Lib.html("div")
+    //   .appendTo(topBar)
+    //   .class("topBarItem")
+    //   .html("Application");
+
     let dock = new Root.Lib.html("div").appendTo(wrapper).class("dock");
 
-    for (let i = 0; i < 5; i++) {
-      let app = new Root.Lib.html("div").appendTo(dock).class("app");
+    let menuButton = new Root.Lib.html("button")
+      .class("toolbar-button")
+      .html(
+        `<svg width="24" height="24" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M9 15.3713C12.7949 15.3713 15.8713 12.2949 15.8713 8.5C15.8713 4.70511 12.7949 1.62874 9 1.62874C5.20511 1.62874 2.12874 4.70511 2.12874 8.5C2.12874 12.2949 5.20511 15.3713 9 15.3713ZM9 17C13.6944 17 17.5 13.1944 17.5 8.5C17.5 3.80558 13.6944 0 9 0C4.30558 0 0.5 3.80558 0.5 8.5C0.5 13.1944 4.30558 17 9 17Z" fill="currentColor"/></svg>`
+      )
+      .appendTo(dock);
+
+    let menuIsOpen = false;
+    let menuIsToggling = false;
+    let menuElm;
+
+    function onClickDetect(ev) {
+      if (ev.target.closest(".menu")) {
+      }
     }
-*/
 
-    // let dock = new Root.Lib.html("div").class("dock").appendTo(wrapper);
+    const userAccountService = Root.Core.services
+      .filter((x) => x !== null)
+      .find((x) => x.name === "Account");
 
-    // let menuButton = new Root.Lib.html("button")
-    //   .class("toolbar-button")
-    //   .html(
-    //     `<svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M9 15.3713C12.7949 15.3713 15.8713 12.2949 15.8713 8.5C15.8713 4.70511 12.7949 1.62874 9 1.62874C5.20511 1.62874 2.12874 4.70511 2.12874 8.5C2.12874 12.2949 5.20511 15.3713 9 15.3713ZM9 17C13.6944 17 17.5 13.1944 17.5 8.5C17.5 3.80558 13.6944 0 9 0C4.30558 0 0.5 3.80558 0.5 8.5C0.5 13.1944 4.30558 17 9 17Z" fill="white"/></svg>`
-    //   )
-    //   .appendTo(dock);
-    // let dockItems = new Root.Lib.html("div").class("items").appendTo(dock);
-    // let collapseButton = new Root.Lib.html("button")
-    //   .class("toolbar-button")
-    //   .html(
-    //     `<svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 15L6 9L12 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
-    //   )
-    //   .appendTo(dock);
+    function toggleMenu() {
+      if (menuIsToggling) {
+        return; // Return early if menu is currently toggling
+      }
+
+      menuIsToggling = true;
+      menuIsOpen = !menuIsOpen;
+
+      const userData = userAccountService.ref.getUserData();
+
+      if (menuIsOpen === true) {
+        if (!menuElm) {
+          // Create menu element if it doesn't exist
+          menuElm = new Html("div")
+            .class("menu")
+            .appendMany(
+              new Html("div").class("me").appendMany(
+                new Html("div").class("pfp").style({
+                  "--url": `url(${userData.pfp})`,
+                }),
+                new Html("div")
+                  .class("text")
+                  .appendMany(
+                    new Html("div").class("heading").text(userData.username),
+                    new Html("div")
+                      .class("subheading")
+                      .text(
+                        userData.onlineAccount === true
+                          ? "Zeon Account"
+                          : "Local Account"
+                      )
+                  ),
+                new Root.Lib.html("button")
+                  .class("small")
+                  .html(Root.Lib.icons.wrench)
+                  .on("click", (e) => {
+                    Root.Core.startPkg("apps:Settings", true, true);
+                  })
+              ),
+              new Html("div")
+                .class("spacer")
+                .appendMany(
+                  new Html("div").class("space"),
+                  new Html("div").text("Apps"),
+                  new Html("div").class("space")
+                ),
+              new Html("div")
+                .class("apps")
+                .appendMany(
+                  new Html("div")
+                    .class("app")
+                    .appendMany(
+                      new Html("div")
+                        .class("app-icon")
+                        .html(Root.Lib.icons.cpu),
+                      new Html("div")
+                        .class("app-text")
+                        .appendMany(
+                          new Html("div")
+                            .class("app-heading")
+                            .text("Task Manager"),
+                          new Html("div")
+                            .class("app-description")
+                            .text("Examine and manage processes")
+                        )
+                    )
+                )
+            )
+            .appendTo(dock);
+        }
+
+        menuElm.classOn("opening");
+        setTimeout(() => {
+          menuElm.classOff("opening");
+          menuIsToggling = false;
+        }, 500);
+      } else {
+        if (menuElm) {
+          menuElm.classOn("closing");
+          setTimeout(() => {
+            menuElm.cleanup();
+            menuElm = null; // Reset menu element reference
+            menuIsToggling = false;
+          }, 500);
+        }
+      }
+    }
+
+    menuButton.on("click", toggleMenu);
+
+    let dockItems = new Root.Lib.html("div").class("items").appendTo(dock);
+    let dockItemsList = [];
+
+    /* quickAccessButton */
+    let timeInterval = -1;
+    let pastMinute = 0;
+
+    function updateTime() {
+      let x = new Date();
+      let hours = x.getHours().toString().padStart(2, "0");
+      let minutes = x.getMinutes().toString().padStart(2, "0");
+      if (pastMinute === minutes) return;
+      pastMinute = minutes;
+      let timeString = `${hours}:${minutes}`;
+      quickAccessButton.text(timeString);
+    }
+
+    const quickAccessButton = new Root.Lib.html("div")
+      .class("toolbar-button")
+      .text("..:..")
+      .appendTo(dock);
+
+    updateTime();
+    timeInterval = setInterval(updateTime, 1000);
+
+    function createButton(pid, name) {
+      dockItemsList[pid] = new Html()
+        .class("dock-item")
+        .appendTo(dockItems)
+        .text(name);
+    }
+
+    Root.Core.processList
+      .filter((n) => n !== null)
+      .forEach((a) => {
+        if (
+          a.name.startsWith("system:") ||
+          a.name.startsWith("ui:") ||
+          a.name.startsWith("services:")
+        )
+          return;
+        if (!a.proc) return;
+
+        createButton(a.pid, a.proc.name);
+      });
+
+    let isCurrentlyChangingWallpaper = false;
+    let wallpaperToChangeTo = "";
+
+    function smoothlySwapBackground(to) {
+      const preloadImage = new Image();
+      background.classOn("fadeOut");
+      if (isCurrentlyChangingWallpaper === true) {
+        wallpaperToChangeTo = to;
+        return;
+      }
+      isCurrentlyChangingWallpaper = true;
+      wallpaperToChangeTo = to;
+      setTimeout(() => {
+        preloadImage.src = wallpaperToChangeTo;
+        preloadImage.addEventListener("load", fadeIn);
+      }, 500);
+      function fadeIn() {
+        setTimeout(() => {
+          background.classOff("fadeOut").classOn("fadeIn");
+          background.style({
+            "background-image": "url(" + wallpaperToChangeTo + ")",
+          });
+          isCurrentlyChangingWallpaper = false;
+        }, 500);
+      }
+    }
 
     return Root.Lib.setupReturns(onEnd, (m) => {
-      console.log("Example recieved message: " + m);
+      try {
+        // Got a message
+        const { type, data } = m;
+        switch (type) {
+          case "setWallpaper":
+            if (data === "default") {
+              appearanceConfig = JSON.parse(
+                vfs.readFile("Root/Pluto/config/appearanceConfig.json")
+              );
+              smoothlySwapBackground(appearanceConfig.wallpaper);
+            } else {
+              smoothlySwapBackground(data);
+            }
+            break;
+          case "refresh":
+            break;
+          case "coreEvent":
+            console.log("Desktop recieved core event", data);
+
+            if (
+              data.data.name.startsWith("system:") ||
+              data.data.name.startsWith("ui:") ||
+              data.data.name.startsWith("services:")
+            )
+              return;
+            if (data.type === "pkgStart") {
+              if (dockItemsList[data.data.pid]) return;
+              createButton(data.data.pid, data.data.proc.name);
+            } else if (data.type === "pkgEnd") {
+              console.log("Cleanup pid", data.data.pid);
+              dockItemsList[data.data.pid].cleanup();
+              dockItemsList[data.data.pid] = null;
+              console.log("Removed", data.data.pid);
+            }
+            break;
+          case "wsEvent":
+            if (data.type === "focusedWindow") {
+              if (data.data === undefined) return;
+              const p = data.data.options.pid;
+              dockItemsList
+                .filter((n) => n !== null)
+                .forEach((pa) => {
+                  pa.classOff("selected");
+                });
+              if (dockItemsList[p] !== undefined)
+                if (dockItemsList[p] !== null)
+                  dockItemsList[p].classOn("selected");
+                else console.log("?!");
+            }
+            break;
+        }
+      } catch (e) {
+        console.log("desktop oops", e);
+      }
     });
   },
 };

@@ -23,7 +23,6 @@ export default {
             new html("div").class("sidebar-text").html(b.text)
           )
           .on("click", (e) => {
-            console.log(this);
             b.onclick && b.onclick(e);
           })
           .style(b.style || {})

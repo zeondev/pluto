@@ -1,3 +1,5 @@
+// Pluto 
+
 (async () => {
   try {
     const knownLibraries = [];
@@ -107,9 +109,7 @@
       },
     };
 
-    GlobalLib.icons = await fetch("/assets/icons.json")
-      .then((j) => j.json())
-      .catch((r) => undefined);
+    GlobalLib.icons = (await import("/assets/icons.js")).default;
 
     // Similar name to procLib but is not actually ProcLib
     const processLib = class ProcessAvailableLibrary {
@@ -192,6 +192,18 @@
           `%cProcess ${proc.name} (${proc.pid}) was ended.`,
           "color:green;font-weight:bold"
         );
+        let x = procsListeningToEvents.findIndex((p) => p === pid);
+        if (x !== undefined || x !== null) {
+          // console.log("removing", x, "from broadcast list");
+          procsListeningToEvents[x] = null;
+        }
+        broadcastEventToProcs({
+          type: "coreEvent",
+          data: {
+            type: "pkgEnd",
+            data: Core.processList[pid],
+          },
+        });
         Core.processList[pid] = null;
         console.groupEnd();
       },
@@ -211,8 +223,22 @@
       },
     };
 
+    const permittedApps = ["lib:ThemeLib"];
+    const procsListeningToEvents = [];
+
+    function broadcastEventToProcs(eventData) {
+      // console.log("procsListeningToEvents", procsListeningToEvents);
+      procsListeningToEvents
+        .filter((m) => m !== null)
+        .forEach((e) => {
+          Core.processList[e] !== null &&
+            Core.processList[e].proc !== null &&
+            Core.processList[e].proc.send(eventData);
+        });
+    }
+
     const Core = {
-      version: 0.1,
+      version: 1.0,
       processList: [],
       knownPackageList: [],
       startPkg: async function (url, isUrl = true, force = false) {
@@ -257,12 +283,13 @@
               const newLib = new processLib(url, PID, Token);
               if (Core.processList[PID]) Core.processList[PID].token = Token;
               let result;
-              console.log(pkg.privileges);
+              // console.log(pkg.privileges);
               if (
                 url.startsWith("system:") ||
                 url.startsWith("ui:") ||
                 url.startsWith("components:") ||
-                url.startsWith("services:")
+                url.startsWith("services:") ||
+                permittedApps.includes(url)
               ) {
                 result = await pkg.exec({
                   Lib: newLib,
@@ -348,9 +375,7 @@
                     ...(privileges.knownPackageList
                       ? { knownPackageList: Core.knownPackageList }
                       : {}),
-                    ...(privileges.services
-                      ? { services: Core.services }
-                      : {}),
+                    ...(privileges.services ? { services: Core.services } : {}),
                   };
                   if (privileges.full) {
                     coreObj = Core;
@@ -363,7 +388,7 @@
                     Modal,
                     Services: Core.services,
                   });
-                  console.log("ran with privs");
+                  // console.log("ran with privs");
                 } else if (modalResult === "deny") {
                   result = await pkg.exec({
                     Lib: newLib,
@@ -373,7 +398,7 @@
                     Modal,
                     Services: Core.services,
                   });
-                  console.log("ran without privs");
+                  // console.log("ran without privs");
                 } else {
                   result = null;
                 }
@@ -387,6 +412,21 @@
                   { name: pkg?.name, description: pkg?.description },
                   result
                 );
+                if (
+                  typeof pkg?.optInToEvents !== "undefined" &&
+                  pkg?.optInToEvents === true
+                ) {
+                  console.log("Core: adding", PID, "to optInToEvents");
+                  procsListeningToEvents.push(PID);
+                }
+
+                broadcastEventToProcs({
+                  type: "coreEvent",
+                  data: {
+                    type: "pkgStart",
+                    data: Core.processList[PID],
+                  },
+                });
               }
               console.groupEnd();
               return Core.processList[PID];
@@ -417,15 +457,24 @@
           }
         }
       },
-      services: {},
+      services: {
+        
+      },
+      broadcastEventToProcs,
+      async afa(id) {
+        const x = await this.startPkg("lib:WindowSystem");
+
+        if (x.focusWindow) {
+          x.focusWindow(id);
+        }
+      },
     };
 
     Modal = await Core.startPkg("ui:Modal");
 
     await Core.startPkg("system:BootLoader");
 
-    console.log(Modal);
-
+    window.m = Modal;
     window.c = Core;
     window.l = GlobalLib;
     window.h = GlobalLib.html;

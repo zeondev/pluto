@@ -54,13 +54,31 @@ export default {
         opensWith: "apps:ImageViewer",
         icon: "fileImage",
       },
+      gif: {
+        type: "image",
+        label: "GIF image",
+        opensWith: "apps:ImageViewer",
+        icon: "fileImage",
+      },
+      mp4: {
+        type: "image",
+        label: "MP4 video",
+        opensWith: "apps:ImageViewer",
+        icon: "fileImage",
+      },
       shrt: {
         type: "text",
         label: "Desktop shortcut",
         opensWith: "apps:Notepad",
       },
+      theme: {
+        type: "text",
+        label: "Theme",
+        opensWith: "apps:Notepad",
+        icon: "brush",
+      },
     },
-    retriveAllMIMEdata: function(path, vfs) {
+    retriveAllMIMEdata: function (path, vfs) {
       // pass in path, if shrt file, run custom shrt algorythm (returns everything that a regular run does), else, find file format, return icon, label, file name, and onclick events
       let ext = path.split(".").pop();
       if (ext === "shrt") {
@@ -79,14 +97,26 @@ export default {
       } else {
         let icon = vfs.whatIs(path);
         let map = {};
-        if (icon === 'dir') {
-          map = { label: icon === 'File folder', opensWith: 'apps:FileManager', loadType: 'loadFolder' };
+        if (icon === "dir") {
+          map = {
+            label: icon === "File folder",
+            opensWith: "apps:FileManager",
+            loadType: "loadFolder",
+          };
         } else {
           map = { label: icon === "File", opensWith: null };
         }
         if (this.mappings[ext.toLowerCase()]) {
           map = this.mappings[ext.toLowerCase()];
           icon = map.icon;
+        } else {
+          if (icon !== "dir")
+            map = {
+              type: "file",
+              label: "Unknown file",
+              opensWith: null,
+              icon: "file",
+            };
         }
         let pathSplit = path.split("/");
         return {
@@ -95,22 +125,33 @@ export default {
           fullname: map.label,
           onClick: async (c) => {
             if (map.opensWith === null) return;
-            let x = await c.startPkg(map.opensWith, true, true);
-            if (map.loadType) {
-              x.proc.send({ type: map.loadType, path });
+            if (map.opensWith === "custom") {
+              c.startPkg(
+                "data:text/javascript;base64," + btoa(vfs.readFile(path)),
+                false,
+                true
+              );
+              return;
             } else {
-              x.proc.send({ type: "loadFile", path });
+              let x = await c.startPkg(map.opensWith, true, true);
+              if (map.loadType) {
+                x.proc.send({ type: map.loadType, path });
+              } else {
+                console.log(map);
+                console.log(path); // ??
+                x.proc.send({ type: "loadFile", path });
+              }
             }
           },
         };
       }
     },
-    getType: function(extension) {
+    getType: function (extension) {
       if (extension in this.mappings) {
         return this.mappings[extension].text;
       } else return false;
     },
-    getLabel: function(extension) {
+    getLabel: function (extension) {
       if (extension in this.mappings) {
         return this.mappings[extension].text;
       } else return false;
