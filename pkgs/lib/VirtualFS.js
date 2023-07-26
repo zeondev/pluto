@@ -9,7 +9,7 @@ let templateFsLayout = {
         "appearanceConfig.json": JSON.stringify({
           wallpaper: "./assets/wallpapers/space.png",
           useThemeWallpaper: true,
-          theme: "dark",
+          theme: "dark.theme",
         }),
         themes: {
           "light.theme":
