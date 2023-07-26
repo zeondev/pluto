@@ -33,7 +33,7 @@ export default {
       await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
     );
 
-    let wallpaper = "/assets/wallpapers/space.png";
+    let wallpaper = "./assets/wallpapers/space.png";
 
     if (appearanceConfig.wallpaper) {
       wallpaper = appearanceConfig.wallpaper;

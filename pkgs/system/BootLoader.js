@@ -71,7 +71,7 @@ export default {
         }
       } else {
         themeLib.setCurrentTheme(
-          '{"version":1,"name":"Dark","description":"A built-in theme.","values":null,"cssThemeDataset":"dark","wallpaper":"/assets/wallpapers/space.png"}'
+          '{"version":1,"name":"Dark","description":"A built-in theme.","values":null,"cssThemeDataset":"dark","wallpaper":"./assets/wallpapers/space.png"}'
         );
       }
 
@@ -81,7 +81,7 @@ export default {
       lsg.cleanup();
 
       // ply starutp stound
-      let a = new Audio("/assets/startup.wav");
+      let a = new Audio("./assets/startup.wav");
       a.volume = 0.5;
       a.play();
     } catch (e) {

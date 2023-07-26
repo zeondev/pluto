@@ -114,7 +114,7 @@
       },
     };
 
-    GlobalLib.icons = (await import("/assets/icons.js")).default;
+    GlobalLib.icons = (await import("./assets/icons.js")).default;
 
     // Similar name to procLib but is not actually ProcLib
     const processLib = class ProcessAvailableLibrary {
@@ -282,7 +282,7 @@
             url = "none:<Imported as URI>";
             // e.g. data:text/javascript;base64,jiOAJIOFAWFJOJAWOj
           } else {
-            pkg = await import("/pkgs/" + url.replace(":", "/") + ".js");
+            pkg = await import("./pkgs/" + url.replace(":", "/") + ".js");
           }
 
           if (!pkg.default)

@@ -7,21 +7,21 @@ let templateFsLayout = {
       },
       config: {
         "appearanceConfig.json": JSON.stringify({
-          wallpaper: "/assets/wallpapers/space.png",
+          wallpaper: "./assets/wallpapers/space.png",
           useThemeWallpaper: true,
           theme: "dark",
         }),
         themes: {
           "light.theme":
-            '{"version":1,"name":"Light","description":"A built-in theme.","values":null,"cssThemeDataset":"light","wallpaper":"/assets/wallpapers/light.png"}',
+            '{"version":1,"name":"Light","description":"A built-in theme.","values":null,"cssThemeDataset":"light","wallpaper":"./assets/wallpapers/light.png"}',
           "dark.theme":
-            '{"version":1,"name":"Dark","description":"A built-in theme.","values":null,"cssThemeDataset":"dark","wallpaper":"/assets/wallpapers/space.png"}',
+            '{"version":1,"name":"Dark","description":"A built-in theme.","values":null,"cssThemeDataset":"dark","wallpaper":"./assets/wallpapers/space.png"}',
           "grey.theme":
-            '{"version":1,"name":"Grey","description":"A built-in theme.","values":null,"cssThemeDataset":"chatify","wallpaper":"/assets/wallpapers/grey.svg"}',
+            '{"version":1,"name":"Grey","description":"A built-in theme.","values":null,"cssThemeDataset":"chatify","wallpaper":"./assets/wallpapers/grey.svg"}',
           "red.theme":
-            '{"version":1,"name":"Red","description":"A built-in theme.","values":null,"cssThemeDataset":"red","wallpaper":"/assets/wallpapers/red.png"}',
+            '{"version":1,"name":"Red","description":"A built-in theme.","values":null,"cssThemeDataset":"red","wallpaper":"./assets/wallpapers/red.png"}',
           "green.theme":
-            '{"version":1,"name":"Green","description":"A built-in theme.","values":null,"cssThemeDataset":"green","wallpaper":"/assets/wallpapers/green.jpg"}',
+            '{"version":1,"name":"Green","description":"A built-in theme.","values":null,"cssThemeDataset":"green","wallpaper":"./assets/wallpapers/green.jpg"}',
         },
       },
       apps: {

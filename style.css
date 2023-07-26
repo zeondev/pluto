@@ -903,9 +903,9 @@ td {
 }
 .log-error::before {
   background-color: #ff3b6b;
-  -webkit-mask: url("/assets/icons/error.svg") no-repeat center center;
+  -webkit-mask: url("./assets/icons/error.svg") no-repeat center center;
   -webkit-mask-size: 100% 100%;
-  mask: url("/assets/icons/error.svg") no-repeat center center;
+  mask: url("./assets/icons/error.svg") no-repeat center center;
   mask-size: 100% 100%;
 }
 .log-warn {
@@ -916,9 +916,9 @@ td {
 }
 .log-warn::before {
   background-color: #d7b600;
-  -webkit-mask: url("/assets/icons/warn.svg") no-repeat center center;
+  -webkit-mask: url("./assets/icons/warn.svg") no-repeat center center;
   -webkit-mask-size: 100% 100%;
-  mask: url("/assets/icons/warn.svg") no-repeat center center;
+  mask: url("./assets/icons/warn.svg") no-repeat center center;
   mask-size: 100% 100%;
 }
 
@@ -1485,7 +1485,7 @@ hr {
   background-image: var(--url);
   background-size: cover;
   background-position: center;
-  --url: url("/assets/user-avatar.svg");
+  --url: url("./assets/user-avatar.svg");
 }
 .desktop .menu > .me > .text {
   display: flex;

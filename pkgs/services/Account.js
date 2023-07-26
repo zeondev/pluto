@@ -58,7 +58,7 @@ export default {
 
     const stockUserData = {
       username: "User",
-      pfp: "/assets/user-avatar.svg",
+      pfp: "./assets/user-avatar.svg",
       id: -1,
       email: null,
       onlineAccount: false,
@@ -66,7 +66,7 @@ export default {
 
     let currentUserData = {
       username: "User",
-      pfp: "/assets/user-avatar.svg",
+      pfp: "./assets/user-avatar.svg",
       id: -1,
       email: null,
       onlineAccount: sessionStorage.getItem("userData") !== null,

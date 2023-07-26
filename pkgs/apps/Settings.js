@@ -282,7 +282,7 @@ export default {
 
         const cardBoxIcon = new Html("div")
           .class("icon")
-          .style({ "--url": "url(/assets/pluto-logo.svg)" });
+          .style({ "--url": "url(./assets/pluto-logo.svg)" });
         const cardBoxName = new Html("div").text(
           "Pluto " + sysInfo.versionString
         );
