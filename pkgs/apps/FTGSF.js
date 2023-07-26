@@ -1,9 +1,9 @@
 export default {
   name: "FTGSF",
   description: "Generates shortcuts for applications on the Desktop.",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
-  exec: async function(Root) {
+  exec: async function (Root) {
     let wrapper; // Lib.html | undefined\
 
     function onEnd() {
@@ -17,7 +17,7 @@ export default {
     console.log("generating shortcuts for applications on the desktop");
 
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
-    vfs.importFS();
+    await vfs.importFS();
 
     // task manager
     // file manager
@@ -31,14 +31,14 @@ export default {
       { name: "File Manager", icon: "folders", fullname: "apps:FileManager" },
       { name: "Image Viewer", icon: "image", fullname: "apps:ImageViewer" },
       { name: "Notepad", icon: "note", fullname: "apps:Notepad" },
-      { name: "Weather", icon: "cloudMoon", fullname: "apps:Weather" },
+      // { name: "Weather", icon: "cloudMoon", fullname: "apps:Weather" },
       { name: "DevEnv", icon: "fileCode", fullname: "apps:DevEnv" },
-      { name: "Browser", icon: "globe", fullname: "apps:Browser" },
+      // { name: "Browser", icon: "globe", fullname: "apps:Browser" },
       { name: "Settings", icon: "wrench", fullname: "apps:Settings" },
     ];
     console.log(shortcutsList.length);
     for (let i = 0; i < shortcutsList.length; i++) {
-      vfs.writeFile(
+      await vfs.writeFile(
         "Root/Desktop/" + shortcutsList[i].name.replace(" ", "") + ".shrt",
         JSON.stringify(shortcutsList[i])
       );

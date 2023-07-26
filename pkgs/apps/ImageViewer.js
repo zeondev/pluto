@@ -1,7 +1,7 @@
 export default {
   name: "Image Viewer",
   description: "View your epic images in this smooth app.",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
@@ -36,7 +36,7 @@ export default {
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
     const FileDialog = await Root.Lib.loadLibrary("FileDialog");
 
-    vfs.importFS();
+    await vfs.importFS();
 
     wrapper.classList.add("with-sidebar", "row", "o-h", "h-100");
 
@@ -47,7 +47,7 @@ export default {
       if (path) file = path;
       else file = await FileDialog.pickFile("Root");
       if (file === false) return;
-      let result = updateImage(vfs.readFile(file));
+      let result = updateImage(await vfs.readFile(file));
       if (result === false) return;
       MyWindow.window.querySelector(".win-titlebar .title").innerText =
         "Image Viewer - " + file.split("/").pop();

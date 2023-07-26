@@ -4,7 +4,7 @@ let html;
 export default {
   name: "Test library",
   description: "Test library",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "component",
   init: function (l) {
     lib = l;

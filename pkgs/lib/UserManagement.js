@@ -52,7 +52,7 @@ export default {
   name: "User Management",
   description:
     "This library handles user managament. Please do not modify this library.",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "library",
   init: function (l) {
     lib = l;

@@ -8,7 +8,7 @@ export default {
       description: "Run applications from files",
     },
   ],
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
     let win;
@@ -28,8 +28,6 @@ export default {
 
     const L = Root.Lib;
     const C = Root.Core;
-
-    console.log("Core!!!", C);
 
     const vfs = await L.loadLibrary("VirtualFS");
     const Sidebar = await L.loadComponent("Sidebar");
@@ -57,10 +55,10 @@ export default {
 
     Sidebar.new(wrapper, [
       {
-        onclick: (_) => {
+        onclick: async (_) => {
           if (path === "Root") return;
 
-          let p = vfs.getParentFolder(path);
+          let p = await vfs.getParentFolder(path);
           path = p;
           renderFileList(p);
         },
@@ -76,7 +74,7 @@ export default {
           );
           if (result === false) return;
           result = result.replace(/\//g, "");
-          vfs.createFolder(path + "/" + result);
+          await vfs.createFolder(path + "/" + result);
         },
         html: L.icons.createFolder,
         title: "Create Folder",
@@ -90,7 +88,7 @@ export default {
           );
           if (result === false) return;
           result = result.replace(/\//g, "");
-          vfs.writeFile(path + "/" + result, "");
+          await vfs.writeFile(path + "/" + result, "");
         },
         html: L.icons.createFile,
         title: "Create File",
@@ -106,20 +104,6 @@ export default {
             var reader = new FileReader();
 
             if (
-              file.type.startsWith("text") ||
-              file.type.startsWith("application")
-            ) {
-              // read as text
-              reader.readAsText(file, "UTF-8");
-
-              // here we tell the reader what to do when it's done reading...
-              reader.onload = (readerEvent) => {
-                var content = readerEvent.target.result; // this is the content!
-                console.log(content);
-                console.log(file);
-                vfs.writeFile(`Root/${file.name}`, content);
-              };
-            } else if (
               file.type.startsWith("image") ||
               file.type.startsWith("audio") ||
               file.type.startsWith("video")
@@ -128,11 +112,20 @@ export default {
               reader.readAsDataURL(file);
 
               // here we tell the reader what to do when it's done reading...
-              reader.onload = (readerEvent) => {
+              reader.onload = async (readerEvent) => {
                 var content = readerEvent.target.result; // this is the content!
                 console.log(content);
                 console.log(file);
-                vfs.writeFile(`Root/${file.name}`, content);
+                await vfs.writeFile(`Root/${file.name}`, content);
+              };
+            } else {
+              // read as text
+              reader.readAsText(file, "UTF-8");
+
+              // here we tell the reader what to do when it's done reading...
+              reader.onload = async (readerEvent) => {
+                var content = readerEvent.target.result; // this is the content!
+                await vfs.writeFile(`${path}/${file.name}`, content);
               };
             }
           };
@@ -140,12 +133,12 @@ export default {
           input.click();
         },
         html: L.icons.fileImport,
-        title: "Import File from yuor system",
+        title: "Import file from your system",
       },
       {
         onclick: async (_) => {
           if (!selectedItem) return;
-          let i = vfs.whatIs(selectedItem);
+          let i = await vfs.whatIs(selectedItem);
           let result = await Root.Modal.prompt(
             "Notice",
             `Are you sure you want to delete this ${
@@ -153,7 +146,7 @@ export default {
             }?`
           );
           if (result === true) {
-            vfs.delete(selectedItem);
+            await vfs.delete(selectedItem);
           }
         },
         html: L.icons.delete,
@@ -172,7 +165,7 @@ export default {
       .class("w-100")
       .appendTo(wrapperWrapperWrapper);
 
-    vfs.importFS();
+    await vfs.importFS();
 
     let selectedItem = "";
 
@@ -183,17 +176,23 @@ export default {
 
     let tableBody = new L.html("tbody").appendTo(table);
 
-    function renderFileList(folder) {
-      const isFolder = vfs.whatIs(folder);
+    async function renderFileList(folder) {
+      const isFolder = await vfs.whatIs(folder);
 
       if (isFolder !== "dir") {
         path = "Root/";
         return renderFileList();
       }
-      // return renderFileList(vfs.getParentFolder(folder));
+      // return renderFileList(await vfs.getParentFolder(folder));
 
       setTitle("Files - " + folder);
-      let fileList = vfs.list(folder);
+      let fileList = await vfs.list(folder);
+
+      const mappings = await Promise.all(
+        fileList.map(async (e) => {
+          return await FileMappings.retriveAllMIMEdata(path + "/" + e.item);
+        })
+      );
 
       tableBody.html("");
 
@@ -201,10 +200,7 @@ export default {
         let file = fileList[i];
         let tableBodyRow = new L.html("tr").appendTo(tableBody);
 
-        let mapping = FileMappings.retriveAllMIMEdata(
-          path + "/" + file.item,
-          vfs
-        );
+        const mapping = mappings[i];
 
         tableBodyRow.on("click", async (_) => {
           if (selectedItem === path + "/" + file.item) {
@@ -252,7 +248,7 @@ export default {
       }
     }
 
-    renderFileList(path);
+    await renderFileList(path);
 
     return L.setupReturns(onEnd, (m) => {
       if (

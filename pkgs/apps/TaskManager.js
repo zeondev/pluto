@@ -1,7 +1,7 @@
 export default {
   name: "Task Manager",
   description: "Examine and manage processes",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   privileges: [
     {

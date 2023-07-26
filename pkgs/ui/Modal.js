@@ -3,7 +3,7 @@ let lib;
 export default {
   name: "Modal",
   description: "Handles modal alerts and popups",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "library",
   init: function (l) {
     lib = l;

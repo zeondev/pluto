@@ -1,7 +1,7 @@
 export default {
   name: "Desktop",
   description: "Backdrop user interface",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   optInToEvents: true,
   exec: async function (Root) {
@@ -27,10 +27,10 @@ export default {
     let Html = Root.Lib.html;
 
     let vfs = await Root.Core.startPkg("lib:VirtualFS");
-    vfs.importFS();
+    await vfs.importFS();
 
     let appearanceConfig = JSON.parse(
-      vfs.readFile("Root/Pluto/config/appearanceConfig.json")
+      await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
     );
 
     let wallpaper = "/assets/wallpapers/space.png";
@@ -85,7 +85,7 @@ export default {
           vfs.fileSystem.Root["oldFs"] = JSON.parse(
             localStorage.getItem("oldvfs")
           );
-          vfs.save();
+          await vfs.save();
           localStorage.removeItem("oldvfs");
 
           let fm = await Root.Core.startPkg("apps:FileManager", true, true);
@@ -119,7 +119,7 @@ export default {
       //   .appendTo(fileManager)
 
       const desktopDirectory = "Root/Desktop";
-      const fileList = vfs.list(desktopDirectory);
+      const fileList = await vfs.list(desktopDirectory);
 
       const iconsWrapper = new Root.Lib.html("div")
         .class("desktop-apps")
@@ -166,12 +166,13 @@ export default {
         return iconWrapper;
       }
 
+      let FileMappings = await Root.Lib.loadLibrary("FileMappings");
+
       for (let i = 0; i < fileList.length; i++) {
         let file = fileList[i];
 
-        let FileMappings = await Root.Lib.loadLibrary("FileMappings");
         //let daleta = t mapping =
-        let mapping = FileMappings.retriveAllMIMEdata(
+        let mapping = await FileMappings.retriveAllMIMEdata(
           desktopDirectory + "/" + file.item,
           vfs
         );
@@ -181,7 +182,7 @@ export default {
         // if (file.item.endsWith(".shrt")) {
         //   try {
         //     let shrtFile = JSON.parse(
-        //       vfs.readFile(desktopDirectory + "/" + file.item)
+        //       await vfs.readFile(desktopDirectory + "/" + file.item)
         //     );
 
         //     if (!shrtFile.name || !shrtFile.icon || !shrtFile.fullname) {
@@ -210,7 +211,7 @@ export default {
         //         case "app":
         //           Root.Core.startPkg(
         //             "data:text/javascript;base64," +
-        //             btoa(vfs.readFile(desktopDirectory + "/" + file.item)),
+        //             btoa(await vfs.readFile(desktopDirectory + "/" + file.item)),
         //             false
         //           );
         //           break;
@@ -409,30 +410,34 @@ export default {
     let wallpaperToChangeTo = "";
 
     function smoothlySwapBackground(to) {
-      const preloadImage = new Image();
-      background.classOn("fadeOut");
-      if (isCurrentlyChangingWallpaper === true) {
-        wallpaperToChangeTo = to;
-        return;
-      }
-      isCurrentlyChangingWallpaper = true;
       wallpaperToChangeTo = to;
-      setTimeout(() => {
-        preloadImage.src = wallpaperToChangeTo;
-        preloadImage.addEventListener("load", fadeIn);
-      }, 500);
-      function fadeIn() {
-        setTimeout(() => {
-          background.classOff("fadeOut").classOn("fadeIn");
-          background.style({
-            "background-image": "url(" + wallpaperToChangeTo + ")",
-          });
-          isCurrentlyChangingWallpaper = false;
-        }, 500);
-      }
+      background.style({
+        "background-image": "url(" + wallpaperToChangeTo + ")",
+      });
+      // const preloadImage = new Image();
+      // background.classOn("fadeOut");
+      // if (isCurrentlyChangingWallpaper === true) {
+      //   wallpaperToChangeTo = to;
+      //   return;
+      // }
+      // isCurrentlyChangingWallpaper = true;
+      // wallpaperToChangeTo = to;
+      // setTimeout(() => {
+      //   preloadImage.src = wallpaperToChangeTo;
+      //   preloadImage.addEventListener("load", fadeIn);
+      // }, 500);
+      // function fadeIn() {
+      //   setTimeout(() => {
+      //     background.classOff("fadeOut").classOn("fadeIn");
+      //     background.style({
+      //       "background-image": "url(" + wallpaperToChangeTo + ")",
+      //     });
+      //     isCurrentlyChangingWallpaper = false;
+      //   }, 500);
+      // }
     }
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns(onEnd, async (m) => {
       try {
         // Got a message
         const { type, data } = m;
@@ -440,7 +445,7 @@ export default {
           case "setWallpaper":
             if (data === "default") {
               appearanceConfig = JSON.parse(
-                vfs.readFile("Root/Pluto/config/appearanceConfig.json")
+                await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
               );
               smoothlySwapBackground(appearanceConfig.wallpaper);
             } else {

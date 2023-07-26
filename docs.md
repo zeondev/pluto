@@ -16,7 +16,7 @@ Example package:
 export default {
   name: "Example",
   description: "Example app",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
     // Root is a Root object
@@ -191,7 +191,7 @@ new Root.Lib.html("p").html("This is my example app").appendTo(wrapper);
 export default {
   name: "Window library demo",
   description: "Example of window library",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
     let MyWindow;

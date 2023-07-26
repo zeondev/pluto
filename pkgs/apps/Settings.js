@@ -1,7 +1,7 @@
 export default {
   name: "Settings",
   description: "Modify settings from this UI.",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   privileges: [
     {
@@ -63,15 +63,15 @@ export default {
     const Card = await Root.Lib.loadComponent("Card");
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
     const themeLib = await Root.Lib.loadLibrary("ThemeLib");
-    vfs.importFS();
+    await vfs.importFS();
 
     let desktopConfig = JSON.parse(
-      vfs.readFile("Root/Pluto/config/appearanceConfig.json")
+      await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
     );
     console.log(desktopConfig);
 
-    function save() {
-      vfs.writeFile(
+    async function save() {
+      await vfs.writeFile(
         "Root/Pluto/config/appearanceConfig.json",
         JSON.stringify(desktopConfig)
       );
@@ -83,8 +83,8 @@ export default {
       onclose: () => {
         onEnd();
       },
-      width: 400,
-      height: 260,
+      width: 480,
+      height: 360,
       pid: Root.PID,
     });
 
@@ -138,18 +138,26 @@ export default {
         },
       },
       {
-        icon: Root.Lib.icons.glasses,
-        text: "Privacy",
-        title: "Privacy",
+        icon: Root.Lib.icons.shield,
+        text: "Security",
+        title: "Security",
         onclick() {
-          pages.priv();
+          pages.sec();
         },
       },
     ]);
 
     container = new Root.Lib.html("div")
-      .class("container", "col", "w-100")
+      .class("container", "col", "w-100", "gap", "padded", "ovh")
       .appendTo(wrapper);
+
+    function makeHeading(type, text) {
+      if (type === "h1") {
+        new Html().class(type).text(text).appendTo(container);
+      } else {
+        new Html().class(type, "mt-1").text(text).appendTo(container);
+      }
+    }
 
     let pages = {
       clear() {
@@ -157,12 +165,11 @@ export default {
       },
       acct() {
         this.clear();
-        new Html("h1").text("Account").appendTo(container);
-        new Html("hr").appendTo(container);
+        makeHeading("h1", "Account");
 
         const result = sessionStorage.userData;
 
-        const userBoxAvatar = new Html("div").class("avatar");
+        const userBoxAvatar = new Html("div").class("icon");
         const userBoxName = new Html("div").text("User");
         const userBoxType = new Html("div")
           .class("label")
@@ -173,7 +180,7 @@ export default {
             userBoxAvatar,
             new Html("div").class("text").appendMany(userBoxName, userBoxType)
           )
-          .class("user-box")
+          .class("card-box", "max")
           .appendTo(container);
 
         if (result === undefined) {
@@ -267,43 +274,202 @@ export default {
           }
         }
       },
-      sys() {
+      async sys() {
         this.clear();
-        new Html("h1").text("System").appendTo(container);
-        new Html("hr").appendTo(container);
-        new Html("button")
-          .text("WIPE entire file system (dangerous)")
-          .class("danger", "mc", "small")
-          .on("click", async (e) => {
-            console.log("a");
-            window.r = Root;
-            let result = await Root.Modal.prompt(
-              "Confirmation",
-              "Are you sure you want to do this?\nThis action is DESTRUCTIVE and cannot be undone.",
-              settingsWin.elm
-            );
+        makeHeading("h1", "System");
 
-            if (result === true) {
-              localStorage.clear();
-              vfs.importFS();
-              vfs.save();
-              let result = await Root.Modal.prompt(
-                "Success",
-                "Cleared file system.\nWant to launch PassiveReboot as well?",
-                settingsWin.elm
-              );
+        const sysInfo = Root.Lib.systemInfo;
 
-              if (result === true) {
-                Root.Lib.launch("apps:PassiveReboot", settingsWin.elm);
-              }
-            }
-          })
+        const cardBoxIcon = new Html("div")
+          .class("icon")
+          .style({ "--url": "url(/assets/pluto-logo.svg)" });
+        const cardBoxName = new Html("div").text(
+          "Pluto " + sysInfo.versionString
+        );
+        const cardBoxType = new Html("div")
+          .class("label")
+          .text(sysInfo.codename);
+
+        const cardBox = new Html("div")
+          .appendMany(
+            cardBoxIcon,
+            new Html("div").class("text").appendMany(cardBoxName, cardBoxType)
+          )
+          .class("card-box", "max")
           .appendTo(container);
+
+        const filesystemSize =
+          ((await localforage.getItem("fs")).length / 1024).toFixed(2) + " KB";
+
+        makeHeading("h2", "Your device");
+
+        const webProtocol = location.protocol.endsWith("s") ? "HTTPS" : "HTTP";
+
+        // Get user agent string
+        const userAgent = navigator.userAgent;
+
+        // Get browser information
+        const browser = {
+          name: "",
+          version: "",
+        };
+
+        if (userAgent.indexOf("Firefox") > -1) {
+          browser.name = "Firefox";
+          browser.version = userAgent.match(/Firefox\/([\d.]+)/)[1];
+        } else if (userAgent.indexOf("Chrome") > -1) {
+          browser.name = "Chrome";
+          browser.version = userAgent.match(/Chrome\/([\d.]+)/)[1];
+        } else if (userAgent.indexOf("Safari") > -1) {
+          browser.name = "Safari";
+          browser.version = userAgent.match(/Safari\/([\d.]+)/)[1];
+        } else if (userAgent.indexOf("Opera") > -1) {
+          browser.name = "Opera";
+          browser.version = userAgent.match(/Opera\/([\d.]+)/)[1];
+        } else if (userAgent.indexOf("Edge") > -1) {
+          browser.name = "Microsoft Edge";
+          browser.version = userAgent.match(/Edge\/([\d.]+)/)[1];
+        } else {
+          browser.name = "Other";
+          browser.version = "";
+        }
+
+        browser.version = parseInt(browser.version);
+        if (isNaN(browser.version)) browser.version = "";
+
+        // Get operating system information
+        const os = {
+          name: "",
+          version: "",
+        };
+
+        if (userAgent.indexOf("Windows") > -1) {
+          os.name = "Windows";
+          os.version = userAgent.match(/Windows NT ([\d.]+)/)[1];
+        } else if (userAgent.indexOf("Mac") > -1) {
+          os.name = "macOS";
+          os.version = userAgent
+            .match(/Mac OS X ([\d_]+)/)[1]
+            .replace(/_/g, ".");
+        } else if (userAgent.indexOf("Android") > -1) {
+          os.name = "Android";
+          os.version = userAgent.match(/Android ([\d.]+)/)[1];
+        } else if (userAgent.indexOf("Linux") > -1) {
+          os.name = "Linux";
+        } else if (userAgent.indexOf("iOS") > -1) {
+          os.name = "iOS";
+          os.version = userAgent.match(/OS ([\d_]+)/)[1].replace(/_/g, ".");
+        } else {
+          os.name = "Other";
+          os.version = "";
+        }
+
+        os.version = parseInt(os.version);
+        if (isNaN(os.version)) os.version = "";
+
+        // Get device type
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(userAgent);
+        const deviceType = isMobile ? "Mobile" : "Desktop";
+
+        const yourDevice = new Html("div")
+          .class("card-box", "list", "max")
+          .appendMany(
+            // OS
+            new Html()
+              .class("item")
+              .appendMany(
+                new Html().text("Operating System"),
+                new Html()
+                  .class("label")
+                  .text((os.name + " " + os.version).trim())
+              ),
+            // Browser
+            new Html()
+              .class("item")
+              .appendMany(
+                new Html().text("Web Browser"),
+                new Html()
+                  .class("label")
+                  .text((browser.name + " " + browser.version).trim())
+              ),
+            // Device type
+            new Html()
+              .class("item")
+              .appendMany(
+                new Html().text("Device Type"),
+                new Html().class("label").text(deviceType)
+              ),
+            // Protocol
+            new Html()
+              .class("item")
+              .appendMany(
+                new Html().text("Web Protocol"),
+                new Html().class("label").text(webProtocol)
+              )
+          )
+          .appendTo(container);
+
+        makeHeading("h2", "Pluto Information");
+
+        const plutoDetails = new Html("div")
+          .class("card-box", "list", "max")
+          .appendMany(
+            // FS Capacity
+            new Html()
+              .class("item")
+              .appendMany(
+                new Html().text("Storage Used"),
+                new Html().class("label").text(filesystemSize)
+              ),
+            // Core Version
+            new Html()
+              .class("item")
+              .appendMany(
+                new Html().text("Core Version"),
+                new Html().class("label").text(sysInfo.versionString)
+              ),
+            // Supported Versions
+            new Html()
+              .class("item")
+              .appendMany(
+                new Html().text("Supported Versions"),
+                new Html().class("label").text("<" + sysInfo.versionString)
+              )
+          )
+          .appendTo(container);
+
+        // new Html("button")
+        //   .text("WIPE entire file system (dangerous)")
+        //   .class("danger", "mc", "small")
+        //   .on("click", async (e) => {
+        //     console.log("a");
+        //     window.r = Root;
+        //     let result = await Root.Modal.prompt(
+        //       "Confirmation",
+        //       "Are you sure you want to do this?\nThis action is DESTRUCTIVE and cannot be undone.",
+        //       settingsWin.elm
+        //     );
+
+        //     if (result === true) {
+        //       localStorage.clear();
+        //       await vfs.importFS();
+        //       await vfs.save();
+        //       let result = await Root.Modal.prompt(
+        //         "Success",
+        //         "Cleared file system.\nWant to launch PassiveReboot as well?",
+        //         settingsWin.elm
+        //       );
+
+        //       if (result === true) {
+        //         Root.Lib.launch("apps:PassiveReboot", settingsWin.elm);
+        //       }
+        //     }
+        //   })
+        //   .appendTo(container);
       },
-      appe() {
+      async appe() {
         this.clear();
-        new Html("h1").text("Appearance").appendTo(container);
-        new Html("hr").appendTo(container);
+        makeHeading("h1", "Appearance");
 
         const themeSelectSpan = new Html("span")
           .class("row", "ac", "js", "gap")
@@ -323,7 +489,7 @@ export default {
           }),
         ];
 
-        const check = vfs.whatIs("Root/Pluto/config/themes");
+        const check = await vfs.whatIs("Root/Pluto/config/themes");
 
         let themes = [];
         let themeDatas = [];
@@ -332,16 +498,14 @@ export default {
           // non exist
           themes = defaultThemes;
         } else {
-          const themeFileList = vfs
-            .list("Root/Pluto/config/themes")
+          const themeFileListReal = await vfs.list("Root/Pluto/config/themes");
+          const themeFileList = themeFileListReal
             .filter((r) => r.type === "file" && r.item.endsWith(".theme"))
             .map((r) => r.item);
 
-          themeFileList.forEach((itm) => {
-            const theme = vfs.readFile(`Root/Pluto/config/themes/${itm}`);
-
+          await themeFileList.forEach(async (itm) => {
+            const theme = await vfs.readFile(`Root/Pluto/config/themes/${itm}`);
             const result = themeLib.validateTheme(theme);
-
             if (result.success === true) {
               themes.push(
                 new Html("option").text(result.data.name).attr({
@@ -383,11 +547,11 @@ export default {
                 id: Root.PID + "lc",
                 checked: desktopConfig.useThemeWallpaper === true ? true : null,
               })
-              .on("input", (e) => {
+              .on("input", async (e) => {
                 desktopConfig.useThemeWallpaper = e.target.checked;
                 if (desktopConfig.theme.endsWith(".theme")) {
                   const currentTheme = themeLib.validateTheme(
-                    vfs.readFile(
+                    await vfs.readFile(
                       "Root/Pluto/config/themes/" + desktopConfig.theme
                     )
                   );
@@ -420,15 +584,12 @@ export default {
       },
       netw() {
         this.clear();
-        new Html("h1").text("Networking").appendTo(container);
-        new Html("hr").appendTo(container);
+        makeHeading("h1", "Networking");
       },
-      appl() {
+      async appl() {
         this.clear();
-        new Html("h1").text("Applications").appendTo(container);
-        new Html("hr").appendTo(container);
-        let installedapps = vfs
-          .list("Root/Pluto/apps")
+        makeHeading("h1", "Applications");
+        let installedapps = (await vfs.list("Root/Pluto/apps"))
           .filter((p) => p.type === "file" && p.item.endsWith(".app"))
           .map((i) => i.item);
         console.log(installedapps);
@@ -441,7 +602,7 @@ export default {
           const a = (
             await import(
               `data:text/javascript;base64,${btoa(
-                vfs.readFile(`Root/Pluto/apps/${name}.app`)
+                await vfs.readFile(`Root/Pluto/apps/${name}.app`)
               )}`
             )
           ).default;
@@ -465,16 +626,13 @@ export default {
             )
           );
         });
-        console.log(vfs);
       },
-      priv() {
+      sec() {
         this.clear();
-        new Html("h1").text("Privacy").appendTo(container);
-        new Html("hr").appendTo(container);
+        makeHeading("h1", "Security");
       },
     };
 
-    // new Html("h1").text("Example App").appendTo(container);
     pages.sys();
 
     return Root.Lib.setupReturns(onEnd, (m) => {

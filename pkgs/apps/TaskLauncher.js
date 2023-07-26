@@ -2,7 +2,7 @@ export default {
   name: "Task Launcher",
   description:
     "Launch applications with any kind of elevation. Pop-ups will be displayed showing what kind of will be used.",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
     let wrapper;

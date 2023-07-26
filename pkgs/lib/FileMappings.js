@@ -1,9 +1,16 @@
+let L = {};
+let C = {};
+
 export default {
   name: "MIME File Mapping Library",
   description:
     "This library maps MIME types with applications and labels in order to fulfill launching files from desktop and FileManager use cases.",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "library",
+  init: (l, c) => {
+    L = l;
+    C = c;
+  },
   data: {
     mappings: {
       txt: {
@@ -78,11 +85,13 @@ export default {
         icon: "brush",
       },
     },
-    retriveAllMIMEdata: function (path, vfs) {
+    retriveAllMIMEdata: async function (path) {
       // pass in path, if shrt file, run custom shrt algorythm (returns everything that a regular run does), else, find file format, return icon, label, file name, and onclick events
+      const vfs = await L.loadLibrary("VirtualFS");
+      await vfs.importFS();
       let ext = path.split(".").pop();
       if (ext === "shrt") {
-        let shrtFile = JSON.parse(vfs.readFile(path));
+        let shrtFile = JSON.parse(await vfs.readFile(path));
         if (!shrtFile.name || !shrtFile.icon || !shrtFile.fullname) {
           return 0;
         }
@@ -95,16 +104,17 @@ export default {
           },
         };
       } else {
-        let icon = vfs.whatIs(path);
+        let icon = await vfs.whatIs(path);
         let map = {};
         if (icon === "dir") {
           map = {
+            type: "dir",
             label: icon === "File folder",
             opensWith: "apps:FileManager",
             loadType: "loadFolder",
           };
         } else {
-          map = { label: icon === "File", opensWith: null };
+          map = { label: icon === "file", opensWith: null };
         }
         if (this.mappings[ext.toLowerCase()]) {
           map = this.mappings[ext.toLowerCase()];
@@ -114,7 +124,7 @@ export default {
             map = {
               type: "file",
               label: "Unknown file",
-              opensWith: null,
+              opensWith: "apps:Notepad",
               icon: "file",
             };
         }
@@ -127,7 +137,7 @@ export default {
             if (map.opensWith === null) return;
             if (map.opensWith === "custom") {
               c.startPkg(
-                "data:text/javascript;base64," + btoa(vfs.readFile(path)),
+                "data:text/javascript;base64," + btoa(await vfs.readFile(path)),
                 false,
                 true
               );
@@ -137,8 +147,6 @@ export default {
               if (map.loadType) {
                 x.proc.send({ type: map.loadType, path });
               } else {
-                console.log(map);
-                console.log(path); // ??
                 x.proc.send({ type: "loadFile", path });
               }
             }

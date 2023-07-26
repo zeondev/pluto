@@ -14,7 +14,7 @@ function makeid(length) {
 export default {
   name: "Basic",
   description: "Basic user interface",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
     let wrapper; // Lib.html | undefinedd
@@ -53,9 +53,9 @@ export default {
       .appendTo(wrapper);
 
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
-    vfs.importFS();
+    await vfs.importFS();
 
-    vfs.writeFile(
+    await vfs.writeFile(
       "Root/Pluto/panics/pluto_" + makeid(16) + ".panic",
       err + "\n\n" + err.stack + "\n\n\n" + new Date().toString()
     );
@@ -71,7 +71,7 @@ export default {
     // new Html("button")
     //   .text("Attempt to save error")
     //   .on("click", (e) => {
-    //     vfs.writeFile(
+    //     await vfs.writeFile(
     //       "Root/Pluto/panics/pluto_" + makeid(16) + ".panic",
     //       err + "\n\n" + err.stack + "\n\n\n" + new Date().toString()
     //     );
@@ -81,10 +81,10 @@ export default {
 
     new Html("button")
       .text("Attempt filesystem backup and restore")
-      .on("click", (e) => {
-        localStorage.setItem("oldvfs", JSON.stringify(vfs.exportFS()));
-        let fs = vfs.importFS(true);
-        vfs.save();
+      .on("click", async (e) => {
+        localStorage.setItem("oldvfs", JSON.stringify(await vfs.exportFS()));
+        let fs = await vfs.importFS(true);
+        await vfs.save();
         location.reload();
       })
       .appendTo(wrapper);

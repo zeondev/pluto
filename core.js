@@ -1,7 +1,12 @@
-// Pluto 
+// Pluto
 
 (async () => {
   try {
+    const coreDetails = {
+      version: 1.1,
+      versionString: (1.1).toFixed(1),
+      codename: "Elysium",
+    };
     const knownLibraries = [];
     const GlobalLib = {
       html: class Html {
@@ -120,6 +125,7 @@
 
         this.html = GlobalLib.html;
         this.icons = GlobalLib.icons;
+        this.systemInfo = coreDetails;
 
         this.launch = async (app, parent = "body") => {
           if (
@@ -207,7 +213,31 @@
         Core.processList[pid] = null;
         console.groupEnd();
       },
-      randomString: (_) => crypto.randomUUID(),
+      randomString: (_) => {
+        if (crypto && crypto.randomUUID) crypto.randomUUID();
+        else {
+          var d = new Date().getTime();
+          var d2 =
+            (typeof performance !== "undefined" &&
+              performance.now &&
+              performance.now() * 1000) ||
+            0;
+          return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+            /[xy]/g,
+            function (c) {
+              var r = Math.random() * 16;
+              if (d > 0) {
+                r = (d + r) % 16 | 0;
+                d = Math.floor(d / 16);
+              } else {
+                r = (d2 + r) % 16 | 0;
+                d2 = Math.floor(d2 / 16);
+              }
+              return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+            }
+          );
+        }
+      },
     };
 
     let Modal;
@@ -238,7 +268,8 @@
     }
 
     const Core = {
-      version: 1.0,
+      version: coreDetails.version,
+      codename: coreDetails.codename,
       processList: [],
       knownPackageList: [],
       startPkg: async function (url, isUrl = true, force = false) {
@@ -457,9 +488,7 @@
           }
         }
       },
-      services: {
-        
-      },
+      services: {},
       broadcastEventToProcs,
       async afa(id) {
         const x = await this.startPkg("lib:WindowSystem");

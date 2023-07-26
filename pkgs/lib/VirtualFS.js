@@ -51,34 +51,37 @@ const Vfs = {
   // The file system is represented as a nested object, where each key is a folder or file name
   // and the value is either a string (for file contents) or another object (for a subfolder)
   fileSystem: {},
-  save() {
-    localStorage.setItem("fs", JSON.stringify(this.fileSystem));
-    this.fileSystem = JSON.parse(localStorage.getItem("fs"));
+  async save() {
+    await localforage.setItem("fs", JSON.stringify(this.fileSystem));
+    this.fileSystem = JSON.parse(await localforage.getItem("fs"));
   },
-  importFS(fsObject = templateFsLayout) {
+  async importFS(fsObject = templateFsLayout) {
     if (fsObject === true) {
-      this.fileSystem = templateFsLayout; 
-    } else if (!localStorage.getItem("fs") && fsObject === templateFsLayout) {
+      this.fileSystem = templateFsLayout;
+    } else if (
+      !(await localforage.getItem("fs")) &&
+      fsObject === templateFsLayout
+    ) {
       this.fileSystem = fsObject;
     } else if (fsObject !== templateFsLayout) {
       this.fileSystem = fsObject;
     } else {
-      this.fileSystem = JSON.parse(localStorage.getItem("fs"));
+      this.fileSystem = JSON.parse(await localforage.getItem("fs"));
     }
     this.save();
     return this.fileSystem;
   },
-  exportFS() {
+  async exportFS() {
     return this.fileSystem;
   },
   // Helper function to get the parent folder of a given path
-  getParentFolder(path) {
+  async getParentFolder(path) {
     const parts = path.split("/");
     parts.pop();
     return parts.join("/");
   },
   // function to tell you if stored data is a file or a folder
-  whatIs(path, fsObject = this.fileSystem) {
+  async whatIs(path, fsObject = this.fileSystem) {
     const parts = path.split("/");
     let current = fsObject;
     for (let i = 0; i < parts.length; i++) {
@@ -95,7 +98,7 @@ const Vfs = {
     }
   },
   // Function to get the contents of a file at a given path
-  readFile(path, fsObject = this.fileSystem) {
+  async readFile(path, fsObject = this.fileSystem) {
     const parts = path.split("/");
     let current = fsObject;
     for (let i = 0; i < parts.length; i++) {
@@ -111,7 +114,7 @@ const Vfs = {
     return current;
   },
   // Function to write to a file at a given path
-  writeFile(path, contents, fsObject = this.fileSystem) {
+  async writeFile(path, contents, fsObject = this.fileSystem) {
     const parts = path.split("/");
     const filename = parts.pop();
     let current = fsObject;
@@ -126,7 +129,7 @@ const Vfs = {
     this.save();
   },
   // Function to create a new folder at a given path
-  createFolder(path, fsObject = this.fileSystem) {
+  async createFolder(path, fsObject = this.fileSystem) {
     const parts = path.split("/");
     const foldername = parts.pop();
     let current = fsObject;
@@ -141,7 +144,7 @@ const Vfs = {
     this.save();
   },
   // Function to delete a file or folder at a given path
-  delete(path, fsObject = this.fileSystem) {
+  async delete(path, fsObject = this.fileSystem) {
     const parts = path.split("/");
     const filename = parts.pop();
     const parentPath = this.getParentFolder(path);
@@ -157,7 +160,7 @@ const Vfs = {
     this.save();
   },
   // Function to list all files and folders at a given path
-  list(path, fsObject = this.fileSystem) {
+  async list(path, fsObject = this.fileSystem) {
     const parts = path.split("/");
     let current = fsObject;
     for (let i = 0; i < parts.length; i++) {
@@ -167,9 +170,12 @@ const Vfs = {
       }
       current = current[part];
     }
-    return Object.keys(current).map((m) => {
-      return { item: m, type: this.whatIs(path + "/" + m) };
-    });
+    const result = await Promise.all(
+      Object.keys(current).map(async (m) => {
+        return { item: m, type: await this.whatIs(path + "/" + m) };
+      })
+    );
+    return result;
   },
 };
 
@@ -177,7 +183,7 @@ export default {
   name: "Virtual File System",
   description:
     "A file system based in the browsers local storage. This library includes many function to help loading and executing of files.",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "library",
   data: Vfs,
 };

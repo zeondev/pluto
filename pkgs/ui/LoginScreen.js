@@ -5,7 +5,7 @@ export default {
   description: "Login screen for Pluto",
   privileges: 1,
 
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined

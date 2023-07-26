@@ -5,7 +5,7 @@ export default {
   name: "List Pick Library",
   description:
     "! this library is unfinished ! List library to pick out items from a list",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "library",
   init: (l, c) => {
     L = l;
@@ -72,22 +72,22 @@ export default {
 
         buttonRow.appendMany(confirmButton, cancelButton);
 
-        vfs.importFS();
+        await vfs.importFS();
 
         let selectedItem = "";
 
         function renderFileList(folder) {
-          const isFolder = vfs.whatIs(folder);
+          const isFolder = await vfs.whatIs(folder);
 
           if (isFolder !== "dir") {
             path = "Root/Desktop";
             return renderFileList();
           }
 
-          // return renderFileList(vfs.getParentFolder(folder));
+          // return renderFileList(await vfs.getParentFolder(folder));
 
           setTitle("File picker - " + folder);
-          let fileList = vfs.list(folder);
+          let fileList = await vfs.list(folder);
 
           table.html("");
 

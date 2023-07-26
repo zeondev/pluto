@@ -7,7 +7,7 @@ export default {
       description: "for the admin app to do admin things",
     },
   ],
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
     let wrapper;

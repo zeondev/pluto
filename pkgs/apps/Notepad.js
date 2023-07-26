@@ -1,7 +1,7 @@
 export default {
   name: "Notepad",
   description: "Write and edit text files with this simplistic app.",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
@@ -70,10 +70,10 @@ export default {
     // FileDialog.pickFile and FileDialog.saveFile both take path as an argument and are async
     async function openFile() {
       let file = await FileDialog.pickFile(
-        vfs.getParentFolder(currentDocument.path) || "Root"
+        await vfs.getParentFolder(currentDocument.path) || "Root"
       );
       if (file === false) return;
-      let content = vfs.readFile(file);
+      let content = await vfs.readFile(file);
       newDocument(file, content);
       NpWindow.focus();
     }
@@ -82,13 +82,13 @@ export default {
       if (currentDocument.path === "") {
         return saveAs();
       }
-      vfs.writeFile(currentDocument.path, text.elm.value);
+      await vfs.writeFile(currentDocument.path, text.elm.value);
       currentDocument.dirty = false;
       updateTitle();
     }
     async function saveAs() {
       let result = await FileDialog.saveFile(
-        vfs.getParentFolder(currentDocument.path) || "Root"
+        await vfs.getParentFolder(currentDocument.path) || "Root"
       );
       if (result === false) return false;
       currentDocument.path = result;
@@ -150,7 +150,7 @@ export default {
     ]);
 
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
-    vfs.importFS();
+    await vfs.importFS();
 
     let text = new Root.Lib.html("textarea")
       .class("transparent", "ovh", "fg", "container")
@@ -163,9 +163,9 @@ export default {
       updateTitle();
     });
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns(onEnd, async (m) => {
       if (typeof m === "object" && m.type && m.type === "loadFile" && m.path) {
-        newDocument(m.path, vfs.readFile(m.path));
+        newDocument(m.path, await vfs.readFile(m.path));
       }
     });
   },

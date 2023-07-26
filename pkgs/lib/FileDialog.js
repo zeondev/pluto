@@ -4,14 +4,14 @@ let C = {};
 export default {
   name: "File Dialog Library",
   description: "Create file dialogs to pick and select files",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "library",
   init: (l, c) => {
     L = l;
     C = c;
   },
   data: {
-    pickFile: (path) => {
+    pickFile: async (path) => {
       if (path === undefined || path === "") path = "Root";
       return new Promise(async (resolve, reject) => {
         const vfs = await L.loadLibrary("VirtualFS");
@@ -38,8 +38,8 @@ export default {
 
         Sidebar.new(wrapper, [
           {
-            onclick: (_) => {
-              let p = vfs.getParentFolder(path);
+            onclick: async (_) => {
+              let p = await vfs.getParentFolder(path);
               path = p;
               renderFileList(p);
             },
@@ -88,7 +88,7 @@ export default {
 
         buttonRow.appendMany(confirmButton, cancelButton);
 
-        vfs.importFS();
+        await vfs.importFS();
 
         let selectedItem = "";
 
@@ -102,18 +102,22 @@ export default {
 
         let tableBody = new L.html("tbody").appendTo(table);
 
-        function renderFileList(folder) {
-          const isFolder = vfs.whatIs(folder);
+        async function renderFileList(folder) {
+          const isFolder = await vfs.whatIs(folder);
 
           if (isFolder !== "dir") {
             path = "Root/Desktop";
-            return renderFileList();
+            return await renderFileList();
           }
 
-          // return renderFileList(vfs.getParentFolder(folder));
-
           setTitle("File picker - " + folder);
-          let fileList = vfs.list(folder);
+          let fileList = await vfs.list(folder);
+
+          const mappings = await Promise.all(
+            fileList.map(async (e) => {
+              return await FileMappings.retriveAllMIMEdata(path + "/" + e.item);
+            })
+          );
 
           tableBody.html("");
 
@@ -144,10 +148,8 @@ export default {
               }
               renderFileList(path);
             });
-            let mapping = FileMappings.retriveAllMIMEdata(
-              path + "/" + file.item,
-              vfs
-            );
+
+            const mapping = mappings[i];
 
             if (file === null) continue;
 
@@ -177,6 +179,81 @@ export default {
             new L.html("td").text(userFriendlyFileType).appendTo(tableBodyRow);
           }
         }
+        // async function renderFileList(folder) {
+        //   const isFolder = await vfs.whatIs(folder);
+
+        //   if (isFolder !== "dir") {
+        //     path = "Root/Desktop";
+        //     return await renderFileList();
+        //   }
+
+        //   // return renderFileList(await vfs.getParentFolder(folder));
+
+        //   setTitle("File picker - " + folder);
+        //   let fileList = await vfs.list(folder);
+
+        //   tableBody.html("");
+
+        //   for (let i = 0; i < fileList.length; i++) {
+        //     let file = fileList[i];
+        //     let tableBodyRow = new L.html("tr").appendTo(tableBody);
+        //     tableBodyRow.on("click", async (_) => {
+        //       if (selectedItem === path + "/" + file.item) {
+        //         if (file.type === "dir") {
+        //           selectedItem = path + "/" + file.item;
+        //           confirmButton.attr({ disabled: "" });
+        //           path = selectedItem;
+        //           renderFileList(path);
+        //         } else {
+        //           selectedItem = path + "/" + file.item;
+        //           await attemptClose();
+        //           return resolve(selectedItem);
+        //         }
+
+        //         return;
+        //       }
+        //       selectedItem = path + "/" + file.item;
+        //       if (file.type === "file") {
+        //         confirmButton.attr({ disabled: null });
+        //       }
+        //       if (file.type === "dir") {
+        //         confirmButton.attr({ disabled: "" });
+        //       }
+        //       renderFileList(path);
+        //     });
+        //     let mapping = FileMappings.retriveAllMIMEdata(
+        //       path + "/" + file.item,
+        //       vfs
+        //     );
+
+        //     if (file === null) continue;
+
+        //     if (selectedItem === path + "/" + file.item)
+        //       tableBodyRow.class("table-selected");
+
+        //     let userFriendlyFileType = "File";
+
+        //     switch (file.type) {
+        //       case "dir":
+        //         userFriendlyFileType = "File folder";
+        //         break;
+        //       case "file":
+        //         userFriendlyFileType = mapping.fullname || mapping.label;
+        //         break;
+        //     }
+
+        //     new L.html("td")
+        //       .style({ width: "24px", height: "24px" })
+        //       .append(
+        //         new L.html("div")
+        //           .html(L.icons[mapping.icon])
+        //           .style({ width: "24px" })
+        //       )
+        //       .appendTo(tableBodyRow);
+        //     new L.html("td").text(file.item).appendTo(tableBodyRow);
+        //     new L.html("td").text(userFriendlyFileType).appendTo(tableBodyRow);
+        //   }
+        // }
 
         renderFileList(path);
       });
@@ -208,8 +285,8 @@ export default {
 
         Sidebar.new(wrapper, [
           {
-            onclick: (_) => {
-              let p = vfs.getParentFolder(path);
+            onclick: async (_) => {
+              let p = await vfs.getParentFolder(path);
               path = p;
               renderFileList(p);
             },
@@ -268,7 +345,7 @@ export default {
 
         buttonRow.appendMany(pathInput, confirmButton, cancelButton);
 
-        vfs.importFS();
+        await vfs.importFS();
 
         let selectedItem = "";
 
@@ -287,16 +364,22 @@ export default {
 
         let tableBody = new L.html("tbody").appendTo(table);
 
-        function renderFileList(folder) {
-          const isFolder = vfs.whatIs(folder);
+        async function renderFileList(folder) {
+          const isFolder = await vfs.whatIs(folder);
 
           if (isFolder !== "dir") {
             path = "Root/Desktop";
-            return renderFileList();
+            return await renderFileList();
           }
 
           setTitle("File picker - " + folder);
-          let fileList = vfs.list(folder);
+          let fileList = await vfs.list(folder);
+
+          const mappings = await Promise.all(
+            fileList.map(async (e) => {
+              return await FileMappings.retriveAllMIMEdata(path + "/" + e.item);
+            })
+          );
 
           tableBody.html("");
 
@@ -331,10 +414,7 @@ export default {
               renderFileList(path);
             });
 
-            let mapping = FileMappings.retriveAllMIMEdata(
-              path + "/" + file.item,
-              vfs
-            );
+            const mapping = mappings[i];
 
             if (file === null) continue;
 

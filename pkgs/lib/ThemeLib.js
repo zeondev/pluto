@@ -5,7 +5,7 @@ let Core = {};
 export default {
   name: "Theme Lib",
   description: "Manages theme parsing and handling",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "library",
   init: function (l, c) {
     lib = l;
@@ -117,11 +117,11 @@ export default {
     setCurrentTheme: async (theme) => {
       const vfs = await lib.loadLibrary("VirtualFS");
 
-      vfs.importFS();
+      await vfs.importFS();
 
       try {
         const appearanceConfig = JSON.parse(
-          vfs.readFile("Root/Pluto/config/appearanceConfig.json")
+          await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
         );
         if (
           typeof appearanceConfig.useThemeWallpaper !== undefined &&

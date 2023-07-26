@@ -7,7 +7,7 @@ export default {
       description: "Run applications",
     },
   ],
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
@@ -74,10 +74,10 @@ export default {
     // FileDialog.pickFile and FileDialog.saveFile both take path as an argument and are async
     async function openFile() {
       let file = await FileDialog.pickFile(
-        vfs.getParentFolder(currentDocument.path) || "Root"
+        await vfs.getParentFolder(currentDocument.path) || "Root"
       );
       if (file === false) return;
-      let content = vfs.readFile(file);
+      let content = await vfs.readFile(file);
       newDocument(file, content);
       NpWindow.focus();
     }
@@ -85,12 +85,12 @@ export default {
       // make sure the path is not unreasonable
       if (currentDocument.path === "") {
         let result = await FileDialog.saveFile(
-          vfs.getParentFolder(currentDocument.path) || "Root"
+          await vfs.getParentFolder(currentDocument.path) || "Root"
         );
         if (result === false) return false;
         currentDocument.path = result;
       }
-      vfs.writeFile(currentDocument.path, editor.getValue());
+      await vfs.writeFile(currentDocument.path, editor.getValue());
       currentDocument.dirty = false;
       updateTitle();
     }
@@ -148,7 +148,7 @@ export default {
     ]);
 
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
-    vfs.importFS();
+    await vfs.importFS();
 
     let text = new Root.Lib.html("div").class("fg").appendTo(wrapper);
 
@@ -171,7 +171,7 @@ export default {
       `export default {
   name: "Example",
   description: "Example app",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
@@ -241,9 +241,9 @@ export default {
 `
     );
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns(onEnd, async (m) => {
       if (typeof m === "object" && m.type && m.type === "loadFile" && m.path) {
-        newDocument(m.path, vfs.readFile(m.path));
+        newDocument(m.path, await vfs.readFile(m.path));
       }
     });
   },

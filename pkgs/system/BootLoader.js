@@ -4,7 +4,7 @@ let token = "";
 export default {
   name: "BootLoader",
   description: "Handles loading and startup",
-  ver: 0.1, // Compatible with core 0.1
+  ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
     const serviceList = ["Account"];
@@ -44,10 +44,10 @@ export default {
       // Start of global customisation config
 
       let vfs = await Root.Core.startPkg("lib:VirtualFS");
-      vfs.importFS();
+      await vfs.importFS();
 
       let appearanceConfig = JSON.parse(
-        vfs.readFile("Root/Pluto/config/appearanceConfig.json")
+        await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
       );
 
       await Root.Core.startPkg("apps:FTGSF");
@@ -58,7 +58,7 @@ export default {
 
       if (appearanceConfig.theme && appearanceConfig.theme.endsWith(".theme")) {
         const x = themeLib.validateTheme(
-          vfs.readFile("Root/Pluto/config/themes/" + appearanceConfig.theme)
+          await vfs.readFile("Root/Pluto/config/themes/" + appearanceConfig.theme)
         );
 
         if (x !== undefined && x.success === true) {
