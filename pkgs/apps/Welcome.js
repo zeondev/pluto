@@ -54,7 +54,7 @@ export default {
 
     /* Banner */ new Root.Lib.html("img")
       .attr({
-        src: "./assets/Banner.svg",
+        src: "./assets/banner.svg",
       })
       .style({
         position: "relative",
