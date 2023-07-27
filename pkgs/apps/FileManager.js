@@ -62,7 +62,7 @@ export default {
           path = p;
           renderFileList(p);
         },
-        html: L.icons.folderUp,
+        html: L.icons.arrowUp,
         title: "Up a directory",
       },
       {
@@ -132,7 +132,7 @@ export default {
 
           input.click();
         },
-        html: L.icons.fileImport,
+        html: L.icons.import,
         title: "Import file from your system",
       },
       {

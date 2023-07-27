@@ -43,7 +43,7 @@ export default {
               path = p;
               renderFileList(p);
             },
-            html: L.icons.folderUp,
+            html: L.icons.arrowUp,
           },
         ]);
 
@@ -290,7 +290,7 @@ export default {
               path = p;
               renderFileList(p);
             },
-            html: L.icons.folderUp,
+            html: L.icons.arrowUp,
           },
         ]);
 
