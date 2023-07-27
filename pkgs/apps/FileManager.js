@@ -12,38 +12,30 @@ export default {
   type: "process",
   exec: async function (Root) {
     let win;
-
+    
     console.log("Hello from example package", Root.Lib);
-
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        win.close();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
-
+    
     const L = Root.Lib;
     const C = Root.Core;
-
+    
     const vfs = await L.loadLibrary("VirtualFS");
     const Sidebar = await L.loadComponent("Sidebar");
     const Win = (await L.loadLibrary("WindowSystem")).win;
     const FileMappings = await L.loadLibrary("FileMappings");
-
+    
+    
     win = new Win({
       title: "Files",
       pid: Root.PID,
       width: "468px",
       height: "320px",
       onclose: () => {
-        onEnd();
+        Root.Lib.onEnd();
       },
     });
-
+    
+    Root.Lib.setOnEnd(_ => win.close());
+    
     const setTitle = (t) =>
       (win.window.querySelector(".win-titlebar .title").innerText = t);
 
@@ -254,7 +246,7 @@ export default {
 
     await renderFileList(path);
 
-    return L.setupReturns(onEnd, (m) => {
+    return L.setupReturns((m) => {
       if (
         typeof m === "object" &&
         m.type &&

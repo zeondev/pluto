@@ -9,16 +9,7 @@ export default {
 
     console.log("Hello from example package", Root.Lib);
 
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        MyWindow.close();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
+    Root.Lib.setOnEnd((_) => MyWindow.close());
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
@@ -28,12 +19,12 @@ export default {
       content: "",
       pid: Root.PID,
       onclose: () => {
-        onEnd();
+        Root.Lib.onEnd();
       },
     });
 
     wrapper = MyWindow.window.querySelector(".win-content");
-    wrapper.classList.add('col', 'with-sidebar');
+    wrapper.classList.add("col", "with-sidebar");
 
     const header = new Root.Lib.html("div")
       .style({
@@ -46,18 +37,18 @@ export default {
 
     const iframe = new Root.Lib.html("iframe")
       .attr({
-        // there's a good reason i did this, it's called browser compatiblity
+        // there's a good reason i did this, it's called browser compatibility
         style:
           "width:-webkit-fill-available;width:-moz-fill-available;height:-webkit-fill-available;height:-moz-fill-available;",
         src: "http://frogfind.com/",
       })
-      .class('fg')
+      .class("fg")
       .appendTo(wrapper);
 
     new Root.Lib.html("input")
       .attr({
         type: "search",
-        // there's a good reason i did this, it's called browser compatiblity
+        // there's a good reason i did this, it's called browser compatibility
         style: "width:-webkit-fill-available;width:-moz-fill-available;",
         value: "http://frogfind.com/",
       })
@@ -82,7 +73,7 @@ export default {
       })
       .appendTo(header);
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns((m) => {
       console.log("Example received message: " + m);
     });
   },

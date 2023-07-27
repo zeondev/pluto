@@ -9,17 +9,6 @@ export default {
 
     console.log("Hello from example package", Root.Lib);
 
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        MyWindow.close();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
-
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
     // Testing the html library
@@ -28,9 +17,11 @@ export default {
       content: "Hello",
       pid: Root.PID,
       onclose: () => {
-        onEnd();
+        Root.Lib.onEnd();
       },
     });
+
+    Root.Lib.setOnEnd(_ => MyWindow.close());
 
     wrapper = MyWindow.window.querySelector(".win-content");
 
@@ -62,10 +53,10 @@ export default {
       .text("End Process")
       .appendTo(wrapper)
       .on("click", (e) => {
-        onEnd();
+        Root.Lib.onEnd();
       });
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns((m) => {
       console.log("Example received message: " + m);
     });
   },

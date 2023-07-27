@@ -1,6 +1,6 @@
 export default {
-  name: "Build A Ktat",
-  description: "Build A Ktat app, very nice for some cool characters.",
+  name: "Cloudburst",
+  description: "Cloudburst application",
   ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
@@ -9,14 +9,14 @@ export default {
 
     console.log("Hello from example package", Root.Lib);
 
-    Root.Lib.setOnEnd(_ => MyWindow.close());
+    Root.Lib.setOnEnd((_) => MyWindow.close());
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
     // Testing the html library
     MyWindow = new Win({
-      title: "Build A Ktat",
-      content: '<iframe src="https://build-a.ktat.repl.co">',
+      title: "Cloudburst",
+      content: '<iframe src="https://cherries.to/cloudburst/">',
       pid: Root.PID,
       onclose: () => {
         Root.Lib.onEnd();

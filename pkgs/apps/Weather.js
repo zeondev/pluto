@@ -15,16 +15,9 @@ export default {
 
     console.log("Weather application started", Root.Lib);
 
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        MyWindow.close();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
+    Root.Lib.setOnEnd(function () {
+      MyWindow.close();
+    });
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
@@ -34,7 +27,7 @@ export default {
       content: "",
       pid: Root.PID,
       onclose: () => {
-        onEnd();
+        Root.Lib.onEnd();
       },
     });
 
@@ -190,7 +183,7 @@ export default {
       .class("row", "spaced-horizontally")
       .appendTo(wrapper);
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns((m) => {
       console.log("Example received message: " + m);
     });
   },

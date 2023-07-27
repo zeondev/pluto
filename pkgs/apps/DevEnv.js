@@ -14,12 +14,7 @@ export default {
     let NpWindow;
     let editorSize = 14;
 
-    function onEnd() {
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        NpWindow.close();
-      }
-    }
+    Root.Lib.setOnEnd((_) => NpWindow.close());
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
     const FileDialog = await Root.Lib.loadLibrary("FileDialog");
@@ -42,7 +37,7 @@ export default {
             return false;
           }
         }
-        onEnd();
+        Root.Lib.onEnd();
       },
     });
 
@@ -187,7 +182,7 @@ export default {
 
     newDocument(
       "",
-      `export default {
+      /*js*/ `export default {
   name: "Example",
   description: "Example app",
   ver: 1, // Compatible with core v1
@@ -198,16 +193,7 @@ export default {
 
     console.log("Hello from example package", Root.Lib);
 
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        MyWindow.close();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
+    Root.Lib.setOnEnd(_ => MyWindow.close());
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
@@ -216,7 +202,7 @@ export default {
       title: "Example App",
       content: "Hello",
       onclose: () => {
-        onEnd();
+        Root.Lib.onEnd();
       },
     });
 
@@ -249,10 +235,10 @@ export default {
       .text("End Process")
       .appendTo(wrapper)
       .on("click", (e) => {
-        onEnd();
+        Root.Lib.onEnd();
       });
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns((m) => {
       console.log("Example received message: " + m);
     });
   },
@@ -260,7 +246,7 @@ export default {
 `
     );
 
-    return Root.Lib.setupReturns(onEnd, async (m) => {
+    return Root.Lib.setupReturns(async (m) => {
       if (typeof m === "object" && m.type && m.type === "loadFile" && m.path) {
         newDocument(m.path, await vfs.readFile(m.path));
       }

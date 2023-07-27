@@ -15,17 +15,10 @@ export default {
     let window;
     let remakeTable;
 
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        window.close();
-        clearInterval(remakeTable);
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
+    Root.Lib.setOnEnd(function () {
+      window.close();
+      clearInterval(remakeTable);
+    });
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
@@ -37,7 +30,7 @@ export default {
       height: "320px",
       pid: Root.PID,
       onclose: () => {
-        onEnd();
+        Root.Lib.onEnd();
       },
     });
 
@@ -137,8 +130,8 @@ export default {
         });
     }
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
-      console.log("Example received message: " + m);
+    return Root.Lib.setupReturns((m) => {
+      console.log("Message", m);
     });
   },
 };

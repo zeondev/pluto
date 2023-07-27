@@ -6,14 +6,6 @@ export default {
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined\
 
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        console.log("Cleanup Success! Token:", Root.Token);
-      }
-    }
-
     console.log("generating shortcuts for applications on the desktop");
 
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
@@ -31,9 +23,9 @@ export default {
       { name: "File Manager", icon: "folders", fullName: "apps:FileManager" },
       { name: "Image Viewer", icon: "image", fullName: "apps:ImageViewer" },
       { name: "Notepad", icon: "note", fullName: "apps:Notepad" },
-      // { name: "Weather", icon: "cloudMoon", fullName: "apps:Weather" },
+      { name: "Weather", icon: "cloudMoon", fullName: "apps:Weather" },
       { name: "DevEnv", icon: "fileCode", fullName: "apps:DevEnv" },
-      // { name: "Browser", icon: "globe", fullName: "apps:Browser" },
+      { name: "Browser", icon: "globe", fullName: "apps:Browser" },
       { name: "Settings", icon: "wrench", fullName: "apps:Settings" },
       { name: "Terminal", icon: "terminal", fullName: "apps:Terminal" },
     ];
@@ -44,9 +36,10 @@ export default {
         JSON.stringify(shortcutsList[i])
       );
     }
-    onEnd();
+    Root.Lib.setOnEnd();
+    Root.Lib.onEnd();
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns((m) => {
       console.log("Example received message: " + m);
     });
   },

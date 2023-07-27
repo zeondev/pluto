@@ -1,4 +1,4 @@
-function makeid(length) {
+function makeId(length) {
   let result = "";
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -17,21 +17,12 @@ export default {
   ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
-    let wrapper; // Lib.html | undefinedd
+    let wrapper; // Lib.html | undefined
     let MyWindow;
 
     console.log("Hello from example package", Root.Lib);
 
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        wrapper.cleanup();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
+    Root.Lib.setOnEnd(_ => {wrapper.cleanup()})
 
     let Html = Root.Lib.html;
     wrapper = new Html("div").appendTo("body").class("desktop");
@@ -56,7 +47,7 @@ export default {
     await vfs.importFS();
 
     await vfs.writeFile(
-      "Root/Pluto/panics/pluto_" + makeid(16) + ".panic",
+      "Root/Pluto/panics/pluto_" + makeId(16) + ".panic",
       err + "\n\n" + err.stack + "\n\n\n" + new Date().toString()
     );
     console.log(err);
@@ -72,7 +63,7 @@ export default {
     //   .text("Attempt to save error")
     //   .on("click", (e) => {
     //     await vfs.writeFile(
-    //       "Root/Pluto/panics/pluto_" + makeid(16) + ".panic",
+    //       "Root/Pluto/panics/pluto_" + makeId(16) + ".panic",
     //       err + "\n\n" + err.stack + "\n\n\n" + new Date().toString()
     //     );
     //     console.log(err);
@@ -89,7 +80,7 @@ export default {
       })
       .appendTo(wrapper);
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns((m) => {
       console.log("Example received message: " + m);
     });
   },

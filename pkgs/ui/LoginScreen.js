@@ -42,18 +42,18 @@ export default {
       users.forEach((user) => {
         let usr = [...Um.getAll()][i];
         console.log(usr);
-        // let userelm = new Root.Lib.html("p").appendTo(wrapper).html(`
+        // let userElm = new Root.Lib.html("p").appendTo(wrapper).html(`
         // <b>ID:</b> ${[...Um.getAll()][i][0]}<br>
         // <b>Username:</b> ${user.username}<br>
-        // <b>Fullname:</b> ${user.name.first} ${user.name.last}<br>
+        // <b>FullName:</b> ${user.name.first} ${user.name.last}<br>
         // `)
 
-        // let passwordinput = new Root.Lib.html("input").attr({ type: "password", placeholder: "Password..." }).appendTo(userelm)
-        // let passwordbutton = new Root.Lib.html("button").html("login").appendTo(userelm)
+        // let passwordInput = new Root.Lib.html("input").attr({ type: "password", placeholder: "Password..." }).appendTo(userElm)
+        // let passwordButton = new Root.Lib.html("button").html("login").appendTo(userElm)
 
-        // passwordbutton.elm.addEventListener("click", () => {
+        // passwordButton.elm.addEventListener("click", () => {
         //   console.log(i, usr)
-        //   let login = Um.login(usr[0], passwordinput.elm.value)
+        //   let login = Um.login(usr[0], passwordInput.elm.value)
         //   if (login.status == 200) {
         //     console.log("password match, launching new app")
 

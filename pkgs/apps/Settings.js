@@ -20,19 +20,9 @@ export default {
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
     let settingsWin;
+    Root.Lib.setOnEnd((_) => settingsWin.close());
 
     console.log("Hello from example package", Root.Lib);
-
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        if (settingsWin !== undefined) settingsWin.close();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
 
     if (
       !Root.Core ||
@@ -49,11 +39,8 @@ export default {
               x.proc.name === "Settings"
           ) !== undefined)
     ) {
-      // setTimeout(() => {
-      //   onEnd();
-      // }, 100);
-      onEnd();
-      return Root.Lib.setupReturns(onEnd, (m) => {
+      Root.Lib.onEnd();
+      return Root.Lib.setupReturns((m) => {
         console.log("Example received message: " + m);
       });
     }
@@ -95,7 +82,7 @@ export default {
     settingsWin = new Win({
       title: "Settings",
       onclose: () => {
-        onEnd();
+        Root.Lib.onEnd();
       },
       width: 480,
       height: 360,
@@ -724,7 +711,7 @@ export default {
 
     pages.system();
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns((m) => {
       console.log("Example received message: " + m);
     });
   },

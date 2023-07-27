@@ -13,16 +13,7 @@ export default {
     let wrapper;
     let MyWindow;
 
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        MyWindow.close();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
+    Root.Lib.setOnEnd((_) => MyWindow.close());
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
@@ -40,7 +31,7 @@ export default {
     /* Heading */ new Root.Lib.html("h1").text("Hi i am app").appendTo(wrapper);
     /* Paragraph */
     new Root.Lib.html("p")
-      .html(`I ${Root.Core !== null ? "have" : "do not have"} admin priviliges`)
+      .html(`I ${Root.Core !== null ? "have" : "do not have"} admin privileges`)
       .appendTo(wrapper);
     /* Button */
     new Root.Lib.html("button")
@@ -49,7 +40,7 @@ export default {
       .on("click", (e) => {
         Root.Modal.alert(
           "Hi",
-          `I am ${Root.Core !== null ? "Priviliged" : "Non-Priviliged"}`,
+          `I am ${Root.Core !== null ? "Privileged" : "Non-Privileged"}`,
           wrapper
         );
       });
@@ -58,10 +49,10 @@ export default {
       .text("End Process")
       .appendTo(wrapper)
       .on("click", (e) => {
-        onEnd();
+        Root.Lib.onEnd();
       });
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns((m) => {
       console.log("Example received message: " + m);
     });
   },

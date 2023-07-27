@@ -7,19 +7,14 @@ export default {
     let wrapper; // Lib.html | undefined
     let MyWindow;
 
-    function onEnd() {
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        MyWindow.close();
-      }
-    }
+    Root.Lib.setOnEnd(_ => MyWindow.close())
 
     const logs = [];
     let list;
     const commands = {
       // Commands example
       async launch(app) {
-        // launc the app
+        // launch the app
         return await Root.Core.startPkg(app);
       },
       async clear() {
@@ -187,7 +182,7 @@ export default {
 
     let consoleState = false; // not open
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns((m) => {
       // Got a message
       const { type, data } = m;
       switch (type) {

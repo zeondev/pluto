@@ -9,17 +9,6 @@ export default {
 
     console.log("Hello from example package", Root.Lib);
 
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        MyWindow.close();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
-
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
     let width = 600;
@@ -43,9 +32,11 @@ export default {
       top,
       resizable: false,
       onclose: () => {
-        onEnd();
+        Root.Lib.onEnd();
       },
     });
+
+    Root.Lib.setOnEnd(_ => MyWindow.close());
 
     wrapper = MyWindow.window.querySelector(".win-content");
 
@@ -85,10 +76,10 @@ export default {
       .appendTo(btnRow)
       .class("primary", "ml-auto")
       .on("click", (e) => {
-        onEnd();
+        Root.Lib.onEnd();
       });
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns((m) => {
       console.log("Example received message: " + m);
     });
   },

@@ -4,23 +4,7 @@ export default {
   ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
-    let wrapper; // Lib.html | undefined
-    let MyWindow;
-
-    console.log("Hello from example package", Root.Lib);
-
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        MyWindow.close();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
-
-    async function login(u, p) {
+     async function login(u, p) {
       return await fetch("https://zeon.dev/api/public/login", {
         method: "POST",
         headers: {
@@ -47,7 +31,7 @@ export default {
         })
         .catch((error) => {
           // Handle any errors that occur during the request
-          console.error("the error reroeaed", error);
+          console.error("the error occurred", error);
         });
     }
 
@@ -92,7 +76,6 @@ export default {
     checkUserData();
 
     return {
-      onEnd,
       login,
       logout,
       getUserData() {

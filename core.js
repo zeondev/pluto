@@ -160,13 +160,6 @@
           if (cmp.includes(":")) return false;
           return await Core.startPkg("components:" + cmp);
         };
-        this.setupReturns = function (onEnd, onMessage) {
-          // the idea is a standardized .proc on processes
-          return {
-            end: onEnd,
-            send: onMessage,
-          };
-        };
         this.cleanup = function (pid, token) {
           // Token is required for the pid to verify that it is the one willing to clean up
           console.log("Checking..");
@@ -180,6 +173,26 @@
           } else {
             return false;
           }
+        };
+        this.setOnEnd = function (onEndCallback) {
+          this.onEndCallback = onEndCallback;
+          this.onEnd = () => {
+            console.log("Example process ended, attempting clean up...");
+            const result = this.cleanup(Pid, Token);
+            if (result === true) {
+              this.onEndCallback && this.onEndCallback();
+              console.log("Cleanup Success! Token:", Token);
+            } else {
+              console.log("Cleanup Failure. Token:", Token);
+            }
+          };
+        };
+        this.setupReturns = function (onMessage) {
+          // the idea is a standardized .proc on processes
+          return {
+            end: this.onEnd,
+            send: onMessage,
+          };
         };
       }
     };
@@ -214,7 +227,7 @@
         console.groupEnd();
       },
       randomString: (_) => {
-        if (crypto && crypto.randomUUID) crypto.randomUUID();
+        if (crypto && crypto.randomUUID) return crypto.randomUUID();
         else {
           var d = new Date().getTime();
           var d2 =

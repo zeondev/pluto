@@ -7,16 +7,9 @@ export default {
     let wrapper; // Lib.html | undefined
     let MyWindow;
 
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        MyWindow.close();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
+    Root.Lib.setOnEnd((_) => {
+      MyWindow.close();
+    });
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
@@ -26,23 +19,34 @@ export default {
       content: "Hello",
       pid: Root.PID,
       onclose: () => {
-        onEnd();
+        Root.Lib.onEnd();
       },
     });
 
     wrapper = MyWindow.window.querySelector(".win-content");
 
-    /* Paragraph */ new Root.Lib.html("p").html("very cool").appendTo(wrapper);
-    /* Button */ new Root.Lib.html("button")
-      .text("Borderify everything")
-      .appendTo(wrapper)
-      .on("click", (e) => {
-        new Root.Lib.html("style")
+    let hasStyle = true;
+    let styleRef = null;
+
+    function toggleBorder() {
+      hasStyle = !hasStyle;
+
+      if (hasStyle) styleRef.cleanup();
+      else
+        styleRef = new Root.Lib.html("style")
           .html("* { outline: 1px solid #fff7 !important; }")
           .appendTo("body");
+    }
+
+    new Root.Lib.html("p").html("very cool").appendTo(wrapper);
+    new Root.Lib.html("button")
+      .text("Border-ify everything")
+      .appendTo(wrapper)
+      .on("click", (e) => {
+        toggleBorder();
       });
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns((m) => {
       console.log("Example received message: " + m);
     });
   },

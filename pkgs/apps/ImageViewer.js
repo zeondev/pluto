@@ -9,17 +9,9 @@ export default {
 
     console.log("Hello from example package", Root.Lib);
 
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        MyWindow.close();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
-
+    Root.Lib.setOnEnd(function () {
+      MyWindow.close();
+    });
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
     // Testing the html library
@@ -27,10 +19,11 @@ export default {
       title: "Image Viewer",
       pid: Root.PID,
       onclose: () => {
-        onEnd();
+        Root.Lib.onEnd();
       },
     });
 
+    // initializing wrappers and vfs
     wrapper = MyWindow.window.querySelector(".win-content");
 
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
@@ -42,6 +35,8 @@ export default {
 
     const Sidebar = await Root.Lib.loadComponent("Sidebar");
 
+    // this function opens the file and changes the title to the file name,
+    // we load the file into a buffer
     async function openFile(path) {
       let file;
       if (path) file = path;
@@ -54,6 +49,7 @@ export default {
       MyWindow.focus();
     }
 
+    // creates sidebar
     Sidebar.new(wrapper, [
       {
         onclick: async (_) => {
@@ -72,10 +68,12 @@ export default {
       },
     ]);
 
+    // creates the wrapper that the image is in
     let imgWrapper = new Root.Lib.html("div")
       .class("ovh", "fg", "fc", "row")
       .appendTo(wrapper);
 
+    // creates the actual img element
     let img = new Root.Lib.html("img")
       .appendTo(imgWrapper)
       .style({
@@ -86,6 +84,7 @@ export default {
       })
       .attr({ draggable: "false" });
 
+    // updates the image on the next load
     function updateImage(content) {
       if (!content.startsWith("data:image/")) {
         Root.Modal.alert("Error", "This does not look like an image").then(
@@ -98,7 +97,7 @@ export default {
       img.elm.src = content;
     }
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns((m) => {
       if (typeof m === "object" && m.type && m.type === "loadFile" && m.path) {
         openFile(m.path);
       }

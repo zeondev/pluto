@@ -7,17 +7,7 @@ export default {
     let wrapper; // Lib.html | undefined
 
     console.log("Hello from example package", Root.Lib);
-
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        wrapper.cleanup();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
+    Root.Lib.setOnEnd((_) => {wrapper.cleanup()})
 
     let Html = Root.Lib.html;
     wrapper = new Html("div")
@@ -54,7 +44,7 @@ export default {
     }
     requestLoop();
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns((m) => {
       console.log("Example received message: " + m);
     });
   },

@@ -10,19 +10,12 @@ export default {
 
     console.log("Hello from example package", Root.Lib);
 
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      clearInterval(timeInterval);
-      if (result === true) {
-        wrapper.cleanup();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
-
     wrapper = new Root.Lib.html("div").appendTo("body").class("desktop");
+
+    Root.Lib.setOnEnd(function () {
+      clearInterval(timeInterval);
+      wrapper.cleanup();
+    });
 
     let Html = Root.Lib.html;
 
@@ -350,7 +343,7 @@ export default {
                         await Root.Core.startPkg(shrt.fullName, true, true);
                       }
                     } catch (e) {
-                      console.log("Couldn't load the application")
+                      console.log("Couldn't load the application");
                     }
                   } else {
                     try {
@@ -363,7 +356,7 @@ export default {
                         true
                       );
                     } catch (e) {
-                      console.log("Couldn't load the application")
+                      console.log("Couldn't load the application");
                     }
                   }
                 });
@@ -517,7 +510,7 @@ export default {
 
     console.log("winSys", WindowSystem, Root.Core.windowsList);
 
-    return Root.Lib.setupReturns(onEnd, async (m) => {
+    return Root.Lib.setupReturns(async (m) => {
       try {
         // Got a message
         const { type, data } = m;

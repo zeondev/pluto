@@ -8,16 +8,9 @@ export default {
     let wrapper;
     let MyWindow;
 
-    function onEnd() {
-      console.log("Example process ended, attempting clean up...");
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        MyWindow.close();
-        console.log("Cleanup Success! Token:", Root.Token);
-      } else {
-        console.log("Cleanup Failure. Token:", Root.Token);
-      }
-    }
+    Root.Lib.setOnEnd(function() {
+      MyWindow.close();
+    });
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
@@ -30,7 +23,7 @@ export default {
       resizable: false,
       pid: Root.PID,
       onclose: () => {
-        onEnd();
+        Root.Lib.onEnd();
       },
     });
     wrapper = MyWindow.window.querySelector(".win-content");
@@ -50,7 +43,7 @@ export default {
         Root.Lib.launch("apps:" + x.elm.value.replace(/([^A-Za-z0-9-])/g, ""));
       });
 
-    return Root.Lib.setupReturns(onEnd, (m) => {
+    return Root.Lib.setupReturns((m) => {
       console.log("Example received message: " + m);
     });
   },

@@ -7,12 +7,7 @@ export default {
     let wrapper; // Lib.html | undefined
     let NpWindow;
 
-    function onEnd() {
-      const result = Root.Lib.cleanup(Root.PID, Root.Token);
-      if (result === true) {
-        NpWindow.close();
-      }
-    }
+    Root.Lib.setOnEnd(_ => NpWindow.close());
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
     const FileDialog = await Root.Lib.loadLibrary("FileDialog");
@@ -36,7 +31,7 @@ export default {
             return false;
           }
         }
-        onEnd();
+        Root.Lib.onEnd();
       },
     });
 
@@ -164,7 +159,7 @@ export default {
       updateTitle();
     });
 
-    return Root.Lib.setupReturns(onEnd, async (m) => {
+    return Root.Lib.setupReturns(async (m) => {
       if (typeof m === "object" && m.type && m.type === "loadFile" && m.path) {
         newDocument(m.path, await vfs.readFile(m.path));
       }
