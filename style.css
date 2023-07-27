@@ -841,7 +841,7 @@ td {
   border: 1px solid var(--outline);
   box-shadow: 0px 0px 28px 2px rgba(0, 0, 0, 0.41);
 
-  animation: shortSlideUp 1s var(--easing-function) forwards;
+  animation: simpleSlideUp 1s var(--easing-function) forwards;
 }
 
 .desktop .dock.collapse {
@@ -1552,6 +1552,7 @@ hr {
   align-items: flex-start;
   gap: 4px;
   align-self: stretch;
+  overflow: scroll;
 }
 .desktop .menu > .apps > .app {
   display: flex;
@@ -1559,6 +1560,11 @@ hr {
   align-items: center;
   gap: 10px;
   align-self: stretch;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.desktop .menu > .apps > .app:hover {
+  background-color: var(--header);
 }
 
 .desktop .menu > .apps > .app > .app-icon {
@@ -1601,6 +1607,14 @@ hr {
   }
   to {
     transform: translateX(-100%);
+  }
+}
+@keyframes simpleSlideUp {
+  from {
+    transform: translateY(150%);
+  }
+  to {
+    transform: translateY(0);
   }
 }
 

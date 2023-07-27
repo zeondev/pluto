@@ -115,7 +115,9 @@ export default {
 
           const mappings = await Promise.all(
             fileList.map(async (e) => {
-              return await FileMappings.retrieveAllMIMEdata(path + "/" + e.item);
+              return await FileMappings.retrieveAllMIMEdata(
+                path + "/" + e.item
+              );
             })
           );
 
@@ -124,7 +126,8 @@ export default {
           for (let i = 0; i < fileList.length; i++) {
             let file = fileList[i];
             let tableBodyRow = new L.html("tr").appendTo(tableBody);
-            tableBodyRow.on("click", async (_) => {
+
+            async function selectItem() {
               if (selectedItem === path + "/" + file.item) {
                 if (file.type === "dir") {
                   selectedItem = path + "/" + file.item;
@@ -147,7 +150,10 @@ export default {
                 confirmButton.attr({ disabled: "" });
               }
               renderFileList(path);
-            });
+            }
+
+            tableBodyRow.on("mousedown", selectItem);
+            tableBodyRow.on("touchstart", selectItem);
 
             const mapping = mappings[i];
 
@@ -377,7 +383,9 @@ export default {
 
           const mappings = await Promise.all(
             fileList.map(async (e) => {
-              return await FileMappings.retrieveAllMIMEdata(path + "/" + e.item);
+              return await FileMappings.retrieveAllMIMEdata(
+                path + "/" + e.item
+              );
             })
           );
 
@@ -386,7 +394,8 @@ export default {
           for (let i = 0; i < fileList.length; i++) {
             let file = fileList[i];
             let tableBodyRow = new L.html("tr").appendTo(tableBody);
-            tableBodyRow.on("click", async (_) => {
+
+            async function selectItem() {
               if (selectedItem === path + "/" + file.item) {
                 if (file.type === "dir") {
                   selectedItem = path + "/" + file.item;
@@ -412,7 +421,10 @@ export default {
                 confirmButton.attr({ disabled: "" });
               }
               renderFileList(path);
-            });
+            }
+
+            tableBodyRow.on("mousedown", selectItem);
+            tableBodyRow.on("touchstart", selectItem);
 
             const mapping = mappings[i];
 

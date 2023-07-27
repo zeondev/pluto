@@ -70,7 +70,7 @@ export default {
     // FileDialog.pickFile and FileDialog.saveFile both take path as an argument and are async
     async function openFile() {
       let file = await FileDialog.pickFile(
-        await vfs.getParentFolder(currentDocument.path) || "Root"
+        (await vfs.getParentFolder(currentDocument.path)) || "Root"
       );
       if (file === false) return;
       let content = await vfs.readFile(file);
@@ -88,9 +88,10 @@ export default {
     }
     async function saveAs() {
       let result = await FileDialog.saveFile(
-        await vfs.getParentFolder(currentDocument.path) || "Root"
+        (await vfs.getParentFolder(currentDocument.path)) || "Root"
       );
       if (result === false) return false;
+      currentDocument.dirty = false;
       currentDocument.path = result;
     }
 

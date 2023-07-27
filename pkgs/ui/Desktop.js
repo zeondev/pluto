@@ -269,7 +269,7 @@ export default {
       .filter((x) => x !== null)
       .find((x) => x.name === "Account");
 
-    function toggleMenu() {
+    async function toggleMenu() {
       if (menuIsToggling) {
         return; // Return early if menu is currently toggling
       }
@@ -282,6 +282,36 @@ export default {
       if (menuIsOpen === true) {
         if (!menuElm) {
           // Create menu element if it doesn't exist
+          const desktopApps = (await vfs.list("Root/Desktop"))
+            .filter((f) => f.item.endsWith(".shrt"))
+            .map((f) => {
+              return { type: "desktop", item: f.item };
+            });
+          const installedApps = (await vfs.list("Root/Pluto/apps"))
+            .filter((f) => f.item.endsWith(".shrt"))
+            .map((f) => {
+              return { type: "installed", item: f.item };
+            });
+
+          const apps = [...installedApps, ...desktopApps];
+
+          const appsHtml = apps.map((app) => {
+            console.log(app);
+            return new Html("div")
+              .class("app")
+              .appendMany(
+                new Html("div").class("app-icon").html(Root.Lib.icons.cpu),
+                new Html("div")
+                  .class("app-text")
+                  .appendMany(
+                    new Html("div").class("app-heading").text("Task Manager"),
+                    new Html("div")
+                      .class("app-description")
+                      .text("Examine and manage processes")
+                  )
+              );
+          });
+
           menuElm = new Html("div")
             .class("menu")
             .appendMany(
@@ -315,27 +345,7 @@ export default {
                   new Html("div").text("Apps"),
                   new Html("div").class("space")
                 ),
-              new Html("div")
-                .class("apps")
-                .appendMany(
-                  new Html("div")
-                    .class("app")
-                    .appendMany(
-                      new Html("div")
-                        .class("app-icon")
-                        .html(Root.Lib.icons.cpu),
-                      new Html("div")
-                        .class("app-text")
-                        .appendMany(
-                          new Html("div")
-                            .class("app-heading")
-                            .text("Task Manager"),
-                          new Html("div")
-                            .class("app-description")
-                            .text("Examine and manage processes")
-                        )
-                    )
-                )
+              new Html("div").class("apps").appendMany(...appsHtml)
             )
             .appendTo(dock);
         }
