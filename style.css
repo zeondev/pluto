@@ -1261,14 +1261,17 @@ svg:not(.ignore-css) {
   padding: 8px 12px;
   animation: shortSlideUp 1s var(--easing-function) forwards;
 }
+.desktop-icon:hover {
+  background-color: var(--header);
+}
 .desktop-icon .icon {
   width: 48px;
   height: 48px;
 }
 .desktop-icon .text-wrapper {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: flex-start;
   padding: 0;
   height: 100%;
   width: 100%;
