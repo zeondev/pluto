@@ -262,8 +262,15 @@ export default {
 
     function onClickDetect(ev) {
       if (ev.target.closest(".menu")) {
-      }
+        if (ev.button === 0) {
+          if (ev.target.closest("button") || ev.target.closest(".app")) {
+            toggleMenu();
+          }
+        }
+      } else toggleMenu();
     }
+
+    let FileMappings = await Root.Lib.loadLibrary("FileMappings");
 
     const userAccountService = Root.Core.services
       .filter((x) => x !== null)
@@ -280,6 +287,8 @@ export default {
       const userData = userAccountService.ref.getUserData();
 
       if (menuIsOpen === true) {
+        window.addEventListener("mousedown", onClickDetect);
+        window.addEventListener("touchstart", onClickDetect);
         if (!menuElm) {
           // Create menu element if it doesn't exist
           const desktopApps = (await vfs.list("Root/Desktop"))
@@ -288,29 +297,47 @@ export default {
               return { type: "desktop", item: f.item };
             });
           const installedApps = (await vfs.list("Root/Pluto/apps"))
-            .filter((f) => f.item.endsWith(".shrt"))
+            .filter((f) => f.item.endsWith(".app"))
             .map((f) => {
               return { type: "installed", item: f.item };
             });
 
           const apps = [...installedApps, ...desktopApps];
 
-          const appsHtml = apps.map((app) => {
-            console.log(app);
-            return new Html("div")
-              .class("app")
-              .appendMany(
-                new Html("div").class("app-icon").html(Root.Lib.icons.cpu),
-                new Html("div")
-                  .class("app-text")
-                  .appendMany(
-                    new Html("div").class("app-heading").text("Task Manager"),
-                    new Html("div")
-                      .class("app-description")
-                      .text("Examine and manage processes")
-                  )
-              );
-          });
+          const appsHtml = await Promise.all(
+            apps.map(async (app) => {
+              console.log(app);
+              let icon = "box",
+                name = app.item,
+                description = null;
+
+              if (app.type === "desktop") {
+                const data = await FileMappings.retrieveAllMIMEdata(
+                  "Root/Desktop/" + app.item
+                );
+
+                icon = data.icon;
+                name = data.name;
+                description = data.fullName;
+              }
+
+              return new Html("div")
+                .class("app")
+                .appendMany(
+                  new Html("div").class("app-icon").html(Root.Lib.icons[icon]),
+                  new Html("div")
+                    .class("app-text")
+                    .appendMany(
+                      new Html("div").class("app-heading").text(name),
+                      description !== null
+                        ? new Html("div")
+                            .class("app-description")
+                            .text(description)
+                        : null
+                    )
+                );
+            })
+          );
 
           menuElm = new Html("div")
             .class("menu")
@@ -356,6 +383,8 @@ export default {
           menuIsToggling = false;
         }, 500);
       } else {
+        window.removeEventListener("mousedown", onClickDetect);
+        window.removeEventListener("touchstart", onClickDetect);
         if (menuElm) {
           menuElm.classOn("closing");
           setTimeout(() => {

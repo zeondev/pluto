@@ -41,7 +41,7 @@ export default {
 
     // Previous Commands DIV
     const prevCommands = new Root.Lib.html("div")
-      .class("terminal-prev-commands")
+      .class("terminal-prev-commands", "monospace")
       .appendTo(wrapper);
 
     // Terminal Current Line
@@ -101,9 +101,11 @@ export default {
             console.log(files);
 
             commandOutputText.text(
-              files.map((file) => {
-                return `${file.item} - ${file.type.toUpperCase()}\n`;
-              })
+              files
+                .map((file) => {
+                  return `${file.item} - ${file.type.toUpperCase()}`;
+                })
+                .join("\n")
             );
           },
           cat: async (args) => {

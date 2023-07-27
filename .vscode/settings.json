@@ -1,21 +1,29 @@
 {
-    "liveServer.settings.port": 5501,
-    "cSpell.words": [
-        "Baro",
-        "colspan",
-        "localforage",
-        "lucide",
-        "shrt",
-        "titlebar",
-        "Zeon"
-    ],
-    "cSpell.ignorePaths": [
-        "package-lock.json",
-        "node_modules",
-        "vscode-extension",
-        ".git/objects",
-        ".vscode",
-        ".vscode-insiders",
-        "style.css"
-    ]
+  "liveServer.settings.port": 5500,
+  "liveServer.settings.ignoreFiles": [
+    ".vscode/**",
+    "**/*.scss",
+    "**/*.sass",
+    "**/*.ts",
+    "**/*.md",
+    "**/*.svg"
+  ],
+  "cSpell.words": [
+    "Baro",
+    "colspan",
+    "localforage",
+    "lucide",
+    "shrt",
+    "titlebar",
+    "Zeon"
+  ],
+  "cSpell.ignorePaths": [
+    "package-lock.json",
+    "node_modules",
+    "vscode-extension",
+    ".git/objects",
+    ".vscode",
+    ".vscode-insiders",
+    "style.css"
+  ]
 }
