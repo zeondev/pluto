@@ -41,8 +41,7 @@ body {
   --neutral: hsl(222, 26%, 18%);
   --neutral-focus: hsl(222, 27%, 20%);
   --outline: hsl(222, 23%, 22%);
-  /* --easing-function: cubic-bezier(0.65, 0, 0.35, 1); */
-  --easing-function: linear;
+  --easing-function: cubic-bezier(0.65, 0, 0.35, 1);
   --animation-duration: 0.45s;
   --long-animation-duration: 1s;
 }
