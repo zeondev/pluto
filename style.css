@@ -1238,8 +1238,7 @@ svg:not(.ignore-css) {
   gap: 10px;
   justify-content: center;
   align-items: center;
-  max-width: 128px;
-  background-color: rgba(var(--root-rgb), 0.5);
+  width: 90px;
   border-radius: 8px;
   padding: 8px 12px;
   animation: shortSlideUp 1s ease forwards;
@@ -1254,13 +1253,13 @@ svg:not(.ignore-css) {
   justify-content: center;
   padding: 0;
   height: 100%;
+  width: 100%;
   min-width: 0;
 }
 .desktop-icon .text {
   text-align: center;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   text-shadow: 0 0 20px #000;
+  width: 100%;
 }
 
 .separator {
@@ -1630,4 +1629,25 @@ hr {
   align-items: center;
   align-self: stretch;
   gap: 8px;
+}
+
+.terminal-prev-commands {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.terminal-prev-command {
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-prev-command-text {
+  font-size: 14.5px;
+  color: var(--positive-dark);
+  font-weight: 500;
+}
+
+.terminal-current-line-input {
+  width: 100%;
 }
