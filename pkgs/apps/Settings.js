@@ -6,16 +6,16 @@ export default {
   privileges: [
     {
       privilege: "knownPackageList",
-      description: "Get a list of the known applications on the system"
+      description: "Get a list of the known applications on the system",
     },
     {
       privilege: "processList",
-      description: "There can only be one settings app open at a time"
+      description: "There can only be one settings app open at a time",
     },
     {
       privilege: "services",
-      description: "Access system services"
-    }
+      description: "Access system services",
+    },
   ],
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
@@ -85,7 +85,7 @@ export default {
       },
       width: 480,
       height: 360,
-      pid: Root.PID
+      pid: Root.PID,
     });
 
     let Html = Root.Lib.html;
@@ -103,7 +103,7 @@ export default {
         title: "System",
         onclick() {
           pages.sys();
-        }
+        },
       },
       {
         icon: Root.Lib.icons.users,
@@ -111,7 +111,7 @@ export default {
         title: "Account",
         onclick() {
           pages.acct();
-        }
+        },
       },
       {
         icon: Root.Lib.icons.brush,
@@ -119,7 +119,7 @@ export default {
         title: "Appearance",
         onclick() {
           pages.appe();
-        }
+        },
       },
       {
         icon: Root.Lib.icons.wifiConnected,
@@ -127,7 +127,7 @@ export default {
         title: "Network",
         onclick() {
           pages.netw();
-        }
+        },
       },
       {
         icon: Root.Lib.icons.application,
@@ -135,7 +135,7 @@ export default {
         title: "Applications",
         onclick() {
           pages.appl();
-        }
+        },
       },
       {
         icon: Root.Lib.icons.shield,
@@ -143,8 +143,8 @@ export default {
         title: "Security",
         onclick() {
           pages.sec();
-        }
-      }
+        },
+      },
     ]);
 
     container = new Root.Lib.html("div")
@@ -264,7 +264,7 @@ export default {
               // ok
               userBoxAvatar.style({
                 "--url":
-                  "url(" + userData.pfp.replace("/", "https://zeon.dev/") + ")"
+                  "url(" + userData.pfp.replace("/", "https://zeon.dev/") + ")",
               });
               userBoxName.text(userData.user);
               userBoxType.text("Zeon Account");
@@ -311,7 +311,7 @@ export default {
         // Get browser information
         const browser = {
           name: "",
-          version: ""
+          version: "",
         };
 
         if (userAgent.indexOf("Firefox") > -1) {
@@ -340,7 +340,7 @@ export default {
         // Get operating system information
         const os = {
           name: "",
-          version: ""
+          version: "",
         };
 
         if (userAgent.indexOf("Windows") > -1) {
@@ -481,12 +481,12 @@ export default {
         const defaultThemes = [
           new Html("option").text("Dark").attr({
             value: "dark",
-            selected: desktopConfig.theme === "dark" ? true : null
+            selected: desktopConfig.theme === "dark" ? true : null,
           }),
           new Html("option").text("Light").attr({
             value: "light",
-            selected: desktopConfig.theme === "light" ? true : null
-          })
+            selected: desktopConfig.theme === "light" ? true : null,
+          }),
         ];
 
         const check = await vfs.whatIs("Root/Pluto/config/themes");
@@ -510,7 +510,7 @@ export default {
               themes.push(
                 new Html("option").text(result.data.name).attr({
                   value: themes.length,
-                  selected: desktopConfig.theme === itm ? true : null
+                  selected: desktopConfig.theme === itm ? true : null,
                 })
               );
               themeDatas.push(Object.assign({ fileName: itm }, result.data));
@@ -545,7 +545,7 @@ export default {
               .attr({
                 type: "checkbox",
                 id: Root.PID + "lc",
-                checked: desktopConfig.useThemeWallpaper === true ? true : null
+                checked: desktopConfig.useThemeWallpaper === true ? true : null,
               })
               .on("input", async (e) => {
                 desktopConfig.useThemeWallpaper = e.target.checked;
@@ -576,7 +576,7 @@ export default {
               }),
             new Html("label")
               .attr({
-                for: Root.PID + "lc"
+                for: Root.PID + "lc",
               })
               .text("Use wallpaper from theme")
           )
@@ -631,7 +631,7 @@ export default {
               new Html("code")
                 .class("label")
                 .style({
-                  "margin-top": "-4px"
+                  "margin-top": "-4px",
                 })
                 .text(`${name}.app`), // Type
               // Filename and Version
@@ -646,7 +646,7 @@ export default {
       sec() {
         this.clear();
         makeHeading("h1", "Security");
-      }
+      },
     };
 
     pages.sys();
@@ -654,5 +654,5 @@ export default {
     return Root.Lib.setupReturns(onEnd, (m) => {
       console.log("Example recieved message: " + m);
     });
-  }
+  },
 };

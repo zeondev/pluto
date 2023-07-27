@@ -34,7 +34,7 @@ export default {
       height: 500,
       onclose: () => {
         onEnd();
-      }
+      },
     });
 
     wrapper = MyWindow.window.querySelector(".win-content");
@@ -178,38 +178,38 @@ export default {
               {
                 name: "clear",
                 description: "Clears the terminal",
-                usage: "clear"
+                usage: "clear",
               },
               {
                 name: "echo",
                 description: "Prints the arguments",
-                usage: "echo [args...]"
+                usage: "echo [args...]",
               },
               {
                 name: "help",
                 description: "Prints this help message",
-                usage: "help"
+                usage: "help",
               },
               {
                 name: "ls",
                 description: "Lists files and folders",
-                usage: "ls [path]"
+                usage: "ls [path]",
               },
               {
                 name: "cat",
                 description: "Prints the contents of a file",
-                usage: "cat [path]"
+                usage: "cat [path]",
               },
               {
                 name: "cd",
                 description: "Changes the current directory",
-                usage: "cd [path]"
+                usage: "cd [path]",
               },
               {
                 name: "process",
                 description: "Manages processes",
-                usage: "process [start | kill] [name | pid]"
-              }
+                usage: "process [start | kill] [name | pid]",
+              },
             ];
 
             commandOutputText.text(
@@ -219,7 +219,7 @@ export default {
                 )
                 .join("")
             );
-          }
+          },
         };
 
         const args = command.split(" ");
@@ -239,5 +239,5 @@ export default {
     return Root.Lib.setupReturns(onEnd, (m) => {
       console.log("Example recieved message: " + m);
     });
-  }
+  },
 };

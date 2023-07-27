@@ -4,8 +4,8 @@ export default {
   privileges: [
     {
       privilege: "startPkg",
-      description: "Run applications"
-    }
+      description: "Run applications",
+    },
   ],
   ver: 1, // Compatible with core v1
   type: "process",
@@ -43,7 +43,7 @@ export default {
           }
         }
         onEnd();
-      }
+      },
     });
 
     wrapper = NpWindow.window.querySelector(".win-content");
@@ -52,7 +52,7 @@ export default {
 
     let currentDocument = {
       path: "",
-      dirty: false
+      dirty: false,
     };
 
     const updateTitle = (_) =>
@@ -118,7 +118,7 @@ export default {
           if (result === false) return;
           newDocument("", "");
         },
-        html: Root.Lib.icons.newFile
+        html: Root.Lib.icons.newFile,
       },
       {
         onclick: async (_) => {
@@ -126,35 +126,35 @@ export default {
           if (result === false) return;
           openFile();
         },
-        html: Root.Lib.icons.openFolder
+        html: Root.Lib.icons.openFolder,
       },
       {
         onclick: async (_) => {
           await saveFile();
         },
-        html: Root.Lib.icons.save
+        html: Root.Lib.icons.save,
       },
       {
         onclick: async (_) => {
           editorSize += 2;
           textWrapper.style({
-            "font-size": editorSize.toString() + "px"
+            "font-size": editorSize.toString() + "px",
           });
         },
-        html: Root.Lib.icons.zoomIn
+        html: Root.Lib.icons.zoomIn,
       },
       {
         onclick: async (_) => {
           editorSize -= 2;
           textWrapper.style({
-            "font-size": editorSize.toString() + "px"
+            "font-size": editorSize.toString() + "px",
           });
         },
-        html: Root.Lib.icons.zoomOut
+        html: Root.Lib.icons.zoomOut,
       },
       {
         style: {
-          "margin-top": "auto"
+          "margin-top": "auto",
         },
         onclick: (_) => {
           Root.Core.startPkg(
@@ -162,8 +162,8 @@ export default {
             false
           );
         },
-        html: Root.Lib.icons.run
-      }
+        html: Root.Lib.icons.run,
+      },
     ]);
 
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
@@ -265,5 +265,5 @@ export default {
         newDocument(m.path, await vfs.readFile(m.path));
       }
     });
-  }
+  },
 };

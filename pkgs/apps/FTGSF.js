@@ -35,7 +35,7 @@ export default {
       { name: "DevEnv", icon: "fileCode", fullname: "apps:DevEnv" },
       // { name: "Browser", icon: "globe", fullname: "apps:Browser" },
       { name: "Settings", icon: "wrench", fullname: "apps:Settings" },
-      { name: "Terminal", icon: "terminal", fullname: "apps:Terminal" }
+      { name: "Terminal", icon: "terminal", fullname: "apps:Terminal" },
     ];
     console.log(shortcutsList.length);
     for (let i = 0; i < shortcutsList.length; i++) {
@@ -49,5 +49,5 @@ export default {
     return Root.Lib.setupReturns(onEnd, (m) => {
       console.log("Example recieved message: " + m);
     });
-  }
+  },
 };

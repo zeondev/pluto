@@ -5,8 +5,8 @@ export default {
   privileges: [
     {
       privilege: "startPkg",
-      description: "Run applications from files"
-    }
+      description: "Run applications from files",
+    },
   ],
   ver: 1, // Compatible with core v1
   type: "process",
@@ -41,7 +41,7 @@ export default {
       height: "320px",
       onclose: () => {
         onEnd();
-      }
+      },
     });
 
     const setTitle = (t) =>
@@ -63,7 +63,7 @@ export default {
           renderFileList(p);
         },
         html: L.icons.folderUp,
-        title: "Up a directory"
+        title: "Up a directory",
       },
       {
         onclick: async (_) => {
@@ -77,7 +77,7 @@ export default {
           await vfs.createFolder(path + "/" + result);
         },
         html: L.icons.createFolder,
-        title: "Create Folder"
+        title: "Create Folder",
       },
       {
         onclick: async (_) => {
@@ -91,7 +91,7 @@ export default {
           await vfs.writeFile(path + "/" + result, "");
         },
         html: L.icons.createFile,
-        title: "Create File"
+        title: "Create File",
       },
       {
         onclick: (_) => {
@@ -133,7 +133,7 @@ export default {
           input.click();
         },
         html: L.icons.fileImport,
-        title: "Import file from your system"
+        title: "Import file from your system",
       },
       {
         onclick: async (_) => {
@@ -150,8 +150,8 @@ export default {
           }
         },
         html: L.icons.delete,
-        title: "Delete File"
-      }
+        title: "Delete File",
+      },
     ]);
 
     const wrapperWrapper = new L.html("div")
@@ -262,5 +262,5 @@ export default {
         renderFileList(m.path);
       }
     });
-  }
+  },
 };
