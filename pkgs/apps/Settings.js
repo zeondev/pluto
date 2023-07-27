@@ -158,6 +158,9 @@ export default {
         new Html().class(type, "mt-1").text(text).appendTo(container);
       }
     }
+    function makeAlert(type, text) {
+      new Html().class("alert", type).text(text).appendTo(container);
+    }
 
     let pages = {
       clear() {
@@ -297,11 +300,12 @@ export default {
           .appendTo(container);
 
         const filesystemSize =
-          ((await localforage.getItem("fs")).length / 1024).toFixed(2) + " KB";
+          ((await localforage.getItem("fs")).length / 1024).toFixed(0) + " KB";
 
         makeHeading("h2", "Your device");
 
-        const webProtocol = location.protocol.endsWith("s") ? "HTTPS" : "HTTP";
+        const webProtocol = location.protocol.endsWith("s:") ? "HTTPS" : "HTTP";
+        const webHost = location.host;
 
         // Get user agent string
         const userAgent = navigator.userAgent;
@@ -403,6 +407,13 @@ export default {
               .appendMany(
                 new Html().text("Web Protocol"),
                 new Html().class("label").text(webProtocol)
+              ),
+            // Host
+            new Html()
+              .class("item")
+              .appendMany(
+                new Html().text("Web Host"),
+                new Html().class("label").text(webHost)
               )
           )
           .appendTo(container);
@@ -644,6 +655,10 @@ export default {
       security() {
         this.clear();
         makeHeading("h1", "Security");
+        makeAlert(
+          "warning",
+          "This section is currently not finished. Come back later when it's completed."
+        );
       },
     };
 

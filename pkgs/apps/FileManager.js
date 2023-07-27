@@ -203,7 +203,7 @@ export default {
 
         const mapping = mappings[i];
 
-        tableBodyRow.on("click", async (_) => {
+        async function handleClick() {
           if (selectedItem === path + "/" + file.item) {
             console.log("open selected item");
             if (file.type === "dir") {
@@ -218,7 +218,10 @@ export default {
           }
           selectedItem = path + "/" + file.item;
           renderFileList(path);
-        });
+        }
+
+        tableBodyRow.on("mousedown", handleClick);
+        tableBodyRow.on("touchstart", handleClick);
 
         if (file === null) continue;
 

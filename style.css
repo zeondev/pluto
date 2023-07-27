@@ -24,6 +24,9 @@ body {
   --positive: hsl(133, 80%, 40%);
   --positive-light: hsl(134, 81%, 72%);
   --positive-dark: hsl(133, 79%, 25%);
+  --warning: hsla(60, 90%, 40%, 0.8);
+  --warning-light: hsla(60, 89%, 72%, 0.4);
+  --warning-dark: hsla(60, 96%, 25%, 0.5);
   --root: hsl(222, 25%, 8%);
   --root-rgb: 15, 18, 25;
   --header: hsl(219, 28%, 12%);
@@ -677,6 +680,12 @@ table > tbody > tr > td div {
   justify-content: center;
   align-items: center;
 }
+tr {
+  transition: none !important;
+}
+tr:hover {
+  background-color: var(--header);
+}
 thead::after {
   content: "";
   position: absolute;
@@ -701,7 +710,8 @@ td {
   padding: 4px 8px;
 }
 .table-selected {
-  background-color: var(--header);
+  background-color: var(--neutral) !important;
+  color: var(--text);
 }
 
 .sidebar {
@@ -1653,4 +1663,32 @@ hr {
 
 .terminal-current-line-input {
   width: 100%;
+}
+
+.alert {
+  display: inline-flex;
+  background-color: var(--header);
+  border: 1px solid var(--warning-light);
+  color: var(--text);
+  padding: 8px 12px 8px 40px;
+  border-radius: 8px;
+  position: relative;
+  max-width: fit-content;
+}
+.alert::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--warning);
+  mask-image: url("/assets/icons/warn.svg");
+  mask-size: 24px;
+  mask-repeat: no-repeat;
+  mask-position: 12px center;
+}
+.alert.warning {
+  background-color: var(--warning-dark);
+  color: var(--text);
 }
