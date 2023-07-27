@@ -26,7 +26,7 @@ body {
   --positive-dark: hsl(133, 79%, 25%);
   --warning: hsla(60, 90%, 40%, 0.8);
   --warning-light: hsla(60, 89%, 72%, 0.4);
-  --warning-dark: hsla(60, 96%, 25%, 0.5);
+  --warning-dark: hsla(60, 96%, 25%, 0.2);
   --root: hsl(222, 25%, 8%);
   --root-rgb: 15, 18, 25;
   --header: hsl(219, 28%, 12%);

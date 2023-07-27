@@ -58,7 +58,7 @@ export default {
       getCity,
       /// Gets and returns the set office in the office variable
       getZone,
-      /// Gets and retusn the set zone in the zone variable
+      /// Gets and returns the set zone in the zone variable
       getOffice,
       /// get units
       getUnits,
@@ -86,11 +86,11 @@ export default {
       weatherHumidity,
       /// Returns the wind speed of the current location
       weatherWindSpeed,
-      /// Retusn the current wind degrees angle of the current location.
+      /// Returns the current wind degrees angle of the current location.
       weatherWindDeg,
       /// Returns the sunrise time of the current location
       weatherSunrise,
-      /// Retusn the sunset time of the current location
+      /// Returns the sunset time of the current location
       weatherSunset,
       /// Returns the current visibility of the current location in percent
       weatherVisibilityPercent,
