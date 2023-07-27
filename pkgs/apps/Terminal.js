@@ -3,6 +3,12 @@ export default {
   description: "Terminal for PlutoOS",
   ver: 1, // Compatible with core v1
   type: "process",
+  privileges: [
+    {
+      privilege: "startPkg",
+      description: "Run applications",
+    },
+  ],
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
     let MyWindow;
@@ -28,7 +34,6 @@ export default {
     // Testing the html library
     MyWindow = new Win({
       title: "Terminal",
-      // content: "Hello",
       pid: Root.PID,
       width: 869,
       height: 500,

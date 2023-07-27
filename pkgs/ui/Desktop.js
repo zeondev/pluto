@@ -423,10 +423,17 @@ export default {
     updateTime();
     timeInterval = setInterval(updateTime, 1000);
 
-    function createButton(pid, name) {
+    function createButton(pid, name, onclickFocusWindow) {
       dockItemsList[pid] = new Html()
         .class("dock-item")
         .appendTo(dockItems)
+        .on(
+          "click",
+          (_) =>
+            onclickFocusWindow &&
+            onclickFocusWindow.focus &&
+            onclickFocusWindow.focus()
+        )
         .text(name);
     }
 
@@ -475,6 +482,10 @@ export default {
       // }
     }
 
+    const WindowSystem = await Root.Lib.loadLibrary("WindowSystem");
+
+    console.log("winSys", WindowSystem, Root.Core.windowsList);
+
     return Root.Lib.setupReturns(onEnd, async (m) => {
       try {
         // Got a message
@@ -503,7 +514,13 @@ export default {
               return;
             if (data.type === "pkgStart") {
               if (dockItemsList[data.data.pid]) return;
-              createButton(data.data.pid, data.data.proc.name);
+              const p = Root.Core.windowsList.find(
+                (p) => p.options.pid === data.data.pid
+              );
+              if (p) {
+                console.log("winSys", p);
+                createButton(data.data.pid, data.data.proc.name, p);
+              }
             } else if (data.type === "pkgEnd") {
               console.log("Cleanup pid", data.data.pid);
               dockItemsList[data.data.pid].cleanup();

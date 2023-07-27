@@ -3,8 +3,8 @@
 (async () => {
   try {
     const coreDetails = {
-      version: 1.1,
-      versionString: (1.1).toFixed(1),
+      version: 1.2,
+      versionString: (1.2).toFixed(1),
       codename: "Elysium",
     };
     const knownLibraries = [];
@@ -280,7 +280,6 @@
             // treat this package as a raw uri
             pkg = await import(url);
             url = "none:<Imported as URI>";
-            // e.g. data:text/javascript;base64,jiOAJIOFAWFJOJAWOj
           } else {
             pkg = await import("./pkgs/" + url.replace(":", "/") + ".js");
           }
@@ -419,7 +418,6 @@
                     Modal,
                     Services: Core.services,
                   });
-                  // console.log("ran with privs");
                 } else if (modalResult === "deny") {
                   result = await pkg.exec({
                     Lib: newLib,
@@ -429,7 +427,6 @@
                     Modal,
                     Services: Core.services,
                   });
-                  // console.log("ran without privs");
                 } else {
                   result = null;
                 }
@@ -490,13 +487,6 @@
       },
       services: {},
       broadcastEventToProcs,
-      async afa(id) {
-        const x = await this.startPkg("lib:WindowSystem");
-
-        if (x.focusWindow) {
-          x.focusWindow(id);
-        }
-      },
     };
 
     Modal = await Core.startPkg("ui:Modal");

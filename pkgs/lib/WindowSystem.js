@@ -12,10 +12,9 @@ let windowPid = -1;
 
 let lib = {};
 let core = {};
-const windowsList = [];
 
 function getWindowObjectById(id) {
-  return windowsList.find((window) => window.options.id === id);
+  return core.windowsList.find((window) => window.options.id === id);
 }
 
 export default {
@@ -27,9 +26,12 @@ export default {
   init: function (l, c) {
     lib = l;
     core = c;
+    if (!core.windowsList)
+    core.windowsList = [];
   },
   data: {
     // exported functions here
+    getWindowObjectById,
     win: class Win {
       constructor(options) {
         if (options === undefined) {
@@ -80,7 +82,7 @@ export default {
         this.init();
 
         // may be useful?
-        this.arrayId = windowsList.push(this);
+        this.arrayId = core.windowsList.push(this);
       }
 
       init() {
