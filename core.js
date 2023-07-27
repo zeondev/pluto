@@ -3,8 +3,8 @@
 (async () => {
   try {
     const coreDetails = {
-      version: 1.2,
-      versionString: (1.2).toFixed(1),
+      version: 1.21,
+      versionString: (1.21).toFixed(1),
       codename: "Elysium",
     };
     const knownLibraries = [];

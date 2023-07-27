@@ -335,7 +335,38 @@ export default {
                             .text(description)
                         : null
                     )
-                );
+                )
+                .on("click", async (e) => {
+                  if (app.type === "desktop") {
+                    // View the shortcut file
+                    try {
+                      let shrt = JSON.parse(
+                        await vfs.readFile("Root/Desktop/" + app.item)
+                      );
+
+                      console.log(shrt);
+
+                      if (shrt.fullName) {
+                        await Root.Core.startPkg(shrt.fullName, true, true);
+                      }
+                    } catch (e) {
+                      console.log("Couldn't load the application")
+                    }
+                  } else {
+                    try {
+                      const appData = await vfs.readFile(
+                        "Root/Pluto/apps/" + app.item
+                      );
+                      await Root.Core.startPkg(
+                        "data:text/javascript;base64," + btoa(appData),
+                        false,
+                        true
+                      );
+                    } catch (e) {
+                      console.log("Couldn't load the application")
+                    }
+                  }
+                });
             })
           );
 
