@@ -75,6 +75,9 @@ export default {
         "Root/Pluto/config/appearanceConfig.json",
         JSON.stringify(desktopConfig)
       );
+      desktopConfig = JSON.parse(
+        await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
+      );
     }
 
     // Testing the html library
@@ -163,20 +166,36 @@ export default {
     }
 
     let pages = {
-      clear() {
+      async clear() {
         container.elm.innerHTML = "";
+        desktopConfig = JSON.parse(
+          await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
+        );
       },
-      account() {
-        this.clear();
+      async account() {
+        await this.clear();
         makeHeading("h1", "Account");
 
         const result = sessionStorage.userData;
 
-        const userBoxAvatar = new Html("div").class("icon");
-        const userBoxName = new Html("div").text("User");
+        let service = Root.Core.services.find((x) => x.name === "Account");
+
+        if (!service && !service.ref)
+          return new Html("span")
+            .text("Could not fetch from account service")
+            .appendTo(container);
+
+        const userData = service.ref.getUserData();
+
+        const userBoxAvatar = new Html("div").class("icon").style({
+          "--url": "url(" + userData.pfp + ")",
+        });
+        const userBoxName = new Html("div").text(userData.username);
         const userBoxType = new Html("div")
           .class("label")
-          .text("Local account");
+          .text(
+            userData.onlineAccount === true ? "Zeon Account" : "Local account"
+          );
 
         const userBox = new Html("div")
           .appendMany(
@@ -187,54 +206,48 @@ export default {
           .appendTo(container);
 
         if (result === undefined) {
-          const blurItem = new Html("div")
-            .class("blur")
-            .style({ "border-radius": "4px" })
-            .appendMany(
-              new Html("button")
-                .class("primary", "small", "mc")
-                .text("Login with Zeon Account")
-                .on("click", async (e) => {
-                  let x = await Root.Modal.input(
-                    "Login with Zeon",
-                    "Enter your user name",
-                    "Username",
-                    settingsWin.elm,
-                    false
+          new Html("button")
+            .class("primary", "small", "mc")
+            .text("Login with Zeon Account")
+            .on("click", async (e) => {
+              let x = await Root.Modal.input(
+                "Login with Zeon",
+                "Enter your user name",
+                "Username",
+                settingsWin.elm,
+                false
+              );
+
+              if (x === false) return;
+
+              let y = await Root.Modal.input(
+                "Login with Zeon",
+                "Enter your password",
+                "Password",
+                settingsWin.elm,
+                true
+              );
+
+              if (y === false) return;
+
+              let service = Root.Core.services.find(
+                (x) => x.name === "Account"
+              );
+
+              if (service) {
+                let result = await service.ref.login(x, y);
+                this.account();
+                if (result.status === 200) {
+                  Root.Modal.alert(
+                    "Oops",
+                    "Something went wrong while logging in:\n\n" +
+                      JSON.stringify(result, null, 2),
+                    settingsWin
                   );
-
-                  if (x === false) return;
-
-                  let y = await Root.Modal.input(
-                    "Login with Zeon",
-                    "Enter your password",
-                    "Password",
-                    settingsWin.elm,
-                    true
-                  );
-
-                  if (y === false) return;
-
-                  let service = Root.Core.services.find(
-                    (x) => x.name === "Account"
-                  );
-
-                  if (service) {
-                    let result = await service.ref.login(x, y);
-                    this.account();
-                    if (result.status === 200) {
-                      Root.Modal.alert(
-                        "Oops",
-                        "Something went wrong while logging in:\n\n" +
-                          JSON.stringify(result, null, 2),
-                        settingsWin
-                      );
-                    }
-                  }
-                })
-            );
-
-          blurItem.appendTo(userBox);
+                }
+              }
+            })
+            .appendTo(container);
         } else {
           new Html("button")
             .class("danger", "mc")
@@ -276,7 +289,7 @@ export default {
         }
       },
       async system() {
-        this.clear();
+        await this.clear();
         makeHeading("h1", "System");
 
         const sysInfo = Root.Lib.systemInfo;
@@ -477,7 +490,7 @@ export default {
         //   .appendTo(container);
       },
       async appearance() {
-        this.clear();
+        await this.clear();
         makeHeading("h1", "Appearance");
 
         const themeSelectSpan = new Html("span")
@@ -591,8 +604,8 @@ export default {
           )
           .appendTo(container);
       },
-      network() {
-        this.clear();
+      async network() {
+        await this.clear();
         makeHeading("h1", "Networking");
 
         new Html("button")
@@ -612,48 +625,54 @@ export default {
           .appendTo(container);
       },
       async applications() {
-        this.clear();
+        await this.clear();
         makeHeading("h1", "Applications");
         let installedApps = (await vfs.list("Root/Pluto/apps"))
           .filter((p) => p.type === "file" && p.item.endsWith(".app"))
           .map((i) => i.item);
         console.log(installedApps);
-        installedApps.forEach(async (e) => {
-          let splitE = e.split(".");
-          let name = splitE[0];
-          let extension = splitE[1];
-          console.log(name, extension);
+        if (installedApps.length > 0) {
+          installedApps.forEach(async (e) => {
+            let splitE = e.split(".");
+            let name = splitE[0];
+            let extension = splitE[1];
+            console.log(name, extension);
 
-          const a = (
-            await import(
-              `data:text/javascript;base64,${btoa(
-                await vfs.readFile(`Root/Pluto/apps/${name}.app`)
-              )}`
-            )
-          ).default;
-          console.log(a);
+            const a = (
+              await import(
+                `data:text/javascript;base64,${btoa(
+                  await vfs.readFile(`Root/Pluto/apps/${name}.app`)
+                )}`
+              )
+            ).default;
+            console.log(a);
 
-          Card.new(
-            container,
-            new Html("div").class("flex-group", "col").appendMany(
-              new Html("span").class("h2").text(a.name), // Actual name
-              new Html("code")
-                .class("label")
-                .style({
-                  "margin-top": "-4px",
-                })
-                .text(`${name}.app`), // Type
-              // Filename and Version
-              new Html("span").text(a.description), // Description
-              new Html("span")
-                .class("label-light")
-                .text(`(supports core ${a.ver})`) //
-            )
-          );
-        });
+            Card.new(
+              container,
+              new Html("div").class("flex-group", "col").appendMany(
+                new Html("span").class("h2").text(a.name), // Actual name
+                new Html("code")
+                  .class("label")
+                  .style({
+                    "margin-top": "-4px",
+                  })
+                  .text(`${name}.app`), // Type
+                // Filename and Version
+                new Html("span").text(a.description), // Description
+                new Html("span")
+                  .class("label-light")
+                  .text(`(supports core ${a.ver})`) //
+              )
+            );
+          });
+        } else {
+          new Html("span")
+            .text("You have no installed applications.")
+            .appendTo(container);
+        }
       },
-      security() {
-        this.clear();
+      async security() {
+        await this.clear();
         makeHeading("h1", "Security");
         makeAlert(
           "warning",

@@ -17,6 +17,7 @@ body {
 
 :root {
   color-scheme: dark;
+  accent-color: var(--primary);
   --primary: hsl(222, 80%, 40%);
   --negative: hsl(0, 80%, 40%);
   --negative-light: hsl(0, 80%, 73%);
