@@ -185,6 +185,9 @@ body {
   border: none;
   box-shadow: none;
 }
+.win-window.max > .win-titlebar > .buttons > .win-btn.win-minimize {
+  visibility: collapse;
+}
 .desktop ~ .win-window.max {
   height: calc(100% - 42px - 12px) !important;
 }
