@@ -11,7 +11,7 @@ export default {
 
     // Root is just a temp name for the global object the core gives you
     if (pid !== -1) {
-      console.log("%cBootloader called twice, aborting", "color:red");
+      console.log("%BootLoader called twice, aborting", "color:red");
       console.log(Root);
       const x = Root.Lib.cleanup(Root.PID, Root.Token);
       console.log(x); // true
@@ -41,7 +41,7 @@ export default {
       Root.Core.services = serviceReference;
       // await Root.Core.startPkg('ui:LoginScreen');
 
-      // Start of global customisation config
+      // Start of global customization config
 
       let vfs = await Root.Core.startPkg("lib:VirtualFS");
       await vfs.importFS();
@@ -49,6 +49,10 @@ export default {
       let appearanceConfig = JSON.parse(
         await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
       );
+
+      if (appearanceConfig.sidebarType) {
+        document.documentElement.dataset.sidebarType = appearanceConfig.sidebarType;
+      }
 
       await Root.Core.startPkg("apps:FTGSF");
 
@@ -80,7 +84,7 @@ export default {
       // destroy loading screen
       lsg.cleanup();
 
-      // ply starutp stound
+      // ply startup stound
       let a = new Audio("./assets/startup.wav");
       a.volume = 0.5;
       a.play();
@@ -89,7 +93,7 @@ export default {
       lsg.cleanup();
       Root.Core.startPkg("system:Basic");
       Root.Modal.alert(
-        "Bootloader Error",
+        "BootLoader Error",
         "Something went wrong while loading...\n\n" +
           e +
           "\n\n" +
@@ -99,13 +103,13 @@ export default {
       );
 
       // Console
-      const cnsl = await Root.Core.startPkg("system:Console", true, true);
+      const console = await Root.Core.startPkg("system:Console", true, true);
 
       window.addEventListener("keydown", (e) => {
         if (e.key === "`") {
           e.preventDefault();
           // send msg
-          cnsl.proc.send({ type: "toggle" });
+          console.proc.send({ type: "toggle" });
         }
       });
     }
@@ -113,7 +117,7 @@ export default {
     return Root.Lib.setupReturns(
       (_) => {
         // Root.Modal.alert("BootLoader", "No");
-        // console.log("Bootloader process ended, attempting clean up...");
+        // console.log("BootLoader process ended, attempting clean up...");
         // const result = Root.Lib.cleanup(pid, token);
         // if (result === true) {
         //   console.log("Cleanup Success! Token:", token);
@@ -122,7 +126,7 @@ export default {
         // }
       },
       (m) => {
-        console.log("Bootloader received message: " + m);
+        console.log("BootLoader received message: " + m);
       }
     );
   },

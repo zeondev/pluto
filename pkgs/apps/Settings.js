@@ -65,8 +65,16 @@ export default {
     const themeLib = await Root.Lib.loadLibrary("ThemeLib");
     await vfs.importFS();
 
-    let desktopConfig = JSON.parse(
-      await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
+    const defaultDesktopConfig = {
+      wallpaper: "./assets/wallpapers/space.png",
+      useThemeWallpaper: true,
+      theme: "dark.theme",
+      sidebarType: "vertical",
+    };
+
+    let desktopConfig = Object.assign(
+      defaultDesktopConfig,
+      JSON.parse(await vfs.readFile("Root/Pluto/config/appearanceConfig.json"))
     );
     console.log(desktopConfig);
 
@@ -75,8 +83,11 @@ export default {
         "Root/Pluto/config/appearanceConfig.json",
         JSON.stringify(desktopConfig)
       );
-      desktopConfig = JSON.parse(
-        await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
+      desktopConfig = Object.assign(
+        defaultDesktopConfig,
+        JSON.parse(
+          await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
+        )
       );
     }
 
@@ -168,8 +179,11 @@ export default {
     let pages = {
       async clear() {
         container.elm.innerHTML = "";
-        desktopConfig = JSON.parse(
-          await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
+        desktopConfig = Object.assign(
+          defaultDesktopConfig,
+          JSON.parse(
+            await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
+          )
         );
       },
       async account() {
@@ -603,6 +617,33 @@ export default {
               .text("Use wallpaper from theme")
           )
           .appendTo(container);
+
+        const sidebarTypeSpan = new Html("span")
+          .class("row", "ac", "js", "gap")
+          .appendTo(container);
+
+        sidebarTypeSpan.appendMany(
+          new Html("span").text("Toolbar position"),
+          new Html("select")
+            .appendMany(
+              new Html("option").text("Vertical").attr({
+                value: "vertical",
+                selected:
+                  desktopConfig.sidebarType === "vertical" ? true : null,
+              }),
+              new Html("option").text("Horizontal").attr({
+                value: "horizontal",
+                selected:
+                  desktopConfig.sidebarType === "horizontal" ? true : null,
+              })
+            )
+            .on("input", (e) => {
+              desktopConfig.sidebarType = e.target.value;
+              document.documentElement.dataset.sidebarType = e.target.value;
+              save();
+            })
+            .class("if", "mc")
+        );
       },
       async network() {
         await this.clear();

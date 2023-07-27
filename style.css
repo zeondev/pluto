@@ -322,6 +322,9 @@ body {
 .win-content.with-sidebar {
   padding: 0;
 }
+[data-sidebar-type="horizontal"] .with-sidebar {
+  flex-direction: column;
+}
 .win-content {
   padding: 10px;
   flex: 1;
@@ -733,11 +736,21 @@ td {
   min-width: 32px;
   flex-shrink: 0;
 }
+[data-sidebar-type="horizontal"] .sidebar,
+[data-sidebar-type="horizontal"] .text-sidebar {
+  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-shrink: 0;
+  width: 100%;
+}
 .sidebar button {
   padding: 4px;
   display: flex;
   border-radius: 4px;
   margin: 2px;
+  width: 32px;
+  flex-shrink: 0;
 }
 .sidebar button:hover {
   background-color: var(--neutral);

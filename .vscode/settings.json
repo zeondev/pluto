@@ -11,12 +11,13 @@
   "cSpell.words": [
     "Baro",
     "colspan",
+    "FTGSF",
     "localforage",
     "lucide",
     "shrt",
     "titlebar",
     "Zeon"
-  ],
+],
   "cSpell.ignorePaths": [
     "package-lock.json",
     "node_modules",

@@ -10,6 +10,7 @@ let templateFsLayout = {
           wallpaper: "./assets/wallpapers/space.png",
           useThemeWallpaper: true,
           theme: "dark.theme",
+          sidebarType: "vertical",
         }),
         themes: {
           "light.theme":
