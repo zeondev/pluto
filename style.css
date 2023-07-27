@@ -1630,3 +1630,24 @@ hr {
   align-self: stretch;
   gap: 8px;
 }
+
+.terminal-prev-commands {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.terminal-prev-command {
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-prev-command-text {
+  font-size: 14.5px;
+  color: var(--positive-dark);
+  font-weight: 500;
+}
+
+.terminal-current-line-input {
+  width: 100%;
+}
