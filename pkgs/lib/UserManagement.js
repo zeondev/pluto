@@ -51,7 +51,7 @@ function checkUserConfig(config) {
 export default {
   name: "User Management",
   description:
-    "This library handles user managament. Please do not modify this library.",
+    "This library handles user management. Please do not modify this library.",
   ver: 1, // Compatible with core v1
   type: "library",
   init: function (l) {
