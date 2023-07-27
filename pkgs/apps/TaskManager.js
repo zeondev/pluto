@@ -3,6 +3,7 @@ export default {
   description: "Examine and manage processes",
   ver: 1, // Compatible with core v1
   type: "process",
+  optInToEvents: true,
   privileges: [
     {
       privilege: "processList",
