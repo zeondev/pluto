@@ -82,7 +82,7 @@ export default {
     new Html("button")
       .text("Attempt filesystem backup and restore")
       .on("click", async (e) => {
-        localStorage.setItem("oldvfs", JSON.stringify(await vfs.exportFS()));
+        localStorage.setItem("oldVFS", JSON.stringify(await vfs.exportFS()));
         let fs = await vfs.importFS(true);
         await vfs.save();
         location.reload();
@@ -90,7 +90,7 @@ export default {
       .appendTo(wrapper);
 
     return Root.Lib.setupReturns(onEnd, (m) => {
-      console.log("Example recieved message: " + m);
+      console.log("Example received message: " + m);
     });
   },
 };

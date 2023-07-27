@@ -1,3 +1,11 @@
 {
-    "liveServer.settings.port": 5501
+    "liveServer.settings.port": 5501,
+    "cSpell.words": [
+        "colspan",
+        "localforage",
+        "lucide",
+        "shrt",
+        "titlebar",
+        "Zeon"
+    ]
 }

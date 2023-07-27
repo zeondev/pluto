@@ -85,22 +85,22 @@ export default {
         icon: "brush",
       },
     },
-    retriveAllMIMEdata: async function (path) {
-      // pass in path, if shrt file, run custom shrt algorythm (returns everything that a regular run does), else, find file format, return icon, label, file name, and onclick events
+    retrieveAllMIMEdata: async function (path) {
+      // pass in path, if shrt file, run custom shrt algorithm (returns everything that a regular run does), else, find file format, return icon, label, file name, and onclick events
       const vfs = await L.loadLibrary("VirtualFS");
       await vfs.importFS();
       let ext = path.split(".").pop();
       if (ext === "shrt") {
         let shrtFile = JSON.parse(await vfs.readFile(path));
-        if (!shrtFile.name || !shrtFile.icon || !shrtFile.fullname) {
+        if (!shrtFile.name || !shrtFile.icon || !shrtFile.fullName) {
           return 0;
         }
         return {
           name: shrtFile.name,
           icon: shrtFile.icon,
-          fullname: `Desktop shortcut (${shrtFile.fullname})`,
+          fullName: `Desktop shortcut (${shrtFile.fullName})`,
           onClick: (c) => {
-            c.startPkg(shrtFile.fullname, true, true);
+            c.startPkg(shrtFile.fullName, true, true);
           },
         };
       } else {
@@ -132,7 +132,7 @@ export default {
         return {
           name: pathSplit[pathSplit.length - 1],
           icon,
-          fullname: map.label,
+          fullName: map.label,
           onClick: async (c) => {
             if (map.opensWith === null) return;
             if (map.opensWith === "custom") {

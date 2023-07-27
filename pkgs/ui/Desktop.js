@@ -5,7 +5,7 @@ export default {
   type: "process",
   optInToEvents: true,
   exec: async function (Root) {
-    let wrapper; // Lib.html | undefinedd
+    let wrapper; // Lib.html | undefined
     let MyWindow;
 
     console.log("Hello from example package", Root.Lib);
@@ -70,7 +70,7 @@ export default {
         x: 0,
         y: 0,
       };
-      if (localStorage.getItem("oldvfs")) {
+      if (localStorage.getItem("oldVFS")) {
         const x = await Root.Modal.prompt(
           "Filesystem restore",
           "Looks like you have an old file system.\nWould you like to mount it?",
@@ -79,14 +79,14 @@ export default {
 
         if (x === true) {
           // Do the thing the thing
-          // const vfas = await l.loadLibrary("VirtualFS");
+          // const vfs = await l.loadLibrary("VirtualFS");
 
           // Root -> oldFs
           vfs.fileSystem.Root["oldFs"] = JSON.parse(
-            localStorage.getItem("oldvfs")
+            localStorage.getItem("oldVFS")
           );
           await vfs.save();
-          localStorage.removeItem("oldvfs");
+          localStorage.removeItem("oldVFS");
 
           let fm = await Root.Core.startPkg("apps:FileManager", true, true);
 
@@ -171,8 +171,7 @@ export default {
       for (let i = 0; i < fileList.length; i++) {
         let file = fileList[i];
 
-        //let daleta = t mapping =
-        let mapping = await FileMappings.retriveAllMIMEdata(
+        let mapping = await FileMappings.retrieveAllMIMEdata(
           desktopDirectory + "/" + file.item,
           vfs
         );
@@ -185,12 +184,12 @@ export default {
         //       await vfs.readFile(desktopDirectory + "/" + file.item)
         //     );
 
-        //     if (!shrtFile.name || !shrtFile.icon || !shrtFile.fullname) {
+        //     if (!shrtFile.name || !shrtFile.icon || !shrtFile.fullName) {
         //       continue;
         //     }
 
         //     createDesktopIcon(shrtFile.name, shrtFile.icon, () => {
-        //       Root.Core.startPkg(shrtFile.fullname, true, true);
+        //       Root.Core.startPkg(shrtFile.fullName, true, true);
         //     });
         //   } catch (e) {
         //     console.log("UNABLE TO PARSE", file);
@@ -455,7 +454,7 @@ export default {
           case "refresh":
             break;
           case "coreEvent":
-            console.log("Desktop recieved core event", data);
+            console.log("Desktop received core event", data);
 
             if (
               data.data.name.startsWith("system:") ||

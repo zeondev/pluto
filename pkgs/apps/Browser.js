@@ -83,7 +83,7 @@ export default {
       .appendTo(header);
 
     return Root.Lib.setupReturns(onEnd, (m) => {
-      console.log("Example recieved message: " + m);
+      console.log("Example received message: " + m);
     });
   },
 };

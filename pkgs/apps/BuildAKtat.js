@@ -36,7 +36,7 @@ export default {
     wrapper.style.padding = "0px";
 
     return Root.Lib.setupReturns(onEnd, (m) => {
-      console.log("Example recieved message: " + m);
+      console.log("Example received message: " + m);
     });
   },
 };

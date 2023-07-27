@@ -54,7 +54,7 @@ export default {
       // }, 100);
       onEnd();
       return Root.Lib.setupReturns(onEnd, (m) => {
-        console.log("Example recieved message: " + m);
+        console.log("Example received message: " + m);
       });
     }
 
@@ -102,7 +102,7 @@ export default {
         text: "System",
         title: "System",
         onclick() {
-          pages.sys();
+          pages.system();
         },
       },
       {
@@ -110,7 +110,7 @@ export default {
         text: "Account",
         title: "Account",
         onclick() {
-          pages.acct();
+          pages.account();
         },
       },
       {
@@ -118,7 +118,7 @@ export default {
         text: "Appearance",
         title: "Appearance",
         onclick() {
-          pages.appe();
+          pages.appearance();
         },
       },
       {
@@ -126,7 +126,7 @@ export default {
         text: "Network",
         title: "Network",
         onclick() {
-          pages.netw();
+          pages.network();
         },
       },
       {
@@ -134,7 +134,7 @@ export default {
         text: "Applications",
         title: "Applications",
         onclick() {
-          pages.appl();
+          pages.applications();
         },
       },
       {
@@ -142,7 +142,7 @@ export default {
         text: "Security",
         title: "Security",
         onclick() {
-          pages.sec();
+          pages.security();
         },
       },
     ]);
@@ -163,7 +163,7 @@ export default {
       clear() {
         container.elm.innerHTML = "";
       },
-      acct() {
+      account() {
         this.clear();
         makeHeading("h1", "Account");
 
@@ -199,6 +199,9 @@ export default {
                     settingsWin.elm,
                     false
                   );
+
+                  if (x === false) return;
+
                   let y = await Root.Modal.input(
                     "Login with Zeon",
                     "Enter your password",
@@ -207,12 +210,7 @@ export default {
                     true
                   );
 
-                  console.log(
-                    "Your Username : " +
-                      x +
-                      "\nYour Password : " +
-                      "*".repeat(y.length)
-                  );
+                  if (y === false) return;
 
                   let service = Root.Core.services.find(
                     (x) => x.name === "Account"
@@ -220,11 +218,11 @@ export default {
 
                   if (service) {
                     let result = await service.ref.login(x, y);
-                    this.acct();
+                    this.account();
                     if (result.status === 200) {
                       Root.Modal.alert(
                         "Oops",
-                        "Bad data, something bad:\n\n" +
+                        "Something went wrong while logging in:\n\n" +
                           JSON.stringify(result, null, 2),
                         settingsWin
                       );
@@ -247,7 +245,7 @@ export default {
                 if (service && service.ref) {
                   service.ref.logout();
                 }
-                this.acct();
+                this.account();
               }
             })
             .appendTo(container);
@@ -274,7 +272,7 @@ export default {
           }
         }
       },
-      async sys() {
+      async system() {
         this.clear();
         makeHeading("h1", "System");
 
@@ -467,7 +465,7 @@ export default {
         //   })
         //   .appendTo(container);
       },
-      async appe() {
+      async appearance() {
         this.clear();
         makeHeading("h1", "Appearance");
 
@@ -492,7 +490,7 @@ export default {
         const check = await vfs.whatIs("Root/Pluto/config/themes");
 
         let themes = [];
-        let themeDatas = [];
+        let themeData = [];
 
         if (check === null) {
           // non exist
@@ -513,7 +511,7 @@ export default {
                   selected: desktopConfig.theme === itm ? true : null,
                 })
               );
-              themeDatas.push(Object.assign({ fileName: itm }, result.data));
+              themeData.push(Object.assign({ fileName: itm }, result.data));
             } else {
               alert("failed parsing theme data due to " + result.message);
             }
@@ -529,7 +527,7 @@ export default {
               desktopConfig.theme = e.target.value;
               themeLib.setCurrentTheme(x);
             } else {
-              const x = themeDatas[parseInt(e.target.value)];
+              const x = themeData[parseInt(e.target.value)];
               console.log(x);
               desktopConfig.theme = x.fileName;
               themeLib.setCurrentTheme(x);
@@ -582,7 +580,7 @@ export default {
           )
           .appendTo(container);
       },
-      netw() {
+      network() {
         this.clear();
         makeHeading("h1", "Networking");
 
@@ -602,17 +600,17 @@ export default {
           })
           .appendTo(container);
       },
-      async appl() {
+      async applications() {
         this.clear();
         makeHeading("h1", "Applications");
-        let installedapps = (await vfs.list("Root/Pluto/apps"))
+        let installedApps = (await vfs.list("Root/Pluto/apps"))
           .filter((p) => p.type === "file" && p.item.endsWith(".app"))
           .map((i) => i.item);
-        console.log(installedapps);
-        installedapps.forEach(async (e) => {
-          let splite = e.split(".");
-          let name = splite[0];
-          let extension = splite[1];
+        console.log(installedApps);
+        installedApps.forEach(async (e) => {
+          let splitE = e.split(".");
+          let name = splitE[0];
+          let extension = splitE[1];
           console.log(name, extension);
 
           const a = (
@@ -643,16 +641,16 @@ export default {
           );
         });
       },
-      sec() {
+      security() {
         this.clear();
         makeHeading("h1", "Security");
       },
     };
 
-    pages.sys();
+    pages.system();
 
     return Root.Lib.setupReturns(onEnd, (m) => {
-      console.log("Example recieved message: " + m);
+      console.log("Example received message: " + m);
     });
   },
 };

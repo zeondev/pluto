@@ -86,7 +86,7 @@ body {
   --outline: hsl(131, 23%, 22%);
 }
 
-:root[data-theme="chatify"] {
+:root[data-theme="grey"] {
   color-scheme: dark;
   --primary: #124b31;
   --negative: #b81414;

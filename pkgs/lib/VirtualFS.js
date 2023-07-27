@@ -17,7 +17,7 @@ let templateFsLayout = {
           "dark.theme":
             '{"version":1,"name":"Dark","description":"A built-in theme.","values":null,"cssThemeDataset":"dark","wallpaper":"./assets/wallpapers/space.png"}',
           "grey.theme":
-            '{"version":1,"name":"Grey","description":"A built-in theme.","values":null,"cssThemeDataset":"chatify","wallpaper":"./assets/wallpapers/grey.svg"}',
+            '{"version":1,"name":"Grey","description":"A built-in theme.","values":null,"cssThemeDataset":"grey","wallpaper":"./assets/wallpapers/grey.svg"}',
           "red.theme":
             '{"version":1,"name":"Red","description":"A built-in theme.","values":null,"cssThemeDataset":"red","wallpaper":"./assets/wallpapers/red.png"}',
           "green.theme":

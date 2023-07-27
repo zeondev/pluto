@@ -191,7 +191,7 @@ export default {
 
       const mappings = await Promise.all(
         fileList.map(async (e) => {
-          return await FileMappings.retriveAllMIMEdata(path + "/" + e.item);
+          return await FileMappings.retrieveAllMIMEdata(path + "/" + e.item);
         })
       );
 
@@ -232,7 +232,7 @@ export default {
             userFriendlyFileType = "File folder";
             break;
           case "file":
-            userFriendlyFileType = mapping.fullname || mapping.label;
+            userFriendlyFileType = mapping.fullName || mapping.label;
             break;
         }
 

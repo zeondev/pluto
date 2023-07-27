@@ -27,15 +27,15 @@ export default {
     // DevEnv
 
     let shortcutsList = [
-      { name: "Task Manager", icon: "cpu", fullname: "apps:TaskManager" },
-      { name: "File Manager", icon: "folders", fullname: "apps:FileManager" },
-      { name: "Image Viewer", icon: "image", fullname: "apps:ImageViewer" },
-      { name: "Notepad", icon: "note", fullname: "apps:Notepad" },
-      // { name: "Weather", icon: "cloudMoon", fullname: "apps:Weather" },
-      { name: "DevEnv", icon: "fileCode", fullname: "apps:DevEnv" },
-      // { name: "Browser", icon: "globe", fullname: "apps:Browser" },
-      { name: "Settings", icon: "wrench", fullname: "apps:Settings" },
-      { name: "Terminal", icon: "terminal", fullname: "apps:Terminal" },
+      { name: "Task Manager", icon: "cpu", fullName: "apps:TaskManager" },
+      { name: "File Manager", icon: "folders", fullName: "apps:FileManager" },
+      { name: "Image Viewer", icon: "image", fullName: "apps:ImageViewer" },
+      { name: "Notepad", icon: "note", fullName: "apps:Notepad" },
+      // { name: "Weather", icon: "cloudMoon", fullName: "apps:Weather" },
+      { name: "DevEnv", icon: "fileCode", fullName: "apps:DevEnv" },
+      // { name: "Browser", icon: "globe", fullName: "apps:Browser" },
+      { name: "Settings", icon: "wrench", fullName: "apps:Settings" },
+      { name: "Terminal", icon: "terminal", fullName: "apps:Terminal" },
     ];
     console.log(shortcutsList.length);
     for (let i = 0; i < shortcutsList.length; i++) {
@@ -47,7 +47,7 @@ export default {
     onEnd();
 
     return Root.Lib.setupReturns(onEnd, (m) => {
-      console.log("Example recieved message: " + m);
+      console.log("Example received message: " + m);
     });
   },
 };

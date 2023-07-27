@@ -122,7 +122,7 @@ export default {
         // }
       },
       (m) => {
-        console.log("Bootloader recieved message: " + m);
+        console.log("Bootloader received message: " + m);
       }
     );
   },
