@@ -32,7 +32,7 @@ export default {
       left = 0;
     }
 
-    // Testin   g the html library
+    // Testing the html library
     MyWindow = new Win({
       title: "Welcome",
       content: "",
