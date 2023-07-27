@@ -823,7 +823,8 @@ td {
 
 [disabled] {
   background-color: var(--unfocused) !important;
-  color: rgba(var(--text-rgb), 0.5);
+  color: rgba(var(--text-rgb), 0.5) !important;
+  cursor: not-allowed;
 }
 
 .desktop .dock {
