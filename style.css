@@ -1239,7 +1239,6 @@ svg:not(.ignore-css) {
   justify-content: center;
   align-items: center;
   max-width: 128px;
-  background-color: rgba(var(--root-rgb), 0.5);
   border-radius: 8px;
   padding: 8px 12px;
   animation: shortSlideUp 1s ease forwards;

@@ -4,14 +4,15 @@ export default {
   privileges: [
     {
       privilege: "startPkg",
-      description: "Run applications",
-    },
+      description: "Run applications"
+    }
   ],
   ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
     let NpWindow;
+    let editorSize = 14;
 
     function onEnd() {
       const result = Root.Lib.cleanup(Root.PID, Root.Token);
@@ -27,8 +28,8 @@ export default {
     NpWindow = new Win({
       title: "DevEnv",
       content: "",
-      width: 340,
-      height: 220,
+      width: 540,
+      height: 420,
       pid: Root.PID,
       onclose: async () => {
         if (currentDocument.dirty === true) {
@@ -42,7 +43,7 @@ export default {
           }
         }
         onEnd();
-      },
+      }
     });
 
     wrapper = NpWindow.window.querySelector(".win-content");
@@ -51,7 +52,7 @@ export default {
 
     let currentDocument = {
       path: "",
-      dirty: false,
+      dirty: false
     };
 
     const updateTitle = (_) =>
@@ -74,7 +75,7 @@ export default {
     // FileDialog.pickFile and FileDialog.saveFile both take path as an argument and are async
     async function openFile() {
       let file = await FileDialog.pickFile(
-        await vfs.getParentFolder(currentDocument.path) || "Root"
+        (await vfs.getParentFolder(currentDocument.path)) || "Root"
       );
       if (file === false) return;
       let content = await vfs.readFile(file);
@@ -85,7 +86,7 @@ export default {
       // make sure the path is not unreasonable
       if (currentDocument.path === "") {
         let result = await FileDialog.saveFile(
-          await vfs.getParentFolder(currentDocument.path) || "Root"
+          (await vfs.getParentFolder(currentDocument.path)) || "Root"
         );
         if (result === false) return false;
         currentDocument.path = result;
@@ -117,7 +118,7 @@ export default {
           if (result === false) return;
           newDocument("", "");
         },
-        html: Root.Lib.icons.newFile,
+        html: Root.Lib.icons.newFile
       },
       {
         onclick: async (_) => {
@@ -125,17 +126,35 @@ export default {
           if (result === false) return;
           openFile();
         },
-        html: Root.Lib.icons.openFolder,
+        html: Root.Lib.icons.openFolder
       },
       {
         onclick: async (_) => {
           await saveFile();
         },
-        html: Root.Lib.icons.save,
+        html: Root.Lib.icons.save
+      },
+      {
+        onclick: async (_) => {
+          editorSize += 2;
+          textWrapper.style({
+            "font-size": editorSize.toString() + "px"
+          });
+        },
+        html: Root.Lib.icons.zoomIn
+      },
+      {
+        onclick: async (_) => {
+          editorSize -= 2;
+          textWrapper.style({
+            "font-size": editorSize.toString() + "px"
+          });
+        },
+        html: Root.Lib.icons.zoomOut
       },
       {
         style: {
-          "margin-top": "auto",
+          "margin-top": "auto"
         },
         onclick: (_) => {
           Root.Core.startPkg(
@@ -143,8 +162,8 @@ export default {
             false
           );
         },
-        html: Root.Lib.icons.run,
-      },
+        html: Root.Lib.icons.run
+      }
     ]);
 
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
@@ -246,5 +265,5 @@ export default {
         newDocument(m.path, await vfs.readFile(m.path));
       }
     });
-  },
+  }
 };
