@@ -15,6 +15,12 @@ body {
   color-scheme: dark;
 }
 
+p,
+span,
+a {
+  cursor: default !important;
+}
+
 :root {
   color-scheme: dark;
   accent-color: var(--primary);
@@ -26,7 +32,8 @@ body {
   --positive-light: hsl(134, 81%, 72%);
   --positive-dark: hsl(133, 79%, 25%);
   --warning: hsla(60, 90%, 40%, 0.8);
-  --warning-light: hsla(60, 89%, 72%, 0.4);
+  --warning-light: rgba(247, 247, 120, 1);
+  --warning-light-translucent: rgba(247, 247, 120, 0.4);
   --warning-dark: hsla(60, 96%, 25%, 0.2);
   --root: hsl(222, 25%, 8%);
   --root-rgb: 15, 18, 25;
@@ -42,6 +49,7 @@ body {
   --neutral-focus: hsl(222, 27%, 20%);
   --outline: hsl(222, 23%, 22%);
   --easing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  --short-animation-duration: 0.15s;
   --animation-duration: 0.45s;
   --long-animation-duration: 1s;
 }
@@ -525,6 +533,15 @@ button.success {
   background-color: var(--positive);
   color: var(--text-light);
 }
+.success {
+  color: var(--positive-light);
+}
+.danger {
+  color: var(--negative-light);
+}
+.warning {
+  color: var(--warning-light);
+}
 
 select,
 option {
@@ -590,8 +607,16 @@ iframe {
   display: flex;
   flex-direction: column;
 }
+.row-wrap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
 .padded {
   padding: 16px 18px;
+}
+.pad {
+  padding: 8px;
 }
 
 .ml-auto {
@@ -1246,7 +1271,7 @@ ul {
   box-sizing: border-box;
   touch-action: none !important;
   transition-property: background-color, color, border-color;
-  transition-duration: 0.15s;
+  transition-duration: 0.1s;
   transition-timing-function: var(--easing-function);
 }
 
@@ -1259,9 +1284,16 @@ ul {
   opacity: 0.4;
 }
 
-svg:not(.ignore-css) {
-  width: 100%;
-  height: 100%;
+svg.lucide:not(.ignore-css) {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2px;
+}
+
+.desktop-icon svg.lucide {
+  width: 48px;
+  height: 48px;
+  stroke-width: 1.5px;
 }
 
 .desktop-apps {
@@ -1468,6 +1500,7 @@ hr {
 }
 .h3 {
   font-size: 16px;
+  font-weight: 600;
 }
 
 .label {
@@ -1484,6 +1517,9 @@ hr {
 }
 .mc {
   width: max-content;
+}
+.mhc {
+  height: max-content;
 }
 
 .fadeIn {
@@ -1588,9 +1624,11 @@ hr {
   background-color: var(--header);
 }
 
-.desktop .menu > .apps > .app > .app-icon {
+.desktop .menu > .apps > .app > .app-icon,
+.desktop .menu > .apps > .app > .app-icon svg {
   width: 32px;
   height: 32px;
+  stroke-width: 1.5px;
 }
 .desktop .menu > .apps > .app > .app-text {
   display: flex;
@@ -1753,4 +1791,72 @@ hr {
 .alert.warning {
   background-color: var(--warning-dark);
   color: var(--text);
+}
+
+.app-store .search-bar {
+  display: flex;
+  padding: 4px;
+  align-items: center;
+  gap: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--outline);
+}
+.app-store .search-bar input {
+  flex: 1;
+}
+.app-store .app {
+  display: flex;
+  padding: 8px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.app-store .app-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.app-store .app-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.app-store .app-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}
+.app-store .app-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-store .app-banner {
+  display: flex;
+  height: 150px;
+  background-image: var(--url);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+}
+.app-store .app-banner.no-banner {
+  background: var(--unfocused);
+  position: relative;
+}
+.app-store .app-banner.no-banner::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 128px;
+  height: 128px;
+  background-image: var(--url);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 50%;
 }

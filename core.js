@@ -3,8 +3,8 @@
 (async () => {
   try {
     const coreDetails = {
-      version: 1.21,
-      versionString: (1.21).toFixed(1),
+      version: 1.3,
+      versionString: (1.3).toFixed(1),
       codename: "Elysium",
     };
     const knownLibraries = [];
@@ -506,10 +506,10 @@
 
     await Core.startPkg("system:BootLoader");
 
-    window.m = Modal;
-    window.c = Core;
-    window.l = GlobalLib;
-    window.h = GlobalLib.html;
+    // window.m = Modal;
+    // window.c = Core;
+    // window.l = GlobalLib;
+    // window.h = GlobalLib.html;
   } catch (e) {
     alert(e);
   }

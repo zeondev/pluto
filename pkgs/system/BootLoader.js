@@ -51,7 +51,8 @@ export default {
       );
 
       if (appearanceConfig.sidebarType) {
-        document.documentElement.dataset.sidebarType = appearanceConfig.sidebarType;
+        document.documentElement.dataset.sidebarType =
+          appearanceConfig.sidebarType;
       }
 
       await Root.Core.startPkg("apps:FTGSF");
@@ -62,7 +63,9 @@ export default {
 
       if (appearanceConfig.theme && appearanceConfig.theme.endsWith(".theme")) {
         const x = themeLib.validateTheme(
-          await vfs.readFile("Root/Pluto/config/themes/" + appearanceConfig.theme)
+          await vfs.readFile(
+            "Root/Pluto/config/themes/" + appearanceConfig.theme
+          )
         );
 
         if (x !== undefined && x.success === true) {
@@ -88,6 +91,17 @@ export default {
       let a = new Audio("./assets/startup.wav");
       a.volume = 0.5;
       a.play();
+
+      // Console
+      const consoleApp = await Root.Core.startPkg("system:Console", true, true);
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "`") {
+          e.preventDefault();
+          // send msg
+          consoleApp.proc.send({ type: "toggle" });
+        }
+      });
     } catch (e) {
       window.err = e;
       lsg.cleanup();
@@ -101,17 +115,6 @@ export default {
           "\n\n" +
           "Launching Basic Mode"
       );
-
-      // Console
-      const console = await Root.Core.startPkg("system:Console", true, true);
-
-      window.addEventListener("keydown", (e) => {
-        if (e.key === "`") {
-          e.preventDefault();
-          // send msg
-          console.proc.send({ type: "toggle" });
-        }
-      });
     }
 
     return Root.Lib.setupReturns(

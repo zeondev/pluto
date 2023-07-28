@@ -7,15 +7,17 @@ export default {
     let wrapper; // Lib.html | undefined
     let MyWindow;
 
-    Root.Lib.setOnEnd(_ => MyWindow.close())
+    Root.Lib.setOnEnd((_) => MyWindow.close());
 
-    const logs = [];
+    let logs = [];
     let list;
     const commands = {
       // Commands example
       async launch(app) {
         // launch the app
-        return await Root.Core.startPkg(app);
+        log("Loading...", "Loading...", "log");
+        await Root.Core.startPkg(app);
+        log("Loaded" + app, "Loaded " + app, "log");
       },
       async clear() {
         logs = [];
@@ -153,7 +155,7 @@ export default {
       let cmdData = consoleInput.elm.value.split(" ");
       consoleInput.elm.value = "";
 
-      appendListItem("] " + cmdData);
+      appendListItem("] " + cmdData.join(" "));
 
       const cmd = cmdData[0];
       const args = cmdData.slice(1);

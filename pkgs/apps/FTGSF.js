@@ -21,12 +21,13 @@ export default {
     let shortcutsList = [
       { name: "Task Manager", icon: "cpu", fullName: "apps:TaskManager" },
       { name: "File Manager", icon: "folders", fullName: "apps:FileManager" },
-      { name: "Image Viewer", icon: "image", fullName: "apps:ImageViewer" },
-      { name: "Notepad", icon: "note", fullName: "apps:Notepad" },
-      { name: "Weather", icon: "cloudMoon", fullName: "apps:Weather" },
-      { name: "DevEnv", icon: "fileCode", fullName: "apps:DevEnv" },
-      { name: "Browser", icon: "globe", fullName: "apps:Browser" },
+      { name: "App Store", icon: "package", fullName: "apps:AppStore" },
       { name: "Settings", icon: "wrench", fullName: "apps:Settings" },
+      { name: "Notepad", icon: "note", fullName: "apps:Notepad" },
+      { name: "DevEnv", icon: "fileCode", fullName: "apps:DevEnv" },
+      { name: "Image Viewer", icon: "image", fullName: "apps:ImageViewer" },
+      { name: "Browser", icon: "globe", fullName: "apps:Browser" },
+      { name: "Weather", icon: "cloudMoon", fullName: "apps:Weather" },
       { name: "Terminal", icon: "terminal", fullName: "apps:Terminal" },
     ];
     console.log(shortcutsList.length);

@@ -26,8 +26,7 @@ export default {
   init: function (l, c) {
     lib = l;
     core = c;
-    if (!core.windowsList)
-    core.windowsList = [];
+    if (!core.windowsList) core.windowsList = [];
   },
   data: {
     // exported functions here
@@ -290,6 +289,7 @@ function focusWindow(x) {
 function BeginWinDrag(e) {
   // check if window can be selected
   if (!e.clientX && !e.touches) return;
+  if (e.button && e.button !== 0) return;
   // get pointer position
   mouseX = e.clientX || e.touches[0].clientX;
   mouseY = e.clientY || e.touches[0].clientY;

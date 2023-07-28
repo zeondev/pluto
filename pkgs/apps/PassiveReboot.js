@@ -14,15 +14,19 @@ export default {
     },
   ],
   exec: async function (Root) {
-    let wrapper; // Lib.html | undefined
-    let window;
-    let remakeTable;
-    Root.Lib.setOnEnd((_) => {console.log("ended?")})
+    Root.Lib.setOnEnd((_) => {
+      console.log("ended?");
+    });
 
     if (Root.Core !== null) {
       let processes = Root.Core.processList
         .slice(1)
-        .filter((p) => p !== null && p.name !== "apps:PassiveReboot");
+        .filter(
+          (p) =>
+            p !== null &&
+            p.name !== "apps:PassiveReboot" &&
+            !p.name.startsWith("services:")
+        );
       console.log(processes);
 
       processes.forEach((p) => {
