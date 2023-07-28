@@ -173,7 +173,7 @@ export default {
                         .html(appCompatibleIcon)
                         .class(appCompatibleColor, "row"),
                       new Html("button").text("View").on("click", (e) => {
-                        this.appPage(app, pkg);
+                        pages.appPage(app, pkg);
                       })
                     )
                   )
