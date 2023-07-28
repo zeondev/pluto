@@ -114,32 +114,32 @@ export default {
 
             const packageList = await appStoreModule.list();
 
-            const searchBar = new Html("div")
-              .class("search-bar")
-              .appendMany(
-                new Html("input")
-                  .attr({
-                    placeholder: "Search apps",
-                  })
-                  .class("transparent", "m-0", "pad")
-                  .on("input", (e) => {
-                    console.log(e.target.value);
-                  })
-              )
-              .appendTo(container);
+            // const searchBar = new Html("div")
+            //   .class("search-bar")
+            //   .appendMany(
+            //     new Html("input")
+            //       .attr({
+            //         placeholder: "Search apps",
+            //       })
+            //       .class("transparent", "m-0", "pad")
+            //       .on("input", (e) => {
+            //         console.log(e.target.value);
+            //       })
+            //   )
+            //   .appendTo(container);
 
-            const fuzzySearch = function (term, ratio) {
-              var string = this.toLowerCase();
-              var compare = term.toLowerCase();
-              var matches = 0;
-              if (string.indexOf(compare) > -1) return true; // covers basic partial matches
-              for (var i = 0; i < compare.length; i++) {
-                string.indexOf(compare[i]) > -1
-                  ? (matches += 1)
-                  : (matches -= 1);
-              }
-              return matches / this.length >= ratio || term == "";
-            };
+            // const fuzzySearch = function (term, ratio) {
+            //   var string = this.toLowerCase();
+            //   var compare = term.toLowerCase();
+            //   var matches = 0;
+            //   if (string.indexOf(compare) > -1) return true; // covers basic partial matches
+            //   for (var i = 0; i < compare.length; i++) {
+            //     string.indexOf(compare[i]) > -1
+            //       ? (matches += 1)
+            //       : (matches -= 1);
+            //   }
+            //   return matches / this.length >= ratio || term == "";
+            // };
 
             const appsList = new Html("div")
               .class("apps", "ovh", "fg")
@@ -180,6 +180,8 @@ export default {
                   .appendTo(appsList);
               }
             }
+
+            renderAppsList();
           },
           async appPage(app, pkg) {
             this.clear();
