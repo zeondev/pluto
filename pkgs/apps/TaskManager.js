@@ -12,18 +12,18 @@ export default {
   ],
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
-    let window;
+    let TaskManagerWindow;
     let remakeTable;
 
     Root.Lib.setOnEnd(function () {
-      window.close();
+      TaskManagerWindow.close();
       clearInterval(remakeTable);
     });
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
     // Testing the html library
-    window = new Win({
+    TaskManagerWindow = new Win({
       title: "Task Manager",
       content: "Loading...",
       width: "468px",
@@ -36,7 +36,7 @@ export default {
 
     const Html = Root.Lib.html;
 
-    wrapper = window.window.querySelector(".win-content");
+    wrapper = TaskManagerWindow.window.querySelector(".win-content");
     wrapper.innerHTML = "";
 
     wrapper.classList.add("col");

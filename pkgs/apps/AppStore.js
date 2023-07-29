@@ -164,8 +164,15 @@ export default {
                       new Html("div")
                         .class("app-text")
                         .appendMany(
-                          new Html("span").class("h3").text(app.name),
-                          new Html("span").text(app.description)
+                          new Html("span")
+                            .class("row", "gap", "fc")
+                            .appendMany(
+                              new Html("span").class("h3").text(app.name),
+                              new Html("span")
+                                .class("label")
+                                .text(`by ${app.author}`)
+                            ),
+                          new Html("span").text(app.shortDescription)
                         )
                     ),
                     new Html("div").class("app-buttons").appendMany(
@@ -220,7 +227,14 @@ export default {
                   new Html("div")
                     .class("app-text")
                     .appendMany(
-                      new Html("span").class("h3").text(app.name),
+                      new Html("span")
+                        .class("row", "gap", "fc")
+                        .appendMany(
+                          new Html("span").class("h3").text(app.name),
+                          new Html("span")
+                            .class("label")
+                            .text(`by ${app.author}`)
+                        ),
                       new Html("span").text(app.description)
                     )
                 ),
