@@ -20,7 +20,7 @@ export default {
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
     let settingsWin;
-    Root.Lib.setOnEnd((_) => settingsWin.close && settingsWin.close());
+    Root.Lib.setOnEnd((_) => settingsWin && settingsWin.close && settingsWin.close());
 
     console.log("Hello from example package", Root.Lib);
 

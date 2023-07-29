@@ -1810,11 +1810,17 @@ hr {
   justify-content: space-between;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
+}
+.app-store .app.in-menu {
+  flex-direction: column;
+  align-items: stretch;
 }
 .app-store .app-meta {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: 1;
 }
 .app-store .app-text {
   display: flex;
@@ -1835,12 +1841,13 @@ hr {
 
 .app-store .app-banner {
   display: flex;
+  flex-shrink: 0;
   height: 150px;
   background-image: var(--url);
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: 8px;
+  /* border-radius: 8px; */
 }
 .app-store .app-banner.no-banner {
   background: var(--unfocused);

@@ -91,7 +91,29 @@ export default {
       await vfs.importFS();
       let ext = path.split(".").pop();
       if (ext === "shrt") {
-        let shrtFile = JSON.parse(await vfs.readFile(path));
+        let shrtFile = {};
+        try {
+          shrtFile = JSON.parse(await vfs.readFile(path));
+        } catch (e) {
+          return {
+            name: "Unknown",
+            icon: "help",
+            fullName: `Desktop shortcut?`,
+            onClick: (c) => {
+              L.Modal.alert("Oops", "Cannot open this file");
+            },
+          };
+        }
+
+        if (shrtFile === undefined || shrtFile === null)
+          return {
+            name: "Unknown",
+            icon: "help",
+            fullName: `Desktop shortcut?`,
+            onClick: (c) => {
+              L.Modal.alert("Oops", "Cannot open this file");
+            },
+          };
         if (!shrtFile.name || !shrtFile.icon || !shrtFile.fullName) {
           return 0;
         }

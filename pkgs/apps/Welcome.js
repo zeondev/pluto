@@ -110,7 +110,11 @@ export default {
           .appendTo(btnRow)
           .class("primary", "ml-auto")
           .on("click", (e) => {
-            pages.p2();
+            Root.Modal.alert(
+              "Whoops",
+              "This is currently not finished. Come back later or close the app.",
+              wrapper
+            );
           });
       },
     };

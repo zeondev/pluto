@@ -3,6 +3,12 @@ export default {
   description: "Pluto App Store",
   ver: 1, // Compatible with core v1
   type: "process",
+  privileges: [
+    {
+      privilege: "startPkg",
+      description: "Open apps you have installed",
+    },
+  ],
   strings: {
     en_US: {
       appStore_welcome: "Welcome",
@@ -11,6 +17,7 @@ export default {
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
     let StoreWindow;
+    let pages;
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
@@ -29,9 +36,34 @@ export default {
 
     Root.Lib.setOnEnd((_) => StoreWindow.close());
 
+    if (!Root.Core && !Root.Core.startPkg) return Root.Lib.onEnd();
+
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
 
     wrapper = StoreWindow.window.querySelector(".win-content");
+
+    wrapper.classList.add("row", "o-h", "h-100", "with-sidebar");
+
+    const TextSidebar = await Root.Lib.loadComponent("TextSidebar");
+
+    TextSidebar.new(wrapper, [
+      {
+        icon: Root.Lib.icons.package,
+        text: "Apps",
+        title: "Apps",
+        onclick() {
+          pages.appsList();
+        },
+      },
+      {
+        icon: Root.Lib.icons.wrench,
+        text: "Settings",
+        title: "Settings",
+        onclick() {
+          pages.settings();
+        },
+      },
+    ]);
 
     const container = new Root.Lib.html("div")
       .class("col", "w-100", "gap", "ovh", "app-store")
@@ -40,7 +72,7 @@ export default {
     try {
       new Html("div").class("row", "fc").text("Loading...").appendTo(container);
 
-      const host = "https://zeondev.github.io/Pluto-AppStore/";
+      let host = "https://zeondev.github.io/Pluto-AppStore/";
 
       const appStoreModule = (await import(`${host}import.js`)).default;
 
@@ -83,18 +115,31 @@ export default {
           return { appCompatible, appCompatibleColor, appCompatibleIcon };
         }
 
-        async function installApp(pkg, app) {
+        async function installApp(pkg, app, force = false) {
           await fetch(`${host}pkgs/${pkg}/${app.assets.path}`)
             .then(async (e) => {
-              let result = await e.text();
+              console.log(await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`));
+              if (
+                (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) ===
+                  null ||
+                force === true
+              ) {
+                let result = await e.text();
 
-              await vfs.writeFile(`Root/Pluto/apps/${app.name}.app`, result);
+                await vfs.writeFile(`Root/Pluto/apps/${app.name}.app`, result);
 
-              await Root.Modal.alert(
-                "Success",
-                `Your app has been installed!`,
-                container.elm
-              );
+                pages.appPage(app, pkg);
+              } else if (
+                (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) === "file"
+              ) {
+                //await Root.Modal.alert("ahh", "The app is already installed.", container.elm)
+                await Root.Core.startPkg(
+                  "data:text/javascript;base64," +
+                    btoa(await vfs.readFile(`Root/Pluto/apps/${app.name}.app`)),
+                  false,
+                  true
+                );
+              }
             })
             .catch((e) => {
               Root.Modal.alert(
@@ -105,7 +150,7 @@ export default {
             });
         }
 
-        const pages = {
+        pages = {
           async clear() {
             container.elm.innerHTML = "";
           },
@@ -173,12 +218,16 @@ export default {
                                 .text(`by ${app.author}`)
                             ),
                           new Html("span").text(app.shortDescription)
+                        ),
+                      new Html("div")
+                        .class("row", "ml-auto")
+                        .append(
+                          new Html("div")
+                            .html(appCompatibleIcon)
+                            .class(appCompatibleColor, "row")
                         )
                     ),
                     new Html("div").class("app-buttons").appendMany(
-                      new Html("div")
-                        .html(appCompatibleIcon)
-                        .class(appCompatibleColor, "row"),
                       new Html("button").text("View").on("click", (e) => {
                         pages.appPage(app, pkg);
                       })
@@ -192,6 +241,9 @@ export default {
           },
           async appPage(app, pkg) {
             this.clear();
+            console.log("loading new app page");
+
+            console.log(app, pkg);
 
             const appIconUrl = `${host}pkgs/${pkg}/${app.assets.icon}`;
             const appHasBanner = app.assets.banner ? true : false;
@@ -217,8 +269,121 @@ export default {
               )
               .appendTo(container);
 
+            async function makeInstallOrOpenButton() {
+              if (
+                (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) === null
+              ) {
+                return [
+                  new Html("button")
+                    .text(
+                      (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) ===
+                        null
+                        ? "Install"
+                        : (await vfs.whatIs(
+                            `Root/Pluto/apps/${app.name}.app`
+                          )) === "file"
+                        ? "Open"
+                        : "ERROR"
+                    )
+                    .class("primary")
+                    .attr({ id: "installButton" })
+                    .on("click", async (e) => {
+                      if (appCompatible === "ok") {
+                        await installApp(pkg, app);
+                        // pages.appPage(app, pkg);
+                      } else {
+                        const result = await Root.Modal.prompt(
+                          "Notice",
+                          `This app (made for ${app.compatibleWith}) may be incompatible with your current version of Pluto (${sysInfo.version}).\nAre you sure you want to continue installing?`,
+                          container.elm
+                        );
+
+                        if (result === true) {
+                          await installApp(pkg, app);
+                          pages.appPage(app, pkg);
+                        }
+                      }
+                    }),
+                ];
+              } else {
+                let localHash = new Hashes.MD5().hex(
+                  await vfs.readFile(`Root/Pluto/apps/${app.name}.app`)
+                );
+                const appHash = await fetch(
+                  `${host}pkgs/${pkg}/${app.assets.path}`
+                ).then(async (e) => {
+                  let t = await e.text();
+                  return new Hashes.MD5().hex(t);
+                });
+
+                const hashesMatch = localHash === appHash;
+
+                console.log(localHash, appHash, hashesMatch);
+
+                return [
+                  new Html("button")
+                    .text(
+                      hashesMatch === false
+                        ? "Update"
+                        : (await vfs.whatIs(
+                            `Root/Pluto/apps/${app.name}.app`
+                          )) === null
+                        ? "Install"
+                        : (await vfs.whatIs(
+                            `Root/Pluto/apps/${app.name}.app`
+                          )) === "file"
+                        ? "Open"
+                        : "Error"
+                    )
+                    .class("primary")
+                    .attr({ id: "installButton" })
+                    .on("click", async (e) => {
+                      if (hashesMatch === false) {
+                        console.log("hashes DON'T match");
+                        await installApp(pkg, app, true);
+                        return;
+                      }
+
+                      if (appCompatible === "ok") {
+                        await installApp(pkg, app);
+                      } else {
+                        const result = await Root.Modal.prompt(
+                          "Notice",
+                          `This app (made for ${app.compatibleWith}) may be incompatible with your current version of Pluto (${sysInfo.version}).\nAre you sure you want to continue installing?`,
+                          container.elm
+                        );
+
+                        if (result === true) {
+                          await installApp(pkg, app);
+                        }
+                      }
+                    }),
+                  new Html("button")
+                    .text("Uninstall")
+                    .class("danger")
+                    .on("click", async (e) => {
+                      let result = await Root.Modal.prompt(
+                        "Are you sure?",
+                        "Are you sure you want to delete this app?",
+                        wrapper
+                      );
+
+                      if (result === true) {
+                        await vfs.delete(`Root/Pluto/apps/${app.name}.app`);
+                        await Root.Modal.alert(
+                          "App Deleted!",
+                          `${app.name} has been successfully deleted!`
+                        );
+                        pages.appPage(app, pkg);
+                      }
+                    })
+                    .appendTo(container),
+                ];
+              }
+            }
+
             new Html("div")
-              .class("app")
+              .class("app", "in-menu")
               .appendMany(
                 new Html("div").class("app-meta").appendMany(
                   new Html("img").class("app-icon").attr({
@@ -236,38 +401,99 @@ export default {
                             .text(`by ${app.author}`)
                         ),
                       new Html("span").text(app.description)
+                    ),
+                  new Html("div")
+                    .class("row", "ml-auto")
+                    .append(
+                      new Html("div")
+                        .html(appCompatibleIcon)
+                        .class(appCompatibleColor, "row")
                     )
                 ),
-                new Html("div").class("app-buttons").appendMany(
-                  new Html("div")
-                    .html(appCompatibleIcon)
-                    .class(appCompatibleColor, "row"),
-                  new Html("button")
-                    .text("Install")
-                    .class("primary")
-                    .on("click", async (e) => {
-                      if (appCompatible === "ok") {
-                        await installApp(pkg, app);
-                      } else {
-                        const result = await Root.Modal.prompt(
-                          "Notice",
-                          `This app (made for ${app.compatibleWith}) may be incompatible with your current version of Pluto (${sysInfo.version}).\nAre you sure you want to continue installing?`,
-                          container.elm
-                        );
-
-                        if (result === true) {
-                          await installApp(pkg, app);
-                        }
-                      }
-                    })
-                )
+                new Html("div")
+                  .class("app-buttons")
+                  .appendMany(...(await makeInstallOrOpenButton()))
               )
               .appendTo(container);
+          },
+          async settings() {
+            this.clear();
+            const box = new Html("div")
+              .class("padded", "col", "gap")
+              .appendTo(container);
+            new Html("span")
+              .class("h1")
+              .text("Advanced Settings")
+              .appendTo(box);
+
+            const URLregex = new RegExp(
+              /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi
+            );
+
+            let inputValue = "";
+            let useCustomRepo = false;
+
+            const input = new Html("input")
+              .attr({
+                type: "text",
+                placeholder: "Custom Repository URL",
+              })
+              .on("input", (e) => {
+                if (!e.target.value.match(URLregex)) {
+                  e.target.style.borderColor = "var(--negative)";
+                } else {
+                  e.target.style.borderColor = "var(--outline)";
+                }
+                inputValue = e.target.value;
+                if (useCustomRepo === true) {
+                  host = e.target.value;
+                }
+              })
+              .appendTo(box);
+
+            new Html("span")
+              .appendMany(
+                new Html("input")
+                  .attr({
+                    type: "checkbox",
+                    id: Root.PID + "chk",
+                  })
+                  .on("input", async (e) => {
+                    console.log(e.target.checked);
+                    if (e.target.checked === true) {
+                      let result = await Root.Modal.prompt(
+                        "Are you sure",
+                        "Are you sure you want to use a custom app store repository?",
+                        wrapper
+                      );
+
+                      if (result === true) {
+                        useCustomRepo = true;
+                      } else {
+                        e.target.checked = false;
+                        useCustomRepo = false;
+                      }
+                    } else {
+                      useCustomRepo = false;
+                    }
+                  }),
+                new Html("label")
+                  .attr({
+                    for: Root.PID + "chk",
+                  })
+                  .text("Use custom Server URL")
+              )
+              .appendTo(box);
           },
         };
 
         await pages.appsList();
-      } else throw new Error("Not the app store module");
+      } else
+        Root.Modal.alert(
+          "Notice",
+          "App Store module missing on server.",
+          wrapper
+        );
     } catch (e) {
       Root.Modal.alert(
         "Error",
