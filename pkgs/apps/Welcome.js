@@ -112,7 +112,7 @@ export default {
           .on("click", (e) => {
             Root.Modal.alert(
               "Whoops",
-              "This is currently not finished. Come back later or close the app.",
+              "This is currently not finished. Close the app and come back later.",
               wrapper
             );
           });
