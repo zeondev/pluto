@@ -106,7 +106,7 @@ What exactly is given through this object depends on the permissions of your app
 Here's a breakdown of what the Root object looks like:
 
 ```ts
-Root {
+interface Root {
   Lib: {
     html: class Html;
     icons: Icons;
