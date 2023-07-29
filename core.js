@@ -506,10 +506,12 @@
 
     await Core.startPkg("system:BootLoader");
 
-    // window.m = Modal;
-    // window.c = Core;
-    // window.l = GlobalLib;
-    // window.h = GlobalLib.html;
+    // Comment these out to disable global core access
+    // recommended to keep for debugging purposes
+    window.m = Modal;
+    window.c = Core;
+    window.l = GlobalLib;
+    window.h = GlobalLib.html;
   } catch (e) {
     alert(e);
   }
