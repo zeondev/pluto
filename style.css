@@ -1783,7 +1783,7 @@ hr {
   width: 100%;
   height: 100%;
   background-color: var(--warning);
-  mask-image: url("/assets/icons/warn.svg");
+  mask-image: url("./assets/icons/warn.svg");
   mask-size: 24px;
   mask-repeat: no-repeat;
   mask-position: 12px center;
