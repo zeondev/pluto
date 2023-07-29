@@ -44,26 +44,28 @@ export default {
 
     wrapper.classList.add("row", "o-h", "h-100", "with-sidebar");
 
-    const TextSidebar = await Root.Lib.loadComponent("TextSidebar");
+    // Hide sidebar (for now)
 
-    TextSidebar.new(wrapper, [
-      {
-        icon: Root.Lib.icons.package,
-        text: "Apps",
-        title: "Apps",
-        onclick() {
-          pages.appsList();
-        },
-      },
-      {
-        icon: Root.Lib.icons.wrench,
-        text: "Settings",
-        title: "Settings",
-        onclick() {
-          pages.settings();
-        },
-      },
-    ]);
+    // const TextSidebar = await Root.Lib.loadComponent("TextSidebar");
+
+    // TextSidebar.new(wrapper, [
+    //   {
+    //     icon: Root.Lib.icons.package,
+    //     text: "Apps",
+    //     title: "Apps",
+    //     onclick() {
+    //       pages.appsList();
+    //     },
+    //   },
+    //   {
+    //     icon: Root.Lib.icons.wrench,
+    //     text: "Settings",
+    //     title: "Settings",
+    //     onclick() {
+    //       pages.settings();
+    //     },
+    //   },
+    // ]);
 
     const container = new Root.Lib.html("div")
       .class("col", "w-100", "gap", "ovh", "app-store")
@@ -115,14 +117,12 @@ export default {
           return { appCompatible, appCompatibleColor, appCompatibleIcon };
         }
 
-        async function installApp(pkg, app, force = false) {
+        async function installApp(pkg, app) {
           await fetch(`${host}pkgs/${pkg}/${app.assets.path}`)
             .then(async (e) => {
               console.log(await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`));
               if (
-                (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) ===
-                  null ||
-                force === true
+                (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) === null
               ) {
                 let result = await e.text();
 
@@ -290,7 +290,7 @@ export default {
                     .on("click", async (e) => {
                       if (appCompatible === "ok") {
                         await installApp(pkg, app);
-                        // pages.appPage(app, pkg);
+                        pages.appPage(app, pkg);
                       } else {
                         const result = await Root.Modal.prompt(
                           "Notice",
@@ -310,40 +310,29 @@ export default {
                   await vfs.readFile(`Root/Pluto/apps/${app.name}.app`)
                 );
                 const appHash = await fetch(
-                  `${host}pkgs/${pkg}/${app.assets.path}`
+                  "https://zeondev.github.io/Pluto-AppStore/pkgs/" +
+                    app.name +
+                    ".js"
                 ).then(async (e) => {
-                  let t = await e.text();
-                  return new Hashes.MD5().hex(t);
+                  return new Hashes.MD5().hex(e.text());
                 });
-
-                const hashesMatch = localHash === appHash;
-
-                console.log(localHash, appHash, hashesMatch);
+                console.log(localHash, appHash);
 
                 return [
                   new Html("button")
                     .text(
-                      hashesMatch === false
-                        ? "Update"
-                        : (await vfs.whatIs(
-                            `Root/Pluto/apps/${app.name}.app`
-                          )) === null
+                      (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) ===
+                        null
                         ? "Install"
                         : (await vfs.whatIs(
                             `Root/Pluto/apps/${app.name}.app`
                           )) === "file"
                         ? "Open"
-                        : "Error"
+                        : "Er"
                     )
                     .class("primary")
                     .attr({ id: "installButton" })
                     .on("click", async (e) => {
-                      if (hashesMatch === false) {
-                        console.log("hashes DON'T match");
-                        await installApp(pkg, app, true);
-                        return;
-                      }
-
                       if (appCompatible === "ok") {
                         await installApp(pkg, app);
                       } else {
