@@ -12,11 +12,11 @@ export default {
   },
   data: {
     new: (wrapper, buttons) => {
-      const sideBar = new html("div").class("col", "text-sidebar").appendMany();
+      const sideBar = new html("div").class("col", "text-sidebar");
 
       buttons.forEach((b) =>
         new html("button")
-          .class("sidebar-item", "m-0", "transparent", 'small')
+          .class("sidebar-item", "m-0", "transparent", "small")
           .attr({ title: b?.title !== undefined ? b.title : "Button" })
           .appendMany(
             new html("div").class("sidebar-icon").html(b.icon),

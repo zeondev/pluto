@@ -24,7 +24,6 @@ export default {
     const vfs = await L.loadLibrary("VirtualFS");
     const FileMappings = await L.loadLibrary("FileMappings");
 
-    // Testing the html library
     MyWindow = new Win({
       title: "Terminal",
       pid: Root.PID,

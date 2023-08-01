@@ -37,11 +37,26 @@ export default {
         new html("tr")
           .html(b.html)
           .on("click", (e) => b.onclick && b.onclick(e))
-          .style(b.style || {})
+          .style(b.style || { padding: "8px", display: "block" })
           .appendTo(selectList)
       );
 
       selectList.appendTo(wrapper);
+
+      return selectList;
     },
+    // table: (wrapper, buttons) => {
+    //   const selectList = new html("table");
+
+    //   buttons.forEach((b) =>
+    //     new html("tr")
+    //       .html(b.html)
+    //       .on("click", (e) => b.onclick && b.onclick(e))
+    //       .style(b.style || {})
+    //       .appendTo(selectList)
+    //   );
+
+    //   selectList.appendTo(wrapper);
+    // },
   },
 };

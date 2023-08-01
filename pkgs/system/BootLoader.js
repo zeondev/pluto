@@ -54,6 +54,12 @@ export default {
         document.documentElement.dataset.sidebarType =
           appearanceConfig.sidebarType;
       }
+      if (
+        appearanceConfig.language &&
+        Root.Lib.langs.includes(appearanceConfig.language)
+      ) {
+        Root.Core.setLanguage(appearanceConfig.language);
+      }
 
       await Root.Core.startPkg("apps:FTGSF");
 
@@ -82,7 +88,12 @@ export default {
         );
       }
 
-      await Root.Core.startPkg("apps:Welcome");
+      if (
+        appearanceConfig["hasSetupSystem"] === undefined ||
+        appearanceConfig["hasSetupSystem"] === false
+      ) {
+        await Root.Core.startPkg("apps:Welcome", true, true);
+      }
       // await Root.Core.startPkg("apps:TaskManager", true, true);
       // destroy loading screen
       lsg.cleanup();

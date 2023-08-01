@@ -299,7 +299,7 @@ export default {
 
           const appsHtml = await Promise.all(
             apps.map(async (app) => {
-              console.log(app);
+              // console.log(app);
               let icon = "box",
                 name = app.item,
                 description = null;
@@ -337,7 +337,7 @@ export default {
                         await vfs.readFile("Root/Desktop/" + app.item)
                       );
 
-                      console.log(shrt);
+                      // console.log(shrt);
 
                       if (shrt.fullName) {
                         await Root.Core.startPkg(shrt.fullName, true, true);

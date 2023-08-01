@@ -72,7 +72,7 @@ export default {
 
         let confirmButton = new L.html("button")
           .class("primary")
-          .text("Confirm")
+          .text(L.getString("confirm"))
           .style({ "margin-left": "auto" })
           .attr({ disabled: true })
           .on("click", async (_) => {
@@ -336,7 +336,7 @@ export default {
 
         let confirmButton = new L.html("button")
           .class("primary")
-          .text("Confirm")
+          .text(L.getString("confirm"))
           .attr({ disabled: true })
           .on("click", async (_) => {
             await attemptClose();

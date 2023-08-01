@@ -13,11 +13,12 @@ export default {
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
-    // Testing the html library
     MyWindow = new Win({
       title: "Build A Ktat",
       content: '<iframe src="https://build-a.ktat.repl.co">',
       pid: Root.PID,
+      width: 800,
+      height: 600,
       onclose: () => {
         Root.Lib.onEnd();
       },

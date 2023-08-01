@@ -21,7 +21,6 @@ export default {
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
-    // Testing the html library
     StoreWindow = new Win({
       title: "App Store",
       pid: Root.PID,
@@ -328,7 +327,7 @@ export default {
                             `Root/Pluto/apps/${app.name}.app`
                           )) === "file"
                         ? "Open"
-                        : "Er"
+                        : "Error"
                     )
                     .class("primary")
                     .attr({ id: "installButton" })

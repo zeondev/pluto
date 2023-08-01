@@ -3,36 +3,119 @@ export default {
   description: "Sets up your system.",
   ver: 1, // Compatible with core v1
   type: "process",
+  privileges: [
+    {
+      privilege: "setLanguage",
+      description: "Allow the user to configure the system language",
+    },
+  ],
+  strings: {
+    en_US: {
+      welcome_window_title: "Welcome",
+      welcome_page1_header: "Welcome to Pluto",
+      welcome_page1_body:
+        "Hey there! Welcome to Pluto, a new 'desktop environment' for the web.\n\nPress Next to enter setup.",
+      welcome_page2_header: "Set your language",
+      welcome_page2_body: "The current language is English (US).",
+      welcome_page2_language_en_US: "English (US)",
+      welcome_page2_language_en_GB: "English (UK)",
+      welcome_page2_language_de_DE: "German (Germany)",
+      welcome_page2_language_es_ES: "Spanish (Spain)",
+      welcome_page2_language_pt_BR: "Portuguese (Brazil)",
+      welcome_page3_header: "Personalize",
+      welcome_page3_body: "Select your favorite theme.",
+      welcome_page4_header: "You have now set up your system!",
+      welcome_page4_body:
+        "Press the Finish button to quit the app and save your settings.",
+    },
+    en_GB: {
+      welcome_window_title: "Welcome",
+      welcome_page1_header: "Welcome to Pluto",
+      welcome_page1_body:
+        "Hello! Welcome to Pluto, a new 'desktop environment' for the web.\n\nPress the Next button to enter the setup process.",
+      welcome_page2_header: "Set your language",
+      welcome_page2_body: "The current language is English (UK).",
+      welcome_page3_header: "Personalise",
+      welcome_page3_body: "Select your favourite theme.",
+      welcome_page4_header: "You have now set up your system!",
+      welcome_page4_body:
+        "Press the Finish button to quit the app and save your settings.",
+    },
+    de_DE: {
+      welcome_window_title: "Willkommen",
+      welcome_page1_header: "Willkommen bei Pluto",
+      welcome_page1_body:
+        'Hallo! Wilkommen bei Pluto, einem neuem Desktop-environment für das Web.\n\nDrücken Sie "Nächste Seite" um die Einstellungen zu öffnen',
+      welcome_page2_header: "Legen Sie eine Sprache fest",
+      welcome_page2_body: "Die aktuelle Sprache ist deutsch.",
+      welcome_page3_header: "Personifizieren",
+      welcome_page3_body: "Wählen Sie Ihr Lieblingsthema.",
+      welcome_page4_header: "Sie haben jetzt Ihr System eingerichtet!",
+      welcome_page4_body:
+        'Drücken Sie "Fertig", um die App zu beenden und Ihre Einstellungen zu speichern.',
+    },
+    es_ES: {
+      welcome_window_title: "Bienvenida",
+      welcome_page1_header: "Bienvenido a Plutón",
+      welcome_page1_body:
+        "¡Hola! Bienvenido a Plutón, un nuevo 'entorno de escritorio' para la web.\n\nPresione Siguiente para ingresar la configuración.",
+      welcome_page2_header: "Establece tu idioma",
+      welcome_page2_body: "El idioma actual es el Español (España).",
+      welcome_page3_header: "Personalizar",
+      welcome_page3_body: "Seleccione su tema favorito.",
+      welcome_page4_header: "¡Ahora has configurado tu sistema!",
+      welcome_page4_body: 'Presione "Completa" para dejar la aplicación.',
+    },
+    pt_BR: {
+      welcome_window_title: "Bem-vindo",
+      welcome_page1_header: "Bem-vindo a Plutão",
+      welcome_page1_body:
+        "Ei! Bem-vindo a Plutão, um novo 'ambiente de desktop' para a web.\n\nPressione o próximo para entrar na instalação.",
+      welcome_page2_header: "Defina seu idioma",
+      welcome_page2_body: "O idioma atual é Português (Brasil).",
+      welcome_page3_header: "Personalizar",
+      welcome_page3_body: "Selecione seu tema favorito.",
+      welcome_page4_header: "Agora você configurou seu sistema!",
+      welcome_page4_body: 'Pressione "Completa" para sair do aplicativo.',
+    },
+  },
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
     let MyWindow;
 
-    console.log("Hello from example package", Root.Lib);
-
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
-    // let width = 600;
-    // let height = 350;
-    // let left = (window.innerWidth - 600) / 2 + "px";
-    // let top = (window.innerHeight - height) / 2 + "px";
+    let width = 600;
+    let height = 350;
+    let left = (window.innerWidth - 600) / 2 + "px";
+    let top = (window.innerHeight - height) / 2 + "px";
 
-    // if (window.innerWidth <= 600) {
-    //   width = window.innerWidth - 2;
-    //   left = 0;
-    // }
+    if (window.innerWidth <= 600) {
+      width = window.innerWidth - 2;
+      left = 0;
+    }
 
-    // Testing the html library
+    function calculateCentre(width, height) {
+      let left = (window.innerWidth - 600) / 2 + "px";
+      let top = (window.innerHeight - height) / 2 + "px";
+
+      if (window.innerWidth <= 600) {
+        width = window.innerWidth - 2;
+        left = 0;
+      }
+
+      return { left, top };
+    }
+
     MyWindow = new Win({
-      title: "Welcome",
+      title: Root.Lib.getString("welcome_window_title"),
       content: "",
       pid: Root.PID,
-      width: 600,
-      height: 350,
-      // width,
-      // height,
-      // left,
-      // top,
-      resizable: false,
+      width,
+      height,
+      left,
+      top,
+      // resizable: false,
       onclose: () => {
         Root.Lib.onEnd();
       },
@@ -42,87 +125,262 @@ export default {
 
     wrapper = MyWindow.window.querySelector(".win-content");
 
-    wrapper.classList.add("col");
-    wrapper.classList.add("o-h");
+    wrapper.classList.add("col", "o-h");
+
+    const Html = Root.Lib.html;
+
+    /* Banner */ new Html("img")
+      .attr({
+        src: "./assets/banner.svg",
+        draggable: false,
+      })
+      .style({
+        position: "relative",
+        inset: "-10px",
+        "min-width": "400px",
+        width: "calc(100% + 20px)",
+        "max-height": "400px",
+      })
+      .appendTo(wrapper);
+
+    const container = new Html("div")
+      .class("fg", "ovh", "col")
+      .appendTo(wrapper);
+
+    const vfs = await Root.Lib.loadLibrary("VirtualFS");
+    const ThemeLib = await Root.Lib.loadLibrary("ThemeLib");
+    const SelectList = await Root.Lib.loadComponent("SelectList");
+
+    let currentPage = "p1",
+      currentLanguage = "en_US",
+      currentTheme = "dark";
 
     let pages = {
-      clear() {
-        wrapper.innerHTML = "";
-        /* Banner */ new Root.Lib.html("img")
-          .attr({
-            src: "./assets/banner.svg",
-          })
-          .style({
-            position: "relative",
-            inset: "-10px",
-            "min-width": "400px",
-            width: "calc(100% + 20px)",
-            "max-height": "400px",
-          })
-          .appendTo(wrapper);
+      clear(pageName) {
+        currentPage = pageName;
+        container.elm.innerHTML = "";
+
+        let width, height;
+
+        if (pageName === "p2") {
+          width = 600;
+          height = 450;
+        } else {
+          width = 600;
+          height = 360;
+        }
+
+        let { top, left } = calculateCentre(width, height);
+
+        MyWindow.window.style.width = width + "px";
+        MyWindow.window.style.height = height + "px";
+        MyWindow.window.style.top = top;
+        MyWindow.window.style.left = left;
       },
       p1() {
-        this.clear();
+        this.clear("p1");
 
-        new Root.Lib.html("h1").text("Welcome").appendTo(wrapper);
-        new Root.Lib.html("p")
-          .text(
-            "Hey there! Welcome to Pluto, a new 'desktop environment' for the web.\n\nPress Next to enter setup."
+        new Html("div")
+          .class("col", "fg")
+          .appendMany(
+            new Root.Lib.html("h1")
+              .text(Root.Lib.getString("welcome_page1_header"))
+              .appendTo(container),
+            new Root.Lib.html("p")
+              .text(Root.Lib.getString("welcome_page1_body"))
+              .appendTo(container)
           )
-          .appendTo(wrapper);
+          .appendTo(container);
 
         let btnRow = new Root.Lib.html("div")
           .class("row", "w-100", "mt-auto")
-          .appendTo(wrapper);
+          .appendTo(container);
         new Root.Lib.html("button")
-          .text("Close")
+          .text(Root.Lib.getString("close"))
           .appendTo(btnRow)
           .on("click", (e) => {
             Root.Lib.onEnd();
           });
         new Root.Lib.html("button")
-          .text("Next")
+          .text(Root.Lib.getString("next"))
           .appendTo(btnRow)
           .class("primary", "ml-auto")
           .on("click", (e) => {
             pages.p2();
           });
       },
-      p2() {
-        this.clear();
+      async p2() {
+        this.clear("p2");
 
-        new Root.Lib.html("h1").text("Let's get you set up").appendTo(wrapper);
+        new Root.Lib.html("h1")
+          .text(Root.Lib.getString("welcome_page2_header"))
+          .appendTo(container);
         new Root.Lib.html("p")
-          .text("Personalize your environment")
-          .appendTo(wrapper);
+          .text(Root.Lib.getString("welcome_page2_body"))
+          .appendTo(container);
+
+        const langs = Root.Lib.langs;
+
+        const list = SelectList.table(
+          container,
+          langs.map((l) => {
+            return {
+              html: Root.Lib.getString("welcome_page2_language_" + l),
+              onclick: function () {
+                if (Root.Core && Root.Core.setLanguage) {
+                  Root.Core.setLanguage(l);
+                  currentLanguage = l;
+                }
+              },
+            };
+          })
+        ).class("ovh");
 
         let btnRow = new Root.Lib.html("div")
           .class("row", "w-100", "mt-auto")
-          .appendTo(wrapper);
+          .appendTo(container);
         new Root.Lib.html("button")
-          .text("Back")
+          .text(Root.Lib.getString("back"))
           .appendTo(btnRow)
           .on("click", (e) => {
             pages.p1();
           });
         new Root.Lib.html("button")
-          .text("Next")
+          .text(Root.Lib.getString("next"))
           .appendTo(btnRow)
           .class("primary", "ml-auto")
           .on("click", (e) => {
-            Root.Modal.alert(
-              "Whoops",
-              "This is currently not finished. Close the app and come back later.",
-              wrapper
-            );
+            pages.p3();
           });
+      },
+      async p3() {
+        this.clear("p3");
+
+        new Root.Lib.html("h1")
+          .text(Root.Lib.getString("welcome_page3_header"))
+          .appendTo(container);
+        new Root.Lib.html("p")
+          .text(Root.Lib.getString("welcome_page3_body"))
+          .appendTo(container);
+
+        const themes = await vfs.list("Root/Pluto/config/themes");
+
+        const themeData = (
+          await Promise.all(
+            themes.map(async (t) => {
+              if (t.type === "dir") return null;
+
+              const result = await ThemeLib.validateTheme(
+                await vfs.readFile("Root/Pluto/config/themes/" + t.item)
+              );
+              if (result.success === true) {
+                return result.data;
+              } else {
+                return null;
+              }
+            })
+          )
+        ).filter((m) => m !== null);
+
+        SelectList.buttonList(
+          container,
+          themeData.map((m, i) => {
+            return {
+              title: "Button",
+              html: m.name,
+              onclick: function () {
+                // Root.Modal.alert("oops", JSON.stringify(m), wrapper);
+                ThemeLib.setCurrentTheme(m);
+                currentTheme = themes[i].item;
+              },
+            };
+          })
+        );
+
+        let btnRow = new Root.Lib.html("div")
+          .class("row", "w-100", "mt-auto")
+          .appendTo(container);
+        new Root.Lib.html("button")
+          .text(Root.Lib.getString("back"))
+          .appendTo(btnRow)
+          .on("click", (e) => {
+            pages.p2();
+          });
+        new Root.Lib.html("button")
+          .text(Root.Lib.getString("next"))
+          .appendTo(btnRow)
+          .class("primary", "ml-auto")
+          .on("click", (e) => {
+            this.p4();
+          });
+      },
+      async p4() {
+        this.clear("p4");
+
+        new Root.Lib.html("h1")
+          .text(Root.Lib.getString("welcome_page4_header"))
+          .appendTo(container);
+        new Root.Lib.html("p")
+          .text(Root.Lib.getString("welcome_page4_body"))
+          .appendTo(container);
+
+        let btnRow = new Root.Lib.html("div")
+          .class("row", "w-100", "mt-auto")
+          .appendTo(container);
+        new Root.Lib.html("button")
+          .text(Root.Lib.getString("back"))
+          .appendTo(btnRow)
+          .on("click", (e) => {
+            pages.p3();
+          });
+        new Root.Lib.html("button")
+          .text(Root.Lib.getString("finish"))
+          .appendTo(btnRow)
+          .class("primary", "ml-auto")
+          .on("click", (e) => {
+            this.finish();
+          });
+      },
+      async finish() {
+        // Save settings
+        try {
+          const appearanceConfigLocation =
+            "Root/Pluto/config/appearanceConfig.json";
+          const appearanceConfig = JSON.parse(
+            await vfs.readFile(appearanceConfigLocation)
+          );
+
+          if (appearanceConfig) {
+            appearanceConfig["language"] = currentLanguage;
+            appearanceConfig["theme"] = currentTheme;
+            appearanceConfig["hasSetupSystem"] = true;
+          }
+
+          await vfs.writeFile(
+            appearanceConfigLocation,
+            JSON.stringify(appearanceConfig)
+          );
+
+          Root.Lib.onEnd();
+        } catch (e) {
+          Root.Modal.alert(
+            Root.Lib.getString("notice"),
+            Root.Lib.getString("welcome_failed_to_parse")
+          );
+        }
       },
     };
 
     pages.p1();
 
     return Root.Lib.setupReturns((m) => {
-      console.log("Example received message: " + m);
+      if (m && m.type) {
+        if (m.type === "refresh") {
+          Root.Lib.getString = m.data;
+          MyWindow.setTitle(Root.Lib.getString("welcome_window_title"));
+          pages[currentPage]();
+        }
+      }
     });
   },
 };

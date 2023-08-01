@@ -86,7 +86,6 @@ export default {
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
-    // Testing the html library
     MyWindow = new Win({
       title: "Console",
     });

@@ -22,7 +22,6 @@ export default {
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
-    // Testing the html library
     TaskManagerWindow = new Win({
       title: "Task Manager",
       content: "Loading...",
@@ -102,7 +101,7 @@ export default {
       .appendTo(buttonRow);
     /* Button */
     new Root.Lib.html("button")
-      .text("Launch")
+      .text(Root.Lib.getString("launchApp"))
       .appendTo(buttonRow)
       .on("click", (e) => {
         Root.Lib.launch("apps:" + x.elm.value.replace(/([^A-Za-z0-9-])/g, ""));
@@ -131,7 +130,7 @@ export default {
     }
 
     return Root.Lib.setupReturns((m) => {
-      console.log("Message", m);
+      // console.log("Message", m);
     });
   },
 };

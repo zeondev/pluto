@@ -13,7 +13,6 @@ export default {
     const FileDialog = await Root.Lib.loadLibrary("FileDialog");
     const Sidebar = await Root.Lib.loadComponent("Sidebar");
 
-    // Testing the html library
     NpWindow = new Win({
       title: "Notepad",
       content: "",

@@ -28,7 +28,7 @@ export default {
     
     */
     new: (wrapper, buttons) => {
-      const sideBar = new html("div").class("col", "sidebar").appendMany();
+      const sideBar = new html("div").class("col", "sidebar");
 
       buttons.forEach((b) =>
         new html("button")

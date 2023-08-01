@@ -12,18 +12,15 @@ export default {
   type: "process",
   exec: async function (Root) {
     let win;
-    
-    console.log("Hello from example package", Root.Lib);
-    
+
     const L = Root.Lib;
     const C = Root.Core;
-    
+
     const vfs = await L.loadLibrary("VirtualFS");
     const Sidebar = await L.loadComponent("Sidebar");
     const Win = (await L.loadLibrary("WindowSystem")).win;
     const FileMappings = await L.loadLibrary("FileMappings");
-    
-    
+
     win = new Win({
       title: "Files",
       pid: Root.PID,
@@ -33,9 +30,9 @@ export default {
         Root.Lib.onEnd();
       },
     });
-    
-    Root.Lib.setOnEnd(_ => win.close());
-    
+
+    Root.Lib.setOnEnd((_) => win.close());
+
     const setTitle = (t) =>
       (win.window.querySelector(".win-titlebar .title").innerText = t);
 
@@ -106,8 +103,6 @@ export default {
               // here we tell the reader what to do when it's done reading...
               reader.onload = async (readerEvent) => {
                 var content = readerEvent.target.result; // this is the content!
-                console.log(content);
-                console.log(file);
                 await vfs.writeFile(`Root/${file.name}`, content);
               };
             } else {
@@ -170,7 +165,6 @@ export default {
 
     async function renderFileList(folder) {
       const isFolder = await vfs.whatIs(folder);
-      console.log(folder);
 
       if (isFolder !== "dir") {
         path = "Root/";
@@ -197,7 +191,6 @@ export default {
 
         async function handleClick() {
           if (selectedItem === path + "/" + file.item) {
-            console.log("open selected item");
             if (file.type === "dir") {
               selectedItem = path + "/" + file.item;
               path = selectedItem;
@@ -220,11 +213,11 @@ export default {
         if (selectedItem === path + "/" + file.item)
           tableBodyRow.class("table-selected");
 
-        let userFriendlyFileType = "File";
+        let userFriendlyFileType = Root.Lib.getString("file");
 
         switch (file.type) {
           case "dir":
-            userFriendlyFileType = "File folder";
+            userFriendlyFileType = Root.Lib.getString("fileFolder");
             break;
           case "file":
             userFriendlyFileType = mapping.fullName || mapping.label;

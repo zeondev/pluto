@@ -9,6 +9,7 @@
     };
     const knownLibraries = [];
     const GlobalLib = {
+      getString,
       html: class Html {
         constructor(e) {
           this.elm = document.createElement(e || "div");
@@ -115,31 +116,71 @@
     };
 
     GlobalLib.icons = (await import("./assets/icons.js")).default;
+    const strings = (await import("./assets/strings.js")).default;
+
+    function replaceString(string, replacements) {
+      let str = string;
+      for (let rpl in replacements) {
+        str = str.replace(`{${rpl}}`, replacements[rpl]);
+      }
+      return str;
+    }
+
+    function getString(str, replacements = null, source) {
+      function getStr() {
+        if (source && source[language] && source[language][str])
+          return source[language][str];
+        else if (source && source["en_US"][str]) return source["en_US"][str];
+        else if (strings[language] && strings[language][str])
+          return strings[language][str];
+        else return strings["en_US"][str];
+      }
+      const newStr = escapeHtml(getStr());
+      if (replacements !== null) {
+        return replaceString(newStr, replacements);
+      } else {
+        if (newStr === undefined) return str;
+        return newStr;
+      }
+    }
+
+    function escapeHtml(str) {
+      if (str !== undefined)
+        return str
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+    }
 
     // Similar name to procLib but is not actually ProcLib
     const processLib = class ProcessAvailableLibrary {
-      constructor(url, pid, token) {
+      constructor(url, pid, token, strs) {
         var Url = url;
         var Pid = pid;
         var Token = token;
+
+        this.getString = function (str, replacements = null) {
+          return getString(str, replacements, strs);
+        };
 
         this.html = GlobalLib.html;
         this.icons = GlobalLib.icons;
         this.systemInfo = coreDetails;
 
+        this.langs = supportedLangs;
         this.launch = async (app, parent = "body") => {
           if (
             (await Modal.prompt(
-              "App Start",
-              `${Core.processList[Pid].proc.name} wants to launch ${app
-                .split(":")
-                .pop()}.\nConfirm or deny?`,
+              getString("notice"),
+              getString("core_appLaunch_notification", {
+                suspectedApp: Core.processList[Pid].proc.name,
+                targetApp: app.split(":").pop(),
+              }),
               parent
             )) === true
           ) {
             return await Core.startPkg(app);
           } else {
-            // await Modal.alert("Cancelled.");
             return false;
           }
         };
@@ -191,7 +232,18 @@
           // the idea is a standardized .proc on processes
           return {
             end: this.onEnd,
-            send: onMessage,
+            send: async (m) => {
+              if (
+                m &&
+                m.type &&
+                m.type === "refresh" &&
+                m.data &&
+                typeof m.data === "function"
+              ) {
+                this.getString = m.data;
+              }
+              return await onMessage(m);
+            },
           };
         };
       }
@@ -256,13 +308,19 @@
     let Modal;
 
     const corePrivileges = {
-      startPkg: { description: "Start other applications" },
-      processList: { description: "View and control other processes" },
-      knownPackageList: { description: "Know installed packages" },
-      services: { description: "Interact with system services" },
+      startPkg: { description: "core_appAccessControl_privilege_startPkg" },
+      processList: {
+        description: "core_appAccessControl_privilege_processList",
+      },
+      knownPackageList: {
+        description: "core_appAccessControl_privilege_knownPackageList",
+      },
+      services: { description: "core_appAccessControl_privilege_services" },
+      setLanguage: {
+        description: "core_appAccessControl_privilege_setLanguage",
+      },
       full: {
-        description:
-          '<span style="color:var(--negative-light);">Full system access</span>',
+        description: "core_appAccessControl_privilege_full",
       },
     };
 
@@ -280,11 +338,38 @@
         });
     }
 
+    const supportedLangs = ["en_US", "en_GB", "de_DE", "es_ES", "pt_BR"];
+
+    let language = "en_US";
+
     const Core = {
       version: coreDetails.version,
       codename: coreDetails.codename,
       processList: [],
       knownPackageList: [],
+
+      setLanguage(lang) {
+        console.log("setting language to", lang);
+        if (supportedLangs.includes(lang)) language = lang;
+
+        // kindly ask all processes to restart
+        Core.processList
+          .filter((n) => n !== null)
+          .forEach((p) => {
+            p.proc &&
+              p.proc.send &&
+              p.proc.send({
+                type: "refresh",
+                data: function (
+                  str,
+                  replacements = null,
+                  source = p.proc.strings
+                ) {
+                  return getString(str, replacements, source);
+                },
+              });
+          });
+      },
       startPkg: async function (url, isUrl = true, force = false) {
         try {
           // This should be safe as startPkg can only be called by admin packages and trusted libraries
@@ -301,7 +386,8 @@
             throw new Error('No "default" specified in package');
           pkg = pkg.default;
 
-          Core.knownPackageList.push({ url, pkg });
+          if (!Core.knownPackageList.find((m) => m.url === url))
+            Core.knownPackageList.push({ url, pkg });
 
           // system:BootLoader
           if (pkg.name && pkg.type === "process" && pkg.ver <= Core.version) {
@@ -323,7 +409,7 @@
                 proc: null,
               };
               const Token = ProcLib.randomString();
-              const newLib = new processLib(url, PID, Token);
+              const newLib = new processLib(url, PID, Token, pkg.strings);
               if (Core.processList[PID]) Core.processList[PID].token = Token;
               let result;
               // console.log(pkg.privileges);
@@ -376,34 +462,43 @@
                 if (force === false)
                   modalResult = await new Promise((resolve, reject) => {
                     Modal.modal(
-                      "App Access Control",
-                      "App " +
-                        url.split(":").pop() +
-                        ` wants to launch privileged:<br><br><ul>${Object.keys(
-                          privileges
+                      getString("core_appAccessControl_title"),
+                      `${getString("core_appAccessControl_description", {
+                        appName: url.split(":").pop(),
+                      })}<br><br><ul>${Object.keys(privileges)
+                        .map(
+                          (m) =>
+                            `<li>${getString(
+                              privileges[m].description
+                            )}<br><span class="label">${
+                              privileges[m].authorNote !== undefined
+                                ? `${getString(
+                                    "core_appAccessControl_authorNote",
+                                    {
+                                      note: escapeHtml(
+                                        privileges[m].authorNote
+                                      ),
+                                    }
+                                  )}</li>`
+                                : `<span style="color:var(--negative-light)">${getString(
+                                    "core_appAccessControl_noAuthorNote"
+                                  )}</span>`
+                            }</span>`
                         )
-                          .map(
-                            (m) =>
-                              `<li>${privileges[m].description}<br>${
-                                privileges[m].authorNote !== undefined
-                                  ? `Author note: ${privileges[m].authorNote}</li>`
-                                  : '<span style="color:var(--negative-light)">No author note</span>'
-                              }`
-                          )
-                          .join("")}</ul>`,
+                        .join("")}</ul>`,
                       "body",
                       false,
                       {
-                        text: "Allow",
+                        text: getString("allow"),
                         type: "primary",
                         callback: (_) => resolve("allow"),
                       },
                       {
-                        text: "Deny",
+                        text: getString("deny"),
                         callback: (_) => resolve("deny"),
                       },
                       {
-                        text: "Cancel",
+                        text: getString("cancel"),
                         callback: (_) => resolve(false),
                       }
                     );
@@ -417,6 +512,9 @@
                       : {}),
                     ...(privileges.knownPackageList
                       ? { knownPackageList: Core.knownPackageList }
+                      : {}),
+                    ...(privileges.setLanguage
+                      ? { setLanguage: Core.setLanguage }
                       : {}),
                     ...(privileges.services ? { services: Core.services } : {}),
                   };
@@ -450,7 +548,11 @@
                 typeof Core.processList[PID]["proc"] !== "undefined"
               ) {
                 Core.processList[PID].proc = Object.assign(
-                  { name: pkg?.name, description: pkg?.description },
+                  {
+                    name: pkg?.name,
+                    description: pkg?.description,
+                    strings: pkg?.strings,
+                  },
                   result
                 );
                 if (
