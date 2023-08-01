@@ -252,6 +252,10 @@ export default {
           }, 500);
         });
       }
+
+      setTitle(title) {
+        this.window.querySelector(".win-titlebar .title").innerText = title;
+      }
     },
     focusWindow,
   },
