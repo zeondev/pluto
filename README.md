@@ -1,16 +1,20 @@
-# Pluto v1.2
+# Pluto v1.3
 
 ![Pluto banner](assets/images/banner.svg)
 
 Pluto is a minimal but functional "web OS" that aims to provide a desktop environment-like experience inside of a website.
 
-![Pluto banner](assets/images/screenshot.png)
+![Pluto banner](assets/images/screenshot2.png)
 
 ## Features
 
 - Clean and minimal UI design, focused on personalization
 - Simple file system
 - Easy to create your own apps
+
+## Documentation
+
+You can find documentation in the [docs](docs/) folder.
 
 ## Contributing
 
