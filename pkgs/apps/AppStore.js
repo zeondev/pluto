@@ -116,12 +116,14 @@ export default {
           return { appCompatible, appCompatibleColor, appCompatibleIcon };
         }
 
-        async function installApp(pkg, app) {
+        async function installApp(pkg, app, force = false) {
           await fetch(`${host}pkgs/${pkg}/${app.assets.path}`)
             .then(async (e) => {
               console.log(await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`));
               if (
-                (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) === null
+                (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) ===
+                  null ||
+                force == true
               ) {
                 let result = await e.text();
 
@@ -277,19 +279,18 @@ export default {
                     .text(
                       (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) ===
                         null
-                        ? "Install"
+                        ? Root.Lib.getString("install")
                         : (await vfs.whatIs(
                             `Root/Pluto/apps/${app.name}.app`
                           )) === "file"
-                        ? "Open"
-                        : "ERROR"
+                        ? Root.Lib.getString("open")
+                        : Root.Lib.getString("error")
                     )
                     .class("primary")
                     .attr({ id: "installButton" })
                     .on("click", async (e) => {
                       if (appCompatible === "ok") {
                         await installApp(pkg, app);
-                        pages.appPage(app, pkg);
                       } else {
                         const result = await Root.Modal.prompt(
                           "Notice",
@@ -309,23 +310,25 @@ export default {
                   await vfs.readFile(`Root/Pluto/apps/${app.name}.app`)
                 );
                 const appHash = await fetch(
-                  "https://zeondev.github.io/Pluto-AppStore/pkgs/" +
-                    app.name +
-                    ".js"
+                  `${host}pkgs/${pkg}/${app.assets.path}`
                 ).then(async (e) => {
-                  return new Hashes.MD5().hex(e.text());
+                  return new Hashes.MD5().hex(await e.text());
                 });
-                console.log(localHash, appHash);
+
+                  // console.log(localHash, appHash);
+
+                const whatIsApp = await vfs.whatIs(
+                  `Root/Pluto/apps/${app.name}.app`
+                );
 
                 return [
                   new Html("button")
                     .text(
-                      (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) ===
-                        null
+                      whatIsApp === null
                         ? "Install"
-                        : (await vfs.whatIs(
-                            `Root/Pluto/apps/${app.name}.app`
-                          )) === "file"
+                        : localHash !== appHash
+                        ? "Update"
+                        : whatIsApp === "file"
                         ? "Open"
                         : "Error"
                     )
@@ -333,7 +336,11 @@ export default {
                     .attr({ id: "installButton" })
                     .on("click", async (e) => {
                       if (appCompatible === "ok") {
-                        await installApp(pkg, app);
+                        if (localHash !== appHash && whatIsApp !== null) {
+                          await installApp(pkg, app, true);
+                        } else {
+                          await installApp(pkg, app);
+                        }
                       } else {
                         const result = await Root.Modal.prompt(
                           "Notice",

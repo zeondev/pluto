@@ -46,6 +46,28 @@ export default {
       let vfs = await Root.Core.startPkg("lib:VirtualFS");
       await vfs.importFS();
 
+      if (await vfs.exists("Root/Pluto/config/fsVersionUpdate.txt")) {
+        let version = await vfs.readFile("Root/Pluto/config/fsVersionUpdate.txt");
+
+        console.log(Number(version), Root.Lib.systemInfo.version)
+        alert(Number(version), Root.Lib.systemInfo.version)
+        
+        if (Number(version) < Root.Lib.systemInfo.version) {
+          await vfs.importFS();
+          await vfs.merge();
+        } else {
+          await vfs.importFS();
+        }
+      } else {
+
+        await vfs.importFS();
+        
+      }
+      console.log(Root.Lib.systemInfo)
+      await vfs.writeFile(
+        "Root/Pluto/config/fsVersionUpdate.txt",
+        Root.Lib.systemInfo.version.toString()
+      )
       let appearanceConfig = JSON.parse(
         await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
       );

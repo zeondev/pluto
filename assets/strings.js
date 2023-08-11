@@ -30,6 +30,10 @@ export default {
     file: "File",
     fileFolder: "File folder",
     language: "Language",
+    install: "Install",
+    uninstall: "Uninstall",
+    open: "Open",
+    error: "Error",
     core_appAccessControl_title: "App Privilege Request",
     core_appAccessControl_description:
       'The application "{appName}" wants to start with these privileges:',
@@ -94,6 +98,10 @@ export default {
     file: "Datei",
     fileFolder: "Aktenordner",
     language: "Sprache",
+    install: "Installieren",
+    uninstall: "Deinstallieren",
+    open: "Offen",
+    error: "Fehler",
     core_appAccessControl_title: "Antrag auf Anwendungsprivilegien",
     core_appAccessControl_description:
       'Die Anwendung "{appName}" möchte mit diesen Berechtigungen starten:',

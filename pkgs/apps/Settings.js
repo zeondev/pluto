@@ -806,10 +806,8 @@ export default {
     setupSettingsApp();
 
     return Root.Lib.setupReturns((m) => {
-      console.log("The event", m);
       if (m && m.type && m.type === "refresh") {
         Root.Lib.getString = m.data;
-        console.log(Root.Lib.getString("finish"));
         setupSettingsApp();
       }
     });

@@ -31,14 +31,10 @@ let templateFsLayout = {
       },
     },
     Desktop: {
-      "Folder 1": {
-        "File 1.txt": "File 1.txt in Folder 1",
-        "File 2.txt": "File 2.txt in Folder 1",
+      "foldertest": {
+        "anothertest.txt": "this is a test of file system merging a folder and a filde in the same folder!",
       },
-      "Folder 2": {
-        "File 1.txt": "File 1.txt in Folder 2",
-        "File 2.txt": "File 2.txt in Folder 2",
-      },
+      "test2.txt": "this is a test of file system merging n2!",
     },
     Documents: {},
     Downloads: {},
@@ -56,6 +52,9 @@ const Vfs = {
     await localforage.setItem("fs", JSON.stringify(this.fileSystem));
     this.fileSystem = JSON.parse(await localforage.getItem("fs"));
   },
+  async exportFS() {
+    return this.fileSystem;
+  },
   async importFS(fsObject = templateFsLayout) {
     if (fsObject === true) {
       this.fileSystem = templateFsLayout;
@@ -67,12 +66,14 @@ const Vfs = {
     } else if (fsObject !== templateFsLayout) {
       this.fileSystem = fsObject;
     } else {
-      this.fileSystem = JSON.parse(await localforage.getItem("fs"));
+      const existingFs = JSON.parse(await localforage.getItem("fs"));
+
+      // this.fileSystem = {...templateFsLayout, ...existingFs};
+      this.fileSystem = existingFs;
+
+      // this.fileSystem = { ...fsObject, ...this.fileSystem };
     }
     this.save();
-    return this.fileSystem;
-  },
-  async exportFS() {
     return this.fileSystem;
   },
   // Helper function to get the parent folder of a given path
@@ -178,6 +179,44 @@ const Vfs = {
     );
     return result;
   },
+  async exists(path, fsObject = this.fileSystem) {
+    const parts = path.split("/");
+    let current = fsObject;
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      if (typeof current[part] === "undefined") {
+        return false;
+      }
+      current = current[part];
+    }
+    return true;
+  },
+  async merge(fsObject = this.fileSystem) {
+    var existingFs = fsObject
+
+    function mergeFileSystem(obj1, obj2) {
+      for (var key in obj2) {
+        if (obj2.hasOwnProperty(key)) {
+          if (typeof obj2[key] === 'object' && obj2[key] !== null && !Array.isArray(obj2[key])) {
+            if (!(key in obj1) || typeof obj1[key] !== 'object' || obj1[key] === null || Array.isArray(obj1[key])) {
+              obj1[key] = {}; // Create an object if the key doesn't exist or if it is not an object
+            }
+            mergeFileSystem(obj1[key], obj2[key]); // Recursive call for nested objects
+          } else {
+            if (!(key in obj1)) {
+              obj1[key] = obj2[key]; // Assign the value if the key doesn't exist in obj1
+            } else {
+              console.log(`File "${key}" already exists and will not be overwritten.`);
+            }
+          }
+        }
+      }
+    }
+      
+    mergeFileSystem(existingFs, templateFsLayout);
+    this.importFS(existingFs);
+    this.save();
+  }
 };
 
 export default {
