@@ -49,9 +49,6 @@ export default {
       if (await vfs.exists("Root/Pluto/config/fsVersionUpdate.txt")) {
         let version = await vfs.readFile("Root/Pluto/config/fsVersionUpdate.txt");
 
-        console.log(Number(version), Root.Lib.systemInfo.version)
-        alert(Number(version), Root.Lib.systemInfo.version)
-        
         if (Number(version) < Root.Lib.systemInfo.version) {
           await vfs.importFS();
           await vfs.merge();
