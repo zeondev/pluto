@@ -1,3 +1,5 @@
+let pages;
+
 export default {
   name: "Settings",
   description: "Modify settings from this UI.",
@@ -61,6 +63,19 @@ export default {
       coreVersion: "Versión central",
       supportedVersions: "Versiones compatibles",
     },
+    pt_BR: {
+      thisSystem: "Este sistema",
+      yourDevice: "Seu dispositivo",
+      operatingSYstem: "Sistema operativo",
+      webBrowser: "Navegador da Web",
+      deviceType: "Tipo de dispositivo",
+      webProtocol: "Protocolo da web",
+      webHost: "Host da web",
+      plutoInfo: "Informação",
+      storageUsed: "Memoria usada",
+      coreVersion: "Versão da core",
+      supportedVersions: "Versãos suportado",
+    },
   },
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
@@ -97,6 +112,7 @@ export default {
     const Card = await Root.Lib.loadComponent("Card");
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
     const themeLib = await Root.Lib.loadLibrary("ThemeLib");
+    const codeScanner = await Root.Lib.loadLibrary("CodeScanner");
     await vfs.importFS();
 
     const defaultDesktopConfig = {
@@ -214,7 +230,7 @@ export default {
         new Html().class("alert", type).text(text).appendTo(container);
       }
 
-      let pages = {
+      pages = {
         async clear(pageName) {
           container.elm.innerHTML = "";
           currentPage = pageName;
@@ -791,24 +807,121 @@ export default {
           }
         },
         async security() {
+          async function performSecurityScan() {
+            let dc = await codeScanner.scanForDangerousCode();
+            table.clear();
+
+            new Html("thead")
+              .appendMany(
+                new Html("tr").appendMany(
+                  new Html("th").text("Name"),
+                  new Html("th").text("Safe"),
+                  new Html("th").text("Delete App")
+                )
+              )
+              .appendTo(table);
+
+            console.log(dc, dc.length, 0 < dc.length, 1 < dc.length);
+
+            for (let i = 0; i < dc.length; i++) {
+              if (dc[i].success) {
+                new Html("tbody")
+                  .appendMany(
+                    new Html("tr").appendMany(
+                      new Html("td").text(dc[i].filename),
+                      new Html("td").text(
+                        dc[i].dangerous === true ? "No" : "Yes"
+                      ),
+                      new Html("td").appendMany(
+                        dc[i].dangerous === true
+                          ? new Html("button")
+                              .text("Delete")
+                              .on("click", async (_) => {
+                                await dc[i].delete();
+                                await performSecurityScan();
+                              })
+                          : new Html("button")
+                              .attr({ disabled: true })
+                              .text("Delete")
+                      )
+                    )
+                  )
+                  .appendTo(table);
+              }
+            }
+          }
           await this.clear("security");
+          // makeAlert("warning", "This section is currently not finished.");
           makeHeading("h1", Root.Lib.getString("security"));
-          makeAlert(
-            "warning",
-            "This section is currently not finished. Come back later when it's completed."
+          let table = new Html("table")
+            .class("w-100")
+            .appendMany()
+            .appendTo(container);
+          new Html("button")
+            .text("Security Check")
+            .class("primary", "mc", "small")
+            .on("click", async (_) => performSecurityScan())
+            .appendTo(container);
+
+          let settingsConfig = JSON.parse(
+            await vfs.readFile("Root/Pluto/config/settingsConfig.json")
           );
+          console.log(settingsConfig);
+          if (settingsConfig === null) {
+            await vfs.writeFile(
+              "Root/Pluto/config/settingsConfig.json",
+              `{"warnSecurityIssues": true}`
+            );
+            settingsConfig = JSON.parse(
+              await vfs.readFile("Root/Pluto/config/settingsConfig.json")
+            );
+          }
+
+          new Html("span")
+            .appendMany(
+              new Html("input")
+                .attr({
+                  type: "checkbox",
+                  id: Root.PID + "lc",
+                  checked: settingsConfig.warnSecurityIssues,
+                })
+                .on("input", async (e) => {
+                  settingsConfig.warnSecurityIssues = e.target.checked;
+                  await vfs.writeFile(
+                    "Root/Pluto/config/settingsConfig.json",
+                    JSON.stringify(settingsConfig)
+                  );
+                }),
+              new Html("label")
+                .attr({
+                  for: Root.PID + "lc",
+                })
+                .text("Check every startup?")
+            )
+            .appendTo(container);
         },
       };
 
-      pages[currentPage]();
+      setTimeout((_) => pages[currentPage]());
     }
 
-    setupSettingsApp();
+    console.log("loading settings pap", pages);
 
-    return Root.Lib.setupReturns((m) => {
-      if (m && m.type && m.type === "refresh") {
-        Root.Lib.getString = m.data;
-        setupSettingsApp();
+    await setupSettingsApp();
+
+    return Root.Lib.setupReturns(async (m) => {
+      if (m && m.type) {
+        if (m.type === "refresh") {
+          Root.Lib.getString = m.data;
+          setupSettingsApp();
+        }
+        if (m.type === "goPage") {
+          // setupSettingsApp();
+          console.log(m.data);
+          console.log(m);
+          console.log(pages);
+          pages[m.data] !== undefined && (await pages[m.data]());
+        }
       }
     });
   },

@@ -133,7 +133,6 @@ export default {
               } else if (
                 (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) === "file"
               ) {
-                //await Root.Modal.alert("ahh", "The app is already installed.", container.elm)
                 await Root.Core.startPkg(
                   "data:text/javascript;base64," +
                     btoa(await vfs.readFile(`Root/Pluto/apps/${app.name}.app`)),
@@ -271,26 +270,38 @@ export default {
               .appendTo(container);
 
             async function makeInstallOrOpenButton() {
-              if (
-                (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) === null
-              ) {
-                return [
-                  new Html("button")
-                    .text(
-                      (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) ===
-                        null
-                        ? Root.Lib.getString("install")
-                        : (await vfs.whatIs(
-                            `Root/Pluto/apps/${app.name}.app`
-                          )) === "file"
-                        ? Root.Lib.getString("open")
-                        : Root.Lib.getString("error")
-                    )
-                    .class("primary")
-                    .attr({ id: "installButton" })
-                    .on("click", async (e) => {
+              let localHash = new Hashes.MD5().hex(
+                await vfs.readFile(`Root/Pluto/apps/${app.name}.app`)
+              );
+              const appHash = await fetch(
+                `${host}pkgs/${pkg}/${app.assets.path}`
+              ).then(async (e) => {
+                return new Hashes.MD5().hex(await e.text());
+              });
+
+              const whatIsApp = await vfs.whatIs(
+                `Root/Pluto/apps/${app.name}.app`
+              );
+
+              return [
+                new Html("button")
+                  .text(
+                    whatIsApp === null
+                      ? "Install"
+                      : localHash !== appHash
+                      ? "Update"
+                      : whatIsApp === "file"
+                      ? "Open"
+                      : "Error"
+                  )
+                  .class("primary")
+                  .attr({ id: "installButton" })
+                  .on("click", async (e) => {
+                    if (localHash !== appHash && whatIsApp !== null) {
+                      await installApp(pkg, app, true);
+                    } else if (localHash !== appHash && whatIsApp === null) {
                       if (appCompatible === "ok") {
-                        await installApp(pkg, app);
+                        await installApp(pkg, app, true);
                       } else {
                         const result = await Root.Modal.prompt(
                           "Notice",
@@ -300,81 +311,35 @@ export default {
 
                         if (result === true) {
                           await installApp(pkg, app);
+                        }
+                      }
+                    } else {
+                      await installApp(pkg, app);
+                    }
+                  }),
+                whatIsApp != null
+                  ? new Html("button")
+                      .text("Uninstall")
+                      .class("danger")
+                      .on("click", async (e) => {
+                        let result = await Root.Modal.prompt(
+                          "Are you sure?",
+                          "Are you sure you want to delete this app?",
+                          wrapper
+                        );
+
+                        if (result === true) {
+                          await vfs.delete(`Root/Pluto/apps/${app.name}.app`);
+                          // await Root.Modal.alert(
+                          //   "App Deleted!",
+                          //   `${app.name} has been successfully deleted!`
+                          // );
                           pages.appPage(app, pkg);
                         }
-                      }
-                    }),
-                ];
-              } else {
-                let localHash = new Hashes.MD5().hex(
-                  await vfs.readFile(`Root/Pluto/apps/${app.name}.app`)
-                );
-                const appHash = await fetch(
-                  `${host}pkgs/${pkg}/${app.assets.path}`
-                ).then(async (e) => {
-                  return new Hashes.MD5().hex(await e.text());
-                });
-
-                  // console.log(localHash, appHash);
-
-                const whatIsApp = await vfs.whatIs(
-                  `Root/Pluto/apps/${app.name}.app`
-                );
-
-                return [
-                  new Html("button")
-                    .text(
-                      whatIsApp === null
-                        ? "Install"
-                        : localHash !== appHash
-                        ? "Update"
-                        : whatIsApp === "file"
-                        ? "Open"
-                        : "Error"
-                    )
-                    .class("primary")
-                    .attr({ id: "installButton" })
-                    .on("click", async (e) => {
-                      if (appCompatible === "ok") {
-                        if (localHash !== appHash && whatIsApp !== null) {
-                          await installApp(pkg, app, true);
-                        } else {
-                          await installApp(pkg, app);
-                        }
-                      } else {
-                        const result = await Root.Modal.prompt(
-                          "Notice",
-                          `This app (made for ${app.compatibleWith}) may be incompatible with your current version of Pluto (${sysInfo.version}).\nAre you sure you want to continue installing?`,
-                          container.elm
-                        );
-
-                        if (result === true) {
-                          await installApp(pkg, app);
-                        }
-                      }
-                    }),
-                  new Html("button")
-                    .text("Uninstall")
-                    .class("danger")
-                    .on("click", async (e) => {
-                      let result = await Root.Modal.prompt(
-                        "Are you sure?",
-                        "Are you sure you want to delete this app?",
-                        wrapper
-                      );
-
-                      if (result === true) {
-                        await vfs.delete(`Root/Pluto/apps/${app.name}.app`);
-                        await Root.Modal.alert(
-                          "App Deleted!",
-                          `${app.name} has been successfully deleted!`
-                        );
-                        pages.appPage(app, pkg);
-                      }
-                    })
-                    .appendTo(container),
-                ];
-              }
+                      })
+                  : new Html(),
+                // .appendTo(container),
+              ];
             }
 
             new Html("div")

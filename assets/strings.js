@@ -48,6 +48,7 @@ export default {
     core_appAccessControl_noAuthorNote: "No author note",
     core_appLaunch_notification:
       "{suspectedApp} wants to launch {targetApp}.\nWill you allow this?",
+    lockScreen_tapAnywhere: "Tap anywhere to unlock",
     lang_en_US: "English (US)",
     lang_en_GB: "English (UK)",
     lang_de_DE: "German (Germany)",

@@ -70,13 +70,14 @@ export default {
       welcome_window_title: "Bem-vindo",
       welcome_page1_header: "Bem-vindo a Plutão",
       welcome_page1_body:
-        "Ei! Bem-vindo a Plutão, um novo 'ambiente de desktop' para a web.\n\nPressione o próximo para entrar na instalação.",
+        "Ola! Bem-vindo a Plutão, um novo 'ambiente de desktop' para a web.\n\nPressione o próximo para entrar na instalação.",
       welcome_page2_header: "Defina seu idioma",
       welcome_page2_body: "O idioma atual é Português (Brasil).",
       welcome_page3_header: "Personalizar",
       welcome_page3_body: "Selecione seu tema favorito.",
       welcome_page4_header: "Agora você configurou seu sistema!",
-      welcome_page4_body: 'Pressione "Completa" para sair do aplicativo.',
+      welcome_page4_body:
+        'Pressione "Completa" para sair do aplicativo "Ben-vindo".',
     },
   },
   exec: async function (Root) {

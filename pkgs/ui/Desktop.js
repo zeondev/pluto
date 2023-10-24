@@ -22,6 +22,8 @@ export default {
     let vfs = await Root.Core.startPkg("lib:VirtualFS");
     await vfs.importFS();
 
+    let codeScanner = await Root.Core.startPkg("lib:CodeScanner");
+
     let appearanceConfig = JSON.parse(
       await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
     );
@@ -387,6 +389,17 @@ export default {
                   .html(Root.Lib.icons.wrench)
                   .on("click", (e) => {
                     Root.Core.startPkg("apps:Settings", true, true);
+                  }),
+                new Root.Lib.html("button")
+                  .class("small")
+                  .html(Root.Lib.icons.lock)
+                  .on("click", async (e) => {
+                    let ls = await Root.Core.startPkg(
+                      "ui:LockScreen",
+                      true,
+                      true
+                    );
+                    ls.loader();
                   })
               ),
               new Html("div")
@@ -477,6 +490,70 @@ export default {
 
     let isCurrentlyChangingWallpaper = false;
     let wallpaperToChangeTo = "";
+
+    // Start the startup apps
+
+    if (await vfs.exists("Root/Pluto/startup")) {
+      let startupApps = await vfs.readFile("Root/Pluto/startup").then((e) => {
+        return e.split("\n").filter((e) => e !== "");
+      });
+
+      if (startupApps.length >= 1) {
+        for (let i = 0; i < startupApps.length; i++) {
+          let file = startupApps[i];
+          let mapping = await FileMappings.retrieveAllMIMEdata(file, vfs);
+          console.log(mapping);
+          mapping.onClick(Root.Core);
+        }
+      }
+    }
+
+    // scan for dangerous files
+    let settingsConfig = JSON.parse(
+      await vfs.readFile("Root/Pluto/config/settingsConfig.json")
+    );
+    console.log(settingsConfig);
+    if (settingsConfig === null) {
+      await vfs.writeFile(
+        "Root/Pluto/config/settingsConfig.json",
+        `{"warnSecurityIssues": true}`
+      );
+      settingsConfig = JSON.parse(
+        await vfs.readFile("Root/Pluto/config/settingsConfig.json")
+      );
+    }
+
+    if (settingsConfig.warnSecurityIssues !== false) {
+      let dc = await codeScanner.scanForDangerousCode();
+
+      let fsContainsDC = false;
+
+      for (let i = 0; i < dc.length; i++) {
+        if (dc[i].success) {
+          if (dc[i].dangerous == true) {
+            fsContainsDC = true;
+          }
+        }
+      }
+
+      if (fsContainsDC) {
+        new Promise(async (resolve, reject) => {
+          // make alert modal popup
+          let prmpt = await Root.Modal.prompt(
+            "Alert",
+            "Your computer contains a potentially dangerous application!\nDo you want to review it?"
+          );
+          console.log(prmpt);
+          if (prmpt == true) {
+            let stgApp = await Root.Core.startPkg("apps:Settings", true, true);
+            await stgApp.proc.send({
+              type: "goPage",
+              data: "security",
+            });
+          }
+        });
+      }
+    }
 
     function smoothlySwapBackground(to) {
       wallpaperToChangeTo = to;

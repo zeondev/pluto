@@ -46,14 +46,16 @@ export default {
 
     new Root.Lib.html("input")
       .attr({
-        type: "search",
+        type: "input",
         // there's a good reason i did this, it's called browser compatibility
         style: "width:-webkit-fill-available;width:-moz-fill-available;",
         value: "http://frogfind.com/",
       })
-      .on("search", async (e) => {
-        if (e.target.value.trim() == "") return;
-        iframe.attr({ src: e.target.value.trim() });
+      .on("keydown", async (e) => {
+        if (e.key === "Enter") {
+          if (e.target.value.trim() == "") return;
+          iframe.attr({ src: e.target.value.trim() });
+        }
       })
       .appendTo(header);
 

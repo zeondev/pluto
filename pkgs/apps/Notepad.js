@@ -7,7 +7,7 @@ export default {
     let wrapper; // Lib.html | undefined
     let NpWindow;
 
-    Root.Lib.setOnEnd(_ => NpWindow.close());
+    Root.Lib.setOnEnd((_) => NpWindow.close());
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
     const FileDialog = await Root.Lib.loadLibrary("FileDialog");
@@ -85,8 +85,12 @@ export default {
         (await vfs.getParentFolder(currentDocument.path)) || "Root"
       );
       if (result === false) return false;
+
+      await vfs.writeFile(currentDocument.path, text.elm.value);
+
       currentDocument.dirty = false;
       currentDocument.path = result;
+      updateTitle();
     }
 
     async function dirtyCheck() {

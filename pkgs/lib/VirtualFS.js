@@ -12,6 +12,9 @@ let templateFsLayout = {
           theme: "dark.theme",
           sidebarType: "vertical",
         }),
+        "settingsConfig.json": JSON.stringify({
+          warnSecurityIssues: true,
+        }),
         themes: {
           "light.theme":
             '{"version":1,"name":"Light","description":"A built-in theme.","values":null,"cssThemeDataset":"light","wallpaper":"./assets/wallpapers/light.png"}',
@@ -29,13 +32,9 @@ let templateFsLayout = {
         "README.MD":
           "This folder contains all the apps that you have downloaded. If you have any questions about them please contact us.",
       },
+      startup: "",
     },
-    Desktop: {
-      "foldertest": {
-        "anothertest.txt": "this is a test of file system merging a folder and a filde in the same folder!",
-      },
-      "test2.txt": "this is a test of file system merging n2!",
-    },
+    Desktop: {},
     Documents: {},
     Downloads: {},
     Pictures: {},
@@ -192,13 +191,22 @@ const Vfs = {
     return true;
   },
   async merge(fsObject = this.fileSystem) {
-    var existingFs = fsObject
+    var existingFs = fsObject;
 
     function mergeFileSystem(obj1, obj2) {
       for (var key in obj2) {
         if (obj2.hasOwnProperty(key)) {
-          if (typeof obj2[key] === 'object' && obj2[key] !== null && !Array.isArray(obj2[key])) {
-            if (!(key in obj1) || typeof obj1[key] !== 'object' || obj1[key] === null || Array.isArray(obj1[key])) {
+          if (
+            typeof obj2[key] === "object" &&
+            obj2[key] !== null &&
+            !Array.isArray(obj2[key])
+          ) {
+            if (
+              !(key in obj1) ||
+              typeof obj1[key] !== "object" ||
+              obj1[key] === null ||
+              Array.isArray(obj1[key])
+            ) {
               obj1[key] = {}; // Create an object if the key doesn't exist or if it is not an object
             }
             mergeFileSystem(obj1[key], obj2[key]); // Recursive call for nested objects
@@ -206,17 +214,19 @@ const Vfs = {
             if (!(key in obj1)) {
               obj1[key] = obj2[key]; // Assign the value if the key doesn't exist in obj1
             } else {
-              console.log(`File "${key}" already exists and will not be overwritten.`);
+              console.log(
+                `File "${key}" already exists and will not be overwritten.`
+              );
             }
           }
         }
       }
     }
-      
+
     mergeFileSystem(existingFs, templateFsLayout);
     this.importFS(existingFs);
     this.save();
-  }
+  },
 };
 
 export default {
