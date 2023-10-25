@@ -173,6 +173,9 @@ export default {
     var editor = ace.edit(textWrapper.elm);
     // Custom theme
     editor.setShowPrintMargin(false);
+    editor.session.setTabSize(2);
+    editor.session.setUseSoftTabs(true);
+    editor.session.setUseWrapMode(true);
     editor.session.setMode("ace/mode/typescript");
 
     text.on("input", (e) => {
