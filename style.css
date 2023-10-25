@@ -243,7 +243,8 @@ body {
   display: none;
 }
 
-.win-titlebar {
+.win-titlebar,
+.win-window-decorative .win-titlebar {
   user-select: none;
   display: flex;
   background-color: var(--root);
@@ -1159,6 +1160,12 @@ ul {
   color: rgb(255, 0, 0);
 }
 
+.ace_search {
+  background-color: var(--root);
+  border-color: var(--outline);
+  color: var(--text);
+}
+
 .ace-tm .ace_marker-layer .ace_selected-word,
 .ace-tm .ace_marker-layer .ace_selection {
   background: var(--unfocused);
@@ -1211,6 +1218,23 @@ ul {
 
 .ace_paren {
   color: var(--text-alt);
+}
+
+.ace_search_field,
+.ace_searchbtn,
+.ace_button {
+  background-color: var(--neutral);
+  border-color: var(--outline);
+  color: var(--text);
+}
+.ace_button:hover,
+.ace_searchbtn:hover {
+  background-color: var(--neutral-focus);
+}
+
+.ace_search_options,
+.ace_button {
+  color: var(--text);
 }
 
 /* ::-webkit-scrollbar {
