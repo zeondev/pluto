@@ -130,19 +130,58 @@ export default {
 
     const Html = Root.Lib.html;
 
-    /* Banner */ new Html("img")
-      .attr({
-        src: "./assets/banner.svg",
-        draggable: false,
+    // /* Banner */ new Html("img")
+    //   .attr({
+    //     src: "./assets/banner.svg",
+    //     draggable: false,
+    //   })
+    //   .style({
+    //     position: "relative",
+    //     inset: "-10px",
+    //     "min-width": "400px",
+    //     width: "calc(100% + 20px)",
+    //     "max-height": "400px",
+    //   })
+    //   .appendTo(wrapper);
+
+    await fetch("./assets/banner.svg")
+      .then((response) => response.text())
+      .then((svgText) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(svgText, "image/svg+xml");
+        const svg = doc.documentElement;
+        // Change the color of specific elements
+
+        let c1 = [...svg.querySelector("#paint0_radial_901_305").children];
+        c1.forEach((element) => {
+          element.setAttribute("stop-color", "var(--neutral)");
+        });
+        let c2 = [...svg.querySelector("#paint1_radial_901_305").children];
+        c2.forEach((element) => {
+          element.setAttribute("stop-color", "var(--label)");
+        });
+        svg.querySelector("#idt").setAttribute("fill", "var(--label-light)");
+
+        // Convert the modified SVG back to a string
+        const serializer = new XMLSerializer();
+        const svgString = serializer.serializeToString(svg);
+
+        // Create a new <div> element and set its innerHTML to the modified SVG string
+        const div = document.createElement("div");
+        div.innerHTML = svgString;
+
+        div.style.position = "relative";
+        div.style.inset = "-10px";
+        div.style.minWidth = "400px";
+        div.style.width = "calc(100% + 10px)";
+        div.style.maxHeight = "400px";
+
+        // Append the <div> to the desired element in the DOM
+        wrapper.appendChild(div);
       })
-      .style({
-        position: "relative",
-        inset: "-10px",
-        "min-width": "400px",
-        width: "calc(100% + 20px)",
-        "max-height": "400px",
-      })
-      .appendTo(wrapper);
+      .catch((err) => {
+        console.error("Error loading SVG file:", err);
+      });
 
     const container = new Html("div")
       .class("fg", "ovh", "col")
