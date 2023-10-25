@@ -153,7 +153,8 @@ export default {
         },
         onclick: (_) => {
           Root.Core.startPkg(
-            "data:text/javascript;base64," + btoa(editor.getValue()),
+            URL.createObjectURL(new Blob([editor.getValue()], {type: 'application/javascript'})),
+            // URL.createObjectURL(["data:text/javascript," + encodeURIComponent(`/*${currentDocument.path}*/` +editor.getValue())], {type:'text/plain'}),
             false
           );
         },
