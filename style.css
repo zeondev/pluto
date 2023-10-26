@@ -21,7 +21,8 @@ a {
   cursor: default !important;
 }
 
-:root {
+:root,
+:root[data-theme="dark"] {
   color-scheme: dark;
   accent-color: var(--primary);
   --primary: hsl(222, 80%, 40%);
@@ -219,12 +220,12 @@ body {
 .desktop ~ .win-window.max {
   height: calc(100% - 42px - 12px) !important;
 }
-.win-window.max .win-titlebar,
-.win-window.max .win-content {
+.win-window.max > .win-titlebar,
+.win-window.max > .win-content {
   border-radius: 0;
 }
 
-.win-window.max .resize-grips {
+.win-window.max > .resize-grips {
   display: none;
 }
 
@@ -233,7 +234,7 @@ body {
   height: auto !important;
   border-radius: 5px;
 }
-.win-window.min .win-titlebar {
+.win-window.min > .win-titlebar {
   border-radius: 5px;
 }
 .win-window.min .win-content {
@@ -254,17 +255,17 @@ body {
   flex-shrink: 0;
 }
 
-.win-window:not(.focus) .win-titlebar .title,
-.win-window-decorative:not(.focus) .win-titlebar .title {
+.win-window:not(.focus) > .win-titlebar .title,
+.win-window-decorative:not(.focus) > .win-titlebar .title {
   opacity: 0.5;
 }
-.win-window:not(.focus) .win-titlebar button,
-.win-window-decorative:not(.focus) .win-titlebar button {
+.win-window:not(.focus) > .win-titlebar button,
+.win-window-decorative:not(.focus) > .win-titlebar button {
   filter: brightness(0.5);
 }
 
-.win-window.focus .win-titlebar,
-.win-window-decorative.focus .win-titlebar {
+.win-window.focus > .win-titlebar,
+.win-window-decorative.focus > .win-titlebar {
   background-color: var(--header);
 }
 
@@ -704,7 +705,7 @@ textarea {
   background-color: var(--neutral);
   border: 1px solid var(--outline);
   margin: 4px;
-  padding: 4px;
+  padding: 4px 6px;
   border-radius: 8px;
   outline: none;
   resize: none;

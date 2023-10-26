@@ -113,12 +113,13 @@ export default {
       description,
       placeholder,
       parent = "body",
-      isPassword = false
+      isPassword = false,
+      value = ''
     ) {
       let wrapper = new lib.html("div").class("col");
       /* span */ new lib.html("span").text(description).appendTo(wrapper);
       let input = new lib.html("input")
-        .attr({ placeholder, type: isPassword === true ? "password" : "text" })
+        .attr({ placeholder, value, type: isPassword === true ? "password" : "text" })
         .appendTo(wrapper);
 
       return new Promise((res, _rej) => {

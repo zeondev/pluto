@@ -140,6 +140,11 @@ export default {
         let thisWin = wrapper.elm.querySelector(".win-window");
         thisWin.style.position = "absolute";
 
+        if (this.options.width > screen.width) {
+          // this.maximize('top');
+          this.options.width = screen.width - (snapMargin*8);
+        }
+
         thisWin.id = this.options.id;
         thisWin.style.width = parseInt(this.options.width) + "px";
         thisWin.style.height = parseInt(this.options.height) + "px";

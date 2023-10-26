@@ -325,7 +325,7 @@ export default {
 
         let pathInput = new L.html("input")
           .class("fg")
-          .attr({ placeholder: "Path", value: "Root/" })
+          .attr({ placeholder: "Path", value: path + "/" || "Root/" })
           .on("keyup", async (e) => {
             let toBeSavedItem = e.target.value;
             if (!toBeSavedItem.startsWith("Root/")) e.target.value = "Root/";

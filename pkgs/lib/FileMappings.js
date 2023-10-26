@@ -43,6 +43,12 @@ export default {
         opensWith: "apps:DevEnv",
         icon: "fileJson",
       },
+      js: {
+        type: "code",
+        label: "JavaScript file",
+        opensWith: "apps:DevEnv",
+        icon: "fileJson",
+      },
       png: {
         type: "image",
         label: "PNG image",
