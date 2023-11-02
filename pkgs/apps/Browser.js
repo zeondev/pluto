@@ -7,8 +7,6 @@ export default {
     let wrapper; // Lib.html | undefined
     let MyWindow;
 
-    console.log("Hello from example package", Root.Lib);
-
     Root.Lib.setOnEnd((_) => MyWindow.close());
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
@@ -39,7 +37,7 @@ export default {
         // there's a good reason i did this, it's called browser compatibility
         style:
           "width:-webkit-fill-available;width:-moz-fill-available;height:-webkit-fill-available;height:-moz-fill-available;",
-        src: "http://frogfind.com/",
+        src: "http://www.google.com/webhp?igu=1",
       })
       .class("fg")
       .appendTo(wrapper);
@@ -49,7 +47,7 @@ export default {
         type: "input",
         // there's a good reason i did this, it's called browser compatibility
         style: "width:-webkit-fill-available;width:-moz-fill-available;",
-        value: "http://frogfind.com/",
+        value: "http://www.google.com/webhp?igu=1",
       })
       .on("keydown", async (e) => {
         if (e.key === "Enter") {
