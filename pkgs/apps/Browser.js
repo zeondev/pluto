@@ -7,6 +7,8 @@ export default {
     let wrapper; // Lib.html | undefined
     let MyWindow;
 
+    console.log("Browser Loading...")
+
     Root.Lib.setOnEnd((_) => MyWindow.close());
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
