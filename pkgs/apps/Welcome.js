@@ -173,7 +173,7 @@ export default {
         div.style.position = "relative";
         div.style.inset = "-10px";
         div.style.minWidth = "400px";
-        div.style.width = "calc(100% + 10px)";
+        div.style.width = "calc(100% + 20px)";
         div.style.maxHeight = "400px";
 
         // Append the <div> to the desired element in the DOM
