@@ -1960,3 +1960,7 @@ hr {
 .display-padding {
   padding: 15vmax;
 }
+
+.browser .selected {
+  background-color: var(--header) !important;
+}
