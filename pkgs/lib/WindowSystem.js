@@ -422,15 +422,15 @@ function BeginWinDrag(e) {
   mouseDown = true;
   winRef = x;
 
-  if (!Html.qs(".debug")) {
-    new Html("p")
-      .class("debug")
-      .styleJs({
-        position: "fixed",
-        bottom: "30vh",
-      })
-      .appendTo("body");
-  }
+  // if (!Html.qs(".debug")) {
+  //   new Html("p")
+  //     .class("debug")
+  //     .styleJs({
+  //       position: "fixed",
+  //       bottom: "30vh",
+  //     })
+  //     .appendTo("body");
+  // }
 }
 
 let snapMargin = 2;

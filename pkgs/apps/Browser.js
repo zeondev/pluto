@@ -22,8 +22,8 @@ export default {
       title: "Browser",
       content: "",
       pid: Root.PID,
-      width: 400,
-      height: 400,
+      width: 640,
+      height: 480,
       minWidth: 400,
       minHeight: 400,
       onclose: () => {
@@ -182,8 +182,8 @@ export default {
         new Root.Lib.html("iframe")
           .attr({
             // there's a good reason i did this, it's called browser compatibility
-            style:
-              "width:-webkit-fill-available;width:-moz-fill-available;height:-webkit-fill-available;height:-moz-fill-available;",
+            // style:
+            //   "width:-webkit-fill-available;width:-moz-fill-available;height:-webkit-fill-available;height:-moz-fill-available;",
             src: "http://www.google.com/webhp?igu=1",
           })
           .class("fg", "page-" + selectedTab)
@@ -274,8 +274,8 @@ export default {
     const iframe = new Root.Lib.html("iframe")
       .attr({
         // there's a good reason i did this, it's called browser compatibility
-        style:
-          "width:-webkit-fill-available;width:-moz-fill-available;height:-webkit-fill-available;height:-moz-fill-available;",
+        // style:
+        //   "width:-webkit-fill-available;width:-moz-fill-available;height:-webkit-fill-available;height:-moz-fill-available;",
         src: "http://www.google.com/webhp?igu=1",
       })
       .class("fg", "page-1")
@@ -338,7 +338,7 @@ export default {
     let adrb = new Root.Lib.html("input")
       .attr({
         type: "input",
-        style: "width:-webkit-fill-available;width:-moz-fill-available;",
+        // style: "width:-webkit-fill-available;width:-moz-fill-available;",
         value: "http://www.google.com/webhp?igu=1",
       })
       .class("url")
