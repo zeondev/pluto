@@ -1964,3 +1964,21 @@ hr {
 .browser .selected {
   background-color: var(--header) !important;
 }
+
+.no-ui {
+  font-family: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
+    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+  padding: 8px;
+  font-size: 1rem;
+  user-select: text !important;
+  height: 100%;
+  overflow: auto;
+}
+
+.no-ui .input {
+  outline: none;
+}
+.no-ui .output {
+  white-space: pre-wrap;
+}

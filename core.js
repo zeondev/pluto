@@ -2,6 +2,7 @@
 
 (async () => {
   try {
+    console.log(typeof require);
     const coreDetails = {
       version: 1.4,
       versionString: (1.4).toFixed(1),

@@ -85,7 +85,7 @@ export default {
             .text(lib.getString("lockScreen_tapAnywhere"))
         )
         .on("click", (e) => {
-          e.target.remove();
+          x.cleanup();
         })
         .appendTo("body");
 

@@ -394,10 +394,16 @@ export default {
           const webProtocol = location.protocol.endsWith("s:")
             ? "HTTPS"
             : "HTTP";
-          const webHost = location.host;
+          let webHost = location.host;
 
           // Get user agent string
           const userAgent = navigator.userAgent;
+
+          if (webHost === "" && userAgent.includes("Electron")) {
+            webHost = "Local (Electron)";
+          } else if (webHost === "") {
+            webHost = "Local";
+          }
 
           // Get browser information
           const browser = {
