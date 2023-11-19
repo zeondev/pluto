@@ -33,6 +33,7 @@ export default {
 
     wrapper = MyWindow.window.querySelector(".win-content");
     wrapper.classList.add("col", "with-sidebar", "browser");
+    wrapper.style.overflow = "hidden";
     let selectedTab = 1;
     let tabsList = [
       {
@@ -74,7 +75,18 @@ export default {
         padding: "0px 8px",
       })
       .class("selected", "tab-1")
-      .appendMany(new Root.Lib.html("span").text("Tab 1"), new Root.Lib.html("span").html(`<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`).style({display: "flex", "justify-content": "center",  "align-items": "center"}))
+      .appendMany(
+        new Root.Lib.html("span").text("Tab 1"),
+        new Root.Lib.html("span")
+          .html(
+            `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`
+          )
+          .style({
+            display: "flex",
+            "justify-content": "center",
+            "align-items": "center",
+          })
+      )
       .on("click", (e) => {
         // e.target.classList.forEach((el) => {
         //   if (el.startsWith("tab-")) {
@@ -181,9 +193,6 @@ export default {
         });
         new Root.Lib.html("iframe")
           .attr({
-            // there's a good reason i did this, it's called browser compatibility
-            // style:
-            //   "width:-webkit-fill-available;width:-moz-fill-available;height:-webkit-fill-available;height:-moz-fill-available;",
             src: "http://www.google.com/webhp?igu=1",
           })
           .class("fg", "page-" + selectedTab)
@@ -202,43 +211,36 @@ export default {
           })
           .class("selected", "tab-" + selectedTab)
           .appendMany(
-            new Root.Lib.html("span").text("Tab " + selectedTab), 
-            new Root.Lib.html("span").html(`<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`)
-            .style({display: "flex", "justify-content": "center",  "align-items": "center"})
-            // .on("click", (e) => {
-            //   console.log(e.target.parentElement.parentElement)
-            //   e.target.parentElement.parentElement.classList.forEach((el) => {
-            //     if (el.startsWith("tab-")) {
-            //       // el = e.target.parentElement.parentElement.classList
+            new Root.Lib.html("span").text("Tab " + selectedTab),
+            new Root.Lib.html("span")
+              .html(
+                `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`
+              )
+              .style({
+                display: "flex",
+                "justify-content": "center",
+                "align-items": "center",
+              })
+              .on("click", (e) => {
+                e.target.parentElement.parentElement.classList.forEach(
+                  (elm) => {
+                    if (elm.startsWith("tab-")) {
+                      const tabId = Number(elm.split("-")[1]);
+                      const tabElement = wrapper.querySelector(`.tab-${tabId}`);
+                      const pageElement = wrapper.querySelector(
+                        `.page-${tabId}`
+                      );
 
-            //       selectedTab = Number(el.split("-")[1]);
-            //         wrapper
-            //           .querySelector(`.tab-${selectedTab}`)
-            //           .remove()
-            //         wrapper.querySelector(`.page-${selectedTab}`)
-            //           .remove()
-            //       // wrapper.querySelector(`.page-${selectedTab}`).style.display =
-            //       //   "block";
-            //       // wrapper.querySelector(`input.url`).value = wrapper.querySelector(
-            //       //   `.page-${selectedTab}`
-            //       // ).src;
-            //       tabsList[selectedTab - 1] = null;
-            //       // e.target.classList.add("selected");
-            //       tabsList = tabsList.filter((p) => p !== null);
-            //       selectedTab = tabsList.length === 2 ? 1 : tabsList.length;
-            //       console.log(selectedTab)
-            //       console.log(`.tab-${selectedTab}`)
-            //       console.log(tabsList)
-            //       for (let i = 0; i < tabsList.length; i++) {
-            //         console.log(i, i + 1, tabsList[i].id)
-            //         wrapper.querySelector(`.tab-${tabsList[i].id}`).classList.remove("selected");
-            //         wrapper.querySelector(`.page-${tabsList[i].id}`).style.display = "none";
-            //       }
-            //       Root.Lib.html.qs(`.tab-${selectedTab}`).elm.classList.add("selected");
-            //       Root.Lib.html.qs(`.page-${selectedTab}`).elm.style.display = "block";
-            //     }
-            //   })
-            // })
+                      // Remove tab and iframe elements
+                      tabElement.remove();
+                      pageElement.remove();
+
+                      // Remove tab from tabsList
+                      tabsList = tabsList.filter((tab) => tab.id !== tabId);
+                    }
+                  }
+                );
+              })
           )
           .on("click", (e) => {
             e.target.classList.forEach((el) => {
@@ -346,9 +348,12 @@ export default {
         if (e.key === "Enter") {
           if (e.target.value.trim() == "") return;
           console.log(selectedTab, "page-" + selectedTab);
-          let uri
-          if (!e.target.value.trim().startsWith("http://") && !e.target.value.trim().startsWith("https://")) {
-            uri = "https://" + e.target.value.trim()
+          let uri;
+          if (
+            !e.target.value.trim().startsWith("http://") &&
+            !e.target.value.trim().startsWith("https://")
+          ) {
+            uri = "https://" + e.target.value.trim();
           }
           Root.Lib.html
             .qs(".page-" + selectedTab)
@@ -372,9 +377,12 @@ export default {
         // iframe.attr({ src: adrb.elm.value.trim() });
         if (adrb.elm.value.trim() == "") return;
         console.log(selectedTab, "page-" + selectedTab);
-        let uri
-        if (!adrb.elm.value.trim().startsWith("http://") && !adrb.elm.value.trim().startsWith("https://")) {
-          uri = "https://" + adrb.elm.value.trim()
+        let uri;
+        if (
+          !adrb.elm.value.trim().startsWith("http://") &&
+          !adrb.elm.value.trim().startsWith("https://")
+        ) {
+          uri = "https://" + adrb.elm.value.trim();
         }
         Root.Lib.html
           .qs(".page-" + selectedTab)

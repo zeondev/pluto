@@ -748,18 +748,76 @@ export default {
         async network() {
           await this.clear("network");
           makeHeading("h1", Root.Lib.getString("network"));
-
+          let resultTab = new Html("div").appendTo(container);
+          resultTab.class("row", "ac", "js", "gap");
+          resultTab.clear();
           new Html("button")
             .text("Test Network")
             .class("primary", "mc", "small")
             .on("click", async (e) => {
-              const req = await fetch("https://zeon.dev");
-              if (req.status === 200) {
-                Root.Modal.alert("Success", "Network is working!");
+              resultTab.clear();
+              let d1 = new Date();
+              const req1 = await fetch(
+                "https://zeon.dev" + "?dummy=" + Date.now()
+              );
+              let d2 = new Date();
+              let d3 = new Date();
+              const req2 = await fetch(
+                "https://zeon.dev" + "?dummy=" + Date.now()
+              );
+              let d4 = new Date();
+              if (req1.status === 200 && req2.status === 200) {
+                console.log(d1 - d2);
+                console.log(d4 - d3);
+
+                let averageResponseTime = (d2 - d1 + (d4 - d3)) / 2;
+                let averageResponse;
+                if (averageResponseTime < 100) {
+                  console.log("good");
+                  averageResponse = "fast";
+                } else if (averageResponseTime > 100) {
+                  console.log("good");
+                  averageResponse = "good";
+                } else if (averageResponseTime > 150) {
+                  console.log("ok");
+                  averageResponse = "ok";
+                } else if (averageResponseTime > 200) {
+                  console.log("slow");
+                  averageResponse = "slow";
+                }
+
+                Root.Modal.alert(
+                  "Success",
+                  "You're online and good to go!\n\nYour internet speed is " +
+                    averageResponse +
+                    ". " +
+                    "Average response time: " +
+                    averageResponseTime +
+                    "ms"
+                );
+                new Html("span")
+                  .appendMany(
+                    new Html("span")
+                      .class("h2")
+                      .style({ "margin-bottom": "8px" })
+                      .text("You're online and good to go!"),
+                    new Html("span").text(
+                      "Your internet is " + averageResponse + "\n"
+                    ),
+                    new Html("span")
+                      .class("muted")
+                      .text(
+                        "Average response time: " + averageResponseTime + "ms"
+                      )
+                  )
+                  .appendTo(resultTab);
               } else {
                 Root.Modal.alert(
                   "Failed",
-                  "Network is not working. Status code: " + req.status
+                  "Network is not working. Status code: " +
+                    req1.status +
+                    ", " +
+                    req2.status
                 );
               }
             })

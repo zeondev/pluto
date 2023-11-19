@@ -1,4 +1,4 @@
-# Pluto v1.3
+# Pluto v1.4
 
 ![Pluto banner](assets/images/banner.svg)
 
@@ -18,4 +18,4 @@ You can find documentation in the [docs](docs/) folder.
 
 ## Contributing
 
-It is recommended to use [VS Code](https://code.visualstudio.com) along with the Live Server and Prettier extensions for the best experience when contributing.
+It is recommended to use [VS Code](https://code.visualstudio.com) along with the Live Server and Prettier extensions for the best experience when contributing and a higher chance of your pull request being approved.
