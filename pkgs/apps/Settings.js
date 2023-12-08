@@ -786,15 +786,15 @@ export default {
                   averageResponse = "slow";
                 }
 
-                Root.Modal.alert(
-                  "Success",
-                  "You're online and good to go!\n\nYour internet speed is " +
-                    averageResponse +
-                    ". " +
-                    "Average response time: " +
-                    averageResponseTime +
-                    "ms"
-                );
+                // Root.Modal.alert(
+                //   "Success",
+                //   "You're online and good to go!\n\nYour internet speed is " +
+                //     averageResponse +
+                //     ". " +
+                //     "Average response time: " +
+                //     averageResponseTime +
+                //     "ms"
+                // );
                 new Html("span")
                   .appendMany(
                     new Html("span")

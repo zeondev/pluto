@@ -22,6 +22,7 @@ export default {
 
     // Make app
     const ls = await Root.Core.startPkg("ui:LoadingScreen");
+    const FileMapping = await Root.Core.startPkg("lib:FileMappings");
     // start loading screen
     const lsg = ls.loader();
     try {
@@ -47,7 +48,9 @@ export default {
       await vfs.importFS();
 
       if (await vfs.exists("Root/Pluto/config/fsVersionUpdate.txt")) {
-        let version = await vfs.readFile("Root/Pluto/config/fsVersionUpdate.txt");
+        let version = await vfs.readFile(
+          "Root/Pluto/config/fsVersionUpdate.txt"
+        );
 
         if (Number(version) < Root.Lib.systemInfo.version) {
           await vfs.importFS();
@@ -56,15 +59,13 @@ export default {
           await vfs.importFS();
         }
       } else {
-
         await vfs.importFS();
-        
       }
-      console.log(Root.Lib.systemInfo)
+      console.log(Root.Lib.systemInfo);
       await vfs.writeFile(
         "Root/Pluto/config/fsVersionUpdate.txt",
         Root.Lib.systemInfo.version.toString()
-      )
+      );
       let appearanceConfig = JSON.parse(
         await vfs.readFile("Root/Pluto/config/appearanceConfig.json")
       );
@@ -80,9 +81,33 @@ export default {
         Root.Core.setLanguage(appearanceConfig.language);
       }
 
-      await Root.Core.startPkg("apps:FTGSF");
-
-      await Root.Core.startPkg("ui:Desktop", true, true);
+      if (await vfs.exists("Root/Pluto/config/settingsConfig.json")) {
+        let settingsConfig = JSON.parse(
+          await vfs.readFile("Root/Pluto/config/settingsConfig.json")
+        );
+        if (
+          settingsConfig !== undefined &&
+          settingsConfig.bootApp !== undefined
+        ) {
+          let appMapping = await FileMapping.retrieveAllMIMEdata(
+            settingsConfig.bootApp,
+            vfs
+          );
+          appMapping.onClick(Root.Core);
+          // await Root.Core.startPkg(
+          //   mapping.onClick(Root.Core);
+          //   await vfs.readFile(settingsConfig.bootApp),
+          //   false,
+          //   true
+          // );
+        } else {
+          await Root.Core.startPkg("apps:FTGSF");
+          await Root.Core.startPkg("ui:Desktop", true, true);
+        }
+      } else {
+        await Root.Core.startPkg("apps:FTGSF");
+        await Root.Core.startPkg("ui:Desktop", true, true);
+      }
 
       let themeLib = await Root.Core.startPkg("lib:ThemeLib");
 
