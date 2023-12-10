@@ -720,6 +720,40 @@ export default {
               .class("if", "mc")
           );
 
+          const dockStyleSpan = new Html("span")
+            .class("row", "ac", "js", "gap")
+            .appendTo(container);
+
+          dockStyleSpan.appendMany(
+            new Html("span").text("Dock style"),
+            new Html("select")
+              .appendMany(
+                new Html("option").text("Full").attr({
+                  value: "vertical",
+                  selected:
+                    desktopConfig.dockStyle === "vertical" ? true : null,
+                }),
+                new Html("option").text("Compact").attr({
+                  value: "compact",
+                  selected: desktopConfig.dockStyle === "compact" ? true : null,
+                })
+              )
+              .on("input", (e) => {
+                desktopConfig.dockStyle = e.target.value;
+
+                Html.qs(".desktop .dock").classOn("hiding");
+
+                setTimeout(() => {
+                  // a bit hacky to do the animation
+                  Html.qs(".desktop .dock").classOff("hiding");
+                  document.documentElement.dataset.dockStyle = e.target.value;
+                }, 600);
+
+                save();
+              })
+              .class("if", "mc")
+          );
+
           const languageSelectSpan = new Html("span")
             .class("row", "ac", "js", "gap")
             .appendTo(container);

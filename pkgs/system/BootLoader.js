@@ -74,6 +74,9 @@ export default {
         document.documentElement.dataset.sidebarType =
           appearanceConfig.sidebarType;
       }
+      if (appearanceConfig.dockStyle) {
+        document.documentElement.dataset.dockStyle = appearanceConfig.dockStyle;
+      }
       if (
         appearanceConfig.language &&
         Root.Lib.langs.includes(appearanceConfig.language)

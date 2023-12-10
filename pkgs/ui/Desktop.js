@@ -365,53 +365,52 @@ export default {
             })
           );
 
-          menuElm = new Html("div")
-            .class("menu")
-            .appendMany(
-              new Html("div").class("me").appendMany(
-                new Html("div").class("pfp").style({
-                  "--url": `url(${userData.pfp})`,
-                }),
-                new Html("div")
-                  .class("text")
-                  .appendMany(
-                    new Html("div").class("heading").text(userData.username),
-                    new Html("div")
-                      .class("subheading")
-                      .text(
-                        userData.onlineAccount === true
-                          ? "Zeon Account"
-                          : "Local Account"
-                      )
-                  ),
-                new Root.Lib.html("button")
-                  .class("small")
-                  .html(Root.Lib.icons.wrench)
-                  .on("click", (e) => {
-                    Root.Core.startPkg("apps:Settings", true, true);
-                  }),
-                new Root.Lib.html("button")
-                  .class("small")
-                  .html(Root.Lib.icons.lock)
-                  .on("click", async (e) => {
-                    let ls = await Root.Core.startPkg(
-                      "ui:LockScreen",
-                      true,
-                      true
-                    );
-                    ls.loader();
-                  })
-              ),
+          menuElm = new Html("div").class("menu").appendMany(
+            new Html("div").class("me").appendMany(
+              new Html("div").class("pfp").style({
+                "--url": `url(${userData.pfp})`,
+              }),
               new Html("div")
-                .class("spacer")
+                .class("text")
                 .appendMany(
-                  new Html("div").class("space"),
-                  new Html("div").text("Apps"),
-                  new Html("div").class("space")
+                  new Html("div").class("heading").text(userData.username),
+                  new Html("div")
+                    .class("subheading")
+                    .text(
+                      userData.onlineAccount === true
+                        ? "Zeon Account"
+                        : "Local Account"
+                    )
                 ),
-              new Html("div").class("apps").appendMany(...appsHtml)
-            )
-            .appendTo(dock);
+              new Root.Lib.html("button")
+                .class("small")
+                .html(Root.Lib.icons.wrench)
+                .on("click", (e) => {
+                  Root.Core.startPkg("apps:Settings", true, true);
+                }),
+              new Root.Lib.html("button")
+                .class("small")
+                .html(Root.Lib.icons.lock)
+                .on("click", async (e) => {
+                  let ls = await Root.Core.startPkg(
+                    "ui:LockScreen",
+                    true,
+                    true
+                  );
+                  ls.loader();
+                })
+            ),
+            new Html("div")
+              .class("spacer")
+              .appendMany(
+                new Html("div").class("space"),
+                new Html("div").text("Apps"),
+                new Html("div").class("space")
+              ),
+            new Html("div").class("apps").appendMany(...appsHtml)
+          );
+
+          dock.elm.insertBefore(menuElm.elm, dock.elm.lastChild);
         }
 
         menuElm.classOn("opening");
