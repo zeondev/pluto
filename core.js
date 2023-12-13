@@ -1,10 +1,8 @@
 // Pluto
-
 (async () => {
   try {
-    console.log(typeof require);
     const coreDetails = {
-      version: 1.4,
+      version: 1.45,
       versionString: (1.4).toFixed(1),
       codename: "Elysium",
     };

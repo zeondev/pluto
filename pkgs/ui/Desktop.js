@@ -257,12 +257,17 @@ export default {
 
     function onClickDetect(ev) {
       if (ev.target.closest(".menu")) {
+      } else toggleMenu();
+    }
+
+    function onFullClickDetect(ev) {
+      if (ev.target.closest(".menu")) {
         if (ev.button === 0) {
           if (ev.target.closest("button") || ev.target.closest(".app")) {
             toggleMenu();
           }
         }
-      } else toggleMenu();
+      }
     }
 
     let FileMappings = await Root.Lib.loadLibrary("FileMappings");
@@ -283,7 +288,9 @@ export default {
 
       if (menuIsOpen === true) {
         window.addEventListener("mousedown", onClickDetect);
+        window.addEventListener("click", onFullClickDetect);
         window.addEventListener("touchstart", onClickDetect);
+        window.addEventListener("touchend", onFullClickDetect);
         if (!menuElm) {
           // Create menu element if it doesn't exist
           const desktopApps = (await vfs.list("Root/Desktop"))

@@ -1,3 +1,5 @@
+import ctxMenu from "../lib/CtxMenu.js";
+
 export default {
   name: "Task Manager",
   description: "Examine and manage processes",
@@ -66,6 +68,22 @@ export default {
           .on("click", (_) => {
             selectedPid = proc.pid;
             makeTaskTable();
+          })
+          .on("contextmenu", (e) => {
+            e.preventDefault();
+            ctxMenu.new(e.clientX, e.clientY, [
+              {
+                item: "End Process",
+                async select() {
+                  let p = Root.Core.processList
+                    .filter((p) => p !== null)
+                    .find((p) => p.pid === proc.pid);
+                  p.proc?.end();
+                  selectedPid = -1;
+                  makeTaskTable();
+                },
+              },
+            ]);
           })
           .appendTo(tableBody);
         let proc = processes[i];

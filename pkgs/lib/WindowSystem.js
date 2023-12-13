@@ -142,7 +142,7 @@ export default {
 
         if (this.options.width > screen.width) {
           // this.maximize('top');
-          this.options.width = screen.width - (snapMargin*8);
+          this.options.width = screen.width - snapMargin * 8;
         }
 
         thisWin.id = this.options.id;
@@ -390,6 +390,11 @@ function focusWindow(x) {
 }
 
 function BeginWinDrag(e) {
+  // Context menu
+  if (e.target.closest(".ctx-menu") === null) {
+    Html.qs(".ctx-menu") && Html.qs(".ctx-menu").cleanup();
+  }
+
   // check if window can be selected
   if (!e.clientX && !e.touches) return;
   if (e.button && e.button !== 0) return;

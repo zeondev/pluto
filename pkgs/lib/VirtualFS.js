@@ -1,4 +1,5 @@
 let templateFsLayout = {
+  Registry: {},
   Root: {
     Pluto: {
       panics: {
@@ -47,9 +48,14 @@ const Vfs = {
   // The file system is represented as a nested object, where each key is a folder or file name
   // and the value is either a string (for file contents) or another object (for a subfolder)
   fileSystem: {},
-  async save() {
+  async save(reason = "save") {
     await localforage.setItem("fs", JSON.stringify(this.fileSystem));
     this.fileSystem = JSON.parse(await localforage.getItem("fs"));
+
+    // Global VFS Events
+    document.dispatchEvent(new CustomEvent("pluto.vfs-refresh"), {
+      detail: { reason },
+    });
   },
   async exportFS() {
     return this.fileSystem;
@@ -72,7 +78,7 @@ const Vfs = {
 
       // this.fileSystem = { ...fsObject, ...this.fileSystem };
     }
-    this.save();
+    this.save("import");
     return this.fileSystem;
   },
   // Helper function to get the parent folder of a given path
@@ -127,7 +133,7 @@ const Vfs = {
       current = current[part];
     }
     current[filename] = contents;
-    this.save();
+    this.save("write " + path);
   },
   // Function to create a new folder at a given path
   async createFolder(path, fsObject = this.fileSystem) {
@@ -142,7 +148,7 @@ const Vfs = {
       current = current[part];
     }
     if (!current[foldername]) current[foldername] = {};
-    this.save();
+    this.save("mkdir " + path);
   },
   // Function to delete a file or folder at a given path
   async delete(path, fsObject = this.fileSystem) {
@@ -158,7 +164,7 @@ const Vfs = {
       parent = parent[part];
     }
     delete parent[filename];
-    this.save();
+    this.save("delete " + path);
   },
   // Function to list all files and folders at a given path
   async list(path, fsObject = this.fileSystem) {
@@ -225,7 +231,7 @@ const Vfs = {
 
     mergeFileSystem(existingFs, templateFsLayout);
     this.importFS(existingFs);
-    this.save();
+    this.save("merge");
   },
 };
 

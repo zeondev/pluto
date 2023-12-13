@@ -32,14 +32,15 @@ button,
 button *,
 select,
 select *,
-.app,
-.app * {
+.desktop .dock .menu .app,
+.desktop .dock .menu .app * {
   cursor: var(--cursor-pointer) 5 0, auto !important;
 }
 
 input,
-textarea {
-  cursor: var(--cursor-text), auto !important;
+textarea,
+.ace_content {
+  cursor: var(--cursor-text) 15 6, auto !important;
 }
 
 /* p,
@@ -736,6 +737,7 @@ textarea {
   outline: none;
   resize: none;
   font: inherit;
+  cursor: var(--cursor-text) 10 10, auto !important;
 }
 
 input::placeholder,
@@ -2105,4 +2107,39 @@ hr {
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+
+.ctx-menu {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--unfocused);
+  border: 1px solid var(--outline);
+  color: var(--text-light);
+  border-radius: 6px;
+  user-select: none;
+
+  min-width: 120px;
+  min-height: 16px;
+  z-index: 9999999;
+}
+
+.ctx-menu .header {
+  color: var(--text-alt);
+  font-weight: 550;
+  font-size: 0.8em;
+  align-self: flex-start;
+  padding: 0 14px;
+  margin: 6px 0;
+  text-transform: uppercase;
+}
+
+.ctx-menu .item {
+  user-select: none;
+  padding: 6px 14px;
+}
+
+.ctx-menu .item:hover,
+.ctx-menu .item.over {
+  background-color: var(--header);
 }

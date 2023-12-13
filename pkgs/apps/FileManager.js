@@ -1,3 +1,5 @@
+import ctxMenu from "../lib/CtxMenu.js";
+
 export default {
   name: "File Manager",
   description:
@@ -83,6 +85,23 @@ export default {
         title: "Create File",
       },
       {
+        onclick: async (_) => {
+          let result = await Root.Modal.input(
+            "Go to Folder",
+            "Enter folder path",
+            "Path",
+            wrapper,
+            false,
+            path
+          );
+          if (result === false) return;
+          path = result;
+          renderFileList(path);
+        },
+        html: L.icons.dir,
+        title: "Go to Folder",
+      },
+      {
         onclick: (_) => {
           var input = new Root.Lib.html("input").elm;
           input.type = "file";
@@ -148,6 +167,26 @@ export default {
       .class("fg", "w-100")
       .appendTo(wrapperWrapper);
 
+    wrapperWrapperWrapper.on("contextmenu", (e) => {
+      if (e.target.closest("tr")) return;
+      e.preventDefault();
+
+      ctxMenu.new(e.clientX, e.clientY, [
+        {
+          item: "Copy path",
+          async select() {
+            let x = new L.html("textarea").val(path);
+            // Select the text field
+            x.elm.select();
+            x.elm.setSelectionRange(0, 99999); // For mobile devices
+
+            // Copy the text inside the text field
+            navigator.clipboard.writeText(x.getValue());
+          },
+        },
+      ]);
+    });
+
     const table = new L.html("table")
       .class("w-100")
       .appendTo(wrapperWrapperWrapper);
@@ -186,8 +225,47 @@ export default {
       for (let i = 0; i < fileList.length; i++) {
         let file = fileList[i];
         let tableBodyRow = new L.html("tr").appendTo(tableBody);
-
         const mapping = mappings[i];
+
+        tableBodyRow.on("contextmenu", (e) => {
+          e.preventDefault();
+          ctxMenu.new(e.clientX, e.clientY, [
+            {
+              item: "Open",
+              async select() {
+                mapping.onClick(Root.Core);
+              },
+            },
+            {
+              item: "Copy path",
+              async select() {
+                let x = new L.html("textarea").val(path + "/" + file.item);
+                // Select the text field
+                x.elm.select();
+                x.elm.setSelectionRange(0, 99999); // For mobile devices
+
+                // Copy the text inside the text field
+                navigator.clipboard.writeText(x.getValue());
+              },
+            },
+            {
+              item: "Rename",
+              async select() {
+                const result = Root.Modal.prompt(
+                  "Rename File",
+                  `Rename ${file.item} to...`
+                );
+                console.log(result);
+              },
+            },
+            {
+              item: "Delete",
+              async select() {
+                await vfs.delete(`${currentPath}/${file.item}`);
+              },
+            },
+          ]);
+        });
 
         async function handleClick() {
           if (selectedItem === path + "/" + file.item) {
@@ -205,7 +283,9 @@ export default {
           renderFileList(path);
         }
 
-        tableBodyRow.on("mousedown", handleClick);
+        tableBodyRow.on("mousedown", (e) => {
+          if (e.button === 0) handleClick();
+        });
         tableBodyRow.on("touchstart", handleClick);
 
         if (file === null) continue;
@@ -234,6 +314,15 @@ export default {
           .appendTo(tableBodyRow);
         new L.html("td").text(file.item).appendTo(tableBodyRow);
         new L.html("td").text(userFriendlyFileType).appendTo(tableBodyRow);
+      }
+
+      if (fileList.length === 0) {
+        tableBody.append(
+          new L.html("tr")
+            .attr({ colspan: "2" })
+            .appendMany(new L.html("label").text("This directory is empty."))
+            .styleJs({ padding: "12px", display: "block" })
+        );
       }
     }
 
