@@ -54,7 +54,11 @@ export default {
       },
     };
 
-    let Terminal = new Html("div").class("no-ui").html(/*html*/ `<div><div class="output">Welcome to Pluto's terminal!<br>Enter 'js' in the terminal if you want to switch to JavaScript.<br></div></div><div class="userInput"><div style="display:flex;" id="inputDiv"><span class="prompt">${Term.prompt}</span><div class="none input" contenteditable="true"></div></div></div>`);
+    let Terminal = new Html("div")
+      .class("no-ui")
+      .html(
+        /*html*/ `<div><div class="output">Welcome to Pluto's terminal!<br>Enter 'js' in the terminal if you want to switch to JavaScript.<br></div></div><div class="userInput"><div style="display:flex;" id="inputDiv"><span class="prompt">${Term.prompt}</span><div class="none input" contenteditable="true"></div></div></div>`
+      );
 
     Terminal.appendTo(wrapper);
 
@@ -178,20 +182,25 @@ export default {
     let path = "Root";
 
     function setPromptPath() {
-      Term.setPrompt(`<Span style="color:var(--primary)">${path === "Root" ? "~" : path}</Span>%&nbsp;`);
+      Term.setPrompt(
+        `<Span style="color:var(--primary)">${
+          path === "Root" ? "~" : path
+        }</Span>%&nbsp;`
+      );
     }
-    
+
     setPromptPath();
 
-
     async function runCommand(elm, input = "") {
+      // debugger;
       document
         .querySelector(".no-ui .output")
         .insertAdjacentHTML(
           "beforeend",
           elm
             .closest(".userInput")
-            .innerText.replace(/    /g, '').replace("\n", "")
+            .innerText.replace(/    /g, "")
+            .replace("\n", "")
             .replace(/\n/g, "<br>") + "<br>"
         );
 
@@ -250,7 +259,7 @@ export default {
   pwd          Print the current directory
   rm [file]    Delete a file
   rmdir [dir]  Delete a directory
-  touch [file] Create a file\n`
+  touch [file] Create a file<br>`
             );
             break;
           case "clear":
