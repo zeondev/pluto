@@ -1824,6 +1824,26 @@ hr {
     transform: translateY(150%);
   }
 }
+@keyframes minimalMenuOpen {
+  from {
+    transform: translate(-50%, 120%);
+    left: 50%;
+  }
+  to {
+    transform: translate(-50%, 0);
+    left: 50%;
+  }
+}
+@keyframes minimalMenuClose {
+  from {
+    transform: translate(-50%, 0);
+    left: 50%;
+  }
+  to {
+    transform: translate(-50%, 150%);
+    left: 50%;
+  }
+}
 @keyframes compactSimpleSlideUp {
   from {
     transform: translate(-50%, 150%);
@@ -1859,6 +1879,21 @@ hr {
 
 [data-dock-style="compact"] .desktop .menu {
   z-index: -1;
+}
+
+[data-dock-style="minimal"] .desktop .menu.opening {
+  animation: minimalMenuOpen var(--animation-duration) var(--easing-function)
+    forwards;
+}
+[data-dock-style="minimal"] .desktop .menu.closing {
+  animation: minimalMenuClose var(--animation-duration) var(--easing-function)
+    forwards;
+}
+
+[data-dock-style="minimal"] .desktop .menu {
+  z-index: -1;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .card-box {
