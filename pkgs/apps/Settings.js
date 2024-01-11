@@ -312,7 +312,7 @@ export default {
                     Root.Modal.alert(
                       "Oops",
                       "Something went wrong while logging in:\n\n" +
-                        JSON.stringify(result, null, 2),
+                      JSON.stringify(result, null, 2),
                       settingsWin
                     );
                   }
@@ -419,7 +419,7 @@ export default {
             browser.version = userAgent.match(/Chrome\/([\d.]+)/)[1];
           } else if (userAgent.indexOf("Safari") > -1) {
             browser.name = "Safari";
-            browser.version = userAgent.match(/Safari\/([\d.]+)/)[1];
+            browser.version = userAgent.match(/Version\/([\d.]+)/)[1];
           } else if (userAgent.indexOf("Opera") > -1) {
             browser.name = "Opera";
             browser.version = userAgent.match(/Opera\/([\d.]+)/)[1];
@@ -431,7 +431,7 @@ export default {
             browser.version = "";
           }
 
-          browser.version = parseInt(browser.version);
+          browser.version = parseFloat(browser.version);
           if (isNaN(browser.version)) browser.version = "";
 
           // Get operating system information
@@ -445,9 +445,7 @@ export default {
             os.version = userAgent.match(/Windows NT ([\d.]+)/)[1];
           } else if (userAgent.indexOf("Mac") > -1) {
             os.name = "macOS";
-            os.version = userAgent
-              .match(/Mac OS X ([\d_]+)/)[1]
-              .replace(/_/g, ".");
+            os.version = userAgent.match(/Mac OS X ([\d_.]+)/)[1].replace(/_/g, ".")
           } else if (userAgent.indexOf("Android") > -1) {
             os.name = "Android";
             os.version = userAgent.match(/Android ([\d.]+)/)[1];
@@ -461,7 +459,12 @@ export default {
             os.version = "";
           }
 
-          os.version = parseInt(os.version);
+          os.version = parseFloat(os.version);
+
+          if (os.name === 'macOS' && os.version === '10.15') {
+            os.version = 'X';
+          }
+
           if (isNaN(os.version)) os.version = "";
 
           // Get device type
@@ -849,9 +852,9 @@ export default {
                 Root.Modal.alert(
                   "Failed",
                   "Network is not working. Status code: " +
-                    req1.status +
-                    ", " +
-                    req2.status
+                  req1.status +
+                  ", " +
+                  req2.status
                 );
               }
             })
@@ -933,14 +936,14 @@ export default {
                       new Html("td").appendMany(
                         dc[i].dangerous === true
                           ? new Html("button")
-                              .text("Delete")
-                              .on("click", async (_) => {
-                                await dc[i].delete();
-                                await performSecurityScan();
-                              })
+                            .text("Delete")
+                            .on("click", async (_) => {
+                              await dc[i].delete();
+                              await performSecurityScan();
+                            })
                           : new Html("button")
-                              .attr({ disabled: true })
-                              .text("Delete")
+                            .attr({ disabled: true })
+                            .text("Delete")
                       )
                     )
                   )
