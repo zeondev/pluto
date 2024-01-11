@@ -29,7 +29,7 @@ export default {
 
     // actual menu
     const ctxMenu = new Html("div")
-      .class("ctx-menu")
+      .class("ctx-menu", "popup-overlay")
       .styleJs({
         position: isAbsolute === true ? "absolute" : "unset",
         left: posX + "px",

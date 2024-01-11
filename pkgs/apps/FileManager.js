@@ -251,17 +251,24 @@ export default {
             {
               item: "Rename",
               async select() {
-                const result = Root.Modal.prompt(
+                let result = await Root.Modal.input(
                   "Rename File",
-                  `Rename ${file.item} to...`
+                  `Rename ${file.item} to...`,
+                  file.item,
+                  wrapper,
+                  false,
+                  file.item
                 );
-                console.log(result);
+                // clean result
+                result = result.replace(/\//g, "");
+                await vfs.rename(`${path}/${file.item}`, `${result}`);
+                renderFileList(path);
               },
             },
             {
               item: "Delete",
               async select() {
-                await vfs.delete(`${currentPath}/${file.item}`);
+                await vfs.delete(`${path}/${file.item}`);
               },
             },
           ]);

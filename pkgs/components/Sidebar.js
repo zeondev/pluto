@@ -1,6 +1,8 @@
 let lib;
 let html;
 
+import Tooltip from "./Tooltip.js";
+
 export default {
   name: "Test library",
   description: "Test library",
@@ -30,15 +32,37 @@ export default {
     new: (wrapper, buttons) => {
       const sideBar = new html("div").class("col", "sidebar");
 
-      buttons.forEach((b) =>
-        new html("button")
+      buttons.forEach((b) => {
+        let popup;
+        let button = new html("button")
           .class("transparent")
-          .attr({ title: b?.title !== undefined ? b.title : "Button" })
+          // .attr({ title: b?.title !== undefined ? b.title : "Button" })
           .html(b.html)
           .on("click", (e) => b.onclick && b.onclick(e))
+          .on("mouseenter", (e) => {
+            if (popup) {
+              popup.cleanup();
+              popup = null;
+            } else {
+              const bcr = button.elm.getBoundingClientRect();
+              popup = Tooltip.new(
+                bcr.right + 6,
+                bcr.bottom - 8,
+                b?.title,
+                document.body,
+                true
+              );
+            }
+          })
+          .on("mouseleave", (e) => {
+            if (popup) {
+              popup.cleanup();
+              popup = null;
+            }
+          })
           .style(b.style || {})
-          .appendTo(sideBar)
-      );
+          .appendTo(sideBar);
+      });
 
       sideBar.appendTo(wrapper);
     },

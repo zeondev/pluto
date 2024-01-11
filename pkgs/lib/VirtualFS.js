@@ -184,6 +184,25 @@ const Vfs = {
     );
     return result;
   },
+  // Function to rename a file
+  // newName MUST be the new exact name of the file
+  // NOT absolute
+  async rename(path, newName, fsObject = this.fileSystem) {
+    const parts = path.split("/");
+    const oldName = parts.pop(); // remove last item from path to get dirname
+    let current = fsObject;
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      if (typeof current[part] === "undefined") {
+        return null;
+      }
+      current = current[part];
+    }
+    let temp = current[oldName];
+    delete current[oldName];
+    current[newName] = temp;
+    this.save(`rename ${path} to ${newName}`);
+  },
   async exists(path, fsObject = this.fileSystem) {
     const parts = path.split("/");
     let current = fsObject;

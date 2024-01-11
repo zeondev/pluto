@@ -384,6 +384,24 @@ body {
   padding: 10px;
 }
 
+.tooltip {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--unfocused);
+  border: 1px solid var(--outline);
+  color: var(--text-light);
+  border-radius: 6px;
+  user-select: none;
+  z-index: 9999999;
+  pointer-events: none;
+}
+
+.tooltip .text {
+  align-self: flex-start;
+  padding: 8px;
+}
+
 .win-content h1 {
   margin: 0.35rem 0;
   font-size: 1.35rem;
@@ -775,7 +793,7 @@ tr:hover {
 thead::after {
   content: "";
   position: absolute;
-  bottom: 0;
+  top: 30px;
   left: 0;
   width: 100%;
   height: 1px;
@@ -786,6 +804,9 @@ thead {
   position: sticky;
   top: 0;
   background: var(--root);
+}
+thead tr {
+  height: 30px;
 }
 th {
   padding: 4px 8px;

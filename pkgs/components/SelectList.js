@@ -3,7 +3,7 @@ let html;
 
 export default {
   name: "Select list",
-  description: "Creates a select list",
+  description: "Creates a select list in table or button list format.",
   ver: 1,
   type: "component",
   init: function (l) {

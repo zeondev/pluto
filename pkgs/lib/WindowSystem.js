@@ -391,8 +391,8 @@ function focusWindow(x) {
 
 function BeginWinDrag(e) {
   // Context menu
-  if (e.target.closest(".ctx-menu") === null) {
-    Html.qs(".ctx-menu") && Html.qs(".ctx-menu").cleanup();
+  if (e.target.closest(".popup-overlay") === null) {
+    Html.qs(".popup-overlay") && Html.qs(".popup-overlay").cleanup();
   }
 
   // check if window can be selected

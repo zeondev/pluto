@@ -56,30 +56,35 @@ export default {
 
       x.appendTo(parent);
 
-      const focusableElements = x.elm.querySelectorAll(
-        'a[href], button, textarea, input[type="text"], input[type="checkbox"], input[type="radio"], select'
-      );
-      this.elementsArray = Array.prototype.slice.call(focusableElements);
-      this.elementsArray.forEach((el) => {
-        el.setAttribute("tabindex", "0");
+      // use RAF to assure all elements are painted
+      requestAnimationFrame(() => {
+        const focusableElements = x.elm.querySelectorAll(
+          'a[href], button, textarea, input[type="text"], input[type="checkbox"], input[type="radio"], select'
+        );
+        this.elementsArray = Array.prototype.slice.call(focusableElements);
+        this.elementsArray.forEach((el) => {
+          el.setAttribute("tabindex", "0");
+        });
+
+        this.elementsArray[0].addEventListener("keydown", (e) => {
+          if (e.key === "Tab" && e.shiftKey) {
+            e.preventDefault();
+            this.elementsArray[this.elementsArray.length - 1].focus();
+          }
+        });
+        this.elementsArray[this.elementsArray.length - 1].addEventListener(
+          "keydown",
+          (e) => {
+            if (e.key === "Tab" && !e.shiftKey) {
+              e.preventDefault();
+              this.elementsArray[0].focus();
+            }
+          }
+        );
+        this.elementsArray[0].focus();
       });
 
-      this.elementsArray[0].addEventListener("keydown", (e) => {
-        if (e.key === "Tab" && e.shiftKey) {
-          e.preventDefault();
-          this.elementsArray[this.elementsArray.length - 1].focus();
-        }
-      });
-      this.elementsArray[this.elementsArray.length - 1].addEventListener(
-        "keydown",
-        (e) => {
-          if (e.key === "Tab" && !e.shiftKey) {
-            e.preventDefault();
-            this.elementsArray[0].focus();
-          }
-        }
-      );
-      this.elementsArray[0].focus();
+      return x;
     },
     alert: function (title, content, parent = "body") {
       return new Promise((res, _rej) => {
@@ -114,16 +119,11 @@ export default {
       placeholder,
       parent = "body",
       isPassword = false,
-      value = ''
+      value = ""
     ) {
-      let wrapper = new lib.html("div").class("col");
-      /* span */ new lib.html("span").text(description).appendTo(wrapper);
-      let input = new lib.html("input")
-        .attr({ placeholder, value, type: isPassword === true ? "password" : "text" })
-        .appendTo(wrapper);
-
       return new Promise((res, _rej) => {
-        this.modal(
+        let wrapper = new lib.html("div").class("col");
+        let modal = this.modal(
           title,
           wrapper,
           parent,
@@ -140,6 +140,25 @@ export default {
             callback: (_) => res(false),
           }
         );
+
+        /* span */ new lib.html("span").text(description).appendTo(wrapper);
+        let input = new lib.html("input")
+          .attr({
+            placeholder,
+            value,
+            type: isPassword === true ? "password" : "text",
+          })
+          .on("keyup", (e) => {
+            if (e.key === "Enter" || e.keyCode === 13) {
+              // submit modal
+              modal.class("closing");
+              setTimeout(() => {
+                modal.cleanup();
+                res(input.elm.value);
+              }, 350);
+            }
+          })
+          .appendTo(wrapper);
       });
     },
   },
