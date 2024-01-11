@@ -732,13 +732,17 @@ export default {
             new Html("select")
               .appendMany(
                 new Html("option").text("Full").attr({
-                  value: "vertical",
+                  value: "full",
                   selected:
-                    desktopConfig.dockStyle === "vertical" ? true : null,
+                    desktopConfig.dockStyle === "full" ? true : null,
                 }),
                 new Html("option").text("Compact").attr({
                   value: "compact",
                   selected: desktopConfig.dockStyle === "compact" ? true : null,
+                }),
+                new Html("option").text("Minimal").attr({
+                  value: "minimal",
+                  selected: desktopConfig.dockStyle === "minimal" ? true : null,
                 })
               )
               .on("input", (e) => {

@@ -952,6 +952,19 @@ td {
     var(--easing-function) forwards;
 }
 
+[data-dock-style="minimal"] .desktop .dock {
+  width: max-content;
+  max-width: 680px;
+  left: 50%;
+  animation: compactSimpleSlideUp var(--long-animation-duration)
+    var(--easing-function) forwards;
+}
+
+[data-dock-style="minimal"] .desktop .dock.hiding {
+  animation: compactSimpleSlideDown var(--long-animation-duration)
+    var(--easing-function) forwards;
+}
+
 .desktop .dock.collapse {
   animation: slideLeft var(--long-animation-duration) var(--easing-function)
     forwards;
