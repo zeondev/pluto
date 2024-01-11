@@ -27,7 +27,7 @@ export default {
       { name: "DevEnv", icon: "fileCode", fullName: "apps:DevEnv" },
       { name: "Image Viewer", icon: "image", fullName: "apps:ImageViewer" },
       { name: "Browser", icon: "globe", fullName: "apps:Browser" },
-      { name: "Weather", icon: "cloudMoon", fullName: "apps:Weather" },
+      { name: "Weather", icon: "cloudMoon", fullName: "apps:Cloudburst" },
       { name: "Terminal", icon: "terminal", fullName: "apps:Terminal" },
     ];
     console.log(shortcutsList.length);

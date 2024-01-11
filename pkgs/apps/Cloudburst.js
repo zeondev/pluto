@@ -17,8 +17,8 @@ export default {
       title: "Cloudburst",
       content: '<iframe src="https://cherries.to/cloudburst/">',
       pid: Root.PID,
-      width: 800,
-      height: 600,
+      width: 400,
+      height: 360,
       onclose: () => {
         Root.Lib.onEnd();
       },
