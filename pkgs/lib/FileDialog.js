@@ -44,6 +44,7 @@ export default {
               renderFileList(p);
             },
             html: L.icons.arrowUp,
+            title: 'Parent Directory'
           },
         ]);
 
@@ -297,6 +298,7 @@ export default {
               renderFileList(p);
             },
             html: L.icons.arrowUp,
+            title: 'Parent Directory'
           },
         ]);
 

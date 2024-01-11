@@ -114,6 +114,7 @@ export default {
           newDocument("", "");
         },
         html: Root.Lib.icons.newFile,
+        title: "New Document",
       },
       {
         onclick: async (_) => {
@@ -122,12 +123,14 @@ export default {
           openFile();
         },
         html: Root.Lib.icons.openFolder,
+        title: "Open...",
       },
       {
         onclick: async (_) => {
           await saveFile();
         },
         html: Root.Lib.icons.save,
+        title: "Save",
       },
       {
         onclick: async (_) => {
@@ -137,6 +140,7 @@ export default {
           });
         },
         html: Root.Lib.icons.zoomIn,
+        title: "Zoom In",
       },
       {
         onclick: async (_) => {
@@ -146,6 +150,7 @@ export default {
           });
         },
         html: Root.Lib.icons.zoomOut,
+        title: "Zoom Out",
       },
       {
         style: {
@@ -153,12 +158,15 @@ export default {
         },
         onclick: (_) => {
           Root.Core.startPkg(
-            URL.createObjectURL(new Blob([editor.getValue()], {type: 'application/javascript'})),
+            URL.createObjectURL(
+              new Blob([editor.getValue()], { type: "application/javascript" })
+            ),
             // URL.createObjectURL(["data:text/javascript," + encodeURIComponent(`/*${currentDocument.path}*/` +editor.getValue())], {type:'text/plain'}),
             false
           );
         },
         html: Root.Lib.icons.run,
+        title: "Run App",
       },
     ]);
 

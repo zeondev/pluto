@@ -116,6 +116,7 @@ export default {
           newDocument("", "");
         },
         html: Root.Lib.icons.newFile,
+        title: "New Document",
       },
       {
         onclick: async (_) => {
@@ -124,18 +125,21 @@ export default {
           openFile();
         },
         html: Root.Lib.icons.openFolder,
+        title: "Open...",
       },
       {
         onclick: async (_) => {
           await saveFile();
         },
         html: Root.Lib.icons.save,
+        title: "Save",
       },
       {
         onclick: async (_) => {
           await saveAs();
         },
         html: Root.Lib.icons.saveAll,
+        title: "Save As...",
       },
       {
         style: {
@@ -145,6 +149,7 @@ export default {
           alert("Not implemented");
         },
         html: Root.Lib.icons.help,
+        title: "Help",
       },
     ]);
 

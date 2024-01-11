@@ -4,7 +4,7 @@ export default {
   new(
     posX = 0,
     posY = 0,
-    text = "Actions",
+    text = "Action",
     parent = document.body,
     isAbsolute = true
   ) {

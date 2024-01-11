@@ -55,6 +55,7 @@ export default {
           openFile();
         },
         html: Root.Lib.icons.fileImage,
+        title: "Select Image...",
       },
       {
         style: {
@@ -64,6 +65,7 @@ export default {
           alert("Not implemented");
         },
         html: Root.Lib.icons.help,
+        title: "Help",
       },
     ]);
 
