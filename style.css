@@ -428,45 +428,45 @@ body {
   top: -6px;
   left: 0;
   width: 100% !important;
-  cursor: n-resize;
+  cursor: ns-resize;
 }
 .win-window .resize-grips div[data-resize-type="right"] {
   top: 0 !important;
   right: -6px !important;
   height: 100% !important;
-  cursor: e-resize !important;
+  cursor: ew-resize !important;
 }
 .win-window .resize-grips div[data-resize-type="bottom"] {
   bottom: -6px;
   left: 0;
   width: 100% !important;
-  cursor: s-resize;
+  cursor: ns-resize;
 }
 .win-window .resize-grips div[data-resize-type="left"] {
   top: 0;
   left: -6px;
   height: 100% !important;
-  cursor: w-resize;
+  cursor: ew-resize;
 }
 .win-window .resize-grips div[data-resize-type="top-right"] {
   top: -6px;
   right: -6px;
-  cursor: ne-resize;
+  cursor: nesw-resize;
 }
 .win-window .resize-grips div[data-resize-type="bottom-right"] {
   bottom: -6px;
   right: -6px;
-  cursor: se-resize;
+  cursor: nwse-resize;
 }
 .win-window .resize-grips div[data-resize-type="bottom-left"] {
   bottom: -6px;
   left: -6px;
-  cursor: sw-resize;
+  cursor: nesw-resize;
 }
 .win-window .resize-grips div[data-resize-type="top-left"] {
   top: -6px;
   left: -6px;
-  cursor: nw-resize;
+  cursor: nwse-resize;
 }
 
 .modal {
