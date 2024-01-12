@@ -399,7 +399,7 @@ body {
 
 .tooltip .text {
   align-self: flex-start;
-  padding: 8px;
+  padding: 4px 8px;
 }
 
 .win-content h1 {

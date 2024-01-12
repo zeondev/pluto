@@ -47,7 +47,7 @@ export default {
               const bcr = button.elm.getBoundingClientRect();
               popup = Tooltip.new(
                 bcr.right + 6,
-                bcr.bottom - 8,
+                bcr.bottom,
                 b?.title,
                 document.body,
                 true
