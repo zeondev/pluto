@@ -63,6 +63,14 @@ export default {
         if (!this.options.height) {
           this.options.height = 200;
         }
+        if (this.options.width > window.innerWidth) {
+          this.options.width = window.innerWidth - (snapBoxMargin * 2);
+          this.options.left = snapBoxMargin + 'px';
+        }
+        if (this.options.height > window.innerHeight) {
+          this.options.height = window.innerHeight - (snapBoxMargin * 2) - 48;
+          this.options.top = snapBoxMargin + 'px';
+        }
         if (!this.options.minWidth) {
           this.options.minWidth = 185;
         }
@@ -387,6 +395,14 @@ function focusWindow(x) {
   x.classList.add("focus");
 
   // console.log("[WS]", x.id, windowsList);
+
+  core.broadcastEventToProcs({
+    type: "wsEvent",
+    data: {
+      type: "focusedWindow",
+      data: getWindowObjectById(x.id),
+    },
+  });
 }
 
 function BeginWinDrag(e) {
