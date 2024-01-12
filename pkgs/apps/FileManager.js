@@ -145,6 +145,29 @@ export default {
         onclick: async (_) => {
           if (!selectedItem) return;
           let i = await vfs.whatIs(selectedItem);
+          if (i === "dir")
+            return Root.Modal.alert("Cannot download folders at the moment.");
+          let text = await vfs.readFile(selectedItem);
+
+          // boilerplate download code
+          var element = document.createElement("a");
+          element.setAttribute(
+            "href",
+            "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+          );
+          element.setAttribute("download", selectedItem.split('/').pop());
+          element.style.display = "none";
+          document.body.appendChild(element);
+          element.click();
+          document.body.removeChild(element);
+        },
+        html: L.icons.download,
+        title: "Download File",
+      },
+      {
+        onclick: async (_) => {
+          if (!selectedItem) return;
+          let i = await vfs.whatIs(selectedItem);
           let result = await Root.Modal.prompt(
             "Notice",
             `Are you sure you want to delete this ${
