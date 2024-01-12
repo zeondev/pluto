@@ -19,6 +19,14 @@ let lib = {};
 let core = {};
 let Html;
 
+function checkDesktopPresence() {
+  return (
+    core.processList
+      .filter((n) => n !== null)
+      .find((n) => n.name === "ui:Desktop") !== undefined
+  );
+}
+
 function getWindowObjectById(id) {
   return core.windowsList.find((window) => window.options.id === id);
 }
@@ -64,12 +72,12 @@ export default {
           this.options.height = 200;
         }
         if (this.options.width > window.innerWidth) {
-          this.options.width = window.innerWidth - (snapBoxMargin * 2);
-          this.options.left = snapBoxMargin + 'px';
+          this.options.width = window.innerWidth - snapBoxMargin * 2;
+          this.options.left = snapBoxMargin + "px";
         }
         if (this.options.height > window.innerHeight) {
-          this.options.height = window.innerHeight - (snapBoxMargin * 2) - 48;
-          this.options.top = snapBoxMargin + 'px';
+          this.options.height = window.innerHeight - snapBoxMargin * 2 + (checkDesktopPresence() ? -48 : 0);
+          this.options.top = snapBoxMargin + "px";
         }
         if (!this.options.minWidth) {
           this.options.minWidth = 185;
@@ -281,7 +289,7 @@ export default {
               this.window.style.width =
                 Math.floor(this.window.parentNode.offsetWidth / 2) + "px";
               this.window.style.height =
-                this.window.parentNode.offsetHeight - 54 + "px";
+                this.window.parentNode.offsetHeight + (checkDesktopPresence() ? -54 : 0) + "px";
               this.window.style.top = 0;
               this.window.style.left = 0;
               this.window.classList.toggle("snapped");
@@ -293,7 +301,7 @@ export default {
                 Math.floor(this.window.parentNode.offsetWidth / 2) + "px";
               // Height is height of parent minus dock height
               this.window.style.height =
-                this.window.parentNode.offsetHeight - 54 + "px";
+                this.window.parentNode.offsetHeight + (checkDesktopPresence() ? -54 : 0) + "px";
               // Top is top of screen (0)
               this.window.style.top = 0;
               // Left is the parent width minus the new window width
