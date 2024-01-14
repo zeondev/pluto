@@ -66,6 +66,7 @@ export default {
           if (result === false) return;
           result = result.replace(/\//g, "");
           await vfs.createFolder(path + "/" + result);
+          renderFileList(path);
         },
         html: L.icons.createFolder,
         title: "Create Folder",
@@ -80,6 +81,7 @@ export default {
           if (result === false) return;
           result = result.replace(/\//g, "");
           await vfs.writeFile(path + "/" + result, "");
+          renderFileList(path);
         },
         html: L.icons.createFile,
         title: "Create File",
@@ -102,6 +104,34 @@ export default {
         title: "Go to Folder",
       },
       {
+        onclick: async (_) => {
+          if (!selectedItem) return;
+          let i = await vfs.whatIs(selectedItem);
+          if (i === "dir")
+            return Root.Modal.alert(
+              "Error",
+              "Folder download is not yet supported.",
+              wrapper
+            );
+          let text = await vfs.readFile(selectedItem);
+
+          // boilerplate download code
+          var element = document.createElement("a");
+          element.setAttribute(
+            "href",
+            "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+          );
+          element.setAttribute("download", selectedItem.split("/").pop());
+          element.style.display = "none";
+          document.body.appendChild(element);
+          element.click();
+          document.body.removeChild(element);
+          renderFileList(path);
+        },
+        html: L.icons.download,
+        title: "Download File",
+      },
+      {
         onclick: (_) => {
           var input = new Root.Lib.html("input").elm;
           input.type = "file";
@@ -116,13 +146,26 @@ export default {
               file.type.startsWith("audio") ||
               file.type.startsWith("video")
             ) {
+              console.log(file);
               // read as arraybuffer; store as base64
-              reader.readAsDataURL(file);
+              // reader.readAsDataURL(file);
+              reader.readAsArrayBuffer(file);
 
               // here we tell the reader what to do when it's done reading...
               reader.onload = async (readerEvent) => {
-                var content = readerEvent.target.result; // this is the content!
-                await vfs.writeFile(`Root/${file.name}`, content);
+                // var content = readerEvent.target.result; // this is the content!
+                const blob = new Blob([readerEvent.target.result], { type: file.type });
+
+                const filePath = `${Root.Lib.randomString()}-${file.name}`;
+
+                await localforage.setItem(filePath, blob);
+
+                await vfs.writeFile(
+                  `${path}/${file.name}`,
+                  `vfsImport:${filePath}`
+                );
+
+                renderFileList(path);
               };
             } else {
               // read as text
@@ -131,38 +174,25 @@ export default {
               // here we tell the reader what to do when it's done reading...
               reader.onload = async (readerEvent) => {
                 var content = readerEvent.target.result; // this is the content!
-                await vfs.writeFile(`${path}/${file.name}`, content);
+
+                const filePath = `${Root.Lib.randomString()}-${file.name}`;
+
+                await localforage.setItem(filePath, content);
+
+                await vfs.writeFile(
+                  `${path}/${file.name}`,
+                  `vfsImport:${filePath}`
+                );
+
+                renderFileList(path);
               };
             }
           };
 
           input.click();
         },
-        html: L.icons.import,
-        title: "Import file from your system",
-      },
-      {
-        onclick: async (_) => {
-          if (!selectedItem) return;
-          let i = await vfs.whatIs(selectedItem);
-          if (i === "dir")
-            return Root.Modal.alert("Cannot download folders at the moment.");
-          let text = await vfs.readFile(selectedItem);
-
-          // boilerplate download code
-          var element = document.createElement("a");
-          element.setAttribute(
-            "href",
-            "data:text/plain;charset=utf-8," + encodeURIComponent(text)
-          );
-          element.setAttribute("download", selectedItem.split('/').pop());
-          element.style.display = "none";
-          document.body.appendChild(element);
-          element.click();
-          document.body.removeChild(element);
-        },
-        html: L.icons.download,
-        title: "Download File",
+        html: L.icons.upload,
+        title: "Upload File from Host",
       },
       {
         onclick: async (_) => {
@@ -176,6 +206,7 @@ export default {
           );
           if (result === true) {
             await vfs.delete(selectedItem);
+            renderFileList(path);
           }
         },
         html: L.icons.delete,
@@ -230,7 +261,7 @@ export default {
 
       if (isFolder !== "dir") {
         path = "Root/";
-        return renderFileList();
+        return renderFileList(path);
       }
       // return renderFileList(await vfs.getParentFolder(folder));
 

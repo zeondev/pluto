@@ -24,7 +24,7 @@ export default {
     const ls = await Root.Core.startPkg("ui:LoadingScreen");
     const FileMapping = await Root.Core.startPkg("lib:FileMappings");
     // start loading screen
-    const lsg = ls.loader();
+    const lsg = ls.loader(Root.Lib);
     try {
       const serviceReference = [];
 

@@ -2,8 +2,8 @@
 (async () => {
   try {
     const coreDetails = {
-      version: 1.45,
-      versionString: (1.4).toFixed(1),
+      version: 1.5,
+      versionString: (1.5).toFixed(1),
       codename: "Elysium",
     };
     const knownLibraries = [];
@@ -282,6 +282,31 @@
           }
         }
       },
+      randomString: (_) => {
+        if (crypto && crypto.randomUUID) return crypto.randomUUID();
+        else {
+          var d = new Date().getTime();
+          var d2 =
+            (typeof performance !== "undefined" &&
+              performance.now &&
+              performance.now() * 1000) ||
+            0;
+          return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+            /[xy]/g,
+            function (c) {
+              var r = Math.random() * 16;
+              if (d > 0) {
+                r = (d + r) % 16 | 0;
+                d = Math.floor(d / 16);
+              } else {
+                r = (d2 + r) % 16 | 0;
+                d2 = Math.floor(d2 / 16);
+              }
+              return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+            }
+          );
+        }
+      },
       loadLibrary: async function (lib) {
         if (lib.includes(":")) return false;
         knownLibraries.push(lib);
@@ -343,16 +368,24 @@
         };
 
         this.html = GlobalLib.html;
+        this.randomString = GlobalLib.randomString;
         this.icons = GlobalLib.icons;
         this.systemInfo = coreDetails;
 
         this.langs = supportedLangs;
         this.launch = async (app, parent = "body") => {
+          let appName = "";
+
+          if (Core.processList[Pid].proc !== null) {
+            appName = Core.processList[Pid].proc.name;
+          } else {
+            appName = "???";
+          }
           if (
             (await Modal.prompt(
               getString("notice"),
               getString("core_appLaunch_notification", {
-                suspectedApp: Core.processList[Pid].proc.name,
+                suspectedApp: appName,
                 targetApp: app.split(":").pop(),
               }),
               parent
@@ -456,31 +489,6 @@
         });
         Core.processList[pid] = null;
         console.groupEnd();
-      },
-      randomString: (_) => {
-        if (crypto && crypto.randomUUID) return crypto.randomUUID();
-        else {
-          var d = new Date().getTime();
-          var d2 =
-            (typeof performance !== "undefined" &&
-              performance.now &&
-              performance.now() * 1000) ||
-            0;
-          return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-            /[xy]/g,
-            function (c) {
-              var r = Math.random() * 16;
-              if (d > 0) {
-                r = (d + r) % 16 | 0;
-                d = Math.floor(d / 16);
-              } else {
-                r = (d2 + r) % 16 | 0;
-                d2 = Math.floor(d2 / 16);
-              }
-              return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
-            }
-          );
-        }
       },
     };
 
@@ -587,7 +595,7 @@
                 pid: PID,
                 proc: null,
               };
-              const Token = ProcLib.randomString();
+              const Token = GlobalLib.randomString();
               const newLib = new processLib(url, PID, Token, pkg.strings);
               if (Core.processList[PID]) Core.processList[PID].token = Token;
               let result;

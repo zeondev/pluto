@@ -1,4 +1,4 @@
-# Pluto v1.4
+# Pluto v1.5
 
 ![Pluto banner](assets/images/banner.svg)
 

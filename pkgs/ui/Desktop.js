@@ -636,7 +636,6 @@ export default {
             }
             break;
           case "wsEvent":
-            console.log('wsevent', type, data);
             if (data.type === "focusedWindow") {
               if (data.data === undefined) return;
               const p = data.data.options.pid;

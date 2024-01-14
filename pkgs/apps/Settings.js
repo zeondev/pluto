@@ -312,7 +312,7 @@ export default {
                     Root.Modal.alert(
                       "Oops",
                       "Something went wrong while logging in:\n\n" +
-                      JSON.stringify(result, null, 2),
+                        JSON.stringify(result, null, 2),
                       settingsWin
                     );
                   }
@@ -385,9 +385,32 @@ export default {
             .class("card-box", "max")
             .appendTo(container);
 
-          const filesystemSize =
-            ((await localforage.getItem("fs")).length / 1024).toFixed(0) +
-            " KB";
+          let allKeys = await localforage.keys();
+          let totalStorage = 0;
+          for (let i = 0; i < allKeys.length; i++) {
+            let value = await localforage.getItem(allKeys[i]);
+
+            if (typeof value === 'string') {
+              totalStorage += value.length;
+            } else if (value instanceof Blob) {
+              totalStorage += value.size;
+            }
+          }
+
+          console.log(totalStorage);
+
+          let filesystemSize;
+
+          if (totalStorage < 1024) {
+            filesystemSize = totalStorage + " B";
+          } else if (totalStorage < 1024 * 1024) {
+            filesystemSize = (totalStorage / 1024).toFixed(2) + " KB";
+          } else if (totalStorage < 1024 * 1024 * 1024) {
+            filesystemSize = (totalStorage / 1024 / 1024).toFixed(1) + " MB";
+          } else {
+            filesystemSize =
+              (totalStorage / 1024 / 1024 / 1024).toFixed(1) + " GB";
+          }
 
           makeHeading("h2", Root.Lib.getString("yourDevice"));
 
@@ -445,7 +468,9 @@ export default {
             os.version = userAgent.match(/Windows NT ([\d.]+)/)[1];
           } else if (userAgent.indexOf("Mac") > -1) {
             os.name = "macOS";
-            os.version = userAgent.match(/Mac OS X ([\d_.]+)/)[1].replace(/_/g, ".")
+            os.version = userAgent
+              .match(/Mac OS X ([\d_.]+)/)[1]
+              .replace(/_/g, ".");
           } else if (userAgent.indexOf("Android") > -1) {
             os.name = "Android";
             os.version = userAgent.match(/Android ([\d.]+)/)[1];
@@ -461,8 +486,8 @@ export default {
 
           os.version = parseFloat(os.version);
 
-          if (os.name === 'macOS' && os.version === '10.15') {
-            os.version = 'X';
+          if (os.name === "macOS" && os.version === "10.15") {
+            os.version = "X";
           }
 
           if (isNaN(os.version)) os.version = "";
@@ -614,7 +639,7 @@ export default {
               .filter((r) => r.type === "file" && r.item.endsWith(".theme"))
               .map((r) => r.item);
 
-            await themeFileList.forEach(async (itm) => {
+            await Promise.all(themeFileList.map(async (itm) => {
               const theme = await vfs.readFile(
                 `Root/Pluto/config/themes/${itm}`
               );
@@ -630,8 +655,11 @@ export default {
               } else {
                 alert("failed parsing theme data due to " + result.message);
               }
-            });
+              console.log("theme parsing", itm, result);
+            }));
           }
+
+          console.log(JSON.parse(JSON.stringify(themes)));
 
           new Html("select")
             .appendMany(...themes)
@@ -733,8 +761,7 @@ export default {
               .appendMany(
                 new Html("option").text("Full").attr({
                   value: "full",
-                  selected:
-                    desktopConfig.dockStyle === "full" ? true : null,
+                  selected: desktopConfig.dockStyle === "full" ? true : null,
                 }),
                 new Html("option").text("Compact").attr({
                   value: "compact",
@@ -856,9 +883,9 @@ export default {
                 Root.Modal.alert(
                   "Failed",
                   "Network is not working. Status code: " +
-                  req1.status +
-                  ", " +
-                  req2.status
+                    req1.status +
+                    ", " +
+                    req2.status
                 );
               }
             })
@@ -940,14 +967,14 @@ export default {
                       new Html("td").appendMany(
                         dc[i].dangerous === true
                           ? new Html("button")
-                            .text("Delete")
-                            .on("click", async (_) => {
-                              await dc[i].delete();
-                              await performSecurityScan();
-                            })
+                              .text("Delete")
+                              .on("click", async (_) => {
+                                await dc[i].delete();
+                                await performSecurityScan();
+                              })
                           : new Html("button")
-                            .attr({ disabled: true })
-                            .text("Delete")
+                              .attr({ disabled: true })
+                              .text("Delete")
                       )
                     )
                   )

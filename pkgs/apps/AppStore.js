@@ -75,7 +75,7 @@ export default {
 
       let host = "https://zeondev.github.io/Pluto-AppStore/";
 
-      const appStoreModule = (await import(`${host}import.js`)).default;
+      const appStoreModule = (await import(`${host}import.js?t=` + performance.now())).default;
 
       // Check if this is the right app store module
       if (appStoreModule.init) {
@@ -117,7 +117,7 @@ export default {
         }
 
         async function installApp(pkg, app, force = false) {
-          await fetch(`${host}pkgs/${pkg}/${app.assets.path}`)
+          await fetch(`${host}pkgs/${pkg}/${app.assets.path}?t=` + performance.now())
             .then(async (e) => {
               console.log(await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`));
               if (
@@ -194,7 +194,7 @@ export default {
               for (let pkg of packageList) {
                 const app = await appStoreModule.fetch(pkg);
 
-                console.log("pkgResult", app);
+                console.log(pkg, "pkgResult", app);
 
                 const { appCompatibleColor, appCompatibleIcon } =
                   getAppCompatibility(app.compatibleWith, sysInfo.version);
@@ -274,7 +274,7 @@ export default {
                 await vfs.readFile(`Root/Pluto/apps/${app.name}.app`)
               );
               const appHash = await fetch(
-                `${host}pkgs/${pkg}/${app.assets.path}`
+                `${host}pkgs/${pkg}/${app.assets.path}?t=` + performance.now()
               ).then(async (e) => {
                 return new Hashes.MD5().hex(await e.text());
               });

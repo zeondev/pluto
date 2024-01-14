@@ -48,9 +48,14 @@ const Vfs = {
   // The file system is represented as a nested object, where each key is a folder or file name
   // and the value is either a string (for file contents) or another object (for a subfolder)
   fileSystem: {},
+  log(info) {
+    console.debug(`[Vfs] ${info}`);
+  },
   async save(reason = "save") {
     await localforage.setItem("fs", JSON.stringify(this.fileSystem));
     this.fileSystem = JSON.parse(await localforage.getItem("fs"));
+
+    this.log(reason);
 
     // Global VFS Events
     document.dispatchEvent(new CustomEvent("pluto.vfs-refresh"), {
@@ -98,6 +103,7 @@ const Vfs = {
       }
       current = current[part];
     }
+    this.log(`whatIs ${path}`);
     if (typeof current !== "string") {
       return "dir";
     } else {
@@ -105,23 +111,60 @@ const Vfs = {
     }
   },
   // Function to get the contents of a file at a given path
-  async readFile(path, fsObject = this.fileSystem) {
-    const parts = path.split("/");
-    let current = fsObject;
-    for (let i = 0; i < parts.length; i++) {
-      const part = parts[i];
-      if (typeof current[part] === "undefined") {
-        return null;
+  async readFile(path, fsObject = this.fileSystem, bypass = false) {
+    return new Promise(async (resolve, reject) => {
+      const parts = path.split("/");
+      let current = fsObject;
+      this.log(`read ${path}`);
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        if (typeof current[part] === "undefined") {
+          return resolve(null);
+        }
+        current = current[part];
       }
-      current = current[part];
-    }
-    if (typeof current !== "string") {
-      return null;
-    }
-    return current;
+      if (typeof current !== "string") {
+        return resolve(null);
+      }
+      if (bypass === false) {
+        // special vfs import handler
+        if (current.startsWith("vfsImport:")) {
+          const vfsImportPath = current.substring(10);
+          if (vfsImportPath === "fs")
+            return resolve("vfsImportError:not-allowed");
+          const item = await localforage.getItem(vfsImportPath);
+
+          if (item !== null && item !== undefined) {
+            if (item instanceof Blob) {
+              if (item.size > 1024 * 1024 * 10) {
+                return resolve(URL.createObjectURL(item));
+              } else {
+                let result = await new Promise((resolve, reject) => {
+                  const reader = new FileReader();
+
+                  reader.onload = function (e) {
+                    return resolve(e.target.result);
+                  };
+
+                  reader.readAsDataURL(item);
+                });
+                return resolve(result);
+              }
+            } else {
+              return resolve(item);
+            }
+          } else {
+            return resolve("vfsImportFailed:" + vfsImportPath);
+          }
+        }
+      }
+      return resolve(current);
+    });
   },
   // Function to write to a file at a given path
   async writeFile(path, contents, fsObject = this.fileSystem) {
+    if (typeof contents !== "string")
+      throw new Error("Tried to write a non-string to a file.");
     const parts = path.split("/");
     const filename = parts.pop();
     let current = fsObject;
@@ -132,7 +175,31 @@ const Vfs = {
       }
       current = current[part];
     }
-    current[filename] = contents;
+
+    // if file has a special
+    if (current[filename] !== undefined) {
+      // special vfs import handler
+      if (current[filename].startsWith("vfsImport:")) {
+        const vfsImportPath = current[filename].substring(10);
+        if (vfsImportPath === "fs") return "vfsImportError:not-allowed";
+        await localforage.setItem(vfsImportPath, contents);
+      } else {
+        current[filename] = contents;
+      }
+    } else {
+      // if file is bigger than 8kb then put it into the special bin
+      if (contents.length > 8192) {
+        const vfsImportPath = Math.random().toString(36).substring(2);
+        if (vfsImportPath === "fs") return "vfsImportError:not-allowed";
+
+        // save link to file
+        await localforage.setItem(vfsImportPath, contents);
+        current[filename] = `vfsImport:${vfsImportPath}`;
+      } else {
+        // save normally
+        current[filename] = contents;
+      }
+    }
     this.save("write " + path);
   },
   // Function to create a new folder at a given path
@@ -163,7 +230,21 @@ const Vfs = {
       }
       parent = parent[part];
     }
+
+    // maybe use readFile here so we don't
+    // accidentally delete the key "fs"
+    const tmp = String(await this.readFile(path, this.fileSystem, true));
+    console.log(tmp);
+    // if it's an import then handle it specially
+    if (tmp.startsWith("vfsImport:")) {
+      const tmpName = tmp.substring(10);
+      await localforage.removeItem(tmpName);
+
+      this.log(`Deleted reference file "${tmpName}"`);
+    }
+
     delete parent[filename];
+
     this.save("delete " + path);
   },
   // Function to list all files and folders at a given path
@@ -177,6 +258,7 @@ const Vfs = {
       }
       current = current[part];
     }
+    this.log(`list ${path}`);
     const result = await Promise.all(
       Object.keys(current).map(async (m) => {
         return { item: m, type: await this.whatIs(path + "/" + m) };

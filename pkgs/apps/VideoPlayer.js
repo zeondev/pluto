@@ -1,6 +1,6 @@
 export default {
-  name: "Image Viewer",
-  description: "View your epic images in this smooth app.",
+  name: "Video Player",
+  description: "View your videos in this app.",
   ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
@@ -15,7 +15,7 @@ export default {
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
     MyWindow = new Win({
-      title: "Image Viewer",
+      title: "Video Player",
       pid: Root.PID,
       onclose: () => {
         Root.Lib.onEnd();
@@ -41,10 +41,10 @@ export default {
       if (path) file = path;
       else file = await FileDialog.pickFile("Root");
       if (file === false) return;
-      let result = updateImage(await vfs.readFile(file));
+      let result = updateVideo(await vfs.readFile(file));
       if (result === false) return;
       MyWindow.window.querySelector(".win-titlebar .title").innerText =
-        "Image Viewer - " + file.split("/").pop();
+        "Video Player - " + file.split("/").pop();
       MyWindow.focus();
     }
 
@@ -54,8 +54,8 @@ export default {
         onclick: async (_) => {
           openFile();
         },
-        html: Root.Lib.icons.fileImage,
-        title: "Select Image...",
+        html: Root.Lib.icons.fileVideo,
+        title: "Select Video...",
       },
       {
         style: {
@@ -70,25 +70,25 @@ export default {
     ]);
 
     // creates the wrapper that the image is in
-    let imgWrapper = new Root.Lib.html("div")
+    let vidWrapper = new Root.Lib.html("div")
       .class("ovh", "fg", "fc", "row")
       .appendTo(wrapper);
 
     // creates the actual img element
-    let img = new Root.Lib.html("img")
-      .appendTo(imgWrapper)
+    let img = new Root.Lib.html("video")
+      .appendTo(vidWrapper)
       .style({
         width: "100%",
         height: "100%",
         "object-fit": "contain",
         border: "none",
       })
-      .attr({ draggable: "false" });
+      .attr({ draggable: "false", controls: 'on' });
 
-    // updates the image on the next load
-    function updateImage(content) {
-      if (!content.startsWith("data:image/") && !content.startsWith("blob:")) {
-        Root.Modal.alert("Error", "This does not look like an image").then(
+    // updates the video on the next load
+    function updateVideo(content) {
+      if (!content.startsWith("data:video/") && !content.startsWith("blob:")) {
+        Root.Modal.alert("Error", "This does not look like a video file").then(
           (_) => {
             MyWindow.focus();
           }
