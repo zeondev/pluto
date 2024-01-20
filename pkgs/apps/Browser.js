@@ -34,7 +34,7 @@ export default {
     wrapper = MyWindow.window.querySelector(".win-content");
     wrapper.classList.add("col", "with-sidebar", "browser");
     wrapper.style.overflow = "hidden";
-    let selectedTab = 1;
+    let selectedTab = 0;
     let tabsList = [
       {
         tabName: "Google",
@@ -76,7 +76,7 @@ export default {
       })
       .class("selected", "tab-1")
       .appendMany(
-        new Root.Lib.html("span").text("Tab 1"),
+        new Root.Lib.html("span").class("tab-text").text("Welcome"),
         new Root.Lib.html("span")
           .html(
             `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`
@@ -111,6 +111,7 @@ export default {
         e.target.classList.forEach((el) => {
           if (el.startsWith("tab-")) {
             for (let i = 0; i < tabsList.length; i++) {
+              console.log(tabsList[i], i);
               wrapper
                 .querySelector(`.tab-${tabsList[i].id}`)
                 .classList.remove("selected");
@@ -185,7 +186,8 @@ export default {
             "none";
         }
         // selectedTab = Number(tabsList.length) + 1;
-        selectedTab = tabsList.filter((p) => p !== null).length + 1;
+        // selectedTab = tabsList.filter((p) => p !== null).length + 1;
+        selectedTab = Date.now();
         tabsList.push({
           tabName: "New Tab",
           favicon: "https://www.google.com/favicon.ico",
@@ -196,6 +198,48 @@ export default {
             src: "http://www.google.com/webhp?igu=1",
           })
           .class("fg", "page-" + selectedTab)
+          .on("load", async (e) => {
+            console.log("Iframe has loaded successfully!");
+            // Uncaught DOMException: Permission denied to access property "reload" on cross-origin object
+
+            let pageName = e.target.src
+              .replace("https://", "")
+              .replace("http://", "")
+              .split("/")[0];
+
+            console.log(e, e.target.src);
+            console.log(Root.Lib.html.qs(".tab-" + selectedTab));
+            Root.Lib.html
+              .qs(".tab-" + selectedTab)
+              .elm.querySelector(".tab-text").innerText = pageName;
+            // let f = await fetch(iframe.elm.src)
+            //   .then((t) => t.text())
+            //   .catch(undefined);
+            // console.log("f is here", f);
+            // if (f === undefined) {
+            //   // Create a new DOMParser object
+            //   const parser = new DOMParser();
+
+            //   // Parse the HTML string
+            //   const doc = parser.parseFromString(htmlString, "text/html");
+
+            //   // Get the title element
+            //   const titleElement = doc.querySelector("title");
+
+            //   // Get the text content of the title element
+            //   const title = titleElement.textContent;
+
+            //   console.log("Got Title: ", title);
+
+            //   console.log(iframe.elm.src, e);
+            // } else {
+            //   console.log(
+            //     "Failed to fetch title, here is a suggested title",
+            //     e.target.src.replace("https://", "")
+            //   );
+            // }
+            // console.log(iframe.elm.contentWindow.title);
+          })
           .appendTo(pages);
         new Root.Lib.html("div")
           .style({
@@ -211,7 +255,9 @@ export default {
           })
           .class("selected", "tab-" + selectedTab)
           .appendMany(
-            new Root.Lib.html("span").text("Tab " + selectedTab),
+            new Root.Lib.html("span")
+              .class("tab-text")
+              .text("Tab " + selectedTab),
             new Root.Lib.html("span")
               .html(
                 `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`
@@ -222,6 +268,7 @@ export default {
                 "align-items": "center",
               })
               .on("click", (e) => {
+                console.log("farderite");
                 e.target.parentElement.parentElement.classList.forEach(
                   (elm) => {
                     if (elm.startsWith("tab-")) {
@@ -231,15 +278,18 @@ export default {
                         `.page-${tabId}`
                       );
 
-                      // Remove tab and iframe elements
-                      tabElement.remove();
-                      pageElement.remove();
+                      if (tabElement && pageElement) {
+                        // Remove tab and iframe elements
+                        tabElement.remove();
+                        pageElement.remove();
 
-                      // Remove tab from tabsList
-                      tabsList = tabsList.filter((tab) => tab.id !== tabId);
+                        // Remove tab from tabsList
+                        tabsList = tabsList.filter((tab) => tab.id !== tabId);
+                      }
                     }
                   }
                 );
+                console.log(tabsList);
               })
           )
           .on("click", (e) => {
@@ -278,7 +328,7 @@ export default {
         // there's a good reason i did this, it's called browser compatibility
         // style:
         //   "width:-webkit-fill-available;width:-moz-fill-available;height:-webkit-fill-available;height:-moz-fill-available;",
-        src: "http://www.google.com/webhp?igu=1",
+        src: "about:blank",
       })
       .class("fg", "page-1")
       .appendTo(pages);
