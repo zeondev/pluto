@@ -1,6 +1,6 @@
-# Pluto Documentation for version 1.3 (Elysium)
+# Pluto Documentation for version 1.5 (Elysium)
 
-- [Pluto Documentation for version 1.3 (Elysium)](#pluto-documentation-for-version-13-elysium)
+- [Pluto Documentation for version 1.5 (Elysium)](#pluto-documentation-for-version-15-elysium)
   - [How to initialize an application](#how-to-initialize-an-application)
     - [Export properties](#export-properties)
     - [Example App code](#example-app-code)
@@ -195,6 +195,12 @@ The Html library is a class that can be initialized at any time to create HTML e
 ```js
 const Html = Root.Lib.html;
 ```
+
+You can also import Html from datkat21's source using unpkg:
+```js
+const Html = await import("https://unpkg.com/@datkat21/html");
+```
+This will ensure the Html library is always up to date, no matter the version of Pluto the app is running on.
 
 ### Examples
 
