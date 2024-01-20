@@ -7,6 +7,7 @@
   - [What is Root?](#what-is-root)
   - [What are app permissions?](#what-are-app-permissions)
     - [Permissions](#permissions)
+  - [Listening to events](#listening-to-events)
   - [Html library](#html-library)
     - [Examples](#examples)
     - [Methods](#methods)
@@ -184,6 +185,53 @@ privileges: [
     description: "Access system services",
   },
 ],
+```
+
+## Listening to events
+
+This is an advanced process feature that allows you to listen to core events (package start, end, etc.) and respond to them.
+
+Here's an example of it in use in an app:
+```js
+export default {
+  name: "Spacedesktop",
+  description: "A desktop replacement for Pluto",
+  ver: 1, // Compatible with core v1
+  type: "process",
+  optInToEvents: true, // <-- Opt in to events
+  privileges: [
+    {
+      privilege: 'full',
+      description: 'Allow Spacedesktop to manage your desktop.'
+    }
+  ],
+  exec: async function (Root) {
+    // ...
+
+    return Root.Lib.setupReturns((m) => {
+      const {type, data} = m;
+      
+      console.log(type, data);
+      
+      // here!
+      switch (type) {
+        case 'coreEvent':
+          if (data.type === 'pkgStart') {
+            const name = data.data.proc.name;
+            const pid = data.data.pid;
+              
+            // ...
+          } else if (data.type === 'pkgEnd') {
+            const name = data.data.proc.name;
+            const pid = data.data.pid;
+            
+            // ...
+          }
+          break;
+      }
+    });
+  },
+};
 ```
 
 ## Html library
