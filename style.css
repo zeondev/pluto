@@ -37,7 +37,7 @@ select *,
   cursor: var(--cursor-pointer) 5 0, auto !important;
 }
 
-input,
+input:not([type="checkbox"]),
 textarea,
 .ace_content {
   cursor: var(--cursor-text) 15 6, auto !important;
@@ -574,7 +574,7 @@ body {
 }
 
 .modal-body > :first-child table {
-  white-space: unset;
+  white-space: normal;
 }
 
 .modal-body .flex-group {
@@ -816,7 +816,6 @@ textarea {
   outline: none;
   resize: none;
   font: inherit;
-  cursor: var(--cursor-text) 10 10, auto !important;
 }
 
 input::placeholder,
@@ -1442,6 +1441,30 @@ ul {
 .ace_search_options,
 .ace_button {
   color: var(--text);
+}
+
+#ace_settingsmenu,
+#kbshortcutmenu {
+  background-color: var(--root);
+  position: fixed;
+  color: var(--text);
+  z-index: 99999999;
+  height: calc(100% - 54px);
+}
+
+.ace_optionsMenuEntry button {
+  background: var(--neutral);
+  border: 1px solid var(--outline);
+}
+.ace_optionsMenuEntry button:hover {
+  background: var(--neutral-focus);
+  border: 1px solid var(--outline);
+}
+
+.ace_optionsMenuEntry button[ace_selected_button="true"] {
+  background: var(--unfocused);
+  box-shadow: unset !important;
+  border: 1px solid var(--outline);
 }
 
 /* ::-webkit-scrollbar {
@@ -2303,7 +2326,7 @@ hr {
   height: 100%;
   pointer-events: none;
   transition: opacity 0.25s var(--easing-function);
-  z-index: 99999;
+  z-index: 999;
 }
 
 .window-box.hidden {

@@ -17,12 +17,19 @@ export default {
       action_zoomIn: "Zoom In",
       action_format: "Prettify",
       action_runApp: "Run App",
+      action_aceSettings: "Ace Editor Settings",
+      action_showAutocomplete: "Show Autocomplete",
       appHelp_string1:
         "Welcome to DevEnv. This is a developer environment for developing Pluto apps.",
       appHelp_string2:
         "You can use the buttons on the sidebar to perform different actions in the app.\nThere is also a set of keyboard shortcuts.",
       appHelp_string3: "Would you like to learn about the keyboard shortcuts?",
       appHelp_string4: "Here are the keyboard shortcuts:",
+      settings_wordWrap: "Word wrap",
+      settings_fontSize: "Font size",
+      settings_templateApp: "Startup with example app",
+      settings_prettifyOnSave: "Format code on save",
+      settings_liveAutocomplete: "Autocomplete while typing",
     },
     en_GB: {
       action_zoomOut: "Zoom Out",
@@ -102,6 +109,10 @@ export default {
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
     const FileDialog = await Root.Lib.loadLibrary("FileDialog");
     const Sidebar = await Root.Lib.loadComponent("Sidebar");
+    const vfs = await Root.Lib.loadLibrary("VirtualFS");
+    await vfs.importFS();
+
+    const Html = Root.Lib.html;
 
     DvWindow = new Win({
       title: Root.Lib.getString("systemApp_DevEnv"),
@@ -124,6 +135,70 @@ export default {
       },
     });
 
+    const DvDefaultSettings = {
+      wordWrap: true,
+      fontSize: 14,
+      templateApp: true,
+      prettifyOnSave: true,
+      liveAutocomplete: true,
+    };
+
+    let DvSettings = DvDefaultSettings;
+
+    async function DvSaveSettings() {
+      await vfs.writeFile(
+        "Registry/DvSettings.json",
+        JSON.stringify(DvSettings)
+      );
+      await DvReadSettings();
+    }
+    async function DvReadSettings() {
+      if ((await vfs.exists("Registry/DvSettings.json")) !== false) {
+        DvSettings = Object.assign(
+          DvDefaultSettings,
+          JSON.parse(await vfs.readFile("Registry/DvSettings.json"))
+        );
+      } else {
+        await DvSaveSettings();
+      }
+
+      if (DvSettings["wordWrap"] !== undefined) {
+        if (typeof DvSettings["wordWrap"] === "boolean") {
+          editor.session.setUseWrapMode(DvSettings["wordWrap"]);
+        }
+      }
+      if (DvSettings["fontSize"] !== undefined) {
+        if (typeof DvSettings["fontSize"] === "number") {
+          textWrapper.style({
+            "font-size": DvSettings["fontSize"] + "px",
+          });
+        }
+      }
+
+      if (DvSettings["liveAutocomplete"] !== undefined) {
+        if (typeof DvSettings["liveAutocomplete"] === "boolean") {
+          editor.setOptions({
+            enableLiveAutocompletion: DvSettings["liveAutocomplete"],
+          });
+        }
+      }
+    }
+
+    function modal(
+      info,
+      isHtml = false,
+      title = Root.Lib.getString("appHelp")
+    ) {
+      return new Promise((res, _rej) => {
+        Root.Modal.modal(title, info, wrapper, isHtml, {
+          text: Root.Lib.getString("ok"),
+          callback: (_) => {
+            res(true);
+          },
+        });
+      });
+    }
+
     const actionHandlers = {
       newDocument: async (_) => {
         // clicking the new document button seems buggy, possibly due to dirty check
@@ -144,12 +219,16 @@ export default {
         textWrapper.style({
           "font-size": editorSize.toString() + "px",
         });
+        DvSettings.fontSize = Number(editorSize.toString());
+        DvSaveSettings();
       },
       zoomOut: async (_) => {
         editorSize -= 2;
         textWrapper.style({
           "font-size": editorSize.toString() + "px",
         });
+        DvSettings.fontSize = Number(editorSize.toString());
+        DvSaveSettings();
       },
       run: (_) => {
         Root.Core.startPkg(
@@ -161,14 +240,25 @@ export default {
         );
       },
       prettify: async (_) => {
-        const formatted = await prettier.format(editor.getValue(), {
-          parser: "babel",
-          plugins: [prettierPluginBabel, prettierPluginEsTree],
-        });
+        try {
+          const formatted = await prettier.format(editor.getValue(), {
+            parser: "babel",
+            plugins: [prettierPluginBabel, prettierPluginEsTree],
+          });
 
-        editor.setValue(formatted, 1);
-        currentDocument.dirty = true;
-        updateTitle();
+          editor.setValue(formatted, 1);
+          currentDocument.dirty = true;
+          updateTitle();
+        } catch (e) {
+          modal(
+            new Html("div").appendMany(
+              new Html("span").text("Something went wrong when formatting"),
+              new Html("pre").text(e.message)
+            ),
+            true,
+            Root.Lib.getString("error")
+          );
+        }
       },
       help: async (_) => {
         function modal(info, isHtml = false) {
@@ -248,6 +338,18 @@ export default {
       <td>CTRL + Enter</td>
       <td>${Root.Lib.getString("action_runApp")}</td>
     </tr>
+    <tr>
+      <td>CTRL + ,</td>
+      <td>${Root.Lib.getString("action_aceSettings")}</td>
+    </tr>
+    <tr>
+      <td>CTRL + .</td>
+      <td>${Root.Lib.getString("systemApp_Settings")}</td>
+    </tr>
+    <tr>
+      <td>CTRL + Space</td>
+      <td>${Root.Lib.getString("action_showAutocomplete")}</td>
+    </tr>
   </tbody>
 </table>
 `),
@@ -270,6 +372,97 @@ export default {
           .from(docsWindow.window.querySelector(".win-content"))
           .classOn("iframe")
           .style({ padding: "0px" });
+      },
+      settings: async (_) => {
+        const settingsInfo = Object.keys(DvSettings).map((key, num) => {
+          switch (typeof DvSettings[key]) {
+            case "boolean":
+              return new Html("span").appendMany(
+                new Html("input")
+                  .attr({
+                    type: "checkbox",
+                    id: Root.PID + key + num,
+                    checked: DvSettings[key] === true ? "true" : undefined,
+                  })
+                  .on("input", (e) => {
+                    DvSettings[key] = e.target.checked;
+
+                    DvSaveSettings();
+                  }),
+                new Html("label")
+                  .attr({
+                    for: Root.PID + key + num,
+                  })
+                  .text(Root.Lib.getString(`settings_${key}`))
+              );
+            case "string":
+              return new Html("span").appendMany(
+                new Html("label")
+                  .attr({
+                    for: Root.PID + key + num,
+                  })
+                  .text(Root.Lib.getString(`settings_${key}`)),
+                new Html("input")
+                  .attr({
+                    type: "text",
+                    id: Root.PID + key + num,
+                    value:
+                      DvSettings[key] !== undefined
+                        ? DvSettings[key]
+                        : undefined,
+                  })
+                  .on("input", (e) => {
+                    DvSettings[key] = e.target.value;
+
+                    DvSaveSettings();
+                  })
+              );
+            case "number":
+              return new Html("span").appendMany(
+                new Html("label")
+                  .attr({
+                    for: Root.PID + key + num,
+                  })
+                  .text(Root.Lib.getString(`settings_${key}`)),
+                new Html("input")
+                  .attr({
+                    type: "number",
+                    id: Root.PID + key + num,
+                    value:
+                      DvSettings[key] !== undefined
+                        ? DvSettings[key]
+                        : undefined,
+                  })
+                  .style({
+                    "max-width": "4rem",
+                  })
+                  .on("input", (e) => {
+                    let n = parseInt(e.target.value);
+                    if (n < 0) {
+                      n = 0;
+                    }
+
+                    DvSettings[key] = n;
+
+                    DvSaveSettings();
+                  })
+              );
+            case "bigint":
+            case "symbol":
+            case "undefined":
+            case "object":
+            case "function":
+              return new Html("span").text(
+                Root.Lib.getString(`settings_${key}`)
+              );
+          }
+        });
+
+        modal(
+          new Html("div").class("col", "gap").appendMany(...settingsInfo),
+          true,
+          Root.Lib.getString("systemApp_Settings")
+        );
       },
     };
 
@@ -311,6 +504,9 @@ export default {
             // Ctrl + S = Save
             e.preventDefault();
             actionHandlers.save();
+            if (DvSettings.prettifyOnSave === true) {
+              actionHandlers.prettify();
+            }
             break;
           case "enter":
             // Ctrl + Enter = Run
@@ -326,6 +522,11 @@ export default {
             // Ctrl + = Zoom In
             e.preventDefault();
             actionHandlers.zoomIn();
+            break;
+          case ".":
+            // Ctrl + . = Settings
+            e.preventDefault();
+            actionHandlers.settings();
             break;
         }
       }
@@ -445,6 +646,11 @@ export default {
           title: Root.Lib.getString("appDocumentation"),
         },
         {
+          onclick: actionHandlers.settings,
+          html: Root.Lib.icons.wrench,
+          title: Root.Lib.getString("systemApp_Settings"),
+        },
+        {
           style: {
             "margin-top": "auto",
             "margin-left": "auto",
@@ -456,9 +662,6 @@ export default {
       ]);
     }
     makeSidebar();
-
-    const vfs = await Root.Lib.loadLibrary("VirtualFS");
-    await vfs.importFS();
 
     let text = new Root.Lib.html("div").class("fg").appendTo(wrapper);
 
@@ -477,76 +680,80 @@ export default {
     editor.session.setUseWrapMode(true);
     editor.session.setMode("ace/mode/typescript");
 
+    await DvReadSettings();
+
     text.on("input", (e) => {
       currentDocument.dirty = true;
       updateTitle();
     });
 
-    newDocument(
-      "",
-      /*js*/ `export default {
-  name: "Example",
-  description: "Example app",
-  ver: 1, // Compatible with core v1
-  type: "process",
-  exec: async function (Root) {
-    let wrapper; // Lib.html | undefined
-    let MyWindow;
+    let defaultText = "";
 
-    console.log("Hello from example package", Root.Lib);
+    if (DvSettings.templateApp === true) {
+      defaultText = `export default {
+name: "Example",
+description: "Example app",
+ver: 1, // Compatible with core v1
+type: "process",
+exec: async function (Root) {
+  let wrapper; // Lib.html | undefined
+  let MyWindow;
 
-    Root.Lib.setOnEnd(_ => MyWindow.close());
+  console.log("Hello from example package", Root.Lib);
 
-    const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
+  Root.Lib.setOnEnd(_ => MyWindow.close());
 
-    // Create a window
-    MyWindow = new Win({
-      title: "Example App",
-      content: "Hello",
-      onclose: () => {
-        Root.Lib.onEnd();
-      },
+  const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
+
+  // Create a window
+  MyWindow = new Win({
+    title: "Example App",
+    content: "Hello",
+    onclose: () => {
+      Root.Lib.onEnd();
+    },
+  });
+
+  wrapper = MyWindow.window.querySelector(".win-content");
+
+  /* Heading */
+  new Root.Lib.html("h1").text("Example App").appendTo(wrapper);
+  /* Paragraph */
+  new Root.Lib.html("p")
+    .html("This is an example app!")
+    .appendTo(wrapper);
+  /* Button with modal */
+  new Root.Lib.html("button")
+    .text("Hello, world")
+    .appendTo(wrapper)
+    .on("click", (e) => {
+      Root.Modal.alert(
+        \`Hello!\nCursor Position: \${e.clientX}, \${e.clientY}\nMy PID: \${Root.PID}\nMy Token: \${Root.Token}\`
+      );
+    });
+  /* Spawn an app */ 
+  new Root.Lib.html("button")
+    .text("Spawn another")
+    .appendTo(wrapper)
+    .on("click", (e) => {
+      Root.Lib.launch("apps:Example", wrapper);
+    });
+  /* Example close button */
+  new Root.Lib.html("button")
+    .text("End Process")
+    .appendTo(wrapper)
+    .on("click", (e) => {
+      Root.Lib.onEnd();
     });
 
-    wrapper = MyWindow.window.querySelector(".win-content");
+  return Root.Lib.setupReturns((m) => {
+    console.log("Example received message: " + m);
+  });
+},
+};`;
+    }
 
-    /* Heading */
-    new Root.Lib.html("h1").text("Example App").appendTo(wrapper);
-    /* Paragraph */
-    new Root.Lib.html("p")
-      .html("This is an example app!")
-      .appendTo(wrapper);
-    /* Button with modal */
-    new Root.Lib.html("button")
-      .text("Hello, world")
-      .appendTo(wrapper)
-      .on("click", (e) => {
-        Root.Modal.alert(
-          \`Hello!\nCursor Position: \${e.clientX}, \${e.clientY}\nMy PID: \${Root.PID}\nMy Token: \${Root.Token}\`
-        );
-      });
-    /* Spawn an app */ 
-    new Root.Lib.html("button")
-      .text("Spawn another")
-      .appendTo(wrapper)
-      .on("click", (e) => {
-        Root.Lib.launch("apps:Example", wrapper);
-      });
-    /* Example close button */
-    new Root.Lib.html("button")
-      .text("End Process")
-      .appendTo(wrapper)
-      .on("click", (e) => {
-        Root.Lib.onEnd();
-      });
-
-    return Root.Lib.setupReturns((m) => {
-      console.log("Example received message: " + m);
-    });
-  },
-};
-`
-    );
+    newDocument("", defaultText);
 
     return Root.Lib.setupReturns(async (m) => {
       if (m && m.type) {

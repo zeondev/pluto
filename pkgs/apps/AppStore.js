@@ -22,7 +22,7 @@ export default {
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
     StoreWindow = new Win({
-      title: Root.Lib.getString('systemApp_AppStore'),
+      title: Root.Lib.getString("systemApp_AppStore"),
       pid: Root.PID,
       width: "500px",
       height: "350px",
@@ -75,7 +75,9 @@ export default {
 
       let host = "https://zeondev.github.io/Pluto-AppStore/";
 
-      const appStoreModule = (await import(`${host}import.js?t=` + performance.now())).default;
+      const appStoreModule = (
+        await import(`${host}import.js?t=` + performance.now())
+      ).default;
 
       // Check if this is the right app store module
       if (appStoreModule.init) {
@@ -117,7 +119,9 @@ export default {
         }
 
         async function installApp(pkg, app, force = false) {
-          await fetch(`${host}pkgs/${pkg}/${app.assets.path}?t=` + performance.now())
+          await fetch(
+            `${host}pkgs/${pkg}/${app.assets.path}?t=` + performance.now()
+          )
             .then(async (e) => {
               console.log(await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`));
               if (
@@ -467,8 +471,8 @@ export default {
       if (m && m.type) {
         if (m.type === "refresh") {
           Root.Lib.getString = m.data;
-          StoreWindow.setTitle(Root.Lib.getString('systemApp_AppStore'));
-          Root.Lib.updateProcTitle(Root.Lib.getString('systemApp_AppStore'));
+          StoreWindow.setTitle(Root.Lib.getString("systemApp_AppStore"));
+          Root.Lib.updateProcTitle(Root.Lib.getString("systemApp_AppStore"));
         }
       }
     });
