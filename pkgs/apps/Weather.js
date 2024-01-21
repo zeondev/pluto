@@ -22,7 +22,7 @@ export default {
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
     MyWindow = new Win({
-      title: "Weather",
+      title: Root.Lib.getString('systemApp_Weather'),
       content: "",
       pid: Root.PID,
       onclose: () => {
@@ -182,8 +182,15 @@ export default {
       .class("row", "spaced-horizontally")
       .appendTo(wrapper);
 
-    return Root.Lib.setupReturns((m) => {
-      console.log("Example received message: " + m);
+      return Root.Lib.setupReturns(async (m) => {
+        if (m && m.type) {
+          if (m.type === "refresh") {
+            Root.Lib.getString = m.data;
+            MyWindow.setTitle(Root.Lib.getString("systemApp_Weather"));
+            Root.Lib.updateProcTitle(Root.Lib.getString("systemApp_Weather"));
+            makeSidebar();
+          }
+        }
     });
   },
 };

@@ -166,7 +166,7 @@ export default {
           return 0;
         }
         return {
-          name: shrtFile.name,
+          name: L.getString(shrtFile.localizedName) ?? shrtFile.name,
           icon: shrtFile.icon,
           fullName: `Desktop shortcut (${shrtFile.fullName})`,
           onClick: (c) => {

@@ -89,7 +89,7 @@ export default {
     alert: function (title, content, parent = "body") {
       return new Promise((res, _rej) => {
         this.modal(title, content, parent, false, {
-          text: "OK",
+          text: lib.getString('ok'),
           callback: (_) => res(true),
         });
       });
@@ -102,12 +102,12 @@ export default {
           parent,
           false,
           {
-            text: "Yes",
+            text: lib.getString('yes'),
             type: "primary",
             callback: (_) => res(true),
           },
           {
-            text: "No",
+            text: lib.getString('no'),
             callback: (_) => res(false),
           }
         );
@@ -129,14 +129,14 @@ export default {
           parent,
           true,
           {
-            text: "OK",
+            text: lib.getString('ok'),
             type: "primary",
             callback: (_) => {
               res(input.elm.value);
             },
           },
           {
-            text: "Cancel",
+            text: lib.getString('cancel'),
             callback: (_) => res(false),
           }
         );

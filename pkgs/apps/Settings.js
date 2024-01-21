@@ -96,9 +96,7 @@ export default {
             (x) =>
               x.name &&
               x.name === "apps:Settings" &&
-              x.proc &&
-              x.proc.name &&
-              x.proc.name === "Settings"
+              x.proc !== null
           ) !== undefined)
     ) {
       Root.Lib.onEnd();
@@ -655,11 +653,8 @@ export default {
               } else {
                 alert("failed parsing theme data due to " + result.message);
               }
-              console.log("theme parsing", itm, result);
             }));
           }
-
-          console.log(JSON.parse(JSON.stringify(themes)));
 
           new Html("select")
             .appendMany(...themes)
@@ -668,7 +663,7 @@ export default {
               if (isNaN(parseInt(e.target.value))) {
                 // apply theme
                 desktopConfig.theme = e.target.value;
-                themeLib.setCurrentTheme(x);
+                themeLib.setCurrentTheme(thisRef);
               } else {
                 const x = themeData[parseInt(e.target.value)];
                 console.log(x);
@@ -1039,12 +1034,17 @@ export default {
 
     console.log("loading settings pap", pages);
 
-    await setupSettingsApp();
+    setupSettingsApp();
+
+    settingsWin.setTitle(Root.Lib.getString('systemApp_Settings'));
+    this.name = Root.Lib.getString('systemApp_Settings');
 
     return Root.Lib.setupReturns(async (m) => {
       if (m && m.type) {
         if (m.type === "refresh") {
           Root.Lib.getString = m.data;
+          settingsWin.setTitle(Root.Lib.getString('systemApp_Settings'));
+          Root.Lib.updateProcTitle(Root.Lib.getString('systemApp_Settings'));
           setupSettingsApp();
         }
         if (m.type === "goPage") {

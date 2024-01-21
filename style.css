@@ -561,7 +561,11 @@ body {
 
 .modal-body> :first-child {
   flex: 1;
-  white-space: pre-wrap;
+  white-space: pre-wrap; 
+}
+
+.modal-body> :first-child table {
+  white-space: unset;
 }
 
 .modal-body .flex-group {
@@ -1160,6 +1164,29 @@ td {
   border: 1px solid var(--outline);
 }
 
+.ace_editor.ace_autocomplete {
+  border: 1px var(--outline) solid;
+  background: var(--unfocused);
+  color: var(--text);
+}
+
+.ace_editor.ace_autocomplete .ace_line {
+  transition: none;
+}
+
+.ace_editor.ace_autocomplete .ace_line-hover {
+  background-color: var(--neutral);
+  border-color: var(--outline);
+}
+
+.ace_editor.ace_autocomplete .ace_marker-layer .ace_active-line {
+  background-color: var(--neutral-focus);
+}
+
+.ace_editor.ace_autocomplete .ace_line.ace_selected {
+  background-color: var(--neutral-focus);
+}
+
 code,
 pre,
 ul {
@@ -1519,9 +1546,10 @@ svg.lucide:not(.ignore-css) {
   gap: 10px;
   justify-content: center;
   align-items: center;
-  width: 90px;
+  min-width: 90px;
+  max-width: 140px;
   border-radius: 8px;
-  padding: 8px 12px;
+  padding: 8px;
   animation: shortSlideUp var(--long-animation-duration) var(--easing-function) forwards;
 }
 
@@ -2353,4 +2381,8 @@ hr {
 .ctx-menu .item:hover,
 .ctx-menu .item.over {
   background-color: var(--header);
+}
+
+.win-content .modal {
+  position: absolute !important;
 }

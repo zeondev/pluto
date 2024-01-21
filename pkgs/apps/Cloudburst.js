@@ -14,7 +14,7 @@ export default {
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
     MyWindow = new Win({
-      title: "Cloudburst",
+      title: Root.Lib.getString('systemApp_Weather'),
       content: '<iframe src="https://cherries.to/cloudburst/">',
       pid: Root.PID,
       width: 400,
@@ -27,7 +27,14 @@ export default {
     wrapper = MyWindow.window.querySelector(".win-content");
     wrapper.style.padding = "0px";
 
-    return Root.Lib.setupReturns((m) => {
+    return Root.Lib.setupReturns(async (m) => {
+      if (m && m.type) {
+        if (m.type === "refresh") {
+          Root.Lib.getString = m.data;
+          MyWindow.setTitle(Root.Lib.getString("systemApp_Weather"));
+          Root.Lib.updateProcTitle(Root.Lib.getString("systemApp_Weather"));
+        }
+      }
       console.log("Example received message: " + m);
     });
   },

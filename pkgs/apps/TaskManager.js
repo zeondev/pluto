@@ -12,6 +12,48 @@ export default {
       description: "List and kill processes",
     },
   ],
+  strings: {
+    en_US: {
+      table_type: "Type",
+      table_appId: "App ID",
+      table_details: "Details",
+      table_pid: "PID",
+      input_appId: "App ID (apps:...)",
+      endProcess: "End Task",
+    },
+    en_GB: {
+      table_type: "Type",
+      table_appId: "App ID",
+      table_details: "Details",
+      table_pid: "PID",
+      input_appId: "App ID (apps:...)",
+      endProcess: "End Task",
+    },
+    de_DE: {
+      table_type: "Typ",
+      table_appId: "App ID",
+      table_details: "Einzelheiten",
+      table_pid: "PID",
+      input_appId: "App-ID (apps:...)",
+      endProcess: "Task beenden",
+    },
+    es_ES: {
+      table_type: "Tipo",
+      table_appId: "ID de aplicación",
+      table_details: "Detalles",
+      table_pid: "PID",
+      input_appId: "ID de aplicación (apps:...)",
+      endProcess: "Tarea final",
+    },
+    pt_BR: {
+      table_type: "Tipo",
+      table_appId: "ID do aplicativo",
+      table_details: "Detalhes",
+      table_pid: "PID",
+      input_appId: "ID do aplicativo (apps:...)",
+      endProcess: "Finalizar tarefa",
+    },
+  },
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
     let TaskManagerWindow;
@@ -25,7 +67,7 @@ export default {
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
     TaskManagerWindow = new Win({
-      title: "Task Manager",
+      title: Root.Lib.getString("systemApp_TaskManager"),
       content: "Loading...",
       width: "468px",
       height: "320px",
@@ -48,20 +90,32 @@ export default {
 
     let selectedPid = -1;
 
-    let tableHead = new Html("thead").appendTo(table);
-    let tableHeadRow = new Html("tr").appendTo(tableHead);
-    new Html("th").text("Type").appendTo(tableHeadRow);
-    new Html("th").text("AppID").appendTo(tableHeadRow);
-    new Html("th").text("Details").attr({ colspan: 2 }).appendTo(tableHeadRow);
-    new Html("th").text("PID").appendTo(tableHeadRow);
-
-    let tableBody = new Html("tbody").appendTo(table);
-
     function makeTaskTable() {
+      table.clear();
+      let tableHead = new Html("thead").appendTo(table);
+      let tableHeadRow = new Html("tr").appendTo(tableHead);
+      new Html("th")
+        .styleJs({ whiteSpace: "nowrap" })
+        .text(Root.Lib.getString("table_type"))
+        .appendTo(tableHeadRow);
+      new Html("th")
+        .styleJs({ whiteSpace: "nowrap" })
+        .text(Root.Lib.getString("table_appId"))
+        .appendTo(tableHeadRow);
+      new Html("th")
+        .styleJs({ whiteSpace: "nowrap" })
+        .text(Root.Lib.getString("table_details"))
+        .attr({ colspan: 2 })
+        .appendTo(tableHeadRow);
+      new Html("th")
+        .styleJs({ whiteSpace: "nowrap" })
+        .text(Root.Lib.getString("table_pid"))
+        .appendTo(tableHeadRow);
+
+      let tableBody = new Html("tbody").appendTo(table);
+
       let processes =
         Root.Core !== null ? Root.Core.processList : Root.Lib.getProcessList();
-
-      tableBody.elm.innerHTML = "";
 
       for (let i = 0; i < processes.length; i++) {
         let tableBodyRow = new Html("tr")
@@ -73,7 +127,7 @@ export default {
             e.preventDefault();
             ctxMenu.new(e.clientX, e.clientY, [
               {
-                item: "End Process",
+                item: Root.Lib.getString("endProcess"),
                 async select() {
                   let p = Root.Core.processList
                     .filter((p) => p !== null)
@@ -114,7 +168,7 @@ export default {
     makeTaskTable();
 
     let x = new Root.Lib.html("input")
-      .attr({ placeholder: "App ID (apps:...)" })
+      .attr({ placeholder: Root.Lib.getString("input_appId") })
       .class("fg")
       .appendTo(buttonRow);
     /* Button */
@@ -132,7 +186,7 @@ export default {
     if (Root.Core !== null) {
       new Root.Lib.html("button")
         .class("primary")
-        .text("End Process")
+        .text(Root.Lib.getString("endProcess"))
         .appendTo(buttonRow)
         .on("click", (e) => {
           if (selectedPid === -1) {
@@ -147,8 +201,14 @@ export default {
         });
     }
 
-    return Root.Lib.setupReturns((m) => {
-      // console.log("Message", m);
+    return Root.Lib.setupReturns(async (m) => {
+      if (m && m.type) {
+        if (m.type === "refresh") {
+          Root.Lib.getString = m.data;
+          TaskManagerWindow.setTitle(Root.Lib.getString('systemApp_TaskManager'));
+          Root.Lib.updateProcTitle(Root.Lib.getString('systemApp_TaskManager'));
+        }
+      }
     });
   },
 };

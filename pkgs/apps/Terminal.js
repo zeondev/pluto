@@ -28,7 +28,7 @@ export default {
     const FileMappings = await L.loadLibrary("FileMappings");
 
     MyWindow = new Win({
-      title: "Terminal",
+      title: Root.Lib.getString("systemApp_Terminal"),
       pid: Root.PID,
       width: 869,
       height: 500,
@@ -366,6 +366,16 @@ export default {
     L.setOnEnd((_) => {
       // Clean up process
       MyWindow.close();
+    });
+
+    return L.setupReturns(async (m) => {
+      if (m && m.type) {
+        if (m.type === "refresh") {
+          Root.Lib.getString = m.data;
+          MyWindow.setTitle(Root.Lib.getString("systemApp_Terminal"));
+          Root.Lib.updateProcTitle(Root.Lib.getString("systemApp_Terminal"));
+        }
+      }
     });
   },
 };

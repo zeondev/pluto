@@ -15,7 +15,7 @@ export default {
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
     MyWindow = new Win({
-      title: "Image Viewer",
+      title: Root.Lib.getString('systemApp_ImageViewer'),
       pid: Root.PID,
       onclose: () => {
         Root.Lib.onEnd();
@@ -49,25 +49,33 @@ export default {
     }
 
     // creates sidebar
-    Sidebar.new(wrapper, [
-      {
-        onclick: async (_) => {
-          openFile();
+    let sidebarWrapper = new Root.Lib.html("div")
+      .styleJs({ display: "flex" })
+      .appendTo(wrapper);
+
+    function makeSidebar() {
+      sidebarWrapper.clear();
+      Sidebar.new(sidebarWrapper, [
+        {
+          onclick: async (_) => {
+            openFile();
+          },
+          html: Root.Lib.icons.fileImage,
+          title: "Select Image...",
         },
-        html: Root.Lib.icons.fileImage,
-        title: "Select Image...",
-      },
-      {
-        style: {
-          "margin-top": "auto",
+        {
+          style: {
+            "margin-top": "auto",
+          },
+          onclick: (_) => {
+            alert("Not implemented");
+          },
+          html: Root.Lib.icons.help,
+          title: "Help",
         },
-        onclick: (_) => {
-          alert("Not implemented");
-        },
-        html: Root.Lib.icons.help,
-        title: "Help",
-      },
-    ]);
+      ]);
+    }
+    makeSidebar();
 
     // creates the wrapper that the image is in
     let imgWrapper = new Root.Lib.html("div")
@@ -98,7 +106,15 @@ export default {
       img.elm.src = content;
     }
 
-    return Root.Lib.setupReturns((m) => {
+    return Root.Lib.setupReturns(async (m) => {
+      if (m && m.type) {
+        if (m.type === "refresh") {
+          Root.Lib.getString = m.data;
+          MyWindow.setTitle(Root.Lib.getString("systemApp_ImageViewer"));
+          Root.Lib.updateProcTitle(Root.Lib.getString("systemApp_ImageViewer"));
+          makeSidebar();
+        }
+      }
       if (typeof m === "object" && m.type && m.type === "loadFile" && m.path) {
         openFile(m.path);
       }
