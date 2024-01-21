@@ -76,6 +76,19 @@ export default {
       coreVersion: "Versão da core",
       supportedVersions: "Versãos suportado",
     },
+    fil_PH: {
+      thisSystem: "Itong system",
+      yourDevice: "Iyong device",
+      operatingSystem: "Ang operating system",
+      webBrowser: "Ang web browser",
+      deviceType: "Uri ng device",
+      webProtocol: "Ang web protocol",
+      webHost: "Ang web host",
+      plutoInfo: "Tungkol sa Pluto",
+      storageUsed: "Storage na ginamit",
+      coreVersion: "Bersyon ng core",
+      supportedVersions: "Supported na mga bersyon",
+    },
   },
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
@@ -93,10 +106,7 @@ export default {
         Root.Core.processList
           .filter((x) => x !== null)
           .find(
-            (x) =>
-              x.name &&
-              x.name === "apps:Settings" &&
-              x.proc !== null
+            (x) => x.name && x.name === "apps:Settings" && x.proc !== null
           ) !== undefined)
     ) {
       Root.Lib.onEnd();
@@ -388,7 +398,7 @@ export default {
           for (let i = 0; i < allKeys.length; i++) {
             let value = await localforage.getItem(allKeys[i]);
 
-            if (typeof value === 'string') {
+            if (typeof value === "string") {
               totalStorage += value.length;
             } else if (value instanceof Blob) {
               totalStorage += value.size;
@@ -637,23 +647,25 @@ export default {
               .filter((r) => r.type === "file" && r.item.endsWith(".theme"))
               .map((r) => r.item);
 
-            await Promise.all(themeFileList.map(async (itm) => {
-              const theme = await vfs.readFile(
-                `Root/Pluto/config/themes/${itm}`
-              );
-              const result = themeLib.validateTheme(theme);
-              if (result.success === true) {
-                themes.push(
-                  new Html("option").text(result.data.name).attr({
-                    value: themes.length,
-                    selected: desktopConfig.theme === itm ? true : null,
-                  })
+            await Promise.all(
+              themeFileList.map(async (itm) => {
+                const theme = await vfs.readFile(
+                  `Root/Pluto/config/themes/${itm}`
                 );
-                themeData.push(Object.assign({ fileName: itm }, result.data));
-              } else {
-                alert("failed parsing theme data due to " + result.message);
-              }
-            }));
+                const result = themeLib.validateTheme(theme);
+                if (result.success === true) {
+                  themes.push(
+                    new Html("option").text(result.data.name).attr({
+                      value: themes.length,
+                      selected: desktopConfig.theme === itm ? true : null,
+                    })
+                  );
+                  themeData.push(Object.assign({ fileName: itm }, result.data));
+                } else {
+                  alert("failed parsing theme data due to " + result.message);
+                }
+              })
+            );
           }
 
           new Html("select")
@@ -1036,15 +1048,15 @@ export default {
 
     setupSettingsApp();
 
-    settingsWin.setTitle(Root.Lib.getString('systemApp_Settings'));
-    this.name = Root.Lib.getString('systemApp_Settings');
+    settingsWin.setTitle(Root.Lib.getString("systemApp_Settings"));
+    this.name = Root.Lib.getString("systemApp_Settings");
 
     return Root.Lib.setupReturns(async (m) => {
       if (m && m.type) {
         if (m.type === "refresh") {
           Root.Lib.getString = m.data;
-          settingsWin.setTitle(Root.Lib.getString('systemApp_Settings'));
-          Root.Lib.updateProcTitle(Root.Lib.getString('systemApp_Settings'));
+          settingsWin.setTitle(Root.Lib.getString("systemApp_Settings"));
+          Root.Lib.updateProcTitle(Root.Lib.getString("systemApp_Settings"));
           setupSettingsApp();
         }
         if (m.type === "goPage") {

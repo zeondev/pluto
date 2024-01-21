@@ -534,7 +534,14 @@
         });
     }
 
-    const supportedLangs = ["en_US", "en_GB", "de_DE", "es_ES", "pt_BR"];
+    const supportedLangs = [
+      "en_US",
+      "en_GB",
+      "de_DE",
+      "es_ES",
+      "pt_BR",
+      "fil_PH",
+    ];
 
     let language = "en_US";
 
