@@ -250,7 +250,7 @@ const Html = Root.Lib.html;
 
 You can also import Html from datkat21's source using unpkg:
 ```js
-const Html = await import("https://unpkg.com/@datkat21/html");
+const Html = (await import("https://unpkg.com/@datkat21/html")).default;
 ```
 This is recommended if you want to use the latest features of Html (e.g. prepend, prependMany, prependTo).     
 This will ensure the Html library is always up to date, no matter the version of Pluto the app is running on.
