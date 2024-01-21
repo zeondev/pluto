@@ -53,6 +53,14 @@ export default {
       input_appId: "ID do aplicativo (apps:...)",
       endProcess: "Finalizar tarefa",
     },
+    fil_PH: {
+      table_type: "Uri",
+      table_appId: "App ID",
+      table_details: "Detalye",
+      table_pid: "PID",
+      input_appId: "App ID (apps:...)",
+      endProcess: "I-tigil ang Task",
+    },
   },
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
@@ -205,8 +213,10 @@ export default {
       if (m && m.type) {
         if (m.type === "refresh") {
           Root.Lib.getString = m.data;
-          TaskManagerWindow.setTitle(Root.Lib.getString('systemApp_TaskManager'));
-          Root.Lib.updateProcTitle(Root.Lib.getString('systemApp_TaskManager'));
+          TaskManagerWindow.setTitle(
+            Root.Lib.getString("systemApp_TaskManager")
+          );
+          Root.Lib.updateProcTitle(Root.Lib.getString("systemApp_TaskManager"));
         }
       }
     });

@@ -72,6 +72,19 @@ export default {
       appHelp_string3: "Você gostaria de aprender sobre os atalhos do teclado?",
       appHelp_string4: "Aqui estão os atalhos do teclado:",
     },
+    fil_PH: {
+      action_zoomOut: "Liitan",
+      action_zoomIn: "Lakihan",
+      action_format: "Pagandahin",
+      action_runApp: "Buksan ang App",
+      appHelp_string1:
+        "Maligayang pagdating sa DevEnv. Ito ay isang developer environment para gumawa ng aplikasyon sa Pluto.",
+      appHelp_string2:
+        "Pwede mong gamitin ang mga buttons sa sidebar para mag-perform ng iba't ibang mga aksyon sa aplikasyon.\nMayroon itong iba't ibang keyboard shortcuts.",
+      appHelp_string3:
+        "Gusto mo bang matuto ng mga iba't ibang keyboard shortcuts?",
+      appHelp_string4: "Ito ay mga keyboard shortcuts:",
+    },
   },
   ver: 1, // Compatible with core v1
   type: "process",
@@ -253,7 +266,8 @@ export default {
           height: 360,
         });
 
-        Root.Lib.html.from(docsWindow.window.querySelector(".win-content"))
+        Root.Lib.html
+          .from(docsWindow.window.querySelector(".win-content"))
           .classOn("iframe")
           .style({ padding: "0px" });
       },
