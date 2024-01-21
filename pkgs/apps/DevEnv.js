@@ -91,7 +91,7 @@ export default {
     const Sidebar = await Root.Lib.loadComponent("Sidebar");
 
     DvWindow = new Win({
-      title: Root.Lib.getString('systemApp_DevEnv'),
+      title: Root.Lib.getString("systemApp_DevEnv"),
       content: "",
       width: 540,
       height: 420,
@@ -243,6 +243,19 @@ export default {
         }
 
         await modal(Root.Lib.getString("thankYou"));
+      },
+      viewDocs: async (_) => {
+        const docsWindow = new Win({
+          title: Root.Lib.getString("Documentation"),
+          content: '<iframe src="./docs/README.html">',
+          pid: Root.PID,
+          width: 400,
+          height: 360,
+        });
+
+        Root.Lib.html.from(docsWindow.window.querySelector(".win-content"))
+          .classOn("iframe")
+          .style({ padding: "0px" });
       },
     };
 
@@ -411,6 +424,11 @@ export default {
           onclick: actionHandlers.help,
           html: Root.Lib.icons.help,
           title: Root.Lib.getString("appHelp"),
+        },
+        {
+          onclick: actionHandlers.viewDocs,
+          html: Root.Lib.icons.book,
+          title: Root.Lib.getString("appDocumentation"),
         },
         {
           style: {

@@ -561,7 +561,7 @@ body {
 
 .modal-body> :first-child {
   flex: 1;
-  white-space: pre-wrap; 
+  white-space: pre-wrap;
 }
 
 .modal-body> :first-child table {
@@ -661,6 +661,12 @@ iframe {
   border: none;
 }
 
+.win-content.iframe {
+  padding: 0;
+  overflow: hidden;
+}
+
+.win-window:not(.focus) iframe,
 .win-window.dragging iframe {
   pointer-events: none;
 }
