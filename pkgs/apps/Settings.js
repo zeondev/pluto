@@ -59,7 +59,7 @@ export default {
       securityCheckEveryStartup: "Check every startup?",
       securityTableItemName: "Name",
       securityTableItemSafe: "Safe",
-      securityTableItemDelete: "Delete App"
+      securityTableItemDelete: "Delete App",
     },
     de_DE: {
       thisSystem: "Dieses System",
@@ -112,6 +112,31 @@ export default {
       storageUsed: "Storage na ginamit",
       coreVersion: "Bersyon ng core",
       supportedVersions: "Supported na mga bersyon",
+      errorCouldNotFetch: "May problema sa pag-kuha mula sa account service",
+      loginWithZeon: "Mag-login sa Zeon Account",
+      logOut: "Mag-log out",
+      zeonAccount: "Zeon Account",
+      useThemeWallpaper: "Gamitin ang wallpaper galing sa tema",
+      toolbarPosition: "Posisyon ng toolbar",
+      toolbarPositionVertical: "Patayo",
+      toolbarPositionHorizontal: "Pahiga",
+      dockStyle: "Istilo ng dock",
+      dockStyleFull: "Full",
+      dockStyleCompact: "Compact",
+      dockStyleMinimal: "Minimal",
+      testNetwork: "Subukan ang network",
+      networkTestSuccess: "Ikaw ay online!",
+      networkTestResult: "Ang status ng iyong internet ay {status}",
+      networkTestMs:
+        "Average response time ng iyong network: {responseTime}ms.",
+      networkTestError:
+        "Hindi gumagana ang iyong network. Status code: {req1Status}, {req2Status}",
+      noInstalledApps: "Walang naka-install na aplikasyon",
+      securityCheck: "I-check ang Seguridad",
+      securityCheckEveryStartup: "I-check tuwing startup?",
+      securityTableItemName: "Pangalan",
+      securityTableItemSafe: "Ligtas",
+      securityTableItemDelete: "I-delete ang aplikasyon",
     },
   },
   exec: async function (Root) {
@@ -915,15 +940,13 @@ export default {
                     new Html("span").text(
                       Root.Lib.getString("networkTestResult", {
                         status: averageResponse,
-                      }) + '\n'
+                      }) + "\n"
                     ),
-                    new Html("span")
-                      .class("muted")
-                      .text(
-                        Root.Lib.getString("networkTestMs", {
-                          responseTime: averageResponseTime,
-                        })
-                      )
+                    new Html("span").class("muted").text(
+                      Root.Lib.getString("networkTestMs", {
+                        responseTime: averageResponseTime,
+                      })
+                    )
                   )
                   .appendTo(resultTab);
               } else {
@@ -993,9 +1016,15 @@ export default {
             new Html("thead")
               .appendMany(
                 new Html("tr").appendMany(
-                  new Html("th").text(Root.Lib.getString('securityTableItemName')),
-                  new Html("th").text(Root.Lib.getString('securityTableItemSafe')),
-                  new Html("th").text(Root.Lib.getString('securityTableItemDelete'))
+                  new Html("th").text(
+                    Root.Lib.getString("securityTableItemName")
+                  ),
+                  new Html("th").text(
+                    Root.Lib.getString("securityTableItemSafe")
+                  ),
+                  new Html("th").text(
+                    Root.Lib.getString("securityTableItemDelete")
+                  )
                 )
               )
               .appendTo(table);
@@ -1009,19 +1038,21 @@ export default {
                     new Html("tr").appendMany(
                       new Html("td").text(dc[i].filename),
                       new Html("td").text(
-                        dc[i].dangerous === true ? Root.Lib.getString('no') : Root.Lib.getString('yes')
+                        dc[i].dangerous === true
+                          ? Root.Lib.getString("no")
+                          : Root.Lib.getString("yes")
                       ),
                       new Html("td").appendMany(
                         dc[i].dangerous === true
                           ? new Html("button")
-                              .text(Root.Lib.getString('delete'))
+                              .text(Root.Lib.getString("delete"))
                               .on("click", async (_) => {
                                 await dc[i].delete();
                                 await performSecurityScan();
                               })
                           : new Html("button")
                               .attr({ disabled: true })
-                              .text(Root.Lib.getString('delete'))
+                              .text(Root.Lib.getString("delete"))
                       )
                     )
                   )
