@@ -1,3 +1,5 @@
+import ctxMenu from "../lib/CtxMenu.js";
+
 export default {
   name: "Desktop",
   description: "Backdrop user interface",
@@ -176,6 +178,32 @@ export default {
     const preloadImage = new Image();
     preloadImage.src = wallpaper;
     preloadImage.addEventListener("load", refresh);
+
+    background.on("contextmenu", (e) => {
+      e.preventDefault();
+      ctxMenu.new(e.clientX, e.clientY, [
+        {
+          item: Root.Lib.getString("refresh"),
+          async select() {
+            refresh();
+          },
+        },
+        {
+          item: Root.Lib.getString("systemApp_FileManager"),
+          async select() {
+            let fm = await Root.Core.startPkg("apps:FileManager", true, true);
+
+            fm.proc.send({ type: "loadFolder", path: 'Root/Desktop' });
+          },
+        },
+        {
+          item: Root.Lib.getString("systemApp_Settings"),
+          async select() {
+            let fm = await Root.Core.startPkg("apps:Settings", true, true);
+          },
+        },
+      ]);
+    });
 
     // let topBar = new Root.Lib.html("div").appendTo(wrapper).class("topBar");
     // let tab1 = new Root.Lib.html("div")
