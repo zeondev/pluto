@@ -371,7 +371,16 @@
         this.randomString = GlobalLib.randomString;
         this.icons = GlobalLib.icons;
         this.systemInfo = coreDetails;
-
+        this.updateProcTitle = function (newTitle) {
+          if (Core.processList[Pid].proc !== null) {
+            Core.processList[Pid].proc.name = newTitle;
+          }
+        };
+        this.updateProcDesc = function (newDescription) {
+          if (Core.processList[Pid].proc !== null) {
+            Core.processList[Pid].proc.description = newDescription;
+          }
+        };
         this.langs = supportedLangs;
         this.launch = async (app, parent = "body") => {
           let appName = "";
@@ -525,7 +534,14 @@
         });
     }
 
-    const supportedLangs = ["en_US", "en_GB", "de_DE", "es_ES", "pt_BR"];
+    const supportedLangs = [
+      "en_US",
+      "en_GB",
+      "de_DE",
+      "es_ES",
+      "pt_BR",
+      "fil_PH",
+    ];
 
     let language = "en_US";
 

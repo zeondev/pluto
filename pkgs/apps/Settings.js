@@ -36,6 +36,30 @@ export default {
       storageUsed: "Storage used",
       coreVersion: "Core version",
       supportedVersions: "Supported versions",
+      errorCouldNotFetch: "Could not fetch from account service",
+      loginWithZeon: "Login with Zeon Account",
+      logOut: "Log out",
+      zeonAccount: "Zeon Account",
+      useThemeWallpaper: "Use the theme's wallpaper",
+      toolbarPosition: "Toolbar position",
+      toolbarPositionVertical: "Vertical",
+      toolbarPositionHorizontal: "Horizontal",
+      dockStyle: "Dock style",
+      dockStyleFull: "Full",
+      dockStyleCompact: "Compact",
+      dockStyleMinimal: "Minimal",
+      testNetwork: "Test Network",
+      networkTestSuccess: "You're online and good to go!",
+      networkTestResult: "Your internet is {status}",
+      networkTestMs: "Average response time: {responseTime}ms.",
+      networkTestError:
+        "Network is not working. Status code: {req1Status}, {req2Status}",
+      noInstalledApps: "There are no installed applications.",
+      securityCheck: "Security Check",
+      securityCheckEveryStartup: "Check every startup?",
+      securityTableItemName: "Name",
+      securityTableItemSafe: "Safe",
+      securityTableItemDelete: "Delete App",
     },
     de_DE: {
       thisSystem: "Dieses System",
@@ -76,6 +100,44 @@ export default {
       coreVersion: "Versão da core",
       supportedVersions: "Versãos suportado",
     },
+    fil_PH: {
+      thisSystem: "Itong system",
+      yourDevice: "Iyong device",
+      operatingSystem: "Ang operating system",
+      webBrowser: "Ang web browser",
+      deviceType: "Uri ng device",
+      webProtocol: "Ang web protocol",
+      webHost: "Ang web host",
+      plutoInfo: "Tungkol sa Pluto",
+      storageUsed: "Storage na ginamit",
+      coreVersion: "Bersyon ng core",
+      supportedVersions: "Supported na mga bersyon",
+      errorCouldNotFetch: "May problema sa pag-kuha mula sa account service",
+      loginWithZeon: "Mag-login sa Zeon Account",
+      logOut: "Mag-log out",
+      zeonAccount: "Zeon Account",
+      useThemeWallpaper: "Gamitin ang wallpaper galing sa tema",
+      toolbarPosition: "Posisyon ng toolbar",
+      toolbarPositionVertical: "Patayo",
+      toolbarPositionHorizontal: "Pahiga",
+      dockStyle: "Istilo ng dock",
+      dockStyleFull: "Full",
+      dockStyleCompact: "Compact",
+      dockStyleMinimal: "Minimal",
+      testNetwork: "Subukan ang network",
+      networkTestSuccess: "Ikaw ay online!",
+      networkTestResult: "Ang status ng iyong internet ay {status}",
+      networkTestMs:
+        "Average response time ng iyong network: {responseTime}ms.",
+      networkTestError:
+        "Hindi gumagana ang iyong network. Status code: {req1Status}, {req2Status}",
+      noInstalledApps: "Walang naka-install na aplikasyon",
+      securityCheck: "I-check ang Seguridad",
+      securityCheckEveryStartup: "I-check tuwing startup?",
+      securityTableItemName: "Pangalan",
+      securityTableItemSafe: "Ligtas",
+      securityTableItemDelete: "I-delete ang aplikasyon",
+    },
   },
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
@@ -93,12 +155,7 @@ export default {
         Root.Core.processList
           .filter((x) => x !== null)
           .find(
-            (x) =>
-              x.name &&
-              x.name === "apps:Settings" &&
-              x.proc &&
-              x.proc.name &&
-              x.proc.name === "Settings"
+            (x) => x.name && x.name === "apps:Settings" && x.proc !== null
           ) !== undefined)
     ) {
       Root.Lib.onEnd();
@@ -251,7 +308,7 @@ export default {
 
           if (!service && !service.ref)
             return new Html("span")
-              .text("Could not fetch from account service")
+              .text(Root.Lib.getString("errorCouldNotFetch"))
               .appendTo(container);
 
           const userData = service.ref.getUserData();
@@ -279,7 +336,7 @@ export default {
           if (result === undefined) {
             new Html("button")
               .class("primary", "small", "mc")
-              .text("Login with Zeon Account")
+              .text(Root.Lib.getString("loginWithZeon"))
               .on("click", async (e) => {
                 let x = await Root.Modal.input(
                   "Login with Zeon",
@@ -322,7 +379,7 @@ export default {
           } else {
             new Html("button")
               .class("danger", "mc")
-              .text("Log out")
+              .text(Root.Lib.getString("logOut"))
               .on("click", async (e) => {
                 const a = await Root.Modal.prompt("Are you sure?", "Log out?");
                 if (a === true) {
@@ -354,7 +411,7 @@ export default {
                     ")",
                 });
                 userBoxName.text(userData.user);
-                userBoxType.text("Zeon Account");
+                userBoxType.text(Root.Lib.getString("zeonAccount"));
               }
             } catch (e) {
               Root.Modal.alert("Something went wrong loading your user data.");
@@ -390,7 +447,7 @@ export default {
           for (let i = 0; i < allKeys.length; i++) {
             let value = await localforage.getItem(allKeys[i]);
 
-            if (typeof value === 'string') {
+            if (typeof value === "string") {
               totalStorage += value.length;
             } else if (value instanceof Blob) {
               totalStorage += value.size;
@@ -639,27 +696,26 @@ export default {
               .filter((r) => r.type === "file" && r.item.endsWith(".theme"))
               .map((r) => r.item);
 
-            await Promise.all(themeFileList.map(async (itm) => {
-              const theme = await vfs.readFile(
-                `Root/Pluto/config/themes/${itm}`
-              );
-              const result = themeLib.validateTheme(theme);
-              if (result.success === true) {
-                themes.push(
-                  new Html("option").text(result.data.name).attr({
-                    value: themes.length,
-                    selected: desktopConfig.theme === itm ? true : null,
-                  })
+            await Promise.all(
+              themeFileList.map(async (itm) => {
+                const theme = await vfs.readFile(
+                  `Root/Pluto/config/themes/${itm}`
                 );
-                themeData.push(Object.assign({ fileName: itm }, result.data));
-              } else {
-                alert("failed parsing theme data due to " + result.message);
-              }
-              console.log("theme parsing", itm, result);
-            }));
+                const result = themeLib.validateTheme(theme);
+                if (result.success === true) {
+                  themes.push(
+                    new Html("option").text(result.data.name).attr({
+                      value: themes.length,
+                      selected: desktopConfig.theme === itm ? true : null,
+                    })
+                  );
+                  themeData.push(Object.assign({ fileName: itm }, result.data));
+                } else {
+                  alert("failed parsing theme data due to " + result.message);
+                }
+              })
+            );
           }
-
-          console.log(JSON.parse(JSON.stringify(themes)));
 
           new Html("select")
             .appendMany(...themes)
@@ -668,7 +724,7 @@ export default {
               if (isNaN(parseInt(e.target.value))) {
                 // apply theme
                 desktopConfig.theme = e.target.value;
-                themeLib.setCurrentTheme(x);
+                themeLib.setCurrentTheme(thisRef);
               } else {
                 const x = themeData[parseInt(e.target.value)];
                 console.log(x);
@@ -720,7 +776,7 @@ export default {
                 .attr({
                   for: Root.PID + "lc",
                 })
-                .text("Use wallpaper from theme")
+                .text(Root.Lib.getString("useThemeWallpaper"))
             )
             .appendTo(container);
 
@@ -729,19 +785,23 @@ export default {
             .appendTo(container);
 
           sidebarTypeSpan.appendMany(
-            new Html("span").text("Toolbar position"),
+            new Html("span").text(Root.Lib.getString("toolbarPosition")),
             new Html("select")
               .appendMany(
-                new Html("option").text("Vertical").attr({
-                  value: "vertical",
-                  selected:
-                    desktopConfig.sidebarType === "vertical" ? true : null,
-                }),
-                new Html("option").text("Horizontal").attr({
-                  value: "horizontal",
-                  selected:
-                    desktopConfig.sidebarType === "horizontal" ? true : null,
-                })
+                new Html("option")
+                  .text(Root.Lib.getString("toolbarPositionVertical"))
+                  .attr({
+                    value: "vertical",
+                    selected:
+                      desktopConfig.sidebarType === "vertical" ? true : null,
+                  }),
+                new Html("option")
+                  .text(Root.Lib.getString("toolbarPositionHorizontal"))
+                  .attr({
+                    value: "horizontal",
+                    selected:
+                      desktopConfig.sidebarType === "horizontal" ? true : null,
+                  })
               )
               .on("input", (e) => {
                 desktopConfig.sidebarType = e.target.value;
@@ -756,21 +816,29 @@ export default {
             .appendTo(container);
 
           dockStyleSpan.appendMany(
-            new Html("span").text("Dock style"),
+            new Html("span").text(Root.Lib.getString("dockStyle")),
             new Html("select")
               .appendMany(
-                new Html("option").text("Full").attr({
-                  value: "full",
-                  selected: desktopConfig.dockStyle === "full" ? true : null,
-                }),
-                new Html("option").text("Compact").attr({
-                  value: "compact",
-                  selected: desktopConfig.dockStyle === "compact" ? true : null,
-                }),
-                new Html("option").text("Minimal").attr({
-                  value: "minimal",
-                  selected: desktopConfig.dockStyle === "minimal" ? true : null,
-                })
+                new Html("option")
+                  .text(Root.Lib.getString("dockStyleFull"))
+                  .attr({
+                    value: "full",
+                    selected: desktopConfig.dockStyle === "full" ? true : null,
+                  }),
+                new Html("option")
+                  .text(Root.Lib.getString("dockStyleCompact"))
+                  .attr({
+                    value: "compact",
+                    selected:
+                      desktopConfig.dockStyle === "compact" ? true : null,
+                  }),
+                new Html("option")
+                  .text(Root.Lib.getString("dockStyleMinimal"))
+                  .attr({
+                    value: "minimal",
+                    selected:
+                      desktopConfig.dockStyle === "minimal" ? true : null,
+                  })
               )
               .on("input", (e) => {
                 desktopConfig.dockStyle = e.target.value;
@@ -820,7 +888,7 @@ export default {
           resultTab.class("row", "ac", "js", "gap");
           resultTab.clear();
           new Html("button")
-            .text("Test Network")
+            .text(Root.Lib.getString("testNetwork"))
             .class("primary", "mc", "small")
             .on("click", async (e) => {
               resultTab.clear();
@@ -868,24 +936,26 @@ export default {
                     new Html("span")
                       .class("h2")
                       .style({ "margin-bottom": "8px" })
-                      .text("You're online and good to go!"),
+                      .text(Root.Lib.getString("networkTestSuccess")),
                     new Html("span").text(
-                      "Your internet is " + averageResponse + "\n"
+                      Root.Lib.getString("networkTestResult", {
+                        status: averageResponse,
+                      }) + "\n"
                     ),
-                    new Html("span")
-                      .class("muted")
-                      .text(
-                        "Average response time: " + averageResponseTime + "ms"
-                      )
+                    new Html("span").class("muted").text(
+                      Root.Lib.getString("networkTestMs", {
+                        responseTime: averageResponseTime,
+                      })
+                    )
                   )
                   .appendTo(resultTab);
               } else {
                 Root.Modal.alert(
-                  "Failed",
-                  "Network is not working. Status code: " +
-                    req1.status +
-                    ", " +
-                    req2.status
+                  Root.Lib.getString("error"),
+                  Root.Lib.getString("networkTestError", {
+                    req1Status: req1.status,
+                    req2Status: req2.status,
+                  })
                 );
               }
             })
@@ -934,7 +1004,7 @@ export default {
             });
           } else {
             new Html("span")
-              .text("You have no installed applications.")
+              .text(Root.Lib.getString("noInstalledApps"))
               .appendTo(container);
           }
         },
@@ -946,9 +1016,15 @@ export default {
             new Html("thead")
               .appendMany(
                 new Html("tr").appendMany(
-                  new Html("th").text("Name"),
-                  new Html("th").text("Safe"),
-                  new Html("th").text("Delete App")
+                  new Html("th").text(
+                    Root.Lib.getString("securityTableItemName")
+                  ),
+                  new Html("th").text(
+                    Root.Lib.getString("securityTableItemSafe")
+                  ),
+                  new Html("th").text(
+                    Root.Lib.getString("securityTableItemDelete")
+                  )
                 )
               )
               .appendTo(table);
@@ -962,19 +1038,21 @@ export default {
                     new Html("tr").appendMany(
                       new Html("td").text(dc[i].filename),
                       new Html("td").text(
-                        dc[i].dangerous === true ? "No" : "Yes"
+                        dc[i].dangerous === true
+                          ? Root.Lib.getString("no")
+                          : Root.Lib.getString("yes")
                       ),
                       new Html("td").appendMany(
                         dc[i].dangerous === true
                           ? new Html("button")
-                              .text("Delete")
+                              .text(Root.Lib.getString("delete"))
                               .on("click", async (_) => {
                                 await dc[i].delete();
                                 await performSecurityScan();
                               })
                           : new Html("button")
                               .attr({ disabled: true })
-                              .text("Delete")
+                              .text(Root.Lib.getString("delete"))
                       )
                     )
                   )
@@ -990,7 +1068,7 @@ export default {
             .appendMany()
             .appendTo(container);
           new Html("button")
-            .text("Security Check")
+            .text(Root.Lib.getString("securityCheck"))
             .class("primary", "mc", "small")
             .on("click", async (_) => performSecurityScan())
             .appendTo(container);
@@ -1028,7 +1106,7 @@ export default {
                 .attr({
                   for: Root.PID + "lc",
                 })
-                .text("Check every startup?")
+                .text(Root.Lib.getString("securityCheckEveryStartup"))
             )
             .appendTo(container);
         },
@@ -1039,12 +1117,17 @@ export default {
 
     console.log("loading settings pap", pages);
 
-    await setupSettingsApp();
+    setupSettingsApp();
+
+    settingsWin.setTitle(Root.Lib.getString("systemApp_Settings"));
+    this.name = Root.Lib.getString("systemApp_Settings");
 
     return Root.Lib.setupReturns(async (m) => {
       if (m && m.type) {
         if (m.type === "refresh") {
           Root.Lib.getString = m.data;
+          settingsWin.setTitle(Root.Lib.getString("systemApp_Settings"));
+          Root.Lib.updateProcTitle(Root.Lib.getString("systemApp_Settings"));
           setupSettingsApp();
         }
         if (m.type === "goPage") {

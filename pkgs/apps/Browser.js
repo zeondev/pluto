@@ -19,7 +19,7 @@ export default {
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
     MyWindow = new Win({
-      title: "Browser",
+      title: Root.Lib.getString('systemApp_Browser'),
       content: "",
       pid: Root.PID,
       width: 640,
@@ -450,8 +450,14 @@ export default {
       })
       .appendTo(toolHeader);
 
-    return Root.Lib.setupReturns((m) => {
-      console.log("Example received message: " + m);
+    return Root.Lib.setupReturns(async (m) => {
+      if (m && m.type) {
+        if (m.type === "refresh") {
+          Root.Lib.getString = m.data;
+          MyWindow.setTitle(Root.Lib.getString("systemApp_Browser"));
+          Root.Lib.updateProcTitle(Root.Lib.getString("systemApp_Browser"));
+        }
+      }
     });
   },
 };

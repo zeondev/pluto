@@ -115,6 +115,10 @@ interface Root {
       versionString: string;
       codename: string;
     }
+    getString: async function(
+        title: string,
+        description
+    );
   };
   Core: Core | null;
   PID: number;
@@ -248,6 +252,7 @@ You can also import Html from datkat21's source using unpkg:
 ```js
 const Html = (await import("https://unpkg.com/@datkat21/html")).default;
 ```
+This is recommended if you want to use the latest features of Html (e.g. prepend, prependMany, prependTo).     
 This will ensure the Html library is always up to date, no matter the version of Pluto the app is running on.
 
 ### Examples
@@ -298,6 +303,8 @@ This will create the following layout:
 
 There are a few more advanced methods to how the Html class works:
 
+**Note: Some methods may not be available in older versions of Pluto, and some methods may not work unless you use the [latest version of Html](#html-library).**
+
 - `.style()`  
    Add inline styles
   ```js
@@ -306,6 +313,17 @@ There are a few more advanced methods to how the Html class works:
     // These are CSS style names,
     // so you will have to use dashes..
     "font-size": "18px",
+    // Another example
+    "backdrop-filter": "blur(4px)"
+  });
+  ```
+- `.styleJs()`  
+   Add inline styles (JS syntax)
+  ```js
+  new Html("span").styleJs({
+    color: "red",
+    fontSize: "18px",
+    backdropFilter: "blur(4px)"
   });
   ```
 - `.attr()`  
@@ -317,13 +335,13 @@ There are a few more advanced methods to how the Html class works:
   // <span id="MySpan"></span>
   ```
 - `.class()`  
-   Toggle a class
+   Toggle a class (on/off)
   ```js
   new Html("span").class("my-class");
   // <span class="my-class"></span>
   ```
 - `.classOn()`  
-   Add a class
+   Add a class (Recommended to use over `.class()`)
   ```js
   new Html("span").classOn("my-class");
   // <span class="my-class"></span>
@@ -334,6 +352,12 @@ There are a few more advanced methods to how the Html class works:
   new Html("span").classOff("my-class");
   // <span></span>
   ```
+- `.id()`  
+   Set the id of an element
+   ```js
+  new Html("div").id("my-id");
+  // <div id="my-id"></div>
+   ```
 - `.on(eventName, eventHandler)`  
    Add an event listener
 
@@ -350,8 +374,40 @@ There are a few more advanced methods to how the Html class works:
     console.log(e);
   });
   ```
-
 - `.un(eventName, eventHandler)`  
+- `.prepend(elm)`
+  Add a new element to the beginning of the element
+  ```js
+  const container = new Html("div").prepend(
+    new Html("span").text("Hello, world!")
+  );
+  ```
+- `.prependMany(...elms)`
+  Add multiple elements to the start
+  ```js
+  new Html("div").prependMany(
+    new Html("span").class("h1").text("Hello!"),
+    new Html("span").text("Hi!")
+  );
+  /*
+  <div>
+    <span class="h1">Hello!</span>
+    <span>Hi!</span>
+  </div>
+  */
+  ```
+- `.prependTo()`
+  Prepend the element to the beginning of another element
+  ```js
+  new Html("div").prependTo("body");
+  
+  /*
+  <body>
+    <div></div>
+    <p>Hello</p>
+  </body>
+  */
+  ```
    Remove an event listener (if a function is available)
 
   ```js
@@ -361,7 +417,6 @@ There are a few more advanced methods to how the Html class works:
 
   new Html("span").un("click", myEvent);
   ```
-
 - `.append(elm)`
   Add a new element inside the element
   ```js
@@ -383,6 +438,18 @@ There are a few more advanced methods to how the Html class works:
   </div>
   */
   ```
+- `.appendTo()`
+  Append the element to another element
+  ```js
+  new Html("div").appendTo("body");
+  
+  /*
+  <body>
+    <p>Hello</p>
+    <div></div>
+  </body>
+  */
+  ```
 - `.cleanup()`  
   Destroy the element
 
@@ -392,6 +459,33 @@ There are a few more advanced methods to how the Html class works:
   // later
   div.cleanup();
   ```
+- `.swapRef(elm)`  
+  Swap the element reference with a new one
+
+  ```js
+  const div = new Html("div").appendTo("body");
+
+  const div2 = document.querySelector("body > div.two");
+
+  div.swapRef(div2); // div now references div2
+  ```
+- `.getText()`
+  Get text of the element
+
+  ```js
+  const div = new Html("div").text("This is my text...");
+
+  div.getText(); // 'This is my text...'
+  ```
+- `.getHtml()`
+  Get HTML content of the element
+
+  ```js
+  const div = new Html("div").html("<p>This is my <b>HTML</b> content...</p>");
+
+  div.getHtml(); // '<p>This is my <b>HTML</b> content...</p>'
+  ```
+- `.getValue()`
 
 ## Using libraries/components in your apps
 

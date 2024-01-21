@@ -7,6 +7,8 @@ export default {
     let wrapper; // Lib.html | undefined
     let NpWindow;
 
+    this.name = Root.Lib.getString("systemApp_Notepad");
+
     Root.Lib.setOnEnd((_) => NpWindow.close());
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
@@ -14,7 +16,7 @@ export default {
     const Sidebar = await Root.Lib.loadComponent("Sidebar");
 
     NpWindow = new Win({
-      title: "Notepad",
+      title: Root.Lib.getString("systemApp_Notepad"),
       content: "",
       width: 340,
       height: 230,
@@ -107,51 +109,60 @@ export default {
       return true;
     }
 
-    Sidebar.new(wrapper, [
-      {
-        onclick: async (_) => {
-          // clicking the new document button seems buggy, possibly due to dirty check
-          const result = await dirtyCheck();
-          if (result === false) return;
-          newDocument("", "");
+    let sidebarWrapper = new Root.Lib.html("div")
+      .styleJs({ display: "flex" })
+      .appendTo(wrapper);
+
+    function makeSidebar() {
+      sidebarWrapper.clear();
+      Sidebar.new(sidebarWrapper, [
+        {
+          onclick: async (_) => {
+            // clicking the new document button seems buggy, possibly due to dirty check
+            const result = await dirtyCheck();
+            if (result === false) return;
+            newDocument("", "");
+          },
+          html: Root.Lib.icons.newFile,
+          title: Root.Lib.getString("action_newDocument"),
         },
-        html: Root.Lib.icons.newFile,
-        title: "New Document",
-      },
-      {
-        onclick: async (_) => {
-          const result = await dirtyCheck();
-          if (result === false) return;
-          openFile();
+        {
+          onclick: async (_) => {
+            const result = await dirtyCheck();
+            if (result === false) return;
+            openFile();
+          },
+          html: Root.Lib.icons.openFolder,
+          title: Root.Lib.getString("action_openDocument"),
         },
-        html: Root.Lib.icons.openFolder,
-        title: "Open...",
-      },
-      {
-        onclick: async (_) => {
-          await saveFile();
+        {
+          onclick: async (_) => {
+            await saveFile();
+          },
+          html: Root.Lib.icons.save,
+          title: Root.Lib.getString("action_save"),
         },
-        html: Root.Lib.icons.save,
-        title: "Save",
-      },
-      {
-        onclick: async (_) => {
-          await saveAs();
+        {
+          onclick: async (_) => {
+            await saveAs();
+          },
+          html: Root.Lib.icons.saveAll,
+          title: Root.Lib.getString("action_saveAs"),
         },
-        html: Root.Lib.icons.saveAll,
-        title: "Save As...",
-      },
-      {
-        style: {
-          "margin-top": "auto",
+        {
+          style: {
+            "margin-top": "auto",
+          },
+          onclick: (_) => {
+            alert("Not implemented");
+          },
+          html: Root.Lib.icons.help,
+          title: Root.Lib.getString("appHelp"),
         },
-        onclick: (_) => {
-          alert("Not implemented");
-        },
-        html: Root.Lib.icons.help,
-        title: "Help",
-      },
-    ]);
+      ]);
+    }
+
+    makeSidebar();
 
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
     await vfs.importFS();
@@ -168,6 +179,14 @@ export default {
     });
 
     return Root.Lib.setupReturns(async (m) => {
+      if (m && m.type) {
+        if (m.type === "refresh") {
+          Root.Lib.getString = m.data;
+          NpWindow.setTitle(Root.Lib.getString("systemApp_Notepad"));
+          Root.Lib.updateProcTitle(Root.Lib.getString("systemApp_Notepad"));
+          makeSidebar();
+        }
+      }
       if (typeof m === "object" && m.type && m.type === "loadFile" && m.path) {
         newDocument(m.path, await vfs.readFile(m.path));
       }

@@ -1,3 +1,5 @@
+import ctxMenu from "../lib/CtxMenu.js";
+
 export default {
   name: "Desktop",
   description: "Backdrop user interface",
@@ -54,44 +56,46 @@ export default {
       })
       .appendTo(wrapper);
 
+    const iconsWrapper = new Root.Lib.html("div")
+      .class("desktop-apps")
+      .appendTo(wrapper);
+
+    if (localStorage.getItem("oldVFS")) {
+      const x = await Root.Modal.prompt(
+        "Filesystem restore",
+        "Looks like you have an old file system.\nWould you like to mount it?",
+        wrapper
+      );
+
+      if (x === true) {
+        // Do the thing the thing
+        // const vfs = await l.loadLibrary("VirtualFS");
+
+        // Root -> oldFs
+        vfs.fileSystem.Root["oldFs"] = JSON.parse(
+          localStorage.getItem("oldVFS")
+        );
+        await vfs.save();
+        localStorage.removeItem("oldVFS");
+
+        let fm = await Root.Core.startPkg("apps:FileManager", true, true);
+
+        Root.Modal.alert(
+          "Filesystem restore",
+          "Your old filesystem has been mounted to the 'oldFs' folder.",
+          wrapper
+        );
+      }
+    }
+
     async function refresh() {
+      iconsWrapper.clear();
+
       background.style({
         opacity: 1,
         display: "block",
         "z-index": -1,
       });
-
-      let mouseSpace = {
-        x: 0,
-        y: 0,
-      };
-      if (localStorage.getItem("oldVFS")) {
-        const x = await Root.Modal.prompt(
-          "Filesystem restore",
-          "Looks like you have an old file system.\nWould you like to mount it?",
-          wrapper
-        );
-
-        if (x === true) {
-          // Do the thing the thing
-          // const vfs = await l.loadLibrary("VirtualFS");
-
-          // Root -> oldFs
-          vfs.fileSystem.Root["oldFs"] = JSON.parse(
-            localStorage.getItem("oldVFS")
-          );
-          await vfs.save();
-          localStorage.removeItem("oldVFS");
-
-          let fm = await Root.Core.startPkg("apps:FileManager", true, true);
-
-          Root.Modal.alert(
-            "Filesystem restore",
-            "Your old filesystem has been mounted to the 'oldFs' folder.",
-            wrapper
-          );
-        }
-      }
 
       // new Root.Lib.html("div")
       //   .html(`<svg viewBox="0 0 24 24" width="64" height="64" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`)
@@ -115,10 +119,6 @@ export default {
 
       const desktopDirectory = "Root/Desktop";
       const fileList = await vfs.list(desktopDirectory);
-
-      const iconsWrapper = new Root.Lib.html("div")
-        .class("desktop-apps")
-        .appendTo(wrapper);
 
       function createDesktopIcon(fileName, icon, fn) {
         const mouse = { x: 0, y: 0 };
@@ -172,65 +172,38 @@ export default {
         );
 
         createDesktopIcon(mapping.name, mapping.icon, mapping.onClick);
-
-        // if (file.item.endsWith(".shrt")) {
-        //   try {
-        //     let shrtFile = JSON.parse(
-        //       await vfs.readFile(desktopDirectory + "/" + file.item)
-        //     );
-
-        //     if (!shrtFile.name || !shrtFile.icon || !shrtFile.fullName) {
-        //       continue;
-        //     }
-
-        //     createDesktopIcon(shrtFile.name, shrtFile.icon, () => {
-        //       Root.Core.startPkg(shrtFile.fullName, true, true);
-        //     });
-        //   } catch (e) {
-        //     console.log("UNABLE TO PARSE", file);
-        //     Root.Modal.alert("Desktop Shortcut Error", e, wrapper);
-        //   }
-        // } else {
-        //   createDesktopIcon(file.item, file.type, async (e) => {
-        //     console.log(file.type)
-        //     if (file.type == "dir") {
-        //       let fm = await Root.Core.startPkg("apps:FileManager");
-        //       fm.proc.send({ type: "loadFolder", path: desktopDirectory + "/" + file.item });
-        //     }
-        //     else if (file.type == "file") {
-        //       let fileExtension = (
-        //         file.item.includes(".") ? file.item.split(".").pop() : ""
-        //       ).trim();
-        //       switch (fileExtension) {
-        //         case "app":
-        //           Root.Core.startPkg(
-        //             "data:text/javascript;base64," +
-        //             btoa(await vfs.readFile(desktopDirectory + "/" + file.item)),
-        //             false
-        //           );
-        //           break;
-        //         case "png":
-        //         case "jpg":
-        //         case "jpeg":
-        //         case "bmp":
-        //         case "gif":
-        //           let img = await Root.Core.startPkg("apps:ImageViewer");
-        //           img.proc.send({ type: "loadFile", path: desktopDirectory + "/" + file.item });
-        //           break;
-        //         default:
-        //           let np = await Root.Core.startPkg("apps:Notepad");
-        //           np.proc.send({ type: "loadFile", path: desktopDirectory + "/" + file.item });
-        //           break;
-        //       }
-        //     }
-        //   });
-        // }
       }
     }
 
     const preloadImage = new Image();
     preloadImage.src = wallpaper;
     preloadImage.addEventListener("load", refresh);
+
+    background.on("contextmenu", (e) => {
+      e.preventDefault();
+      ctxMenu.new(e.clientX, e.clientY, [
+        {
+          item: Root.Lib.getString("refresh"),
+          async select() {
+            refresh();
+          },
+        },
+        {
+          item: Root.Lib.getString("systemApp_FileManager"),
+          async select() {
+            let fm = await Root.Core.startPkg("apps:FileManager", true, true);
+
+            fm.proc.send({ type: "loadFolder", path: 'Root/Desktop' });
+          },
+        },
+        {
+          item: Root.Lib.getString("systemApp_Settings"),
+          async select() {
+            let fm = await Root.Core.startPkg("apps:Settings", true, true);
+          },
+        },
+      ]);
+    });
 
     // let topBar = new Root.Lib.html("div").appendTo(wrapper).class("topBar");
     // let tab1 = new Root.Lib.html("div")
@@ -319,7 +292,7 @@ export default {
                 );
 
                 icon = data.icon;
-                name = data.name;
+                name = data.localizedName ?? data.name;
                 description = data.fullName;
               }
 
@@ -609,6 +582,8 @@ export default {
             }
             break;
           case "refresh":
+            // Language swap, refresh desktop.
+            refresh();
             break;
           case "coreEvent":
             console.log("Desktop received core event", data);

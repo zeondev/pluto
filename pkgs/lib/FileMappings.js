@@ -35,6 +35,10 @@ export default {
         type: "executable",
         label: "Executable Application",
         opensWith: "custom",
+        ctxMenuApp: {
+          launch: "apps:DevEnv",
+          name: "systemApp_DevEnv"
+        },
         icon: "box",
       },
       json: {
@@ -166,7 +170,7 @@ export default {
           return 0;
         }
         return {
-          name: shrtFile.name,
+          name: L.getString(shrtFile.localizedName) ?? shrtFile.name,
           icon: shrtFile.icon,
           fullName: `Desktop shortcut (${shrtFile.fullName})`,
           onClick: (c) => {
@@ -203,6 +207,7 @@ export default {
           name: pathSplit[pathSplit.length - 1],
           icon,
           fullName: map.label,
+          ctxMenuApp: map.ctxMenuApp,
           onClick: async (c) => {
             if (map.opensWith === null) return;
             if (map.opensWith === "custom") {

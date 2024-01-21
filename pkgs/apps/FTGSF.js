@@ -19,16 +19,66 @@ export default {
     // DevEnv
 
     let shortcutsList = [
-      { name: "Task Manager", icon: "cpu", fullName: "apps:TaskManager" },
-      { name: "File Manager", icon: "folders", fullName: "apps:FileManager" },
-      { name: "App Store", icon: "package", fullName: "apps:AppStore" },
-      { name: "Settings", icon: "wrench", fullName: "apps:Settings" },
-      { name: "Notepad", icon: "note", fullName: "apps:Notepad" },
-      { name: "DevEnv", icon: "fileCode", fullName: "apps:DevEnv" },
-      { name: "Image Viewer", icon: "image", fullName: "apps:ImageViewer" },
-      { name: "Browser", icon: "globe", fullName: "apps:Browser" },
-      { name: "Weather", icon: "cloudMoon", fullName: "apps:Cloudburst" },
-      { name: "Terminal", icon: "terminal", fullName: "apps:Terminal" },
+      {
+        localizedName: "systemApp_TaskManager",
+        name: "Task Manager",
+        icon: "cpu",
+        fullName: "apps:TaskManager",
+      },
+      {
+        localizedName: "systemApp_FileManager",
+        name: "File Manager",
+        icon: "folders",
+        fullName: "apps:FileManager",
+      },
+      {
+        localizedName: "systemApp_AppStore",
+        name: "App Store",
+        icon: "package",
+        fullName: "apps:AppStore",
+      },
+      {
+        localizedName: "systemApp_Settings",
+        name: "Settings",
+        icon: "wrench",
+        fullName: "apps:Settings",
+      },
+      {
+        localizedName: "systemApp_Notepad",
+        name: "Notepad",
+        icon: "note",
+        fullName: "apps:Notepad",
+      },
+      {
+        localizedName: "systemApp_DevEnv",
+        name: "DevEnv",
+        icon: "fileCode",
+        fullName: "apps:DevEnv",
+      },
+      {
+        localizedName: "systemApp_ImageViewer",
+        name: "Image Viewer",
+        icon: "image",
+        fullName: "apps:ImageViewer",
+      },
+      {
+        localizedName: "systemApp_Browser",
+        name: "Browser",
+        icon: "globe",
+        fullName: "apps:Browser",
+      },
+      {
+        localizedName: "systemApp_Weather",
+        name: "Weather",
+        icon: "cloudMoon",
+        fullName: "apps:Cloudburst",
+      },
+      {
+        localizedName: "systemApp_Terminal",
+        name: "Terminal",
+        icon: "terminal",
+        fullName: "apps:Terminal",
+      },
     ];
     console.log(shortcutsList.length);
     for (let i = 0; i < shortcutsList.length; i++) {
