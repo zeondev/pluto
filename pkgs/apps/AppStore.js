@@ -22,7 +22,7 @@ export default {
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 
     StoreWindow = new Win({
-      title: "App Store",
+      title: Root.Lib.getString('systemApp_AppStore'),
       pid: Root.PID,
       width: "500px",
       height: "350px",
@@ -463,8 +463,14 @@ export default {
       );
     }
 
-    return Root.Lib.setupReturns((m) => {
-      console.log("Example received message: " + m);
+    return Root.Lib.setupReturns(async (m) => {
+      if (m && m.type) {
+        if (m.type === "refresh") {
+          Root.Lib.getString = m.data;
+          StoreWindow.setTitle(Root.Lib.getString('systemApp_AppStore'));
+          Root.Lib.updateProcTitle(Root.Lib.getString('systemApp_AppStore'));
+        }
+      }
     });
   },
 };
