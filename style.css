@@ -15,14 +15,16 @@ body {
   color-scheme: dark;
 }
 
-*:not(.resize-grips,
-  .resize-grip,
-  input,
-  textarea,
-  button,
-  button *,
-  select,
-  select *) {
+*:not(
+    .resize-grips,
+    .resize-grip,
+    input,
+    textarea,
+    button,
+    button *,
+    select,
+    select *
+  ) {
   cursor: var(--cursor-default) 2 2, auto !important;
 }
 
@@ -191,7 +193,8 @@ body {
 }
 
 .win-window.closing {
-  animation: slide-down var(--animation-duration) var(--easing-function) forwards;
+  animation: slide-down var(--animation-duration) var(--easing-function)
+    forwards;
 }
 
 .win-window.dragging {
@@ -232,20 +235,20 @@ body {
   box-shadow: none;
 }
 
-.win-window.max>.win-titlebar>.buttons>.win-btn.win-minimize {
+.win-window.max > .win-titlebar > .buttons > .win-btn.win-minimize {
   visibility: collapse;
 }
 
-.desktop~.win-window.max {
+.desktop ~ .win-window.max {
   height: calc(100% - 42px - 12px) !important;
 }
 
-.win-window.max>.win-titlebar,
-.win-window.max>.win-content {
+.win-window.max > .win-titlebar,
+.win-window.max > .win-content {
   border-radius: 0;
 }
 
-.win-window.max>.resize-grips {
+.win-window.max > .resize-grips {
   display: none;
 }
 
@@ -255,7 +258,7 @@ body {
   border-radius: 5px;
 }
 
-.win-window.min>.win-titlebar {
+.win-window.min > .win-titlebar {
   border-radius: 5px;
 }
 
@@ -278,18 +281,18 @@ body {
   flex-shrink: 0;
 }
 
-.win-window:not(.focus)>.win-titlebar .title,
-.win-window-decorative:not(.focus)>.win-titlebar .title {
+.win-window:not(.focus) > .win-titlebar .title,
+.win-window-decorative:not(.focus) > .win-titlebar .title {
   opacity: 0.5;
 }
 
-.win-window:not(.focus)>.win-titlebar button,
-.win-window-decorative:not(.focus)>.win-titlebar button {
+.win-window:not(.focus) > .win-titlebar button,
+.win-window-decorative:not(.focus) > .win-titlebar button {
   filter: brightness(0.5);
 }
 
-.win-window.focus>.win-titlebar,
-.win-window-decorative.focus>.win-titlebar {
+.win-window.focus > .win-titlebar,
+.win-window-decorative.focus > .win-titlebar {
   background-color: var(--header);
 }
 
@@ -527,7 +530,8 @@ body {
 }
 
 .modal.closing .modal-content {
-  animation: shortSlideDown var(--animation-duration) var(--easing-function) forwards;
+  animation: shortSlideDown var(--animation-duration) var(--easing-function)
+    forwards;
 }
 
 .modal-content {
@@ -564,12 +568,12 @@ body {
   overflow: auto;
 }
 
-.modal-body> :first-child {
+.modal-body > :first-child {
   flex: 1;
   white-space: pre-wrap;
 }
 
-.modal-body> :first-child table {
+.modal-body > :first-child table {
   white-space: unset;
 }
 
@@ -836,7 +840,7 @@ table {
   border-spacing: 0;
 }
 
-table>tbody>tr>td div {
+table > tbody > tr > td div {
   width: 24px;
   display: flex;
   justify-content: center;
@@ -1030,36 +1034,43 @@ td {
   border: 1px solid var(--outline);
   box-shadow: 0px 0px 28px 2px rgba(0, 0, 0, 0.41);
 
-  animation: simpleSlideUp var(--long-animation-duration) var(--easing-function) forwards;
+  animation: simpleSlideUp var(--long-animation-duration) var(--easing-function)
+    forwards;
 }
 
 .desktop .dock.hiding {
-  animation: simpleSlideDown var(--long-animation-duration) var(--easing-function) forwards;
+  animation: simpleSlideDown var(--long-animation-duration)
+    var(--easing-function) forwards;
 }
 
 [data-dock-style="compact"] .desktop .dock {
   max-width: 680px;
   left: 50%;
-  animation: compactSimpleSlideUp var(--long-animation-duration) var(--easing-function) forwards;
+  animation: compactSimpleSlideUp var(--long-animation-duration)
+    var(--easing-function) forwards;
 }
 
 [data-dock-style="compact"] .desktop .dock.hiding {
-  animation: compactSimpleSlideDown var(--long-animation-duration) var(--easing-function) forwards;
+  animation: compactSimpleSlideDown var(--long-animation-duration)
+    var(--easing-function) forwards;
 }
 
 [data-dock-style="minimal"] .desktop .dock {
   width: max-content;
   max-width: 680px;
   left: 50%;
-  animation: compactSimpleSlideUp var(--long-animation-duration) var(--easing-function) forwards;
+  animation: compactSimpleSlideUp var(--long-animation-duration)
+    var(--easing-function) forwards;
 }
 
 [data-dock-style="minimal"] .desktop .dock.hiding {
-  animation: compactSimpleSlideDown var(--long-animation-duration) var(--easing-function) forwards;
+  animation: compactSimpleSlideDown var(--long-animation-duration)
+    var(--easing-function) forwards;
 }
 
 .desktop .dock.collapse {
-  animation: slideLeft var(--long-animation-duration) var(--easing-function) forwards;
+  animation: slideLeft var(--long-animation-duration) var(--easing-function)
+    forwards;
 }
 
 .desktop .dock .toolbar-button {
@@ -1561,7 +1572,8 @@ svg.lucide:not(.ignore-css) {
   max-width: 140px;
   border-radius: 8px;
   padding: 8px;
-  animation: shortSlideUp var(--long-animation-duration) var(--easing-function) forwards;
+  animation: shortSlideUp var(--long-animation-duration) var(--easing-function)
+    forwards;
 }
 
 .desktop-icon:hover {
@@ -1647,9 +1659,11 @@ svg.lucide:not(.ignore-css) {
   flex-direction: column;
   height: 174px;
   padding: 10% 8%;
-  background-image: linear-gradient(0deg,
+  background-image: linear-gradient(
+      0deg,
       rgba(var(--root-rgb), 0.8),
-      rgba(var(--root-rgb), 0.8)),
+      rgba(var(--root-rgb), 0.8)
+    ),
     var(--bg);
   background-size: cover;
   background-position: center;
@@ -1829,7 +1843,7 @@ hr {
   height: 50vh;
 }
 
-.desktop .menu>.me {
+.desktop .menu > .me {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1837,7 +1851,7 @@ hr {
   margin-top: 12px;
 }
 
-.desktop .menu>.me .pfp {
+.desktop .menu > .me .pfp {
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -1847,7 +1861,7 @@ hr {
   --url: url("./assets/user-avatar.svg");
 }
 
-.desktop .menu>.me>.text {
+.desktop .menu > .me > .text {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1855,7 +1869,7 @@ hr {
   flex: 1 0 0;
 }
 
-.desktop .menu>.me>.text>.subheading {
+.desktop .menu > .me > .text > .subheading {
   color: var(--label-light);
   font-size: 12px;
   font-style: normal;
@@ -1886,7 +1900,7 @@ hr {
   background: var(--label);
 }
 
-.desktop .menu>.apps {
+.desktop .menu > .apps {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1895,7 +1909,7 @@ hr {
   overflow: auto;
 }
 
-.desktop .menu>.apps>.app {
+.desktop .menu > .apps > .app {
   display: flex;
   padding: 8px;
   align-items: center;
@@ -1905,25 +1919,25 @@ hr {
   cursor: pointer;
 }
 
-.desktop .menu>.apps>.app:hover {
+.desktop .menu > .apps > .app:hover {
   background-color: var(--header);
 }
 
-.desktop .menu>.apps>.app>.app-icon,
-.desktop .menu>.apps>.app>.app-icon svg {
+.desktop .menu > .apps > .app > .app-icon,
+.desktop .menu > .apps > .app > .app-icon svg {
   width: 32px;
   height: 32px;
   stroke-width: 1.5px;
 }
 
-.desktop .menu>.apps>.app>.app-text {
+.desktop .menu > .apps > .app > .app-text {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
 }
 
-.desktop .menu>.apps>.app>.app-text>.app-heading {
+.desktop .menu > .apps > .app > .app-text > .app-heading {
   color: var(--text);
   font-size: 14px;
   font-style: normal;
@@ -1931,7 +1945,7 @@ hr {
   line-height: normal;
 }
 
-.desktop .menu>.apps>.app>.app-text>.app-description {
+.desktop .menu > .apps > .app > .app-text > .app-description {
   color: var(--text-alt);
   font-size: 12px;
   font-style: normal;
@@ -2052,11 +2066,13 @@ hr {
 }
 
 [data-dock-style="compact"] .desktop .menu.opening {
-  animation: compactMenuOpen var(--animation-duration) var(--easing-function) forwards;
+  animation: compactMenuOpen var(--animation-duration) var(--easing-function)
+    forwards;
 }
 
 [data-dock-style="compact"] .desktop .menu.closing {
-  animation: compactMenuClose var(--animation-duration) var(--easing-function) forwards;
+  animation: compactMenuClose var(--animation-duration) var(--easing-function)
+    forwards;
 }
 
 [data-dock-style="compact"] .desktop .menu {
@@ -2064,11 +2080,13 @@ hr {
 }
 
 [data-dock-style="minimal"] .desktop .menu.opening {
-  animation: minimalMenuOpen var(--animation-duration) var(--easing-function) forwards;
+  animation: minimalMenuOpen var(--animation-duration) var(--easing-function)
+    forwards;
 }
 
 [data-dock-style="minimal"] .desktop .menu.closing {
-  animation: minimalMenuClose var(--animation-duration) var(--easing-function) forwards;
+  animation: minimalMenuClose var(--animation-duration) var(--easing-function)
+    forwards;
 }
 
 [data-dock-style="minimal"] .desktop .menu {
@@ -2396,4 +2414,8 @@ hr {
 
 .win-content .modal {
   position: absolute !important;
+}
+
+.tab-text {
+  pointer-events: none;
 }
