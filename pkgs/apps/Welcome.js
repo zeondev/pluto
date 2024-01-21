@@ -22,6 +22,7 @@ export default {
       welcome_page2_language_de_DE: "German (Germany)",
       welcome_page2_language_es_ES: "Spanish (Spain)",
       welcome_page2_language_pt_BR: "Portuguese (Brazil)",
+      welcome_page2_language_fil_PH: "Filipino (Pilipinas)",
       welcome_page3_header: "Personalize",
       welcome_page3_body: "Select your favorite theme.",
       welcome_page4_header: "You have now set up your system!",
@@ -78,6 +79,25 @@ export default {
       welcome_page4_header: "Agora você configurou seu sistema!",
       welcome_page4_body:
         'Pressione "Completa" para sair do aplicativo "Ben-vindo".',
+    },
+    fil_PH: {
+      welcome_window_title: "Kamusta!",
+      welcome_page1_header: "Maligayang pagdating sa Pluto",
+      welcome_page1_body:
+        "Kamusta! Maligayang pagdating sa Pluto, ang bagong 'desktop environment' para sa web.\n\nI-click ang 'Sunod' para sa setup.",
+      welcome_page2_header: "Baguhin ang wika",
+      welcome_page2_body: "Ang wikang pinili ay Filipino (Pilipinas).",
+      welcome_page2_language_en_US: "Ingles (US)",
+      welcome_page2_language_en_GB: "Ingles (UK)",
+      welcome_page2_language_de_DE: "German (Germany)",
+      welcome_page2_language_es_ES: "Español (Spain)",
+      welcome_page2_language_pt_BR: "Portuguese (Brazil)",
+      welcome_page2_language_fil_PH: "Filipino (Pilipinas)",
+      welcome_page3_header: "Baguhin ang hitsura ng Pluto",
+      welcome_page3_body: "Piliin ang iyong paboritong theme.",
+      welcome_page4_header: "Dito nagtatapos ang setup!",
+      welcome_page4_body:
+        "I-click ang 'Tapos' para i-quit ang setup at mag-save ng settings.",
     },
   },
   exec: async function (Root) {

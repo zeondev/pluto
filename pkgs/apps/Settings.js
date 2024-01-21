@@ -100,6 +100,19 @@ export default {
       coreVersion: "Versão da core",
       supportedVersions: "Versãos suportado",
     },
+    fil_PH: {
+      thisSystem: "Itong system",
+      yourDevice: "Iyong device",
+      operatingSystem: "Ang operating system",
+      webBrowser: "Ang web browser",
+      deviceType: "Uri ng device",
+      webProtocol: "Ang web protocol",
+      webHost: "Ang web host",
+      plutoInfo: "Tungkol sa Pluto",
+      storageUsed: "Storage na ginamit",
+      coreVersion: "Bersyon ng core",
+      supportedVersions: "Supported na mga bersyon",
+    },
   },
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
