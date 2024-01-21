@@ -2360,7 +2360,7 @@ hr {
   flex-direction: column;
   background-color: var(--unfocused);
   border: 1px solid var(--outline);
-  color: var(--text-light);
+  color: var(--text);
   border-radius: 6px;
   user-select: none;
 

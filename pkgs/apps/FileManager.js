@@ -303,6 +303,24 @@ export default {
                 mapping.onClick(Root.Core);
               },
             },
+            mapping.ctxMenuApp !== undefined
+              ? {
+                  item: `Open in ${Root.Lib.getString(
+                    mapping.ctxMenuApp.name
+                  )}`,
+                  async select() {
+                    const p = await Root.Core.startPkg(
+                      mapping.ctxMenuApp.launch,
+                      true,
+                      true
+                    );
+                    p.proc.send({
+                      type: "loadFile",
+                      path: path + "/" + file.item,
+                    });
+                  },
+                }
+              : null,
             {
               item: "Copy path",
               async select() {
