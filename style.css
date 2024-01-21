@@ -213,7 +213,7 @@ body {
   flex-direction: column;
   min-width: 140px;
   min-height: 80px;
-  transition-property: top, left, width, height;
+  transition-property: top, left, width, height, box-shadow, border-radius;
   transition-duration: var(--animation-duration);
   transition-timing-function: var(--easing-function);
   box-shadow: 0px 0px 28px 2px rgba(0, 0, 0, 0.41);
@@ -291,6 +291,11 @@ body {
 .win-window.focus>.win-titlebar,
 .win-window-decorative.focus>.win-titlebar {
   background-color: var(--header);
+}
+
+.win-window.snapped {
+  box-shadow: none;
+  border-radius: 0;
 }
 
 .win-titlebar .buttons {
