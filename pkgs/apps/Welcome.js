@@ -224,7 +224,7 @@ export default {
 
         if (pageName === "p2") {
           width = 600;
-          height = 450;
+          height = 480;
         } else {
           width = 600;
           height = 360;
