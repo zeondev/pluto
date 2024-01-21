@@ -86,27 +86,26 @@ export default {
             "justify-content": "center",
             "align-items": "center",
           })
+          .on("click", (e) => {
+            console.log("farderite");
+            e.target.parentElement.parentElement.classList.forEach((elm) => {
+              if (elm.startsWith("tab-")) {
+                const tabId = Number(elm.split("-")[1]);
+                const tabElement = wrapper.querySelector(`.tab-${tabId}`);
+                const pageElement = wrapper.querySelector(`.page-${tabId}`);
+
+                if (tabElement && pageElement) {
+                  // Remove tab and iframe elements
+                  tabElement.remove();
+                  pageElement.remove();
+
+                  // Remove tab from tabsList
+                  tabsList = tabsList.filter((tab) => tab.id !== tabId);
+                }
+              }
+            });
+          })
       )
-      .on("click", (e) => {
-        // e.target.classList.forEach((el) => {
-        //   if (el.startsWith("tab-")) {
-        //     for (let i = 0; i < tabsList.length; i++) {
-        //       wrapper
-        //         .querySelector(`.tab-${tabsList[i].id}`)
-        //         .classList.remove("selected");
-        //       wrapper.querySelector(`.page-${tabsList[i].id}`).style.display =
-        //         "none";
-        //     }
-        //     selectedTab = Number(el.split("-")[1]);
-        //     wrapper.querySelector(`.page-${selectedTab}`).style.display =
-        //       "block";
-        //     wrapper.querySelector(`input.url`).value = wrapper.querySelector(
-        //       `.page-${selectedTab}`
-        //     ).src;
-        //     e.target.classList.add("selected");
-        //   }
-        // });
-      })
       .on("click", (e) => {
         e.target.classList.forEach((el) => {
           if (el.startsWith("tab-")) {
@@ -195,18 +194,29 @@ export default {
         });
         new Root.Lib.html("iframe")
           .attr({
-            src: "http://www.google.com/webhp?igu=1",
+            src: `//${location.host}/assets/browserhp.html`,
           })
           .class("fg", "page-" + selectedTab)
           .on("load", async (e) => {
             console.log("Iframe has loaded successfully!");
             // Uncaught DOMException: Permission denied to access property "reload" on cross-origin object
-
-            let pageName = e.target.src
-              .replace("https://", "")
-              .replace("http://", "")
-              .split("/")[0];
-
+            let possiblePageTitle;
+            try {
+              possiblePageTitle = e.target.contentWindow.document.title;
+            } catch (e) {
+              possiblePageTitle = undefined;
+            }
+            console.log(possiblePageTitle);
+            let pageName =
+              possiblePageTitle !== undefined
+                ? possiblePageTitle
+                : e.target.src
+                    .replace("https://", "")
+                    .replace("http://", "")
+                    .split("/")[0];
+            // alert(e.target.innerHTML);
+            console.log(e.target);
+            console.log();
             console.log(e, e.target.src);
             console.log(Root.Lib.html.qs(".tab-" + selectedTab));
             Root.Lib.html
@@ -328,7 +338,7 @@ export default {
         // there's a good reason i did this, it's called browser compatibility
         // style:
         //   "width:-webkit-fill-available;width:-moz-fill-available;height:-webkit-fill-available;height:-moz-fill-available;",
-        src: "about:blank",
+        src: `//${location.host}/assets/browserhp.html`,
       })
       .class("fg", "page-1")
       .appendTo(pages);
