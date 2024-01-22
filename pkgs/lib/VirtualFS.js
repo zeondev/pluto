@@ -74,18 +74,31 @@ const Vfs = {
   },
   // function to tell you if stored data is a file or a folder
   async whatIs(path, fsObject = this.fileSystem) {
-    return window.host.fs
-      .statSync(window.host.path.join(window.host.dir, path))
-      .isDirectory() === true
-      ? "dir"
-      : "file";
+    return new Promise((resolve, reject) => {
+      window.host.fs.readdir(
+        window.host.path.join(window.host.dir, path),
+        (err, files) => {
+          if (err) {
+            resolve("file");
+          } else {
+            resolve("dir");
+          }
+        }
+      );
+    });
   },
   // Function to get the contents of a file at a given path
   async readFile(path, fsObject = this.fileSystem, bypass = false) {
-    return window.host.fs.readFileSync(
-      window.host.path.join(window.host.dir, path),
-      { encoding: "utf-8" }
-    );
+    try {
+      return window.host.fs.readFileSync(
+        window.host.path.join(window.host.dir, path),
+        { encoding: "utf-8" }
+      );
+    } catch (e) {
+      if (e.code === "ENOENT") {
+        return null;
+      }
+    }
   },
   // Function to write to a file at a given path
   async writeFile(path, contents, fsObject = this.fileSystem) {

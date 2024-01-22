@@ -3,26 +3,29 @@ const path = require("path");
 const fs = require("fs");
 const dir = path.join(__dirname, "fs");
 const { mkdirpSync } = require("mkdirp");
-const du = require('du');
+const du = require("du");
+
+const { ipcRenderer } = require("electron/renderer");
 
 contextBridge.exposeInMainWorld("host", {
   fs,
   path,
   dir,
   mkdirp: mkdirpSync,
-  du
+  du,
+  updateRPC: (title) => ipcRenderer.send("update-rpc", title),
 });
 
 function createFileTree(rootPath, fileTree) {
   Object.entries(fileTree).forEach(([key, value]) => {
     const filePath = path.join(rootPath, key);
 
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       // Check if the file already exists
       if (!fs.existsSync(filePath)) {
         fs.writeFileSync(filePath, value);
       }
-    } else if (typeof value === 'object') {
+    } else if (typeof value === "object") {
       // Check if the directory already exists
       if (!fs.existsSync(filePath)) {
         fs.mkdirSync(filePath);

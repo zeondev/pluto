@@ -4,11 +4,21 @@ const {
   globalShortcut,
   session,
   ipcMain,
-  net,
 } = require("electron");
 const { readFileSync } = require("fs");
 const path = require("path");
 const https = require("https");
+const { Client } = require("@xhayper/discord-rpc");
+
+const client = new Client({
+  clientId: "1198824358026682468",
+});
+
+client.on("ready", () => {
+  console.log("Connected to RPC.");
+});
+
+client.login();
 
 let baseUrl = "https://pluto-app.zeon.dev";
 
@@ -33,6 +43,24 @@ function createWindow() {
   // load the url
   mainWindow.loadURL(baseUrl);
 
+  ipcMain.on(
+    "update-rpc",
+    /**
+     * set activit
+     * @param {*} event H
+     * @param {import("@xhayper/discord-rpc").SetActivity} rpcActivity yes
+     */
+    (event, rpcActivity) => {
+      client.user?.setActivity(rpcActivity);
+    }
+  );
+
+  // Execute custom JavaScript code after the web page is loaded
+  mainWindow.webContents.on("did-finish-load", () => {
+    // Inject your custom script
+    mainWindow.webContents.executeJavaScript(readFileSync("./script.js"));
+  });
+
   // let zoomFactor = 1;
 
   // Register global shortcuts for zooming in/out
@@ -53,17 +81,18 @@ function createWindow() {
 app.whenReady().then(() => {
   createWindow();
 
-  session.defaultSession.webRequest.onHeadersReceived(
-    // {urls},
-    (details, callback) => {
-      details.responseHeaders["x-frame-options"] = "";
-      // console.log(details.responseHeaders);
-      const responseHeaders = Object.assign(details.responseHeaders, {
-        "x-frame-options": [""],
-      });
-      callback({ cancel: false, responseHeaders });
-    }
-  );
+  // session.defaultSession.webRequest.onHeadersReceived(
+  //   // {urls},
+  //   (details, callback) => {
+  //     details.responseHeaders["x-frame-options"] = "";
+  //     // console.log(details.responseHeaders);
+  //     const responseHeaders = Object.assign(details.responseHeaders, {
+  //       "x-frame-options": [""],
+  //     });
+  //     callback({ cancel: false, responseHeaders });
+  //   }
+  // );
+
   const urls = [
     `${baseUrl}/pkgs/lib/VirtualFS.js`,
     `${baseUrl}/pkgs/lib/FileMappings.js`,
@@ -79,7 +108,7 @@ app.whenReady().then(() => {
           mimeType: "application/javascript; charset=utf-8",
         });
       } else {
-        https
+        const rq = https
           .request(
             req.url,
             {
@@ -94,7 +123,9 @@ app.whenReady().then(() => {
               res.on("end", () => {
                 callback({
                   statusCode: res.statusCode,
-                  headers: res.headers,
+                  headers: Object.assign(res.headers, {
+                    "x-frame-options": [""],
+                  }),
                   data: Buffer.concat(data),
                 });
               });
@@ -102,8 +133,13 @@ app.whenReady().then(() => {
           )
           .on("error", (err) => {
             console.log("Error: ", err.message);
-          })
-          .end();
+          });
+
+        if (req.method.toLowerCase() === "post") {
+          rq.write(req.uploadData[0].bytes.toString());
+        }
+
+        rq.end();
       }
     }
   );

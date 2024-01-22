@@ -37,7 +37,7 @@ export default {
         opensWith: "custom",
         ctxMenuApp: {
           launch: "apps:DevEnv",
-          name: "systemApp_DevEnv"
+          name: "systemApp_DevEnv",
         },
         icon: "box",
       },
@@ -183,12 +183,12 @@ export default {
         if (icon === "dir") {
           map = {
             type: "dir",
-            label: icon === "File folder",
+            label: icon === "dir" ? "File folder" : "???",
             opensWith: "apps:FileManager",
             loadType: "loadFolder",
           };
         } else {
-          map = { label: icon === "file", opensWith: null };
+          map = { label: icon === "file" ? "File" : "???", opensWith: null };
         }
         if (this.mappings[ext.toLowerCase()]) {
           map = this.mappings[ext.toLowerCase()];
