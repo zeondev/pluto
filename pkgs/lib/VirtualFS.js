@@ -74,7 +74,6 @@ const Vfs = {
   },
   // function to tell you if stored data is a file or a folder
   async whatIs(path, fsObject = this.fileSystem) {
-    debugger;
     return window.host.fs
       .statSync(window.host.path.join(window.host.dir, path))
       .isDirectory() === true

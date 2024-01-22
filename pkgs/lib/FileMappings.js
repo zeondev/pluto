@@ -178,7 +178,6 @@ export default {
           },
         };
       } else {
-        debugger;
         let icon = await vfs.whatIs(path);
         let map = {};
         if (icon === "dir") {
