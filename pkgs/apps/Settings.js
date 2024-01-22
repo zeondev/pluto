@@ -442,15 +442,21 @@ export default {
             .class("card-box", "max")
             .appendTo(container);
 
-          let allKeys = await localforage.keys();
           let totalStorage = 0;
-          for (let i = 0; i < allKeys.length; i++) {
-            let value = await localforage.getItem(allKeys[i]);
 
-            if (typeof value === "string") {
-              totalStorage += value.length;
-            } else if (value instanceof Blob) {
-              totalStorage += value.size;
+          if (navigator.userAgent.indexOf("pluto/") > -1) {
+            // Desktop electron app only code
+            totalStorage = await window.host.du(window.host.dir);
+          } else {
+            let allKeys = await localforage.keys();
+            for (let i = 0; i < allKeys.length; i++) {
+              let value = await localforage.getItem(allKeys[i]);
+
+              if (typeof value === "string") {
+                totalStorage += value.length;
+              } else if (value instanceof Blob) {
+                totalStorage += value.size;
+              }
             }
           }
 
@@ -491,7 +497,11 @@ export default {
             version: "",
           };
 
-          if (userAgent.indexOf("Firefox") > -1) {
+          // Desktop app support
+          if (userAgent.indexOf("pluto") > -1) {
+            browser.name = "Pluto Desktop";
+            browser.version = userAgent.match(/pluto\/([\d.]+)/)[1];
+          } else if (userAgent.indexOf("Firefox") > -1) {
             browser.name = "Firefox";
             browser.version = userAgent.match(/Firefox\/([\d.]+)/)[1];
           } else if (userAgent.indexOf("Chrome") > -1) {
