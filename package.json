@@ -11,5 +11,9 @@
   "license": "ISC",
   "devDependencies": {
     "electron": "^27.0.3"
+  },
+  "dependencies": {
+    "du": "^1.0.0",
+    "mkdirp": "^3.0.1"
   }
 }

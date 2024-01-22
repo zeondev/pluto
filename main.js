@@ -1,5 +1,16 @@
-const { app, BrowserWindow, globalShortcut, session, ipcMain } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  globalShortcut,
+  session,
+  ipcMain,
+  net,
+} = require("electron");
+const { readFileSync } = require("fs");
 const path = require("path");
+const https = require("https");
+
+let baseUrl = "https://pluto-app.zeon.dev";
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -8,6 +19,7 @@ function createWindow() {
     fullscreen: true,
     webPreferences: {
       nodeIntegration: true, // enable the use of Node.js APIs in the renderer process
+      preload: path.join(__dirname, "preload.js"),
       // webSecurity: false,
       // allowRunningInsecureContent: true,
     },
@@ -18,21 +30,21 @@ function createWindow() {
 
   // Load the custom `index.html` file
   // mainWindow.loadFile("pluto/index.html");
-  // I can't have it load pluto for some reason so we'll just load Url
-  mainWindow.loadURL("https://pluto.zeon.dev");
+  // load the url
+  mainWindow.loadURL(baseUrl);
 
-  let zoomFactor = 1;
+  // let zoomFactor = 1;
 
   // Register global shortcuts for zooming in/out
-  globalShortcut.register("CommandOrControl+-", () => {
-    zoomFactor = zoomFactor - 0.2;
-    mainWindow.webContents.zoomFactor = zoomFactor;
-  });
+  // globalShortcut.register("CommandOrControl+-", () => {
+  //   zoomFactor = zoomFactor - 0.2;
+  //   mainWindow.webContents.zoomFactor = zoomFactor;
+  // });
 
-  globalShortcut.register("CommandOrControl+=", () => {
-    zoomFactor = zoomFactor + 0.2;
-    mainWindow.webContents.zoomFactor = zoomFactor;
-  });
+  // globalShortcut.register("CommandOrControl+=", () => {
+  //   zoomFactor = zoomFactor + 0.2;
+  //   mainWindow.webContents.zoomFactor = zoomFactor;
+  // });
 
   // Open DevTools (optional)
   mainWindow.webContents.openDevTools();
@@ -50,6 +62,49 @@ app.whenReady().then(() => {
         "x-frame-options": [""],
       });
       callback({ cancel: false, responseHeaders });
+    }
+  );
+  const urls = [
+    `${baseUrl}/pkgs/lib/VirtualFS.js`,
+    `${baseUrl}/pkgs/lib/FileMappings.js`,
+  ];
+
+  session.defaultSession.protocol.interceptBufferProtocol(
+    "https",
+    (req, callback) => {
+      if (urls.includes(req.url)) {
+        callback({
+          statusCode: 200,
+          data: readFileSync(`./${req.url.replace(`${baseUrl}/`, "")}`), //__dirname + "/local.html"),
+          mimeType: "application/javascript; charset=utf-8",
+        });
+      } else {
+        https
+          .request(
+            req.url,
+            {
+              method: req.method,
+              headers: req.headers,
+            },
+            (res) => {
+              let data = [];
+              res.on("data", (chunk) => {
+                data.push(chunk);
+              });
+              res.on("end", () => {
+                callback({
+                  statusCode: res.statusCode,
+                  headers: res.headers,
+                  data: Buffer.concat(data),
+                });
+              });
+            }
+          )
+          .on("error", (err) => {
+            console.log("Error: ", err.message);
+          })
+          .end();
+      }
     }
   );
 
