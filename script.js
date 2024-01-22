@@ -18,7 +18,7 @@ function refresh() {
 
     if (user.onlineAccount === true) {
       u = {
-        name: "Logged in as " +user.username,
+        name: "Logged in as " + user.username,
         pfp: user.pfp,
       };
     }
