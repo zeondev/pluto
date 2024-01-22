@@ -1,6 +1,7 @@
 # Pluto Documentation for version 1.5 (Elysium)
 
 - [Pluto Documentation for version 1.5 (Elysium)](#pluto-documentation-for-version-15-elysium)
+  - [Links to other useful documentation](#links-to-other-useful-documentation)
   - [How to initialize an application](#how-to-initialize-an-application)
     - [Export properties](#export-properties)
     - [Example App code](#example-app-code)
@@ -11,12 +12,22 @@
   - [Html library](#html-library)
     - [Examples](#examples)
     - [Methods](#methods)
+  - [Using Services in your apps](#using-services-in-your-apps)
+    - [Using the Account service](#using-the-account-service)
   - [Using libraries/components in your apps](#using-librariescomponents-in-your-apps)
   - [Recent breaking changes to apps](#recent-breaking-changes-to-apps)
 
 This documentation will help you understand how to make apps for Pluto, and include the API reference.
 
 This guide may change often, so to help you in making applications, use the latest documentation for your version.
+
+## Links to other useful documentation
+
+There are some other docs in this folder that may be useful.
+
+[VirtualFS Documentation](virtualFS.md)
+[Libraries and Components](libs-and-components.md)
+[Localization](localization.md)
 
 ## How to initialize an application
 
@@ -154,7 +165,6 @@ interface Root {
         isPassword: boolean = false
       );
   };
-  Services: Service[];
 }
 ```
 
@@ -486,12 +496,51 @@ There are a few more advanced methods to how the Html class works:
   div.getHtml(); // '<p>This is my <b>HTML</b> content...</p>'
   ```
 - `.getValue()`
+  Ditto, but for the value of an input tag.
+
+## Using Services in your apps
+
+Currently, there is only one usable service: Account. This service handles Zeon account status and login.
+
+### Using the Account service
+
+You will need the `services` privilege:
+```js
+export default {
+  // ...
+  privileges: [
+    {
+      privilege: "services",
+      description: "Use the Zeon account service"
+    }
+  ],
+  // ...
+}
+```
+
+You can check in your app code for the service's existence:
+
+```js
+let service = Root.Core.services.find(
+  (x) => x.name === "Account"
+);
+if (service && service.ref) {
+  // your code here
+}
+```
+
+The Account service has the following methods:
+
+- `async login(user, pass)`
+  Log in to a Zeon account with its username and password. This is an asynchronous function.
+- `logout()`
+  Log out of the current Zeon account.
+- `getUserData()`
+  Retrieve current user account data. Returns invalid data if a user is not logged in. Check using `.onlineAccount` (true if logged in, false if not) on the returned object.
 
 ## Using libraries/components in your apps
 
-Libraries and components add extra functionality into your apps and make a easy, reusable way to do a certain thing.
-
-Read the [Libraries and Components documentation](docs/libs-and-components.md).
+Libraries and components add extra functionality into your apps and make an easy, reusable way to do a certain thing.
 
 For example, the VirtualFS library can be used to read the file system:
 

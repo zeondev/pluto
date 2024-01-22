@@ -1234,14 +1234,23 @@
           color-scheme: dark;
         }
       }
+
+      .version-info h6 {
+        margin-top: 0;
+      }
     </style>
   </head>
   <body>
     <div class="markdown-body">
+      <div class="version-info">
+        <h6 dir="auto">Generated with <code class="notranslate">pluto-docs</code> running on node v21.5.0.</h6>
+        <hr />
+      </div>
       <div class="content"><h1 dir="auto">Pluto Documentation for version 1.5 (Elysium)</h1>
 <ul dir="auto">
 <li><a href="#pluto-documentation-for-version-15-elysium">Pluto Documentation for version 1.5 (Elysium)</a>
 <ul dir="auto">
+<li><a href="#links-to-other-useful-documentation">Links to other useful documentation</a></li>
 <li><a href="#how-to-initialize-an-application">How to initialize an application</a>
 <ul dir="auto">
 <li><a href="#export-properties">Export properties</a></li>
@@ -1261,6 +1270,11 @@
 <li><a href="#methods">Methods</a></li>
 </ul>
 </li>
+<li><a href="#using-services-in-your-apps">Using Services in your apps</a>
+<ul dir="auto">
+<li><a href="#using-the-account-service">Using the Account service</a></li>
+</ul>
+</li>
 <li><a href="#using-librariescomponents-in-your-apps">Using libraries/components in your apps</a></li>
 <li><a href="#recent-breaking-changes-to-apps">Recent breaking changes to apps</a></li>
 </ul>
@@ -1268,6 +1282,11 @@
 </ul>
 <p dir="auto">This documentation will help you understand how to make apps for Pluto, and include the API reference.</p>
 <p dir="auto">This guide may change often, so to help you in making applications, use the latest documentation for your version.</p>
+<h2 dir="auto">Links to other useful documentation</h2>
+<p dir="auto">There are some other docs in this folder that may be useful.</p>
+<p dir="auto"><a href="virtualFS.md">VirtualFS Documentation</a><br>
+<a href="libs-and-components.md">Libraries and Components</a><br>
+<a href="localization.md">Localization</a></p>
 <h2 dir="auto">How to initialize an application</h2>
 <h3 dir="auto">Export properties</h3>
 <p dir="auto">In every application you must define the following properties in your export:</p>
@@ -1406,8 +1425,7 @@ Here's a breakdown of what the Root object looks like:</p>
         <span class="pl-s1">isPassword</span>: <span class="pl-smi">boolean</span> <span class="pl-c1">=</span> <span class="pl-c1">false</span>
       <span class="pl-kos">)</span><span class="pl-kos">;</span>
   <span class="pl-kos">}</span><span class="pl-kos">;</span>
-  <span class="pl-smi">Services</span>: <span class="pl-smi">Service</span><span class="pl-kos">[</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
-<span class="pl-kos">}</span><span class="pl-kos"></span></pre></div>
+<span class="pl-kos">}</span></pre></div>
 <h2 dir="auto">What are app permissions?</h2>
 <p dir="auto">App permissions (referred to as Privileges in the core) are what your app defines to allow certain parts of the core to be passed to your app.<br>
 As an app developer you need to adapt your application to every limitation because the user allows or denies these permissions for security purposes.</p>
@@ -1496,7 +1514,7 @@ As an app developer you need to adapt your application to every limitation becau
 <p dir="auto"><strong>The examples here use the variable <code class="notranslate">Html</code>, it is recommended to assign the Html variable to Root.Lib.html like this:</strong></p>
 <div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-v">Html</span> <span class="pl-c1">=</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-c1">html</span><span class="pl-kos">;</span></pre></div>
 <p dir="auto">You can also import Html from datkat21's source using unpkg:</p>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-v">Html</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-k">import</span><span class="pl-kos">(</span><span class="pl-s">"https://unpkg.com/@datkat21/html"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-v">Html</span> <span class="pl-c1">=</span> <span class="pl-kos">(</span><span class="pl-k">await</span> <span class="pl-k">import</span><span class="pl-kos">(</span><span class="pl-s">"https://unpkg.com/@datkat21/html"</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-c1">default</span><span class="pl-kos">;</span></pre></div>
 <p dir="auto">This is recommended if you want to use the latest features of Html (e.g. prepend, prependMany, prependTo).<br>
 This will ensure the Html library is always up to date, no matter the version of Pluto the app is running on.</p>
 <h3 dir="auto">Examples</h3>
@@ -1705,12 +1723,42 @@ Get HTML content of the element</p>
 <span class="pl-s1">div</span><span class="pl-kos">.</span><span class="pl-en">getHtml</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// '&lt;p&gt;This is my &lt;b&gt;HTML&lt;/b&gt; content...&lt;/p&gt;'</span></pre></div>
 </li>
 <li>
-<p dir="auto"><code class="notranslate">.getValue()</code></p>
+<p dir="auto"><code class="notranslate">.getValue()</code><br>
+Ditto, but for the value of an input tag.</p>
 </li>
 </ul>
+<h2 dir="auto">Using Services in your apps</h2>
+<p dir="auto">Currently, there is only one usable service: Account. This service handles Zeon account status and login.</p>
+<h3 dir="auto">Using the Account service</h3>
+<p dir="auto">You will need the <code class="notranslate">services</code> privilege:</p>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">export</span> <span class="pl-k">default</span> <span class="pl-kos">{</span>
+  <span class="pl-c">// ...</span>
+  <span class="pl-c1">privileges</span>: <span class="pl-kos">[</span>
+    <span class="pl-kos">{</span>
+      <span class="pl-c1">privilege</span>: <span class="pl-s">"services"</span><span class="pl-kos">,</span>
+      <span class="pl-c1">description</span>: <span class="pl-s">"Use the Zeon account service"</span>
+    <span class="pl-kos">}</span>
+  <span class="pl-kos">]</span><span class="pl-kos">,</span>
+  <span class="pl-c">// ...</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">You can check in your app code for the service's existence:</p>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">let</span> <span class="pl-s1">service</span> <span class="pl-c1">=</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Core</span><span class="pl-kos">.</span><span class="pl-c1">services</span><span class="pl-kos">.</span><span class="pl-en">find</span><span class="pl-kos">(</span>
+  <span class="pl-kos">(</span><span class="pl-s1">x</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-s1">x</span><span class="pl-kos">.</span><span class="pl-c1">name</span> <span class="pl-c1">===</span> <span class="pl-s">"Account"</span>
+<span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">service</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-s1">service</span><span class="pl-kos">.</span><span class="pl-c1">ref</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-c">// your code here</span>
+<span class="pl-kos">}</span></pre></div>
+<p dir="auto">The Account service has the following methods:</p>
+<ul dir="auto">
+<li><code class="notranslate">async login(user, pass)</code><br>
+Log in to a Zeon account with its username and password. This is an asynchronous function.</li>
+<li><code class="notranslate">logout()</code><br>
+Log out of the current Zeon account.</li>
+<li><code class="notranslate">getUserData()</code><br>
+Retrieve current user account data. Returns invalid data if a user is not logged in. Check using <code class="notranslate">.onlineAccount</code> (true if logged in, false if not) on the returned object.</li>
+</ul>
 <h2 dir="auto">Using libraries/components in your apps</h2>
-<p dir="auto">Libraries and components add extra functionality into your apps and make a easy, reusable way to do a certain thing.</p>
-<p dir="auto">Read the <a href="docs/libs-and-components.md">Libraries and Components documentation</a>.</p>
+<p dir="auto">Libraries and components add extra functionality into your apps and make an easy, reusable way to do a certain thing.</p>
 <p dir="auto">For example, the VirtualFS library can be used to read the file system:</p>
 <div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-c">// in-app</span>
 <span class="pl-k">const</span> <span class="pl-s1">vfs</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadLibrary</span><span class="pl-kos">(</span><span class="pl-s">"VirtualFS"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
@@ -1748,6 +1796,12 @@ Get HTML content of the element</p>
         document.querySelectorAll("h1,h2,h3,h4,h5,h6").forEach((h) => {
           const text = toKebabCase(h.innerHTML.trim());
           h.id = text;
+        });
+        document.querySelectorAll("a").forEach((h) => {
+          const href = h.href;
+          let fixedHref = href;
+          if (href.includes(".md")) fixedHref = href.replace(".md", ".html");
+          h.href = fixedHref;
         });
       });
     </script>

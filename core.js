@@ -641,7 +641,7 @@
                   PID,
                   Token,
                   Modal,
-                  Services: Core.services,
+                  Services: null,
                 });
               } else {
                 let privileges = {};
