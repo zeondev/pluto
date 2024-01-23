@@ -1,4 +1,5 @@
 import ctxMenu from "../lib/CtxMenu.js";
+import Tooltip from "../components/Tooltip.js";
 
 export default {
   name: "Desktop",
@@ -181,7 +182,7 @@ export default {
 
     background.on("contextmenu", (e) => {
       e.preventDefault();
-      ctxMenu.new(e.clientX, e.clientY, [
+      ctxMenu.data.new(e.clientX, e.clientY, [
         {
           item: Root.Lib.getString("refresh"),
           async select() {
@@ -193,7 +194,7 @@ export default {
           async select() {
             let fm = await Root.Core.startPkg("apps:FileManager", true, true);
 
-            fm.proc.send({ type: "loadFolder", path: 'Root/Desktop' });
+            fm.proc.send({ type: "loadFolder", path: "Root/Desktop" });
           },
         },
         {
@@ -230,13 +231,22 @@ export default {
 
     function onClickDetect(ev) {
       if (ev.target.closest(".menu")) {
-      } else toggleMenu();
+      } else {
+        if (ev.target.closest(".ctx-menu")) return;
+        if (menuIsOpen === true) toggleMenu();
+        if (trayMenuState === true) toggleTrayMenu();
+      }
     }
 
     function onFullClickDetect(ev) {
+      if (menuIsOpen !== true) return;
+
       if (ev.target.closest(".menu")) {
         if (ev.button === 0) {
-          if (ev.target.closest("button") || ev.target.closest(".app")) {
+          if (
+            ev.target.closest(".menu button") ||
+            ev.target.closest(".menu .app")
+          ) {
             toggleMenu();
           }
         }
@@ -264,6 +274,7 @@ export default {
         window.addEventListener("click", onFullClickDetect);
         window.addEventListener("touchstart", onClickDetect);
         window.addEventListener("touchend", onFullClickDetect);
+
         if (!menuElm) {
           // Create menu element if it doesn't exist
           const desktopApps = (await vfs.list("Root/Desktop"))
@@ -430,6 +441,146 @@ export default {
       let timeString = `${hours}:${minutes}`;
       quickAccessButton.text(timeString);
     }
+
+    let trayWrapper = new Root.Lib.html("div")
+      .style({ position: "relative" })
+      .appendTo(dock);
+
+    const trayMenuButton = new Root.Lib.html("button")
+      .class("toolbar-button", "tray")
+      .html(Root.Lib.icons.chevronUp)
+      .appendTo(trayWrapper);
+
+    let trayMenuState = false; // not opened
+    let trayIsToggling = false;
+    let trayElm;
+
+    async function toggleTrayMenu() {
+      if (trayIsToggling) {
+        return; // Return early if menu is currently toggling
+      }
+
+      trayIsToggling = true;
+
+      trayMenuState = !trayMenuState;
+
+      if (trayMenuState === true) {
+        window.addEventListener("mousedown", onClickDetect);
+        window.addEventListener("click", onFullClickDetect);
+        window.addEventListener("touchstart", onClickDetect);
+        window.addEventListener("touchend", onFullClickDetect);
+        if (!trayElm) {
+          const trayItems = Root.Core.processList.filter((f) => f !== null);
+
+          let appsHtml = await Promise.all(
+            trayItems.map(async (app) => {
+              const t = app.proc.trayInfo;
+              if (t === null || t === undefined) {
+                return false;
+              }
+              if (typeof t.icon === undefined) {
+                return false;
+              }
+
+              let icon = t.icon || Root.Lib.icons.box;
+
+              let popup;
+
+              const item = new Html("button")
+                .class("tray-item")
+                .appendMany(
+                  new Html("div")
+                    .styleJs({ width: "24px", height: "24px" })
+                    .class("app-icon")
+                    .html(icon)
+                )
+                .on("mouseenter", () => {
+                  if (popup) {
+                    popup.cleanup();
+                    popup = null;
+                  } else {
+                    const bcr = item.elm.getBoundingClientRect();
+                    popup = Tooltip.new(
+                      bcr.left + (bcr.width / 2),
+                      bcr.bottom - 36,
+                      t.name || app.proc.name || app.name,
+                      document.body,
+                      true
+                    );
+
+                    requestAnimationFrame(() => {
+                      popup.style({
+                        left: bcr.left + (bcr.width / 2) - (popup.elm.offsetWidth / 2) + 'px'
+                      });
+                    })
+                  }
+                })
+                .on("mouseleave", (e) => {
+                  if (popup) {
+                    popup.cleanup();
+                    popup = null;
+                  }
+                })
+                .on("click", async (e) => {
+                  // send message to process to spawn a custom context menu
+                  app.proc.send({
+                    type: "context-menu",
+                    x: e.clientX,
+                    y: e.clientY,
+                  });
+                });
+
+              return item;
+            })
+          );
+
+          appsHtml = appsHtml.filter((m) => m !== false);
+
+          trayElm = new Html("div")
+            .class("menu", "tray")
+            .appendMany(new Html("div").class("apps").appendMany(...appsHtml));
+
+          if (appsHtml.length === 0) {
+            trayElm
+              .clear()
+              .appendMany(
+                new Html("span")
+                  .class(
+                    "label",
+                    "w-100",
+                    "flex-group",
+                    "fg",
+                    "fc",
+                    "mt-2",
+                    "mb-2"
+                  )
+                  .text("No apps are using the tray.")
+              );
+          }
+
+          trayElm.appendTo(trayWrapper);
+        }
+
+        trayElm.classOn("opening");
+        setTimeout(() => {
+          trayElm.classOff("opening");
+          trayIsToggling = false;
+        }, 500);
+      } else {
+        window.removeEventListener("mousedown", onClickDetect);
+        window.removeEventListener("touchstart", onClickDetect);
+        if (trayElm) {
+          trayElm.classOn("closing");
+          setTimeout(() => {
+            trayElm.cleanup();
+            trayElm = null; // Reset menu element reference
+            trayIsToggling = false;
+          }, 500);
+        }
+      }
+    }
+
+    trayMenuButton.on("click", toggleTrayMenu);
 
     const quickAccessButton = new Root.Lib.html("div")
       .class("toolbar-button")

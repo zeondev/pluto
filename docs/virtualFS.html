@@ -1253,6 +1253,7 @@
 <ul dir="auto">
 <li><a href="#default-file-structure">Default file structure</a></li>
 <li><a href="#functions">Functions</a></li>
+<li><a href="#secret-file-tips">Secret File Tips</a></li>
 <li><a href="#file-location-tips">File Location Tips</a>
 <ul dir="auto">
 <li><a href="#configuration-files">Configuration files</a></li>
@@ -1324,6 +1325,13 @@ Function to rename a file<br>
 <span class="pl-k">await</span> <span class="pl-v">Vfs</span><span class="pl-kos">.</span><span class="pl-en">importFS</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
 
 <span class="pl-c">// You can now use Vfs with any of the functions above</span></pre></div>
+<h2 dir="auto">Secret File Tips</h2>
+<p dir="auto">The file <code class="notranslate">Root/Pluto/startup</code> allows you to configure startup apps. Use newlines to change which apps are launched at boot.</p>
+<p dir="auto">Example:</p>
+<pre class="notranslate"><code class="notranslate">Root/Desktop/Settings.shrt
+Root/Pluto/Apps/Example.js
+</code></pre>
+<p dir="auto">launches Settings and Example at startup.</p>
 <h2 dir="auto">File Location Tips</h2>
 <h3 dir="auto">Configuration files</h3>
 <p dir="auto">For config files, use the Registry path instead of Root. The files will be hidden from the end-user by default.<br>

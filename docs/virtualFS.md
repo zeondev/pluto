@@ -5,6 +5,7 @@
 - [Virtual File System Documentation](#virtual-file-system-documentation)
   - [Default file structure](#default-file-structure)
   - [Functions](#functions)
+  - [Secret File Tips](#secret-file-tips)
   - [File Location Tips](#file-location-tips)
     - [Configuration files](#configuration-files)
     - [Storing external libraries](#storing-external-libraries)
@@ -79,6 +80,17 @@ await Vfs.importFS();
 
 // You can now use Vfs with any of the functions above
 ```
+
+## Secret File Tips
+
+The file `Root/Pluto/startup` allows you to configure startup apps. Use newlines to change which apps are launched at boot.
+
+Example:
+```
+Root/Desktop/Settings.shrt
+Root/Pluto/Apps/Example.js
+```
+launches Settings and Example at startup.
 
 ## File Location Tips
 

@@ -788,12 +788,24 @@ iframe {
   margin-top: 4px !important;
 }
 
+.mt-2 {
+  margin-top: 8px;
+}
+
 .mr-0 {
   margin-right: 0;
 }
 
 .mb-0 {
   margin-bottom: 0;
+}
+
+.mb-1 {
+  margin-bottom: 4px;
+}
+
+.mb-2 {
+  margin-bottom: 8px;
 }
 
 .ml-0 {
@@ -1089,14 +1101,15 @@ td {
   align-items: center;
   flex-shrink: 0;
   outline: 0;
+  border-radius: 0;
 }
 
-.desktop .dock .toolbar-button:first-child {
+.desktop .dock > .toolbar-button:first-child {
   border-right: 1px solid var(--outline);
   border-radius: 8px 0 0 8px;
 }
 
-.desktop .dock .toolbar-button:last-child {
+.desktop .dock > .toolbar-button:last-child {
   border-left: 1px solid var(--outline);
   border-radius: 0 8px 8px 0;
 }
@@ -1874,6 +1887,43 @@ hr {
   height: 50vh;
 }
 
+.desktop .menu.tray {
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 160px;
+  overflow: auto;
+  max-height: 100vh;
+  width: unset;
+  height: unset;
+  padding: 0;
+  text-align: center;
+  z-index: -1;
+}
+
+.desktop .menu.tray .tray-item {
+  padding: 4px;
+}
+.desktop .menu.tray .tray-item,
+.desktop .menu.tray .tray-item .app-icon {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+.desktop .menu.tray .tray-item .app-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.desktop .menu.tray.opening {
+  animation: minimalMenuOpen var(--animation-duration) var(--easing-function)
+    forwards !important;
+}
+
+.desktop .menu.tray.closing {
+  animation: minimalMenuClose var(--animation-duration) var(--easing-function)
+    forwards !important;
+}
+
 .desktop .menu > .me {
   display: flex;
   align-items: center;
@@ -2048,11 +2098,13 @@ hr {
   from {
     transform: translate(-50%, 120%);
     left: 50%;
+    opacity: 0;
   }
 
   to {
     transform: translate(-50%, 0);
     left: 50%;
+    opacity: 1;
   }
 }
 
@@ -2060,11 +2112,13 @@ hr {
   from {
     transform: translate(-50%, 0);
     left: 50%;
+    opacity: 1;
   }
 
   to {
     transform: translate(-50%, 150%);
     left: 50%;
+    opacity: 0;
   }
 }
 
@@ -2108,6 +2162,10 @@ hr {
 
 [data-dock-style="compact"] .desktop .menu {
   z-index: -1;
+}
+
+[data-dock-show-tray="false"] .desktop .dock button.tray {
+  display: none;
 }
 
 [data-dock-style="minimal"] .desktop .menu.opening {
@@ -2449,4 +2507,74 @@ hr {
 
 .tab-text {
   pointer-events: none;
+}
+
+.desktop ~ .notify-box {
+  bottom: 54px;
+  right: 14px;
+}
+.notify-box {
+  display: flex;
+  flex-direction: column-reverse;
+  position: fixed;
+  z-index: 999999;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  gap: 0.5rem;
+}
+
+.win-content .notify-box {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  padding: 0.5rem;
+}
+
+.notify-box > .notify {
+  background-color: var(--root);
+  border: 0.125rem solid var(--outline);
+  border-radius: 0.32rem;
+  padding: 0.75rem 0.8rem;
+  min-width: 4rem;
+  /* min-width: 18rem; */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.notify-box > .notify .notify-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+.notify-box > .notify .notify-description {
+  opacity: 1;
+}
+
+.slideIn {
+  animation: slideIn var(--animation-duration) var(--easing-function) forwards;
+}
+.slideOut {
+  animation: slideOut var(--animation-duration) var(--easing-function) forwards;
+}
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(50%);
+    opacity: 0;
+  }
 }

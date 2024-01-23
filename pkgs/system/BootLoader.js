@@ -77,6 +77,9 @@ export default {
       if (appearanceConfig.dockStyle) {
         document.documentElement.dataset.dockStyle = appearanceConfig.dockStyle;
       }
+      if (appearanceConfig.dockShowTray !== undefined) {
+        document.documentElement.dataset.dockShowTray = appearanceConfig.dockShowTray;
+      }
       if (
         appearanceConfig.language &&
         Root.Lib.langs.includes(appearanceConfig.language)
@@ -176,16 +179,6 @@ export default {
     }
 
     return Root.Lib.setupReturns(
-      (_) => {
-        // Root.Modal.alert("BootLoader", "No");
-        // console.log("BootLoader process ended, attempting clean up...");
-        // const result = Root.Lib.cleanup(pid, token);
-        // if (result === true) {
-        //   console.log("Cleanup Success! Token:", token);
-        // } else {
-        //   console.log("Cleanup Failure. Token:", token);
-        // }
-      },
       (m) => {
         console.log("BootLoader received message: " + m);
       }

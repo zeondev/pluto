@@ -553,7 +553,7 @@ await vfs.importFS();
 const fileContent = await vfs.readFile("Root/myFile.txt");
 ```
 
-More documentation on VirtualFS [can be found here](docs/virtualFS.md).
+More documentation on VirtualFS [can be found here](virtualFS.md).
 
 ## Recent breaking changes to apps
 
@@ -568,3 +568,28 @@ More documentation on VirtualFS [can be found here](docs/virtualFS.md).
   ```
 
   - Remember the process cleans up after itself so you only need to cleanup any elements or intervals you have made when initializing.
+
+- Early 1.5 core uses the second parameter of `setupReturns` to declare tray items.
+
+  Pass in an argument as follows:
+
+  ```js
+  {
+    icon: "/* SVG data for icon (in XML) */",
+  },
+  ```
+
+  Clicking your tray item will send a `context-menu` message to your app.   
+  Here's how to handle it (inside the first parameter of `setupReturns`):
+  ```js
+  if (m.type && m.type === "context-menu") {
+    CtxMenu.new(m.x, m.y, [
+      {
+        item: "item text",
+        select: async () => {
+          // Your code
+        },
+      },
+    ]);
+  }
+  ```

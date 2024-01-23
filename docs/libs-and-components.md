@@ -4,6 +4,8 @@
 
 - [Libraries and Components](#libraries-and-components)
   - [Libraries](#libraries)
+    - [CtxMenu](#ctxmenu)
+    - [Notify](#notify)
   - [Components](#components)
 
 There are a selection of libraries and components available.
@@ -20,13 +22,24 @@ Here is the list of available libraries:
 
 - `CodeScanner`
 - `CtxMenu`
-- `FileDIalog`
+- `FileDialog`
 - `FileMappings`
+- [`Notify`](#notify)
 - `ThemeLib`
 - [`VirtualFS`](virtualFS.md)
 - [`WindowSystem`](README.md#example-app-code)
 
-As of now, there is no documentation for these libraries.
+As of now, there is no documentation for most of these libraries.
+
+Below is some vague documentation that should be easy enough to understand.
+
+### CtxMenu
+
+`.new(posX, posY, items = [{ item: "Nothing", select: () => null }], header = "", parent = document.body, isAbsolute = true )` - Show a context menu
+
+### Notify
+
+`.show(title, description, parent)` - Show a notification
 
 ## Components
 

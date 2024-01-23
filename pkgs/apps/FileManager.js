@@ -238,7 +238,7 @@ export default {
       if (e.target.closest("tr")) return;
       e.preventDefault();
 
-      ctxMenu.new(e.clientX, e.clientY, [
+      ctxMenu.data.new(e.clientX, e.clientY, [
         {
           item: "Copy path",
           async select() {
@@ -296,7 +296,7 @@ export default {
 
         tableBodyRow.on("contextmenu", (e) => {
           e.preventDefault();
-          ctxMenu.new(e.clientX, e.clientY, [
+          ctxMenu.data.new(e.clientX, e.clientY, [
             {
               item: "Open",
               async select() {

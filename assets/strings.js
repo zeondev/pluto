@@ -53,6 +53,7 @@ export default {
     core_appAccessControl_privilege_services: "Interact with system services",
     core_appAccessControl_privilege_setLanguage: "Change the system language",
     core_appAccessControl_privilege_full: "Full system access",
+    core_appAccessControl_privilege_desktopOnlyHostPermission: "Interact with host system integrations (only in Pluto Desktop)",
     core_appAccessControl_authorNote: "Author note: {note}",
     core_appAccessControl_noAuthorNote: "No author note",
     core_appLaunch_notification:

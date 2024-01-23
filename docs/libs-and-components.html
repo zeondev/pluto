@@ -1251,7 +1251,12 @@
 <ul dir="auto">
 <li><a href="#libraries-and-components">Libraries and Components</a>
 <ul dir="auto">
-<li><a href="#libraries">Libraries</a></li>
+<li><a href="#libraries">Libraries</a>
+<ul dir="auto">
+<li><a href="#ctxmenu">CtxMenu</a></li>
+<li><a href="#notify">Notify</a></li>
+</ul>
+</li>
 <li><a href="#components">Components</a></li>
 </ul>
 </li>
@@ -1264,13 +1269,19 @@
 <ul dir="auto">
 <li><code class="notranslate">CodeScanner</code></li>
 <li><code class="notranslate">CtxMenu</code></li>
-<li><code class="notranslate">FileDIalog</code></li>
+<li><code class="notranslate">FileDialog</code></li>
 <li><code class="notranslate">FileMappings</code></li>
+<li><a href="#notify"><code class="notranslate">Notify</code></a></li>
 <li><code class="notranslate">ThemeLib</code></li>
 <li><a href="virtualFS.md"><code class="notranslate">VirtualFS</code></a></li>
 <li><a href="README.md#example-app-code"><code class="notranslate">WindowSystem</code></a></li>
 </ul>
-<p dir="auto">As of now, there is no documentation for these libraries.</p>
+<p dir="auto">As of now, there is no documentation for most of these libraries.</p>
+<p dir="auto">Below is some vague documentation that should be easy enough to understand.</p>
+<h3 dir="auto">CtxMenu</h3>
+<p dir="auto"><code class="notranslate">.new(posX, posY, items = [{ item: "Nothing", select: () =&gt; null }], header = "", parent = document.body, isAbsolute = true )</code> - Show a context menu</p>
+<h3 dir="auto">Notify</h3>
+<p dir="auto"><code class="notranslate">.show(title, description, parent)</code> - Show a notification</p>
 <h2 dir="auto">Components</h2>
 <p dir="auto">Components are similar to libraries, but act like reusable functions to generate HTML elements.</p>
 <p dir="auto">You can load a component into your app with the following code:</p>

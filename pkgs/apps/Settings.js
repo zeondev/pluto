@@ -22,6 +22,10 @@ export default {
       privilege: "setLanguage",
       description: "Allow the user to configure the system language",
     },
+    {
+      privilege: "host",
+      description: "Access host system integrations",
+    },
   ],
   strings: {
     en_US: {
@@ -48,6 +52,7 @@ export default {
       dockStyleFull: "Full",
       dockStyleCompact: "Compact",
       dockStyleMinimal: "Minimal",
+      dockShowTray: "Show the dock's tray",
       testNetwork: "Test Network",
       networkTestSuccess: "You're online and good to go!",
       networkTestResult: "Your internet is {status}",
@@ -177,6 +182,8 @@ export default {
       useThemeWallpaper: true,
       theme: "dark.theme",
       sidebarType: "vertical",
+      dockStyle: 'full',
+      dockShowTray: true,
     };
 
     let desktopConfig = Object.assign(
@@ -446,7 +453,7 @@ export default {
 
           if (navigator.userAgent.indexOf("pluto/") > -1) {
             // Desktop electron app only code
-            totalStorage = await window.host.du(window.host.dir);
+            totalStorage = await Root.Core.host.du(Root.Core.host.dir);
           } else {
             let allKeys = await localforage.keys();
             for (let i = 0; i < allKeys.length; i++) {
@@ -865,6 +872,36 @@ export default {
               })
               .class("if", "mc")
           );
+
+          new Html("span")
+          .appendMany(
+            new Html("input")
+              .attr({
+                type: "checkbox",
+                id: Root.PID + "ds",
+                checked:
+                  desktopConfig.dockShowTray === true ? true : null,
+              })
+              .on("input", async (e) => {
+                desktopConfig.dockShowTray = e.target.checked;
+
+                Html.qs(".desktop .dock").classOn("hiding");
+
+                setTimeout(() => {
+                  // a bit hacky to do the animation
+                  Html.qs(".desktop .dock").classOff("hiding");
+                  document.documentElement.dataset.dockShowTray = e.target.checked;
+                }, 600);
+
+                save();
+              }),
+            new Html("label")
+              .attr({
+                for: Root.PID + "ds",
+              })
+              .text(Root.Lib.getString("dockShowTray"))
+          )
+          .appendTo(container);
 
           const languageSelectSpan = new Html("span")
             .class("row", "ac", "js", "gap")

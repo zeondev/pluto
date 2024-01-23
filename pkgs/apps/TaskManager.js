@@ -133,7 +133,7 @@ export default {
           })
           .on("contextmenu", (e) => {
             e.preventDefault();
-            ctxMenu.new(e.clientX, e.clientY, [
+            ctxMenu.data.new(e.clientX, e.clientY, [
               {
                 item: Root.Lib.getString("endProcess"),
                 async select() {

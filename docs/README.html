@@ -1766,7 +1766,7 @@ Retrieve current user account data. Returns invalid data if a user is not logged
 
 <span class="pl-c">// Read a file</span>
 <span class="pl-k">const</span> <span class="pl-s1">fileContent</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-s1">vfs</span><span class="pl-kos">.</span><span class="pl-en">readFile</span><span class="pl-kos">(</span><span class="pl-s">"Root/myFile.txt"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-<p dir="auto">More documentation on VirtualFS <a href="docs/virtualFS.md">can be found here</a>.</p>
+<p dir="auto">More documentation on VirtualFS <a href="virtualFS.md">can be found here</a>.</p>
 <h2 dir="auto">Recent breaking changes to apps</h2>
 <ul dir="auto">
 <li>
@@ -1780,6 +1780,25 @@ Retrieve current user account data. Returns invalid data if a user is not logged
 <ul dir="auto">
 <li>Remember the process cleans up after itself so you only need to cleanup any elements or intervals you have made when initializing.</li>
 </ul>
+</li>
+<li>
+<p dir="auto">Early 1.5 core uses the second parameter of <code class="notranslate">setupReturns</code> to declare tray items.</p>
+<p dir="auto">Pass in an argument as follows:</p>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-kos">{</span>
+  <span class="pl-c1">icon</span>: <span class="pl-s">"/* SVG data for icon (in XML) */"</span><span class="pl-kos">,</span>
+<span class="pl-kos">}</span><span class="pl-kos">,</span></pre></div>
+<p dir="auto">Clicking your tray item will send a <code class="notranslate">context-menu</code> message to your app.<br>
+Here's how to handle it (inside the first parameter of <code class="notranslate">setupReturns</code>):</p>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">m</span><span class="pl-kos">.</span><span class="pl-c1">type</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-s1">m</span><span class="pl-kos">.</span><span class="pl-c1">type</span> <span class="pl-c1">===</span> <span class="pl-s">"context-menu"</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+  <span class="pl-v">CtxMenu</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">m</span><span class="pl-kos">.</span><span class="pl-c1">x</span><span class="pl-kos">,</span> <span class="pl-s1">m</span><span class="pl-kos">.</span><span class="pl-c1">y</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
+    <span class="pl-kos">{</span>
+      <span class="pl-c1">item</span>: <span class="pl-s">"item text"</span><span class="pl-kos">,</span>
+      <span class="pl-en">select</span>: <span class="pl-k">async</span> <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+        <span class="pl-c">// Your code</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
 </li>
 </ul></div>
     </div>

@@ -449,10 +449,11 @@
             }
           };
         };
-        this.setupReturns = function (onMessage) {
+        this.setupReturns = function (onMessage, trayInfo = null) {
           // the idea is a standardized .proc on processes
           return {
             end: this.onEnd,
+            trayInfo,
             send: async (m) => {
               if (
                 m &&
@@ -501,7 +502,7 @@
       },
     };
 
-    let Modal;
+    let Modal, Toast;
 
     const corePrivileges = {
       startPkg: { description: "core_appAccessControl_privilege_startPkg" },
@@ -514,6 +515,9 @@
       services: { description: "core_appAccessControl_privilege_services" },
       setLanguage: {
         description: "core_appAccessControl_privilege_setLanguage",
+      },
+      host: {
+        description: "core_appAccessControl_privilege_desktopOnlyHostPermission",
       },
       full: {
         description: "core_appAccessControl_privilege_full",
@@ -630,6 +634,8 @@
                   Token,
                   Modal,
                   Services: Core.services,
+                  // Provide access to GlobalLib just in case.
+                  GlobalLib
                 });
               } else if (
                 pkg.privileges === undefined ||
@@ -715,6 +721,9 @@
                       : {}),
                     ...(privileges.knownPackageList
                       ? { knownPackageList: Core.knownPackageList }
+                      : {}),
+                    ...(privileges.host
+                      ? { host: GlobalLib.host }
                       : {}),
                     ...(privileges.setLanguage
                       ? { setLanguage: Core.setLanguage }
@@ -803,20 +812,39 @@
           }
         }
       },
-      services: {},
+      services: [],
       broadcastEventToProcs,
     };
 
     Modal = await Core.startPkg("ui:Modal");
-
-    await Core.startPkg("system:BootLoader");
+    Toast = await Core.startPkg("lib:Notify");
 
     // Comment these out to disable global core access
     // recommended to keep for debugging purposes
     window.m = Modal;
+    window.t = Toast;
     window.c = Core;
     window.l = GlobalLib;
     window.h = GlobalLib.html;
+
+    // If in electron app, don't give away host data
+    let host;
+    if (window.host !== undefined) {
+      host = window.host;
+      window.host = undefined;
+
+      GlobalLib.host = host;
+
+      // Give access to the core temporarily.
+      window.bootUpCore = Core;
+      // Desktop app-specific boot event.
+      window.dispatchEvent(new CustomEvent("pluto.boot"));
+      setTimeout(() => {
+        window.bootUpCore = null;
+      }, 1000);
+    }
+
+    await Core.startPkg("system:BootLoader");
   } catch (e) {
     alert(e);
   }
