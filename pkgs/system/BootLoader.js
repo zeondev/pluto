@@ -78,7 +78,8 @@ export default {
         document.documentElement.dataset.dockStyle = appearanceConfig.dockStyle;
       }
       if (appearanceConfig.dockShowTray !== undefined) {
-        document.documentElement.dataset.dockShowTray = appearanceConfig.dockShowTray;
+        document.documentElement.dataset.dockShowTray =
+          appearanceConfig.dockShowTray;
       }
       if (
         appearanceConfig.language &&
@@ -157,9 +158,8 @@ export default {
       const consoleApp = await Root.Core.startPkg("system:Console", true, true);
 
       document.addEventListener("keydown", (e) => {
-        if (e.key === "`") {
+        if (e.key === "~") {
           e.preventDefault();
-          // send msg
           consoleApp.proc.send({ type: "toggle" });
         }
       });
@@ -178,10 +178,8 @@ export default {
       );
     }
 
-    return Root.Lib.setupReturns(
-      (m) => {
-        console.log("BootLoader received message: " + m);
-      }
-    );
+    return Root.Lib.setupReturns((m) => {
+      console.log("BootLoader received message: " + m);
+    });
   },
 };
