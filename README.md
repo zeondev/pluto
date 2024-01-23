@@ -6,7 +6,7 @@ Pluto is a minimal but functional "web OS" that aims to provide a desktop enviro
 
 <picture>
   <source media="(prefers-color-scheme: light)" srcset="assets/images/ss_light.png">
-  <img width=200 title="hello there!" alt="hello there!" src="assets/images/ss_dark.png">
+  <img src="assets/images/ss_dark.png">
 </picture>
 
 ## Features
