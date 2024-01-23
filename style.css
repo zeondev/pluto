@@ -611,6 +611,16 @@ button {
   align-items: center;
 }
 
+button.transparent {
+  background-color: transparent;
+}
+button.transparent:hover {
+  background-color: rgba(var(--text-rgb), 0.25);
+}
+button.transparent:active {
+  background-color: rgba(var(--text-rgb), 0.5);
+}
+
 button.small {
   padding: 4px 8px;
 }

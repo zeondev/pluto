@@ -1,4 +1,4 @@
-let lib;
+let lib, core;
 
 function generateNoiseImage(width, height) {
   return new Promise((resolve, reject) => {
@@ -35,8 +35,9 @@ export default {
   description: "Displays a background and locks the screen",
   ver: 1, // Compatible with core v1
   type: "library",
-  init: function (l) {
+  init: function (l, c) {
     lib = l;
+    core = c;
   },
   data: {
     loader: async function () {
@@ -74,15 +75,50 @@ export default {
         date.text(dateString);
       }
 
+      let middleText = [];
+      let bottomText = [];
+
+      let service = core.services.find((x) => x.name === "Account");
+
+      if (!service && !service.ref) {
+        bottomText.push(
+          new Html("span").text(lib.getString("lockScreen_tapAnywhere"))
+        );
+      } else {
+        const account = service.ref.getUserData();
+
+        middleText.push(
+          new Html("button")
+            .classOn("col", "gap", "fc", "transparent", "padding")
+            .appendMany(
+              new Html("img").attr({ src: account.pfp }).styleJs({
+                maxWidth: "6.5rem",
+                maxHeight: "6.5rem",
+                width: "8vmax",
+                height: "8vmax",
+                borderRadius: "50%",
+              }),
+              new Html("span")
+                .text(account.username)
+                .styleJs({ fontSize: "18px" })
+            )
+            .styleJs({ marginTop: "auto", marginBottom: "auto" })
+        );
+
+        bottomText.push(
+          new Html("span").text(lib.getString("lockScreen_tapAnywhere"))
+        );
+      }
+
       const x = new Html("div")
         .class("blur", "col", "gap", "display-padding")
         .styleJs({ zIndex: "99999999", backgroundImage: `url(${image})` })
         .appendMany(
           new Html("div").class("col", "fc", "gap").appendMany(time, date),
-
+          ...middleText,
           new Html("span")
-            .class("mt-auto")
-            .text(lib.getString("lockScreen_tapAnywhere"))
+            .class("mt-auto", "col", "fc", "gap")
+            .appendMany(...bottomText)
         )
         .on("click", (e) => {
           x.cleanup();
