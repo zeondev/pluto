@@ -501,7 +501,7 @@ export default {
                   } else {
                     const bcr = item.elm.getBoundingClientRect();
                     popup = Tooltip.new(
-                      bcr.left + (bcr.width / 2),
+                      bcr.left + bcr.width / 2,
                       bcr.bottom - 36,
                       t.name || app.proc.name || app.name,
                       document.body,
@@ -510,9 +510,13 @@ export default {
 
                     requestAnimationFrame(() => {
                       popup.style({
-                        left: bcr.left + (bcr.width / 2) - (popup.elm.offsetWidth / 2) + 'px'
+                        left:
+                          bcr.left +
+                          bcr.width / 2 -
+                          popup.elm.offsetWidth / 2 +
+                          "px",
                       });
-                    })
+                    });
                   }
                 })
                 .on("mouseleave", (e) => {
@@ -556,6 +560,9 @@ export default {
                   )
                   .text("No apps are using the tray.")
               );
+            trayElm.style({
+              width: "160px",
+            });
           }
 
           trayElm.appendTo(trayWrapper);

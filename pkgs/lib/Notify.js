@@ -10,13 +10,12 @@ export default {
   },
   data: {
     show: function (title, description, p = null) {
-      let notifyBox;
-      if (L.html.qs(".notify-box") === null) {
-        notifyBox = new L.html("div").class("notify-box").appendTo("body");
+      if (document.querySelector("body>.notify-box") == null) {
+        new L.html("div").class("notify-box").appendTo("body");
+      }
 
-        if (!p instanceof L.html) {
-          p = notifyBox;
-        }
+      if (p === null) {
+        p = document.querySelector("body>.notify-box");
       }
 
       let parent = p;
