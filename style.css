@@ -1049,7 +1049,7 @@ td {
 [disabled] {
   background-color: var(--unfocused) !important;
   color: rgba(var(--text-rgb), 0.5) !important;
-  cursor: not-allowed;
+  cursor: var(--cursor-not-allowed) 10 10, not-allowed !important;
 }
 
 .desktop .dock {
@@ -1820,7 +1820,7 @@ hr {
 
 .card {
   padding: 8px;
-  background-color: var(--neutral);
+  background-color: var(--unfocused);
   border-radius: 8px;
   border: 1px solid var(--outline);
 }
@@ -2590,4 +2590,16 @@ hr {
     transform: translateX(50%);
     opacity: 0;
   }
+}
+
+.badge {
+  display: inline-flex;
+  max-width: max-content;
+  padding: 4px 8px;
+  border-radius: 99px;
+  text-transform: capitalize;
+  background-color: var(--neutral);
+  color: var(--text);
+  font-weight: bold;
+  font-size: 11px;
 }

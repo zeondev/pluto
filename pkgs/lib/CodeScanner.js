@@ -3,8 +3,8 @@ let C = {};
 let vfs = {};
 
 export default {
-  name: "Test library",
-  description: "Example baseplate library",
+  name: "Code Scanner",
+  description: "Scans application files for dangerous code.",
   ver: 1, // Compatible with core v1
   type: "library",
   init: async (l, c) => {

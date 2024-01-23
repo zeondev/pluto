@@ -65,6 +65,8 @@ export default {
       securityTableItemName: "Name",
       securityTableItemSafe: "Safe",
       securityTableItemDelete: "Delete App",
+      installedApplications: "Installed applications",
+      knownPackageList: "Loaded packages",
     },
     de_DE: {
       thisSystem: "Dieses System",
@@ -182,7 +184,7 @@ export default {
       useThemeWallpaper: true,
       theme: "dark.theme",
       sidebarType: "vertical",
-      dockStyle: 'full',
+      dockStyle: "full",
       dockShowTray: true,
     };
 
@@ -874,34 +876,34 @@ export default {
           );
 
           new Html("span")
-          .appendMany(
-            new Html("input")
-              .attr({
-                type: "checkbox",
-                id: Root.PID + "ds",
-                checked:
-                  desktopConfig.dockShowTray === true ? true : null,
-              })
-              .on("input", async (e) => {
-                desktopConfig.dockShowTray = e.target.checked;
+            .appendMany(
+              new Html("input")
+                .attr({
+                  type: "checkbox",
+                  id: Root.PID + "ds",
+                  checked: desktopConfig.dockShowTray === true ? true : null,
+                })
+                .on("input", async (e) => {
+                  desktopConfig.dockShowTray = e.target.checked;
 
-                Html.qs(".desktop .dock").classOn("hiding");
+                  Html.qs(".desktop .dock").classOn("hiding");
 
-                setTimeout(() => {
-                  // a bit hacky to do the animation
-                  Html.qs(".desktop .dock").classOff("hiding");
-                  document.documentElement.dataset.dockShowTray = e.target.checked;
-                }, 600);
+                  setTimeout(() => {
+                    // a bit hacky to do the animation
+                    Html.qs(".desktop .dock").classOff("hiding");
+                    document.documentElement.dataset.dockShowTray =
+                      e.target.checked;
+                  }, 600);
 
-                save();
-              }),
-            new Html("label")
-              .attr({
-                for: Root.PID + "ds",
-              })
-              .text(Root.Lib.getString("dockShowTray"))
-          )
-          .appendTo(container);
+                  save();
+                }),
+              new Html("label")
+                .attr({
+                  for: Root.PID + "ds",
+                })
+                .text(Root.Lib.getString("dockShowTray"))
+            )
+            .appendTo(container);
 
           const languageSelectSpan = new Html("span")
             .class("row", "ac", "js", "gap")
@@ -1011,49 +1013,86 @@ export default {
         async applications() {
           await this.clear("applications");
           makeHeading("h1", Root.Lib.getString("applications"));
+
+          new Html("span")
+            .class("h2", "mt-1")
+            .text(Root.Lib.getString("installedApplications"))
+            .appendTo(container);
+
           let installedApps = (await vfs.list("Root/Pluto/apps"))
             .filter((p) => p.type === "file" && p.item.endsWith(".app"))
             .map((i) => i.item);
           console.log(installedApps);
           if (installedApps.length > 0) {
-            installedApps.forEach(async (e) => {
-              let splitE = e.split(".");
-              let name = splitE[0];
-              let extension = splitE[1];
-              console.log(name, extension);
+            await Promise.all(
+              installedApps.map(async (e) => {
+                let splitE = e.split(".");
+                let name = splitE[0];
+                let extension = splitE[1];
+                console.log(name, extension);
 
-              const a = (
-                await import(
-                  `data:text/javascript;base64,${btoa(
-                    await vfs.readFile(`Root/Pluto/apps/${name}.app`)
-                  )}`
-                )
-              ).default;
-              console.log(a);
+                const a = (
+                  await import(
+                    `data:text/javascript;base64,${btoa(
+                      await vfs.readFile(`Root/Pluto/apps/${name}.app`)
+                    )}`
+                  )
+                ).default;
 
-              Card.new(
-                container,
-                new Html("div").class("flex-group", "col").appendMany(
-                  new Html("span").class("h2").text(a.name), // Actual name
-                  new Html("code")
-                    .class("label")
-                    .style({
-                      "margin-top": "-4px",
-                    })
-                    .text(`${name}.app`), // Type
-                  // Filename and Version
-                  new Html("span").text(a.description), // Description
-                  new Html("span")
-                    .class("label-light")
-                    .text(`(supports core ${a.ver})`) //
-                )
-              );
-            });
+                if (a === undefined) return false;
+
+                console.log(a);
+
+                Card.new(
+                  container,
+                  new Html("div").class("flex-group", "col").appendMany(
+                    new Html("span").class("h2").text(a.name), // Actual name
+                    new Html("code")
+                      .class("label")
+                      .style({
+                        "margin-top": "-4px",
+                      })
+                      .text(`${name}.app`), // Type
+                    // Filename and Version
+                    new Html("span").text(a.description), // Description
+                    new Html("span")
+                      .class("label-light")
+                      .text(`(supports core ${a.ver})`) //
+                  )
+                );
+              })
+            );
           } else {
             new Html("span")
               .text(Root.Lib.getString("noInstalledApps"))
               .appendTo(container);
           }
+
+          new Html("span")
+            .class("h2", "mt-1")
+            .text(Root.Lib.getString("knownPackageList"))
+            .appendTo(container);
+
+          Root.Core.knownPackageList.forEach((p, i) => {
+            new Html("hr").appendTo(container);
+
+            new Html("div")
+              .class("flex-group", "col")
+              .appendMany(
+                new Html("span")
+                  .class("flex-group", "gap", "js", "ac")
+                  .appendMany(
+                    new Html("span")
+                      .styleJs({ fontWeight: "bold" })
+                      .text(p.pkg.name),
+                    new Html("span").class("badge").text(p.pkg.type)
+                  ),
+                new Html("span")
+                  .styleJs({ fontWeight: "normal" })
+                  .text(p.pkg.description)
+              )
+              .appendTo(container);
+          });
         },
         async security() {
           async function performSecurityScan() {
