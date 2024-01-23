@@ -1,4 +1,4 @@
-const { contextBridge } = require("electron");
+ const { contextBridge } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const dir = path.join(__dirname, "fs");
@@ -7,14 +7,14 @@ const du = require("du");
 
 const { ipcRenderer } = require("electron/renderer");
 
-contextBridge.exposeInMainWorld("host", {
+window.host = {
   fs,
   path,
   dir,
   mkdirp: mkdirpSync,
   du,
   updateRPC: (title) => ipcRenderer.send("update-rpc", title),
-});
+};
 
 function createFileTree(rootPath, fileTree) {
   Object.entries(fileTree).forEach(([key, value]) => {

@@ -2,7 +2,7 @@
   "name": "pluto",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron ."
   },
@@ -15,6 +15,8 @@
   "dependencies": {
     "@xhayper/discord-rpc": "^1.1.2",
     "du": "^1.0.0",
+    "electron-localshortcut": "^3.2.1",
+    "express": "^4.18.2",
     "mkdirp": "^3.0.1"
   }
 }

@@ -1,4 +1,3 @@
-// HAHA
 let templateFsLayout = {
   Registry: {},
   Root: {
@@ -45,6 +44,9 @@ let templateFsLayout = {
   },
 };
 
+let Lib = {},
+  Core = {};
+
 const Vfs = {
   // The file system is represented as a nested object, where each key is a folder or file name
   // and the value is either a string (for file contents) or another object (for a subfolder)
@@ -70,13 +72,13 @@ const Vfs = {
   },
   // Helper function to get the parent folder of a given path
   async getParentFolder(path) {
-    return host.path.dirname(path);
+    return Lib.host.path.dirname(path);
   },
   // function to tell you if stored data is a file or a folder
   async whatIs(path, fsObject = this.fileSystem) {
     return new Promise((resolve, reject) => {
-      window.host.fs.readdir(
-        window.host.path.join(window.host.dir, path),
+      Lib.host.fs.readdir(
+        Lib.host.path.join(Lib.host.dir, path),
         (err, files) => {
           if (err) {
             resolve("file");
@@ -90,10 +92,9 @@ const Vfs = {
   // Function to get the contents of a file at a given path
   async readFile(path, fsObject = this.fileSystem, bypass = false) {
     try {
-      return window.host.fs.readFileSync(
-        window.host.path.join(window.host.dir, path),
-        { encoding: "utf-8" }
-      );
+      return Lib.host.fs.readFileSync(Lib.host.path.join(Lib.host.dir, path), {
+        encoding: "utf-8",
+      });
     } catch (e) {
       if (e.code === "ENOENT") {
         return null;
@@ -102,42 +103,37 @@ const Vfs = {
   },
   // Function to write to a file at a given path
   async writeFile(path, contents, fsObject = this.fileSystem) {
-    const path2 = window.host.path.dirname(
-      window.host.path.join(window.host.dir, path)
-    );
-    window.host.mkdirp(path2);
+    const path2 = Lib.host.path.dirname(Lib.host.path.join(Lib.host.dir, path));
+    Lib.host.mkdirp(path2);
 
-    window.host.fs.writeFileSync(
-      window.host.path.join(window.host.dir, path),
-      contents
-    );
+    Lib.host.fs.writeFileSync(Lib.host.path.join(Lib.host.dir, path), contents);
     this.save("write " + path);
   },
   // Function to create a new folder at a given path
   async createFolder(path, fsObject = this.fileSystem) {
-    const fixedPath = window.host.path.dirname(
-      window.host.path.join(window.host.dir, path)
+    const fixedPath = Lib.host.path.dirname(
+      Lib.host.path.join(Lib.host.dir, path)
     );
-    window.host.mkdirp(fixedPath);
+    Lib.host.mkdirp(fixedPath);
     this.save("mkdir " + path);
   },
   // Function to delete a file or folder at a given path
   async delete(path, fsObject = this.fileSystem) {
-    const path2 = window.host.path.join(window.host.dir, path);
+    const path2 = Lib.host.path.join(Lib.host.dir, path);
 
-    window.host.fs.unlinkSync(path2);
+    Lib.host.fs.unlinkSync(path2);
 
     this.save("delete " + path);
   },
   // Function to list all files and folders at a given path
   async list(path, fsObject = this.fileSystem) {
-    const path2 = window.host.path.join(window.host.dir, path);
+    const path2 = Lib.host.path.join(Lib.host.dir, path);
 
-    return window.host.fs.readdirSync(path2).map((f) => {
+    return Lib.host.fs.readdirSync(path2).map((f) => {
       let stat = "file";
       try {
-        let stat2 = window.host.fs.statSync(
-          window.host.path.join(window.host.dir, path, f)
+        let stat2 = Lib.host.fs.statSync(
+          Lib.host.path.join(Lib.host.dir, path, f)
         );
         stat = stat2.isDirectory() === true ? "dir" : "file";
       } catch (e) {}
@@ -155,9 +151,9 @@ const Vfs = {
     this.save(`rename ${path} to ${newName}`);
   },
   async exists(path, fsObject = this.fileSystem) {
-    const path2 = window.host.path.join(window.host.dir, path);
+    const path2 = Lib.host.path.join(Lib.host.dir, path);
 
-    return window.host.fs.existsSync(path2);
+    return Lib.host.fs.existsSync(path2);
   },
   async merge(fsObject = this.fileSystem) {
     console.log("unused");
@@ -166,10 +162,15 @@ const Vfs = {
 };
 
 export default {
-  name: "Virtual File System",
+  name: "Real File System Wrapper for Pluto Desktop",
   description:
-    "A file system based in the browsers local storage. This library includes many function to help loading and executing of files.",
+    "Access to the real file system. This library includes many function to help loading and executing of files.",
   ver: 1, // Compatible with core v1
   type: "library",
+  init: (l, c) => {
+    // setup lib and core stuff
+    Lib = l;
+    Core = c;
+  },
   data: Vfs,
 };
