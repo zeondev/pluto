@@ -486,8 +486,12 @@ export default {
         }
       }
 
-      if (e.ctrlKey) {
-        if (e.ctrlKey && e.shiftKey && e.key === "S") {
+      // somewhat working macOS command key support
+      if (e.ctrlKey || e.metaKey) {
+        if (
+          (e.ctrlKey && e.shiftKey && e.key === "S") ||
+          (e.metaKey && e.shiftKey && e.key === "S")
+        ) {
           // Ctrl + Shift + S
           e.preventDefault();
           actionHandlers.prettify();

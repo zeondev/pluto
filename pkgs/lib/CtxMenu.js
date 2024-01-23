@@ -50,6 +50,23 @@ export default {
           e.preventDefault();
         })
         .appendTo(parent);
+
+      requestAnimationFrame(() => {
+        // ctx menu has rendered, move it to correct location
+
+        /**
+         * @type DOMRect
+         */
+        const bcr = ctxMenu.elm.getBoundingClientRect();
+
+        // Prevent bottom context menu issues
+        if (bcr.bottom > window.innerHeight) {
+          ctxMenu.style({
+            top: window.innerHeight - bcr.height + "px",
+          });
+        }
+      });
+
       return ctxMenu;
     },
   },

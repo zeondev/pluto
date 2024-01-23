@@ -470,100 +470,124 @@ export default {
         window.addEventListener("touchstart", onClickDetect);
         window.addEventListener("touchend", onFullClickDetect);
         if (!trayElm) {
-          const trayItems = Root.Core.processList.filter((f) => f !== null);
+          async function createTrayItems() {
+            const trayItems = Root.Core.processList.filter((f) => f !== null);
 
-          let appsHtml = await Promise.all(
-            trayItems.map(async (app) => {
-              const t = app.proc.trayInfo;
-              if (t === null || t === undefined) {
-                return false;
-              }
-              if (typeof t.icon === undefined) {
-                return false;
-              }
+            let appsHtml = await Promise.all(
+              trayItems.map(async (app) => {
+                const t = app.proc.trayInfo;
+                if (t === null || t === undefined) {
+                  return false;
+                }
+                if (typeof t.icon === undefined) {
+                  return false;
+                }
 
-              let icon = t.icon || Root.Lib.icons.box;
+                let icon = t.icon || Root.Lib.icons.box;
 
-              let popup;
+                let popup;
 
-              const item = new Html("button")
-                .class("tray-item")
-                .appendMany(
-                  new Html("div")
-                    .styleJs({ width: "24px", height: "24px" })
-                    .class("app-icon")
-                    .html(icon)
-                )
-                .on("mouseenter", () => {
-                  if (popup) {
-                    popup.cleanup();
-                    popup = null;
-                  } else {
-                    const bcr = item.elm.getBoundingClientRect();
-                    popup = Tooltip.new(
-                      bcr.left + bcr.width / 2,
-                      bcr.bottom - 36,
-                      t.name || app.proc.name || app.name,
-                      document.body,
-                      true
-                    );
-
-                    requestAnimationFrame(() => {
-                      popup.style({
-                        left:
-                          bcr.left +
-                          bcr.width / 2 -
-                          popup.elm.offsetWidth / 2 +
-                          "px",
-                      });
-                    });
-                  }
-                })
-                .on("mouseleave", (e) => {
-                  if (popup) {
-                    popup.cleanup();
-                    popup = null;
-                  }
-                })
-                .on("click", async (e) => {
-                  // send message to process to spawn a custom context menu
-                  app.proc.send({
-                    type: "context-menu",
-                    x: e.clientX,
-                    y: e.clientY,
-                  });
-                });
-
-              return item;
-            })
-          );
-
-          appsHtml = appsHtml.filter((m) => m !== false);
-
-          trayElm = new Html("div")
-            .class("menu", "tray")
-            .appendMany(new Html("div").class("apps").appendMany(...appsHtml));
-
-          if (appsHtml.length === 0) {
-            trayElm
-              .clear()
-              .appendMany(
-                new Html("span")
-                  .class(
-                    "label",
-                    "w-100",
-                    "flex-group",
-                    "fg",
-                    "fc",
-                    "mt-2",
-                    "mb-2"
+                const item = new Html("button")
+                  .class("tray-item")
+                  .appendMany(
+                    new Html("div")
+                      .styleJs({ width: "24px", height: "24px" })
+                      .class("app-icon")
+                      .html(icon)
                   )
-                  .text("No apps are using the tray.")
-              );
-            trayElm.style({
-              width: "160px",
-            });
+                  .on("mouseenter", () => {
+                    if (popup) {
+                      popup.cleanup();
+                      popup = null;
+                    } else {
+                      const bcr = item.elm.getBoundingClientRect();
+                      popup = Tooltip.new(
+                        bcr.left + bcr.width / 2,
+                        bcr.bottom - 36,
+                        t.name || app.proc.name || app.name,
+                        document.body,
+                        true
+                      );
+
+                      requestAnimationFrame(() => {
+                        popup.style({
+                          left:
+                            bcr.left +
+                            bcr.width / 2 -
+                            popup.elm.offsetWidth / 2 +
+                            "px",
+                        });
+                      });
+                    }
+                  })
+                  .on("mouseleave", (e) => {
+                    if (popup) {
+                      popup.cleanup();
+                      popup = null;
+                    }
+                  })
+                  .on("click", async (e) => {
+                    // send message to process to spawn a custom context menu
+                    app.proc.send({
+                      type: "context-menu",
+                      button: "left-click",
+                      x: e.clientX,
+                      y: e.clientY,
+                    });
+                  })
+                  .on("contextmenu", async (e) => {
+                    e.preventDefault();
+                    app.proc.send({
+                      type: "context-menu",
+                      button: "right-click",
+                      x: e.clientX,
+                      y: e.clientY,
+                    });
+                  });
+
+                return item;
+              })
+            );
+
+            return appsHtml.filter((m) => m !== false);
           }
+
+          trayElm = new Html("div").class("menu", "tray");
+
+          async function updateTray() {
+            if (trayMenuState === false) clearInterval(trayInterval);
+            let trayApps = await createTrayItems();
+            if (trayApps.length === 0) {
+              trayElm
+                .clear()
+                .appendMany(
+                  new Html("span")
+                    .class(
+                      "label",
+                      "w-100",
+                      "flex-group",
+                      "fg",
+                      "fc",
+                      "mt-2",
+                      "mb-2"
+                    )
+                    .text("No apps are using the tray.")
+                );
+              trayElm.style({
+                width: "160px",
+              });
+            } else {
+              trayElm
+                .clear()
+                .appendMany(
+                  new Html("div").class("apps").appendMany(...trayApps)
+                );
+            }
+          }
+
+          updateTray();
+
+          let trayInterval = setInterval(updateTray, 1000);
 
           trayElm.appendTo(trayWrapper);
         }

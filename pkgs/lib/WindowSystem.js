@@ -444,6 +444,28 @@ export default {
         });
       }
 
+      // Available as of the late v1.5 core
+      show() {
+        return new Promise((res, _rej) => {
+          this.window.style.display = "flex";
+          this.window.classList.remove("closing");
+          setTimeout(() => {
+            res(true);
+          }, 500);
+        });
+      }
+      hide() {
+        return new Promise((res, _rej) => {
+          this.window.style.display = "flex";
+          this.window.classList.add("closing");
+          setTimeout(() => {
+            this.window.style.display = "none";
+            this.window.classList.remove("closing");
+            res(true);
+          }, 500);
+        });
+      }
+
       setTitle(title) {
         this.window.querySelector(".win-titlebar .title").innerText = title;
       }

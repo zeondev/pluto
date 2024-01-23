@@ -391,6 +391,7 @@ body {
   flex: 1;
   background: var(--root);
   overflow: auto;
+  touch-action: pan-y;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   position: relative;
@@ -851,6 +852,7 @@ textarea::placeholder {
   min-height: 0;
   overflow: auto;
   margin: 0;
+  touch-action: pan-y;
 }
 
 /* Table */
@@ -1988,6 +1990,7 @@ hr {
   gap: 4px;
   align-self: stretch;
   overflow: auto;
+  touch-action: pan-y;
 }
 
 .desktop .menu > .apps > .app {
