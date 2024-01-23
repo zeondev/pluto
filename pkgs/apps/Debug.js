@@ -37,9 +37,13 @@ export default {
           .appendTo("body");
     }
 
-    new Root.Lib.html("p").html("very cool").appendTo(wrapper);
+    new Root.Lib.html("p")
+      .html(
+        "Welcome to the debug app, here you can find some stuff to test layouts and other things"
+      )
+      .appendTo(wrapper);
     new Root.Lib.html("button")
-      .text("Border-ify everything")
+      .text("Toggle Border")
       .appendTo(wrapper)
       .on("click", (e) => {
         toggleBorder();
