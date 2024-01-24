@@ -43,7 +43,7 @@ function createWindow() {
       // webSecurity: false,
       // allowRunningInsecureContent: true,
     },
-    icon: path.join(__dirname, "icon.ico"),
+    icon: path.join(__dirname, "../icon.ico"),
   });
 
   if (process.platform === "darwin") {
