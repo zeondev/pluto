@@ -58,16 +58,17 @@ These function are undocumented for now.
 ### CtxMenu
 
 ```js
-new (
-  posX,
-  posY,
-  items = [{ item: "Nothing", select: () => null }],
-  header = "",
-  parent = document.body,
+new(
+  posX, 
+  posY, 
+  items = [
+    { item: "Nothing", select: () => null }
+  ], 
+  header = "", 
+  parent = document.body, 
   isAbsolute = true
 )
 ```
-
 Show a context menu:
 
 ![Context menu](./images/ctxMenu.png)
@@ -179,7 +180,12 @@ Here is the list of available components:
 ![Card image](./images/card.png)
 
 ```js
-Card.new(container, new Html("div").class("flex-group", "col").text("Hello!"));
+Card.new(
+  container,
+  new Html("div")
+    .class("flex-group", "col")
+    .text("Hello!")
+);
 ```
 
 ### ImageButton
@@ -201,17 +207,20 @@ const SelectList = await Root.Lib.loadComponent("SelectList");
 
 // . . .
 
-const list = SelectList.buttonList(container, [
-  {
-    html: "Option 1",
-    onclick: () => Root.Modal.alert("Option 1 clicked!"),
-  },
-  {
-    html: "Option 2",
-    onclick: () => Root.Modal.alert("Option 2 clicked!"),
-  },
-  // ...
-]);
+const list = SelectList.buttonList(
+  container,
+  [
+    { 
+      html: "Option 1", 
+      onclick: () => Root.Modal.alert("Option 1 clicked!")
+    },
+    { 
+      html: "Option 2", 
+      onclick: () => Root.Modal.alert("Option 2 clicked!")
+    },
+    // ...
+  ]
+);
 ```
 
 </details>
@@ -229,17 +238,20 @@ const SelectList = await Root.Lib.loadComponent("SelectList");
 
 // . . .
 
-const list = SelectList.table(container, [
-  {
-    html: "Option 1",
-    onclick: () => Root.Modal.alert("Option 1 clicked!"),
-  },
-  {
-    html: "Option 2",
-    onclick: () => Root.Modal.alert("Option 2 clicked!"),
-  },
-  // ...
-]);
+const list = SelectList.table(
+  container,
+  [
+    { 
+      html: "Option 1", 
+      onclick: () => Root.Modal.alert("Option 1 clicked!")
+    },
+    { 
+      html: "Option 2", 
+      onclick: () => Root.Modal.alert("Option 2 clicked!")
+    },
+    // ...
+  ]
+);
 ```
 
 </details>
@@ -359,11 +371,13 @@ TextSidebar.new(wrapper, [
 ### Tooltip
 
 ```js
-new ((posX = 0),
-(posY = 0),
-(text = "Action"),
-(parent = document.body),
-(isAbsolute = true))();
+new(
+  posX = 0,
+  posY = 0,
+  text = "Action",
+  parent = document.body,
+  isAbsolute = true
+)
 ```
 
 Example

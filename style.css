@@ -33,7 +33,8 @@ button *,
 select,
 select *,
 .desktop .dock .menu .app,
-.desktop .dock .menu .app * {
+.desktop .dock .menu .app *,
+.pointer {
   cursor: var(--cursor-pointer) 5 0, auto !important;
 }
 
@@ -646,6 +647,10 @@ button.primary {
 button.danger {
   background-color: var(--negative);
   color: var(--text-light);
+}
+
+summary { 
+  display: list-item !important;
 }
 
 button.success {
@@ -1684,6 +1689,10 @@ svg.lucide:not(.ignore-css) {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
+}
+
+.nf { 
+  display: block !important;
 }
 
 .fc {

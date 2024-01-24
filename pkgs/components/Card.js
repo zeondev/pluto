@@ -12,6 +12,7 @@ export default {
     new: (wrapper, content) => {
       const card = new html("div").class("card").append(content);
       card.appendTo(wrapper);
+      return card;
     },
   },
 };

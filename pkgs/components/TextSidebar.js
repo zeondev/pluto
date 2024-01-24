@@ -3,7 +3,7 @@ let html;
 
 export default {
   name: "Text Sidebar",
-  description: "Sidebar",
+  description: "Create sidebars used in GUI apps.",
   ver: 1, // Compatible with core v1
   type: "component",
   init: function (l) {

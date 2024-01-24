@@ -1014,10 +1014,12 @@ export default {
           await this.clear("applications");
           makeHeading("h1", Root.Lib.getString("applications"));
 
-          new Html("span")
-            .class("h2", "mt-1")
+          let installedApplications = new Html('details').class('gap', 'col').appendTo(container);
+
+          new Html("summary")
+            .class("mt-1", "pointer")
             .text(Root.Lib.getString("installedApplications"))
-            .appendTo(container);
+            .appendTo(installedApplications);
 
           let installedApps = (await vfs.list("Root/Pluto/apps"))
             .filter((p) => p.type === "file" && p.item.endsWith(".app"))
@@ -1026,14 +1028,17 @@ export default {
           if (installedApps.length > 0) {
             await Promise.all(
               installedApps.map(async (e) => {
+                /** @type array */
                 let splitE = e.split(".");
-                let name = splitE[0];
-                let extension = splitE[1];
-                console.log(name, extension);
+
+                let name = splitE.slice(0, splitE.length - 1).join('.');
+                let extension = splitE.pop();
+
+                if (extension !== "app") return;
 
                 const a = (
                   await import(
-                    `data:text/javascript;base64,${btoa(
+                    `data:text/javascript,${encodeURIComponent(
                       await vfs.readFile(`Root/Pluto/apps/${name}.app`)
                     )}`
                   )
@@ -1044,7 +1049,7 @@ export default {
                 console.log(a);
 
                 Card.new(
-                  container,
+                  installedApplications,
                   new Html("div").class("flex-group", "col").appendMany(
                     new Html("span").class("h2").text(a.name), // Actual name
                     new Html("code")
@@ -1059,22 +1064,24 @@ export default {
                       .class("label-light")
                       .text(`(supports core ${a.ver})`) //
                   )
-                );
+                ).class("mt-2");
               })
             );
           } else {
             new Html("span")
               .text(Root.Lib.getString("noInstalledApps"))
-              .appendTo(container);
+              .appendTo(installedApplications);
           }
 
-          new Html("span")
-            .class("h2", "mt-1")
+          let knownPackages = new Html('details').class('gap', 'col').appendTo(container);
+
+          new Html("summary")
+            .class("mt-1", "pointer")
             .text(Root.Lib.getString("knownPackageList"))
-            .appendTo(container);
+            .appendTo(knownPackages);
 
           Root.Core.knownPackageList.forEach((p, i) => {
-            new Html("hr").appendTo(container);
+            new Html("hr").appendTo(knownPackages);
 
             new Html("div")
               .class("flex-group", "col")
@@ -1091,7 +1098,7 @@ export default {
                   .styleJs({ fontWeight: "normal" })
                   .text(p.pkg.description)
               )
-              .appendTo(container);
+              .appendTo(knownPackages);
           });
         },
         async security() {

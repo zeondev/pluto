@@ -1385,7 +1385,12 @@
 <h3 dir="auto">Card</h3>
 <p dir="auto"><code class="notranslate">new(wrapper, content) =&gt; Html</code>;<br>
 <a target="_blank" rel="noopener noreferrer" href="./images/card.png"><img src="./images/card.png" alt="Card image" style="max-width: 100%;"></a></p>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">Card</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">container</span><span class="pl-kos">,</span> <span class="pl-k">new</span> <span class="pl-v">Html</span><span class="pl-kos">(</span><span class="pl-s">"div"</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">class</span><span class="pl-kos">(</span><span class="pl-s">"flex-group"</span><span class="pl-kos">,</span> <span class="pl-s">"col"</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">text</span><span class="pl-kos">(</span><span class="pl-s">"Hello!"</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">Card</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span>
+  <span class="pl-s1">container</span><span class="pl-kos">,</span>
+  <span class="pl-k">new</span> <span class="pl-v">Html</span><span class="pl-kos">(</span><span class="pl-s">"div"</span><span class="pl-kos">)</span>
+    <span class="pl-kos">.</span><span class="pl-en">class</span><span class="pl-kos">(</span><span class="pl-s">"flex-group"</span><span class="pl-kos">,</span> <span class="pl-s">"col"</span><span class="pl-kos">)</span>
+    <span class="pl-kos">.</span><span class="pl-en">text</span><span class="pl-kos">(</span><span class="pl-s">"Hello!"</span><span class="pl-kos">)</span>
+<span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 <h3 dir="auto">ImageButton</h3>
 <p dir="auto"><code class="notranslate">new(wrapper, imageUri)</code> create image button (unused)</p>
 <h3 dir="auto">SelectList</h3>
@@ -1397,17 +1402,20 @@
 
 <span class="pl-c">// . . .</span>
 
-<span class="pl-k">const</span> <span class="pl-s1">list</span> <span class="pl-c1">=</span> <span class="pl-v">SelectList</span><span class="pl-kos">.</span><span class="pl-en">buttonList</span><span class="pl-kos">(</span><span class="pl-s1">container</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
-  <span class="pl-kos">{</span>
-    <span class="pl-c1">html</span>: <span class="pl-s">"Option 1"</span><span class="pl-kos">,</span>
-    <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Modal</span><span class="pl-kos">.</span><span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Option 1 clicked!"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
-  <span class="pl-kos">}</span><span class="pl-kos">,</span>
-  <span class="pl-kos">{</span>
-    <span class="pl-c1">html</span>: <span class="pl-s">"Option 2"</span><span class="pl-kos">,</span>
-    <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Modal</span><span class="pl-kos">.</span><span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Option 2 clicked!"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
-  <span class="pl-kos">}</span><span class="pl-kos">,</span>
-  <span class="pl-c">// ...</span>
-<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<span class="pl-k">const</span> <span class="pl-s1">list</span> <span class="pl-c1">=</span> <span class="pl-v">SelectList</span><span class="pl-kos">.</span><span class="pl-en">buttonList</span><span class="pl-kos">(</span>
+  <span class="pl-s1">container</span><span class="pl-kos">,</span>
+  <span class="pl-kos">[</span>
+    <span class="pl-kos">{</span> 
+      <span class="pl-c1">html</span>: <span class="pl-s">"Option 1"</span><span class="pl-kos">,</span> 
+      <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Modal</span><span class="pl-kos">.</span><span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Option 1 clicked!"</span><span class="pl-kos">)</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">{</span> 
+      <span class="pl-c1">html</span>: <span class="pl-s">"Option 2"</span><span class="pl-kos">,</span> 
+      <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Modal</span><span class="pl-kos">.</span><span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Option 2 clicked!"</span><span class="pl-kos">)</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-c">// ...</span>
+  <span class="pl-kos">]</span>
+<span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 </details>
 <p dir="auto"><code class="notranslate">table: (wrapper, buttons)</code></p>
 <p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/selectList_table.png"><img src="./images/selectList_table.png" alt="Select buttons" style="max-width: 100%;"></a></p>
@@ -1417,17 +1425,20 @@
 
 <span class="pl-c">// . . .</span>
 
-<span class="pl-k">const</span> <span class="pl-s1">list</span> <span class="pl-c1">=</span> <span class="pl-v">SelectList</span><span class="pl-kos">.</span><span class="pl-en">table</span><span class="pl-kos">(</span><span class="pl-s1">container</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
-  <span class="pl-kos">{</span>
-    <span class="pl-c1">html</span>: <span class="pl-s">"Option 1"</span><span class="pl-kos">,</span>
-    <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Modal</span><span class="pl-kos">.</span><span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Option 1 clicked!"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
-  <span class="pl-kos">}</span><span class="pl-kos">,</span>
-  <span class="pl-kos">{</span>
-    <span class="pl-c1">html</span>: <span class="pl-s">"Option 2"</span><span class="pl-kos">,</span>
-    <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Modal</span><span class="pl-kos">.</span><span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Option 2 clicked!"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
-  <span class="pl-kos">}</span><span class="pl-kos">,</span>
-  <span class="pl-c">// ...</span>
-<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<span class="pl-k">const</span> <span class="pl-s1">list</span> <span class="pl-c1">=</span> <span class="pl-v">SelectList</span><span class="pl-kos">.</span><span class="pl-en">table</span><span class="pl-kos">(</span>
+  <span class="pl-s1">container</span><span class="pl-kos">,</span>
+  <span class="pl-kos">[</span>
+    <span class="pl-kos">{</span> 
+      <span class="pl-c1">html</span>: <span class="pl-s">"Option 1"</span><span class="pl-kos">,</span> 
+      <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Modal</span><span class="pl-kos">.</span><span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Option 1 clicked!"</span><span class="pl-kos">)</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">{</span> 
+      <span class="pl-c1">html</span>: <span class="pl-s">"Option 2"</span><span class="pl-kos">,</span> 
+      <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Modal</span><span class="pl-kos">.</span><span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Option 2 clicked!"</span><span class="pl-kos">)</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-c">// ...</span>
+  <span class="pl-kos">]</span>
+<span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 </details>
 <h3 dir="auto">Sidebar</h3>
 <p dir="auto"><code class="notranslate">new(wrapper, buttons)</code></p>
@@ -1524,11 +1535,13 @@
 <span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 </details>
 <h3 dir="auto">Tooltip</h3>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">new</span> <span class="pl-kos">(</span><span class="pl-kos">(</span><span class="pl-s1">posX</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
-<span class="pl-kos">(</span><span class="pl-s1">posY</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
-<span class="pl-kos">(</span><span class="pl-s1">text</span> <span class="pl-c1">=</span> <span class="pl-s">"Action"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
-<span class="pl-kos">(</span><span class="pl-s1">parent</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-c1">body</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
-<span class="pl-kos">(</span><span class="pl-s1">isAbsolute</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">new</span><span class="pl-kos">(</span>
+  <span class="pl-s1">posX</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">,</span>
+  <span class="pl-s1">posY</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">,</span>
+  <span class="pl-s1">text</span> <span class="pl-c1">=</span> <span class="pl-s">"Action"</span><span class="pl-kos">,</span>
+  <span class="pl-s1">parent</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-c1">body</span><span class="pl-kos">,</span>
+  <span class="pl-s1">isAbsolute</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span>
+<span class="pl-kos">)</span></pre></div>
 <p dir="auto">Example</p>
 <p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/tooltip.png"><img src="./images/tooltip.png" alt="" style="max-width: 100%;"></a></p>
 <details>
