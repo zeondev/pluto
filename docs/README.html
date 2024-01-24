@@ -1243,7 +1243,7 @@
   <body>
     <div class="markdown-body">
       <div class="version-info">
-        <h6 dir="auto">Generated with <code class="notranslate">pluto-docs</code> running on node v21.5.0.</h6>
+        <h6 dir="auto">Generated with <code class="notranslate">pluto-docs</code> running on node v18.19.0.</h6>
         <hr />
       </div>
       <div class="content"><h1 dir="auto">Pluto Documentation for version 1.5 (Elysium)</h1>
@@ -1276,7 +1276,11 @@
 </ul>
 </li>
 <li><a href="#using-librariescomponents-in-your-apps">Using libraries/components in your apps</a></li>
-<li><a href="#recent-breaking-changes-to-apps">Recent breaking changes to apps</a></li>
+<li><a href="#recent-breaking-changes-to-apps">Recent breaking changes to apps</a>
+<ul dir="auto">
+<li><a href="#tray-usage">Tray usage</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1284,9 +1288,9 @@
 <p dir="auto">This guide may change often, so to help you in making applications, use the latest documentation for your version.</p>
 <h2 dir="auto">Links to other useful documentation</h2>
 <p dir="auto">There are some other docs in this folder that may be useful.</p>
-<p dir="auto"><a href="virtualFS.md">VirtualFS Documentation</a><br>
-<a href="libs-and-components.md">Libraries and Components</a><br>
-<a href="localization.md">Localization</a></p>
+<p dir="auto"><a href="virtualFS.html">VirtualFS Documentation</a><br>
+<a href="libs-and-components.html">Libraries and Components</a><br>
+<a href="localization.html">Localization</a></p>
 <h2 dir="auto">How to initialize an application</h2>
 <h3 dir="auto">Export properties</h3>
 <p dir="auto">In every application you must define the following properties in your export:</p>
@@ -1379,21 +1383,34 @@ What exactly is given through this object depends on the permissions of your app
 Here's a breakdown of what the Root object looks like:</p>
 <div class="highlight highlight-source-ts" dir="auto"><pre class="notranslate"><span class="pl-k">interface</span> <span class="pl-smi">Root</span> <span class="pl-kos">{</span>
   <span class="pl-c1">Lib</span>: <span class="pl-kos">{</span>
+    <span class="pl-c1">getProcessList</span>: <span class="pl-s1">function</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-smi">getString</span>: <span class="pl-k">async</span> <span class="pl-c1">function</span><span class="pl-kos">(</span>
+      <span class="pl-s1">title</span>: <span class="pl-smi">string</span><span class="pl-kos">,</span>
+      <span class="pl-s1">description</span>
+    <span class="pl-kos">)</span><span class="pl-kos">;</span>
     <span class="pl-c1">html</span>: <span class="pl-smi">class</span> <span class="pl-smi">Html</span><span class="pl-kos">;</span>
     <span class="pl-c1">icons</span>: <span class="pl-smi">Icons</span><span class="pl-kos">;</span>
-    <span class="pl-c1">systemInfo</span>: <span class="pl-kos">{</span>
+    <span class="pl-c1">langs</span>: <span class="pl-smi">string</span><span class="pl-kos">[</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
+    <span class="pl-c1">launch</span>: <span class="pl-s1">async</span> <span class="pl-s1">function</span><span class="pl-kos">(</span><span class="pl-s1">app</span><span class="pl-kos">,</span> <span class="pl-s1">parent</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">loadComponent</span>: <span class="pl-k">async</span> <span class="pl-k">function</span> <span class="pl-s1">loadComponent</span><span class="pl-kos">(</span><span class="pl-smi">cmp</span><span class="pl-kos">)</span><span class="pl-kos">;</span>​​
+    <span class="pl-c1">loadLibrary</span>: <span class="pl-s1">async</span> <span class="pl-s1">function</span> <span class="pl-s1">loadLibrary</span><span class="pl-kos">(</span><span class="pl-smi">lib</span><span class="pl-kos">)</span><span class="pl-kos">;</span>​​
+    <span class="pl-c1">onEnd</span>: <span class="pl-s1">function</span> <span class="pl-s1">onEnd</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>​​
+    <span class="pl-s1">onEndCallback</span>: <span class="pl-k">function</span> <span class="pl-s1">exec</span><span class="pl-kos">(</span><span class="pl-smi">_</span><span class="pl-kos">)</span><span class="pl-kos">;</span>​​
+    <span class="pl-c1">randomString</span>: <span class="pl-s1">function</span> <span class="pl-s1">randomString</span><span class="pl-kos">(</span><span class="pl-smi">_</span><span class="pl-kos">)</span>​​
+    <span class="pl-s1">setOnEnd</span>: <span class="pl-k">function</span> <span class="pl-s1">setOnEnd</span><span class="pl-kos">(</span><span class="pl-smi">onEndCallback</span><span class="pl-kos">)</span><span class="pl-kos">;</span>​​
+    <span class="pl-c1">setupReturns</span>: <span class="pl-s1">function</span> <span class="pl-s1">setupReturns</span><span class="pl-kos">(</span><span class="pl-s1">onMessage</span><span class="pl-kos">,</span> <span class="pl-s1">trayInfo</span><span class="pl-kos">)</span><span class="pl-kos">;</span>​​​​
+    <span class="pl-s1">systemInfo</span>: <span class="pl-kos">{</span>
       <span class="pl-c1">version</span>: <span class="pl-smi">number</span><span class="pl-kos">;</span>
       <span class="pl-c1">versionString</span>: <span class="pl-smi">string</span><span class="pl-kos">;</span>
       <span class="pl-c1">codename</span>: <span class="pl-smi">string</span><span class="pl-kos">;</span>
     <span class="pl-kos">}</span>
-    <span class="pl-c1">getString</span>: <span class="pl-s1">async</span> <span class="pl-s1">function</span><span class="pl-kos">(</span>
-        <span class="pl-s1">title</span>: <span class="pl-smi">string</span><span class="pl-kos">,</span>
-        <span class="pl-s1">description</span>
-    <span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-c1">updateProcDesc</span>: <span class="pl-s1">function</span> <span class="pl-s1">updateProcDesc</span><span class="pl-kos">(</span><span class="pl-smi">newDescription</span><span class="pl-kos">)</span><span class="pl-kos">;</span>​​
+    <span class="pl-c1">updateProcTitle</span>: <span class="pl-s1">function</span> <span class="pl-s1">updateProcTitle</span><span class="pl-kos">(</span><span class="pl-smi">newTitle</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
   <span class="pl-kos">}</span><span class="pl-kos">;</span>
   <span class="pl-c1">Core</span>: <span class="pl-smi">Core</span> <span class="pl-c1">|</span> <span class="pl-c1">null</span><span class="pl-kos">;</span>
   <span class="pl-c1">PID</span>: <span class="pl-smi">number</span><span class="pl-kos">;</span>
   <span class="pl-c1">Token</span>: <span class="pl-smi">string</span><span class="pl-kos">;</span>
+  <span class="pl-c1">Services</span>: <span class="pl-c1">null</span><span class="pl-kos">;</span>
   <span class="pl-c1">Modal</span>: <span class="pl-kos">{</span>
     <span class="pl-c1">modal</span>:
       <span class="pl-s1">async</span> <span class="pl-s1">function</span><span class="pl-kos">(</span>
@@ -1766,7 +1783,8 @@ Retrieve current user account data. Returns invalid data if a user is not logged
 
 <span class="pl-c">// Read a file</span>
 <span class="pl-k">const</span> <span class="pl-s1">fileContent</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-s1">vfs</span><span class="pl-kos">.</span><span class="pl-en">readFile</span><span class="pl-kos">(</span><span class="pl-s">"Root/myFile.txt"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-<p dir="auto">More documentation on VirtualFS <a href="virtualFS.md">can be found here</a>.</p>
+<p dir="auto">More documentation on VirtualFS <a href="virtualFS.html">can be found here</a>.</p>
+<p dir="auto"><a href="libs-and-components.html"><strong>Read more on the updated components and libraries documentation here.</strong></a></p>
 <h2 dir="auto">Recent breaking changes to apps</h2>
 <ul dir="auto">
 <li>
@@ -1781,6 +1799,9 @@ Retrieve current user account data. Returns invalid data if a user is not logged
 <li>Remember the process cleans up after itself so you only need to cleanup any elements or intervals you have made when initializing.</li>
 </ul>
 </li>
+</ul>
+<h3 dir="auto">Tray usage</h3>
+<ul dir="auto">
 <li>
 <p dir="auto">Early 1.5 core uses the second parameter of <code class="notranslate">setupReturns</code> to declare tray items.</p>
 <p dir="auto">Pass in an argument as follows:</p>
@@ -1815,12 +1836,6 @@ Here's how to handle it (inside the first parameter of <code class="notranslate"
         document.querySelectorAll("h1,h2,h3,h4,h5,h6").forEach((h) => {
           const text = toKebabCase(h.innerHTML.trim());
           h.id = text;
-        });
-        document.querySelectorAll("a").forEach((h) => {
-          const href = h.href;
-          let fixedHref = href;
-          if (href.includes(".md")) fixedHref = href.replace(".md", ".html");
-          h.href = fixedHref;
         });
       });
     </script>

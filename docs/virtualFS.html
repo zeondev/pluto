@@ -1243,11 +1243,11 @@
   <body>
     <div class="markdown-body">
       <div class="version-info">
-        <h6 dir="auto">Generated with <code class="notranslate">pluto-docs</code> running on node v21.5.0.</h6>
+        <h6 dir="auto">Generated with <code class="notranslate">pluto-docs</code> running on node v18.19.0.</h6>
         <hr />
       </div>
       <div class="content"><h1 dir="auto">Virtual File System Documentation</h1>
-<p dir="auto"><a href="README.md">Back to README.md</a></p>
+<p dir="auto"><a href="README.html">Back to README.md</a></p>
 <ul dir="auto">
 <li><a href="#virtual-file-system-documentation">Virtual File System Documentation</a>
 <ul dir="auto">
@@ -1358,12 +1358,6 @@ Here's an example:</p>
         document.querySelectorAll("h1,h2,h3,h4,h5,h6").forEach((h) => {
           const text = toKebabCase(h.innerHTML.trim());
           h.id = text;
-        });
-        document.querySelectorAll("a").forEach((h) => {
-          const href = h.href;
-          let fixedHref = href;
-          if (href.includes(".md")) fixedHref = href.replace(".md", ".html");
-          h.href = fixedHref;
         });
       });
     </script>
