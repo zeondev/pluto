@@ -148,6 +148,7 @@ export default {
       }
       setTimeout(async () => {
         console.log(fileName);
+        texts.clear();
         new Root.Lib.html("h1").appendTo(texts).text("Now Playing");
         new Root.Lib.html("p").appendTo(texts).text(fileName);
         const audioBlob = await (await fetch(content)).blob();
@@ -160,8 +161,9 @@ export default {
               let blob = new Blob([buf]);
               console.log(blob);
               img.elm.src = URL.createObjectURL(blob);
+              img.styleJs({ display: "flex" });
             } else {
-              img.cleanup();
+              img.styleJs({ display: "none" });
             }
           },
           onError: function (error) {
