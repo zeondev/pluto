@@ -9,7 +9,14 @@ export default {
     L = l;
   },
   data: {
-    show: function (title, description, p = null, buttons, autoDismiss = null) {
+    show: function (
+      title,
+      description,
+      p = null,
+      buttons,
+      autoDismiss = null,
+      sound = null
+    ) {
       if (document.querySelector("body>.notify-box") == null) {
         new L.html("div").class("notify-box").appendTo("body");
       }
@@ -28,7 +35,9 @@ export default {
 
       let parent = p;
 
-      let a = new Audio("./assets/notify.wav");
+      if (sound === null) sound = "./assets/notify.wav";
+
+      let a = new Audio(sound);
       a.volume = 0.5;
       setTimeout(() => {
         a.play();
@@ -57,15 +66,13 @@ export default {
           if (!button.text || !button.callback)
             throw new Error("Invalid button configuration");
 
-          const b = new L.html("button")
-            .text(button.text)
-            .on("click", (e) => {
-              hide();
-              setTimeout(() => {
-                notify.cleanup();
-                button.callback(e);
-              }, 500);
-            });
+          const b = new L.html("button").text(button.text).on("click", (e) => {
+            hide();
+            setTimeout(() => {
+              notify.cleanup();
+              button.callback(e);
+            }, 500);
+          });
 
           if (button.type && button.type === "primary") b.class("primary");
 
