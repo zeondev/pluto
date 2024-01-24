@@ -114,6 +114,32 @@ ctxMenu.new(e.clientX, e.clientY, [
 
 ![Notify image](./images/notify.png)
 
+```js
+Notify.show("Title", "Description");
+```
+
+Notifications can also use buttons:
+
+![Notification with buttons](./images/notificationWithButtons.png)
+
+```js
+Notify.show("Title", "Description", null, [
+  {
+    text: "Button 1",
+    type: "primary",
+    callback: () => {
+      alert(1);
+    },
+  },
+  {
+    text: "Button 2",
+    callback: () => {
+      alert(2);
+    },
+  },
+]);
+```
+
 ### ThemeLib
 
 - `validateTheme(theme)`: Parse a theme JSON.

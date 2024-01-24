@@ -1343,6 +1343,24 @@
 <h3 dir="auto">Notify</h3>
 <p dir="auto"><code class="notranslate">show(title, description, parent = null, buttons = null, autoHide = null)</code> - Show a notification:</p>
 <p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/notify.png"><img src="./images/notify.png" alt="Notify image" style="max-width: 100%;"></a></p>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">Notify</span><span class="pl-kos">.</span><span class="pl-en">show</span><span class="pl-kos">(</span><span class="pl-s">"Title"</span><span class="pl-kos">,</span> <span class="pl-s">"Description"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto">Notifications can also use buttons:</p>
+<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/notificationWithButtons.png"><img src="./images/notificationWithButtons.png" alt="Notification with buttons" style="max-width: 100%;"></a></p>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">Notify</span><span class="pl-kos">.</span><span class="pl-en">show</span><span class="pl-kos">(</span><span class="pl-s">"Title"</span><span class="pl-kos">,</span> <span class="pl-s">"Description"</span><span class="pl-kos">,</span> <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">text</span>: <span class="pl-s">"Button 1"</span><span class="pl-kos">,</span>
+    <span class="pl-c1">type</span>: <span class="pl-s">"primary"</span><span class="pl-kos">,</span>
+    <span class="pl-en">callback</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-c1">1</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">text</span>: <span class="pl-s">"Button 2"</span><span class="pl-kos">,</span>
+    <span class="pl-en">callback</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+      <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-c1">2</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 <h3 dir="auto">ThemeLib</h3>
 <ul dir="auto">
 <li><code class="notranslate">validateTheme(theme)</code>: Parse a theme JSON.</li>
