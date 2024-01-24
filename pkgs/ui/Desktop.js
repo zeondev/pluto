@@ -441,7 +441,7 @@ export default {
       if (pastMinute === minutes) return;
       pastMinute = minutes;
       let timeString = `${hours}:${minutes}`;
-      quickAccessButton.text(timeString);
+      quickAccessButtonText.text(timeString);
     }
 
     let trayWrapper = new Root.Lib.html("div")
@@ -623,8 +623,9 @@ export default {
 
     const quickAccessButton = new Root.Lib.html("div")
       .class("toolbar-button")
-      .text("..:..")
       .appendTo(dock);
+
+    const quickAccessButtonText = new Root.Lib.html('spam').appendTo(quickAccessButton);
 
     updateTime();
     timeInterval = setInterval(updateTime, 1000);
