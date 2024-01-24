@@ -58,17 +58,16 @@ These function are undocumented for now.
 ### CtxMenu
 
 ```js
-new(
-  posX, 
-  posY, 
-  items = [
-    { item: "Nothing", select: () => null }
-  ], 
-  header = "", 
-  parent = document.body, 
+new (
+  posX,
+  posY,
+  items = [{ item: "Nothing", select: () => null }],
+  header = "",
+  parent = document.body,
   isAbsolute = true
 )
 ```
+
 Show a context menu:
 
 ![Context menu](./images/ctxMenu.png)
@@ -111,7 +110,7 @@ ctxMenu.new(e.clientX, e.clientY, [
 
 ### Notify
 
-`show(title, description, parent = null, buttons = null, autoHide = null)` - Show a notification:
+`show(title, description, parent = null, buttons = null, autoHide = null, sound = null)` - Show a notification:
 
 ![Notify image](./images/notify.png)
 
@@ -139,6 +138,24 @@ Notify.show("Title", "Description", null, [
     },
   },
 ]);
+```
+
+You can also customize the notification sound:
+
+```js
+Notify.show("Pluto Messenger", "Rick Astley is calling...", null, [
+  {
+    text: "Accept",
+    type: "primary",
+    callback: () => {
+      alert("Never gonna give you up");
+    },
+  },
+  {
+    text: "Decline",
+    callback: () => { ... },
+  },
+], false, "https://example.com/ringtone.mp3");
 ```
 
 ### ThemeLib
@@ -180,12 +197,7 @@ Here is the list of available components:
 ![Card image](./images/card.png)
 
 ```js
-Card.new(
-  container,
-  new Html("div")
-    .class("flex-group", "col")
-    .text("Hello!")
-);
+Card.new(container, new Html("div").class("flex-group", "col").text("Hello!"));
 ```
 
 ### ImageButton
@@ -207,20 +219,17 @@ const SelectList = await Root.Lib.loadComponent("SelectList");
 
 // . . .
 
-const list = SelectList.buttonList(
-  container,
-  [
-    { 
-      html: "Option 1", 
-      onclick: () => Root.Modal.alert("Option 1 clicked!")
-    },
-    { 
-      html: "Option 2", 
-      onclick: () => Root.Modal.alert("Option 2 clicked!")
-    },
-    // ...
-  ]
-);
+const list = SelectList.buttonList(container, [
+  {
+    html: "Option 1",
+    onclick: () => Root.Modal.alert("Option 1 clicked!"),
+  },
+  {
+    html: "Option 2",
+    onclick: () => Root.Modal.alert("Option 2 clicked!"),
+  },
+  // ...
+]);
 ```
 
 </details>
@@ -238,20 +247,17 @@ const SelectList = await Root.Lib.loadComponent("SelectList");
 
 // . . .
 
-const list = SelectList.table(
-  container,
-  [
-    { 
-      html: "Option 1", 
-      onclick: () => Root.Modal.alert("Option 1 clicked!")
-    },
-    { 
-      html: "Option 2", 
-      onclick: () => Root.Modal.alert("Option 2 clicked!")
-    },
-    // ...
-  ]
-);
+const list = SelectList.table(container, [
+  {
+    html: "Option 1",
+    onclick: () => Root.Modal.alert("Option 1 clicked!"),
+  },
+  {
+    html: "Option 2",
+    onclick: () => Root.Modal.alert("Option 2 clicked!"),
+  },
+  // ...
+]);
 ```
 
 </details>
@@ -371,13 +377,11 @@ TextSidebar.new(wrapper, [
 ### Tooltip
 
 ```js
-new(
-  posX = 0,
-  posY = 0,
-  text = "Action",
-  parent = document.body,
-  isAbsolute = true
-)
+new ((posX = 0),
+(posY = 0),
+(text = "Action"),
+(parent = document.body),
+(isAbsolute = true))();
 ```
 
 Example
