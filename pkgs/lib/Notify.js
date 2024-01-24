@@ -9,9 +9,17 @@ export default {
     L = l;
   },
   data: {
-    show: function (title, description, p = null) {
+    show: function (title, description, p = null, buttons, autoDismiss = null) {
       if (document.querySelector("body>.notify-box") == null) {
         new L.html("div").class("notify-box").appendTo("body");
+      }
+
+      if (autoDismiss === null) {
+        if (Array.isArray(buttons)) {
+          autoDismiss = false;
+        } else {
+          autoDismiss = true;
+        }
       }
 
       if (p === null) {
@@ -33,6 +41,38 @@ export default {
           new L.html("div").class("notify-text").text(description)
         );
 
+      function hide() {
+        notify.classOff("slideIn").classOn("slideOut");
+        setTimeout(() => {
+          notify.cleanup();
+        }, 500);
+      }
+
+      // buttons
+      if (Array.isArray(buttons)) {
+        new L.html("div").class("flex-group").appendTo(notify);
+
+        for (let i = 0; i < buttons.length; i++) {
+          let button = buttons[i];
+          if (!button.text || !button.callback)
+            throw new Error("Invalid button configuration");
+
+          const b = new L.html("button")
+            .text(button.text)
+            .on("click", (e) => {
+              hide();
+              setTimeout(() => {
+                notify.cleanup();
+                button.callback(e);
+              }, 500);
+            });
+
+          if (button.type && button.type === "primary") b.class("primary");
+
+          b.appendTo(notify.elm.querySelector(".flex-group"));
+        }
+      }
+
       notify.appendTo(parent);
 
       console.log(notify, parent);
@@ -40,12 +80,10 @@ export default {
       window.nf = notify;
       window.np = parent;
 
-      setTimeout(() => {
-        notify.classOff("slideIn").classOn("slideOut");
+      if (autoDismiss)
         setTimeout(() => {
-          notify.cleanup();
-        }, 500);
-      }, 5000);
+          hide();
+        }, 5000);
     },
   },
 };
