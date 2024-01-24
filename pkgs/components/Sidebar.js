@@ -4,8 +4,8 @@ let html;
 import Tooltip from "./Tooltip.js";
 
 export default {
-  name: "Test library",
-  description: "Test library",
+  name: "Sidebar",
+  description: "Create sidebars used in GUI apps.",
   ver: 1, // Compatible with core v1
   type: "component",
   init: function (l) {

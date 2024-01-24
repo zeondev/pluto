@@ -1247,17 +1247,31 @@
         <hr />
       </div>
       <div class="content"><h1 dir="auto">Libraries and Components</h1>
-<p dir="auto"><a href="README.md">Back to README.md</a></p>
+<p dir="auto"><a href="README.html">Back to README.md</a></p>
 <ul dir="auto">
 <li><a href="#libraries-and-components">Libraries and Components</a>
 <ul dir="auto">
 <li><a href="#libraries">Libraries</a>
 <ul dir="auto">
+<li><a href="#codescanner">CodeScanner</a></li>
 <li><a href="#ctxmenu">CtxMenu</a></li>
+<li><a href="#filedialog">FileDialog</a></li>
+<li><a href="#filemappings">FileMappings</a></li>
 <li><a href="#notify">Notify</a></li>
+<li><a href="#themelib">ThemeLib</a></li>
+<li><a href="#virtualfs">VirtualFS</a></li>
 </ul>
 </li>
-<li><a href="#components">Components</a></li>
+<li><a href="#components">Components</a>
+<ul dir="auto">
+<li><a href="#card">Card</a></li>
+<li><a href="#imagebutton">ImageButton</a></li>
+<li><a href="#selectlist">SelectList</a></li>
+<li><a href="#sidebar">Sidebar</a></li>
+<li><a href="#textsidebar">TextSidebar</a></li>
+<li><a href="#tooltip">Tooltip</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1266,36 +1280,261 @@
 <p dir="auto">You can load a library into your app with the following code:</p>
 <div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-s1">lib</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadLibrary</span><span class="pl-kos">(</span><span class="pl-s">"libraryName"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 <p dir="auto">Here is the list of available libraries:</p>
+<p dir="auto"><a href="#codescanner">CodeScanner</a><br>
+<a href="#ctxmenu">CtxMenu</a><br>
+<a href="#filedialog">FileDialog</a><br>
+<a href="#filemappings">FileMappings</a><br>
+<a href="#notify">Notify</a><br>
+<a href="#themelib">ThemeLib</a><br>
+<a href="virtualFS.html">VirtualFS</a><br>
+<a href="README.md#example-app-code">WindowSystem</a></p>
+<p dir="auto">Below is some vague documentation that should be easy enough to understand. Images are provided to understand what the library creates or does.</p>
+<hr>
+<h3 dir="auto">CodeScanner</h3>
+<p dir="auto">These function are undocumented for now.</p>
 <ul dir="auto">
-<li><code class="notranslate">CodeScanner</code></li>
-<li><code class="notranslate">CtxMenu</code></li>
-<li><code class="notranslate">FileDialog</code></li>
-<li><code class="notranslate">FileMappings</code></li>
-<li><a href="#notify"><code class="notranslate">Notify</code></a></li>
-<li><code class="notranslate">ThemeLib</code></li>
-<li><a href="virtualFS.md"><code class="notranslate">VirtualFS</code></a></li>
-<li><a href="README.md#example-app-code"><code class="notranslate">WindowSystem</code></a></li>
+<li><code class="notranslate">isCodeDangerous(code)</code></li>
+<li><code class="notranslate">async scanFolder(folder = "Root")</code></li>
+<li><code class="notranslate">getFileExtension(filename)</code></li>
+<li><code class="notranslate">async scanForDangerousCode()</code></li>
 </ul>
-<p dir="auto">As of now, there is no documentation for most of these libraries.</p>
-<p dir="auto">Below is some vague documentation that should be easy enough to understand.</p>
 <h3 dir="auto">CtxMenu</h3>
-<p dir="auto"><code class="notranslate">.new(posX, posY, items = [{ item: "Nothing", select: () =&gt; null }], header = "", parent = document.body, isAbsolute = true )</code> - Show a context menu</p>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">new</span><span class="pl-kos">(</span>
+  <span class="pl-s1">posX</span><span class="pl-kos">,</span> 
+  <span class="pl-s1">posY</span><span class="pl-kos">,</span> 
+  <span class="pl-s1">items</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span>
+    <span class="pl-kos">{</span> <span class="pl-c1">item</span>: <span class="pl-s">"Nothing"</span><span class="pl-kos">,</span> <span class="pl-en">select</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-c1">null</span> <span class="pl-kos">}</span>
+  <span class="pl-kos">]</span><span class="pl-kos">,</span> 
+  <span class="pl-s1">header</span> <span class="pl-c1">=</span> <span class="pl-s">""</span><span class="pl-kos">,</span> 
+  <span class="pl-s1">parent</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-c1">body</span><span class="pl-kos">,</span> 
+  <span class="pl-s1">isAbsolute</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span>
+<span class="pl-kos">)</span></pre></div>
+<p dir="auto">Show a context menu:</p>
+<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/ctxMenu.png"><img src="./images/ctxMenu.png" alt="Context menu" style="max-width: 100%;"></a></p>
+<details>
+<summary>View code</summary>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-s1">ctxMenu</span><span class="pl-kos">.</span><span class="pl-c1">data</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">.</span><span class="pl-c1">clientX</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">.</span><span class="pl-c1">clientY</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">item</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"refresh"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-k">async</span> <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span> ... <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">item</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"systemApp_FileManager"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-k">async</span> <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span> ... <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">item</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"systemApp_Settings"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-k">async</span> <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span> ... <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+</details>
+<h3 dir="auto">FileDialog</h3>
+<ul dir="auto">
+<li><code class="notranslate">async pickFile(path)</code> - Show a file picker</li>
+<li><code class="notranslate">saveFile(path)</code> - Show a save file picker</li>
+</ul>
+<h3 dir="auto">FileMappings</h3>
+<p dir="auto"><em>This library has no exported functions.</em></p>
 <h3 dir="auto">Notify</h3>
-<p dir="auto"><code class="notranslate">.show(title, description, parent)</code> - Show a notification</p>
+<p dir="auto"><code class="notranslate">show(title, description, parent)</code> - Show a notification:</p>
+<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/notify.png"><img src="./images/notify.png" alt="Notify image" style="max-width: 100%;"></a></p>
+<h3 dir="auto">ThemeLib</h3>
+<ul dir="auto">
+<li><code class="notranslate">validateTheme(theme)</code>: Parse a theme JSON.</li>
+<li><code class="notranslate">async setCurrentTheme(theme)</code>: Apply the theme to the DOM.</li>
+<li><code class="notranslate">async setWallpaper(wallpaper)</code>: If a desktop is running, tell it to set the wallpaper.</li>
+</ul>
+<h3 dir="auto">VirtualFS</h3>
+<p dir="auto"><a href="virtualFS.html">See VirtualFS</a></p>
+<hr>
 <h2 dir="auto">Components</h2>
 <p dir="auto">Components are similar to libraries, but act like reusable functions to generate HTML elements.</p>
 <p dir="auto">You can load a component into your app with the following code:</p>
 <div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-s1">cmp</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"componentName"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 <p dir="auto">Here is the list of available components:</p>
-<ul dir="auto">
-<li><code class="notranslate">Card</code></li>
-<li><code class="notranslate">ImageButton</code></li>
-<li><code class="notranslate">SelectList</code></li>
-<li><code class="notranslate">Sidebar</code></li>
-<li><code class="notranslate">TextSidebar</code></li>
-<li><code class="notranslate">Tooltip</code></li>
-</ul>
-<p dir="auto">None of these have documentation at the moment, but you can check the source code to see how some components are used in system apps.</p></div>
+<p dir="auto"><a href="#card">Card</a><br>
+<a href="#imagebutton">ImageButton</a><br>
+<a href="#selectlist">SelectList</a><br>
+<a href="#sidebar">Sidebar</a><br>
+<a href="#textsidebar">TextSidebar</a><br>
+<a href="#tooltip">Tooltip</a></p>
+<hr>
+<h3 dir="auto">Card</h3>
+<p dir="auto"><code class="notranslate">new(wrapper, content) =&gt; Html</code>;<br>
+<a target="_blank" rel="noopener noreferrer" href="./images/card.png"><img src="./images/card.png" alt="Card image" style="max-width: 100%;"></a></p>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">Card</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span>
+  <span class="pl-s1">container</span><span class="pl-kos">,</span>
+  <span class="pl-k">new</span> <span class="pl-v">Html</span><span class="pl-kos">(</span><span class="pl-s">"div"</span><span class="pl-kos">)</span>
+    <span class="pl-kos">.</span><span class="pl-en">class</span><span class="pl-kos">(</span><span class="pl-s">"flex-group"</span><span class="pl-kos">,</span> <span class="pl-s">"col"</span><span class="pl-kos">)</span>
+    <span class="pl-kos">.</span><span class="pl-en">text</span><span class="pl-kos">(</span><span class="pl-s">"Hello!"</span><span class="pl-kos">)</span>
+<span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<h3 dir="auto">ImageButton</h3>
+<p dir="auto"><code class="notranslate">new(wrapper, imageUri)</code> create image button (unused)</p>
+<h3 dir="auto">SelectList</h3>
+<p dir="auto"><code class="notranslate">buttonList: (wrapper, buttons)</code></p>
+<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/selectList_row.png"><img src="./images/selectList_row.png" alt="Select buttons" style="max-width: 100%;"></a></p>
+<details>
+<summary>View code</summary>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-v">SelectList</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"SelectList"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// . . .</span>
+
+<span class="pl-k">const</span> <span class="pl-s1">list</span> <span class="pl-c1">=</span> <span class="pl-v">SelectList</span><span class="pl-kos">.</span><span class="pl-en">buttonList</span><span class="pl-kos">(</span>
+  <span class="pl-s1">container</span><span class="pl-kos">,</span>
+  <span class="pl-kos">[</span>
+    <span class="pl-kos">{</span> 
+      <span class="pl-c1">html</span>: <span class="pl-s">"Option 1"</span><span class="pl-kos">,</span> 
+      <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Modal</span><span class="pl-kos">.</span><span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Option 1 clicked!"</span><span class="pl-kos">)</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">{</span> 
+      <span class="pl-c1">html</span>: <span class="pl-s">"Option 2"</span><span class="pl-kos">,</span> 
+      <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Modal</span><span class="pl-kos">.</span><span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Option 2 clicked!"</span><span class="pl-kos">)</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-c">// ...</span>
+  <span class="pl-kos">]</span>
+<span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+</details>
+<p dir="auto"><code class="notranslate">table: (wrapper, buttons)</code></p>
+<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/selectList_table.png"><img src="./images/selectList_table.png" alt="Select buttons" style="max-width: 100%;"></a></p>
+<details>
+<summary>View code</summary>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-v">SelectList</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"SelectList"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-c">// . . .</span>
+
+<span class="pl-k">const</span> <span class="pl-s1">list</span> <span class="pl-c1">=</span> <span class="pl-v">SelectList</span><span class="pl-kos">.</span><span class="pl-en">table</span><span class="pl-kos">(</span>
+  <span class="pl-s1">container</span><span class="pl-kos">,</span>
+  <span class="pl-kos">[</span>
+    <span class="pl-kos">{</span> 
+      <span class="pl-c1">html</span>: <span class="pl-s">"Option 1"</span><span class="pl-kos">,</span> 
+      <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Modal</span><span class="pl-kos">.</span><span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Option 1 clicked!"</span><span class="pl-kos">)</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">{</span> 
+      <span class="pl-c1">html</span>: <span class="pl-s">"Option 2"</span><span class="pl-kos">,</span> 
+      <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Modal</span><span class="pl-kos">.</span><span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Option 2 clicked!"</span><span class="pl-kos">)</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-c">// ...</span>
+  <span class="pl-kos">]</span>
+<span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+</details>
+<h3 dir="auto">Sidebar</h3>
+<p dir="auto"><code class="notranslate">new(wrapper, buttons)</code></p>
+<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/sidebar.png"><img src="./images/sidebar.png" alt="" style="max-width: 100%;"></a></p>
+<details>
+<summary>View code</summary>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-v">Sidebar</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"Sidebar"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-v">Sidebar</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">sidebarWrapper</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span> ... <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-c1">html</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-c1">icons</span><span class="pl-kos">.</span><span class="pl-c1">newFile</span><span class="pl-kos">,</span>
+    <span class="pl-c1">title</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"action_newDocument"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span> ... <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-c1">html</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-c1">icons</span><span class="pl-kos">.</span><span class="pl-c1">openFolder</span><span class="pl-kos">,</span>
+    <span class="pl-c1">title</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"action_openDocument"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span> ... <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-c1">html</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-c1">icons</span><span class="pl-kos">.</span><span class="pl-c1">save</span><span class="pl-kos">,</span>
+    <span class="pl-c1">title</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"action_save"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span> ... <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-c1">html</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-c1">icons</span><span class="pl-kos">.</span><span class="pl-c1">saveAll</span><span class="pl-kos">,</span>
+    <span class="pl-c1">title</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"action_saveAs"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">style</span>: <span class="pl-kos">{</span>
+      <span class="pl-s">"margin-top"</span>: <span class="pl-s">"auto"</span><span class="pl-kos">,</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span> ... <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-c1">html</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-c1">icons</span><span class="pl-kos">.</span><span class="pl-c1">help</span><span class="pl-kos">,</span>
+    <span class="pl-c1">title</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"appHelp"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+</details>
+<h3 dir="auto">TextSidebar</h3>
+<p dir="auto"><code class="notranslate">new(wrapper, buttons)</code></p>
+<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/textSidebar.png"><img src="./images/textSidebar.png" alt="" style="max-width: 100%;"></a></p>
+<details>
+<summary>View code</summary>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">TextSidebar</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">wrapper</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">icon</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-c1">icons</span><span class="pl-kos">.</span><span class="pl-c1">cpu</span><span class="pl-kos">,</span>
+    <span class="pl-c1">text</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"system"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-c1">title</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"system"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-en">onclick</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+      <span class="pl-s1">pages</span><span class="pl-kos">.</span><span class="pl-en">system</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">icon</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-c1">icons</span><span class="pl-kos">.</span><span class="pl-c1">users</span><span class="pl-kos">,</span>
+    <span class="pl-c1">text</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"account"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-c1">title</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"account"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-en">onclick</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+      <span class="pl-s1">pages</span><span class="pl-kos">.</span><span class="pl-en">account</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">icon</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-c1">icons</span><span class="pl-kos">.</span><span class="pl-c1">brush</span><span class="pl-kos">,</span>
+    <span class="pl-c1">text</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"appearance"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-c1">title</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"appearance"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-en">onclick</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+      <span class="pl-s1">pages</span><span class="pl-kos">.</span><span class="pl-en">appearance</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">icon</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-c1">icons</span><span class="pl-kos">.</span><span class="pl-c1">wifiConnected</span><span class="pl-kos">,</span>
+    <span class="pl-c1">text</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"network"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-c1">title</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"network"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-en">onclick</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+      <span class="pl-s1">pages</span><span class="pl-kos">.</span><span class="pl-en">network</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">icon</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-c1">icons</span><span class="pl-kos">.</span><span class="pl-c1">application</span><span class="pl-kos">,</span>
+    <span class="pl-c1">text</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"applications"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-c1">title</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"applications"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-en">onclick</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+      <span class="pl-s1">pages</span><span class="pl-kos">.</span><span class="pl-en">applications</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">icon</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-c1">icons</span><span class="pl-kos">.</span><span class="pl-c1">shield</span><span class="pl-kos">,</span>
+    <span class="pl-c1">text</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"security"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-c1">title</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"security"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+    <span class="pl-en">onclick</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+      <span class="pl-s1">pages</span><span class="pl-kos">.</span><span class="pl-en">security</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+</details>
+<h3 dir="auto">Tooltip</h3>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">new</span><span class="pl-kos">(</span>
+  <span class="pl-s1">posX</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">,</span>
+  <span class="pl-s1">posY</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">,</span>
+  <span class="pl-s1">text</span> <span class="pl-c1">=</span> <span class="pl-s">"Action"</span><span class="pl-kos">,</span>
+  <span class="pl-s1">parent</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-c1">body</span><span class="pl-kos">,</span>
+  <span class="pl-s1">isAbsolute</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span>
+<span class="pl-kos">)</span></pre></div>
+<p dir="auto">Example</p>
+<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/tooltip.png"><img src="./images/tooltip.png" alt="" style="max-width: 100%;"></a></p>
+<details>
+<summary>View code</summary>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-v">Tooltip</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"Tooltip"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-k">const</span> <span class="pl-s1">bcr</span> <span class="pl-c1">=</span> <span class="pl-s1">button</span><span class="pl-kos">.</span><span class="pl-c1">elm</span><span class="pl-kos">.</span><span class="pl-en">getBoundingClientRect</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-v">Tooltip</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span>
+  <span class="pl-s1">bcr</span><span class="pl-kos">.</span><span class="pl-c1">left</span> <span class="pl-c1">+</span> <span class="pl-s1">bcr</span><span class="pl-kos">.</span><span class="pl-c1">width</span> <span class="pl-c1">/</span> <span class="pl-c1">2</span><span class="pl-kos">,</span>
+  <span class="pl-s1">bcr</span><span class="pl-kos">.</span><span class="pl-c1">bottom</span> <span class="pl-c1">-</span> <span class="pl-c1">36</span><span class="pl-kos">,</span>
+  <span class="pl-s">"Example"</span><span class="pl-kos">,</span>
+  <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-c1">body</span><span class="pl-kos">,</span>
+  <span class="pl-c1">true</span>
+<span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+</details></div>
     </div>
 
     <script>
@@ -1310,12 +1549,6 @@
         document.querySelectorAll("h1,h2,h3,h4,h5,h6").forEach((h) => {
           const text = toKebabCase(h.innerHTML.trim());
           h.id = text;
-        });
-        document.querySelectorAll("a").forEach((h) => {
-          const href = h.href;
-          let fixedHref = href;
-          if (href.includes(".md")) fixedHref = href.replace(".md", ".html");
-          h.href = fixedHref;
         });
       });
     </script>

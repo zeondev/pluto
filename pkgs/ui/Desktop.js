@@ -1,5 +1,6 @@
 import ctxMenu from "../lib/CtxMenu.js";
 import Tooltip from "../components/Tooltip.js";
+import * as htmlClass from "../../assets/html.js";
 
 export default {
   name: "Desktop",
@@ -20,6 +21,7 @@ export default {
       wrapper.cleanup();
     });
 
+    /** @type {htmlClass.default} */
     let Html = Root.Lib.html;
 
     let vfs = await Root.Core.startPkg("lib:VirtualFS");
@@ -464,6 +466,8 @@ export default {
 
       trayMenuState = !trayMenuState;
 
+      let prevItems = [];
+
       if (trayMenuState === true) {
         window.addEventListener("mousedown", onClickDetect);
         window.addEventListener("click", onFullClickDetect);
@@ -545,6 +549,7 @@ export default {
                     });
                   });
 
+                // return { pid: app.pid, item };
                 return item;
               })
             );
@@ -552,8 +557,8 @@ export default {
             return appsHtml.filter((m) => m !== false);
           }
 
+          /** @type {htmlClass.default} */
           trayElm = new Html("div").class("menu", "tray");
-
           async function updateTray() {
             if (trayMenuState === false) clearInterval(trayInterval);
             let trayApps = await createTrayItems();
@@ -577,6 +582,9 @@ export default {
                 width: "160px",
               });
             } else {
+              if (Html.qsa(".tooltip") !== null) {
+                Html.qsa(".tooltip").forEach((t) => t.cleanup());
+              }
               trayElm
                 .clear()
                 .appendMany(

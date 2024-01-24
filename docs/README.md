@@ -16,6 +16,7 @@
     - [Using the Account service](#using-the-account-service)
   - [Using libraries/components in your apps](#using-librariescomponents-in-your-apps)
   - [Recent breaking changes to apps](#recent-breaking-changes-to-apps)
+    - [Tray usage](#tray-usage)
 
 This documentation will help you understand how to make apps for Pluto, and include the API reference.
 
@@ -119,21 +120,34 @@ Here's a breakdown of what the Root object looks like:
 ```ts
 interface Root {
   Lib: {
+    getProcessList: function();
+    getString: async function(
+      title: string,
+      description
+    );
     html: class Html;
     icons: Icons;
+    langs: string[];
+    launch: async function(app, parent);
+    loadComponent: async function loadComponent(cmp);​​
+    loadLibrary: async function loadLibrary(lib);​​
+    onEnd: function onEnd();​​
+    onEndCallback: function exec(_);​​
+    randomString: function randomString(_)​​
+    setOnEnd: function setOnEnd(onEndCallback);​​
+    setupReturns: function setupReturns(onMessage, trayInfo);​​​​
     systemInfo: {
       version: number;
       versionString: string;
       codename: string;
     }
-    getString: async function(
-        title: string,
-        description
-    );
+    updateProcDesc: function updateProcDesc(newDescription);​​
+    updateProcTitle: function updateProcTitle(newTitle);
   };
   Core: Core | null;
   PID: number;
   Token: string;
+  Services: null;
   Modal: {
     modal:
       async function(
@@ -555,6 +569,8 @@ const fileContent = await vfs.readFile("Root/myFile.txt");
 
 More documentation on VirtualFS [can be found here](virtualFS.md).
 
+[**Read more on the updated components and libraries documentation here.**](libs-and-components.md)
+
 ## Recent breaking changes to apps
 
 - Early 1.2 Elysium core had a different way of ending apps.
@@ -568,6 +584,8 @@ More documentation on VirtualFS [can be found here](virtualFS.md).
   ```
 
   - Remember the process cleans up after itself so you only need to cleanup any elements or intervals you have made when initializing.
+
+### Tray usage
 
 - Early 1.5 core uses the second parameter of `setupReturns` to declare tray items.
 
