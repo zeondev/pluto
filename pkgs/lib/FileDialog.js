@@ -44,7 +44,7 @@ export default {
               renderFileList(p);
             },
             html: L.icons.arrowUp,
-            title: 'Parent Directory'
+            title: "Parent Directory",
           },
         ]);
 
@@ -298,7 +298,7 @@ export default {
               renderFileList(p);
             },
             html: L.icons.arrowUp,
-            title: 'Parent Directory'
+            title: "Parent Directory",
           },
         ]);
 
@@ -359,7 +359,7 @@ export default {
 
         function setSelectedItem(newPath) {
           selectedItem = newPath;
-          pathInput.val(newPath);
+          if (pathInput.getValue() !== newPath) pathInput.val(newPath);
           confirmButton.attr({ disabled: newPath === "" ? "" : null });
         }
         let tableHead = new L.html("thead").appendTo(table);
