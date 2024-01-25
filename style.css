@@ -2363,6 +2363,10 @@ hr {
   gap: 8px;
 }
 
+.app-store .app-text span {
+  white-space: pre-wrap;
+}
+
 .app-store .app-icon {
   width: 64px;
   height: 64px;

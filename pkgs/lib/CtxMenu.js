@@ -67,7 +67,7 @@ export default {
         }
         if (bcr.right > window.innerWidth) {
           ctxMenu.style({
-            top: window.innerWidth - bcr.width + "px",
+            left: window.innerWidth - bcr.width + "px",
           });
         }
       });
