@@ -65,6 +65,11 @@ export default {
             top: window.innerHeight - bcr.height + "px",
           });
         }
+        if (bcr.right > window.innerWidth) {
+          ctxMenu.style({
+            top: window.innerWidth - bcr.width + "px",
+          });
+        }
       });
 
       return ctxMenu;
