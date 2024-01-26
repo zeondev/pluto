@@ -212,7 +212,7 @@ export default {
             if (map.opensWith === null) return;
             if (map.opensWith === "custom") {
               c.startPkg(
-                "data:text/javascript;base64," + btoa(await vfs.readFile(path)),
+                "data:text/javascript," + encodeURIComponent(await vfs.readFile(path)),
                 false,
                 false
               );
