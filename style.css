@@ -649,7 +649,7 @@ button.danger {
   color: var(--text-light);
 }
 
-summary { 
+summary {
   display: list-item !important;
 }
 
@@ -1691,7 +1691,7 @@ svg.lucide:not(.ignore-css) {
   flex-shrink: 0;
 }
 
-.nf { 
+.nf {
   display: block !important;
 }
 
@@ -2615,4 +2615,28 @@ hr {
   color: var(--text);
   font-weight: bold;
   font-size: 11px;
+}
+
+.calc-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.calc-buttons.one {
+  width: 75%;
+}
+.calc-buttons.two {
+  width: 25%;
+  margin-left: 15px;
+}
+
+.calc-row {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.calc-row * {
+  width: 100%;
 }

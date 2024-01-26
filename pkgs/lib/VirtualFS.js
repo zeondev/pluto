@@ -264,6 +264,16 @@ const Vfs = {
         return { item: m, type: await this.whatIs(path + "/" + m) };
       })
     );
+
+    // sort result into alphabetical order and by folder first and files second
+    result.sort((a, b) => {
+      if (a.type === "dir" && b.type === "file") return -1;
+      if (a.type === "file" && b.type === "dir") return 1;
+      if (a.item < b.item) return -1;
+      if (a.item > b.item) return 1;
+      return 0;
+    });
+
     return result;
   },
   // Function to rename a file

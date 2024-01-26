@@ -78,6 +78,7 @@ export default {
     systemApp_Browser: "Browser",
     systemApp_Weather: "Weather",
     systemApp_Terminal: "Terminal",
+    systemApp_Calculator: "Calculator",
   },
   en_GB: {
     action_newDocument: "New Document",
@@ -177,6 +178,7 @@ export default {
     systemApp_Browser: "Webbrowser",
     systemApp_Weather: "Meteorologisch",
     systemApp_Terminal: "Terminal",
+    systemApp_Calculator: "Calculator",
   },
   es_ES: {
     plutoName: "Pluto",
@@ -249,6 +251,7 @@ export default {
     systemApp_Browser: "Navegador Web",
     systemApp_Weather: "Meteorológica",
     systemApp_Terminal: "Terminal",
+    systemApp_Calculator: "Calculadora",
   },
   pt_BR: {
     plutoName: "Pluto",
@@ -318,6 +321,7 @@ export default {
     systemApp_Browser: "Web browser",
     systemApp_Weather: "Meteorológico",
     systemApp_Terminal: "terminal",
+    systemApp_Calculator: "Calculadora",
   },
   fil_PH: {
     plutoName: "Pluto",
@@ -397,5 +401,6 @@ export default {
     systemApp_Browser: "Browser",
     systemApp_Weather: "Weather",
     systemApp_Terminal: "Terminal",
+    systemApp_Calculator: "Calculator",
   },
 };

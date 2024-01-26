@@ -79,6 +79,12 @@ export default {
         icon: "terminal",
         fullName: "apps:Terminal",
       },
+      {
+        localizedName: "systemApp_Calculator",
+        name: "Calculator",
+        icon: "calculator",
+        fullName: "apps:Calculator",
+      },
     ];
     console.log(shortcutsList.length);
     for (let i = 0; i < shortcutsList.length; i++) {
