@@ -663,7 +663,17 @@
 
                   if (item.privilege in corePrivileges) {
                     privileges[item.privilege] = corePrivileges[item.privilege];
-                    if (!item.description) continue;
+                    if (!item.description)
+                      item.description =
+                        '<span class="danger">No author note</span>';
+                    // dangerous
+                    if (item.privilege === "full") {
+                      privileges[
+                        item.privilege
+                      ].description = `<span class=\"danger\">${
+                        getString(privileges[item.privilege].description)
+                      }</span>`;
+                    }
                     privileges[item.privilege].authorNote = item.description;
                   }
                 }
