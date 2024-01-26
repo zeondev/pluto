@@ -752,8 +752,9 @@
                     Modal,
                     Services: Core.services,
                   });
-                } else {
+                } else if (modalResult === false) {
                   result = null;
+                  return;
                 }
               }
 
