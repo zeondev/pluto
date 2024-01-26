@@ -346,9 +346,9 @@ export default {
                         "Root/Pluto/apps/" + app.item
                       );
                       await Root.Core.startPkg(
-                        "data:text/javascript;base64," + btoa(appData),
+                        "data:text/javascript," + encodeURIComponent(appData),
                         false,
-                        true
+                        false
                       );
                     } catch (e) {
                       console.log("Couldn't load the application");

@@ -517,7 +517,8 @@
         description: "core_appAccessControl_privilege_setLanguage",
       },
       host: {
-        description: "core_appAccessControl_privilege_desktopOnlyHostPermission",
+        description:
+          "core_appAccessControl_privilege_desktopOnlyHostPermission",
       },
       full: {
         description: "core_appAccessControl_privilege_full",
@@ -635,7 +636,7 @@
                   Modal,
                   Services: Core.services,
                   // Provide access to GlobalLib just in case.
-                  GlobalLib
+                  GlobalLib,
                 });
               } else if (
                 pkg.privileges === undefined ||
@@ -662,7 +663,17 @@
 
                   if (item.privilege in corePrivileges) {
                     privileges[item.privilege] = corePrivileges[item.privilege];
-                    if (!item.description) continue;
+                    if (!item.description)
+                      item.description =
+                        '<span class="danger">No author note</span>';
+                    // dangerous
+                    if (item.privilege === "full") {
+                      privileges[
+                        item.privilege
+                      ].description = `<span class=\"danger\">${
+                        getString(privileges[item.privilege].description)
+                      }</span>`;
+                    }
                     privileges[item.privilege].authorNote = item.description;
                   }
                 }
@@ -673,7 +684,10 @@
                     Modal.modal(
                       getString("core_appAccessControl_title"),
                       `${getString("core_appAccessControl_description", {
-                        appName: url.split(":").pop(),
+                        appName:
+                          url === "none:<Imported as URI>"
+                            ? pkg.name
+                            : url.split(":").pop(),
                       })}<br><br><ul>${Object.keys(privileges)
                         .map(
                           (m) =>
@@ -722,9 +736,7 @@
                     ...(privileges.knownPackageList
                       ? { knownPackageList: Core.knownPackageList }
                       : {}),
-                    ...(privileges.host
-                      ? { host: GlobalLib.host }
-                      : {}),
+                    ...(privileges.host ? { host: GlobalLib.host } : {}),
                     ...(privileges.setLanguage
                       ? { setLanguage: Core.setLanguage }
                       : {}),
@@ -750,8 +762,9 @@
                     Modal,
                     Services: Core.services,
                   });
-                } else {
+                } else if (modalResult === false) {
                   result = null;
+                  return;
                 }
               }
 
