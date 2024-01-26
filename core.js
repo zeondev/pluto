@@ -517,7 +517,8 @@
         description: "core_appAccessControl_privilege_setLanguage",
       },
       host: {
-        description: "core_appAccessControl_privilege_desktopOnlyHostPermission",
+        description:
+          "core_appAccessControl_privilege_desktopOnlyHostPermission",
       },
       full: {
         description: "core_appAccessControl_privilege_full",
@@ -635,7 +636,7 @@
                   Modal,
                   Services: Core.services,
                   // Provide access to GlobalLib just in case.
-                  GlobalLib
+                  GlobalLib,
                 });
               } else if (
                 pkg.privileges === undefined ||
@@ -673,7 +674,10 @@
                     Modal.modal(
                       getString("core_appAccessControl_title"),
                       `${getString("core_appAccessControl_description", {
-                        appName: url.split(":").pop(),
+                        appName:
+                          url === "none:<Imported as URI>"
+                            ? pkg.name
+                            : url.split(":").pop(),
                       })}<br><br><ul>${Object.keys(privileges)
                         .map(
                           (m) =>
@@ -722,9 +726,7 @@
                     ...(privileges.knownPackageList
                       ? { knownPackageList: Core.knownPackageList }
                       : {}),
-                    ...(privileges.host
-                      ? { host: GlobalLib.host }
-                      : {}),
+                    ...(privileges.host ? { host: GlobalLib.host } : {}),
                     ...(privileges.setLanguage
                       ? { setLanguage: Core.setLanguage }
                       : {}),
