@@ -214,7 +214,7 @@ export default {
               c.startPkg(
                 "data:text/javascript;base64," + btoa(await vfs.readFile(path)),
                 false,
-                true
+                false
               );
               return;
             } else {
