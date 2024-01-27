@@ -48,6 +48,89 @@ export default {
       output.attr({ value: calculation });
     }
 
+    wrapper.on("keydown", (e) => {
+      switch (e.key) {
+        case "1":
+          calculation += "1";
+          refreshOutput();
+          break;
+        case "2":
+          calculation += "2";
+          refreshOutput();
+          break;
+        case "3":
+          calculation += "3";
+          refreshOutput();
+          break;
+        case "4":
+          calculation += "4";
+          refreshOutput();
+          break;
+        case "5":
+          calculation += "5";
+          refreshOutput();
+          break;
+        case "6":
+          calculation += "6";
+          refreshOutput();
+          break;
+        case "7":
+          calculation += "7";
+          refreshOutput();
+          break;
+        case "8":
+          calculation += "8";
+          refreshOutput();
+          break;
+        case "9":
+          calculation += "9";
+          refreshOutput();
+          break;
+        case "0":
+          calculation += "0";
+          refreshOutput();
+          break;
+        case "+":
+          calculation += "+";
+          refreshOutput();
+          break;
+        case "-":
+          calculation += "-";
+          refreshOutput();
+          break;
+        case "*":
+          calculation += "*";
+          refreshOutput();
+          break;
+        case "/":
+          calculation += "/";
+          refreshOutput();
+          break;
+        case "Enter":
+          let finishedCalc = eval(calculation);
+          calculation = finishedCalc;
+          output.attr({ value: finishedCalc });
+          break;
+        case "=":
+          let finishedCalc2 = eval(calculation);
+          calculation = finishedCalc2;
+          output.attr({ value: finishedCalc2 });
+          break;
+        case "Backspace":
+          calculation = calculation.slice(0, -1);
+          refreshOutput();
+          break;
+        case "Escape":
+          calculation = "";
+          refreshOutput();
+          break;
+        case "c":
+          calculation = "";
+          refreshOutput();
+          break;
+      }
+    });
+
     let buttonsWrapper = new Html("div")
       .style({ display: "flex", "flex-direction": "row", "margin-top": "10px" })
       .appendTo(wrapper);
