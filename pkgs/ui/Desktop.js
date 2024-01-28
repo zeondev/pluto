@@ -479,6 +479,10 @@ export default {
 
             let appsHtml = await Promise.all(
               trayItems.map(async (app) => {
+                if (app.proc === undefined) {
+                  console.log("Bad app");
+                  return;
+                }
                 const t = app.proc.trayInfo;
                 if (t === null || t === undefined) {
                   return false;
@@ -625,7 +629,9 @@ export default {
       .class("toolbar-button")
       .appendTo(dock);
 
-    const quickAccessButtonText = new Root.Lib.html('spam').appendTo(quickAccessButton);
+    const quickAccessButtonText = new Root.Lib.html("spam").appendTo(
+      quickAccessButton
+    );
 
     updateTime();
     timeInterval = setInterval(updateTime, 1000);

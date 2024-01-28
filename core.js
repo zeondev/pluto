@@ -670,9 +670,9 @@
                     if (item.privilege === "full") {
                       privileges[
                         item.privilege
-                      ].description = `<span class=\"danger\">${
-                        getString(privileges[item.privilege].description)
-                      }</span>`;
+                      ].description = `<span class=\"danger\">${getString(
+                        privileges[item.privilege].description
+                      )}</span>`;
                     }
                     privileges[item.privilege].authorNote = item.description;
                   }
@@ -681,6 +681,11 @@
                 let modalResult = "";
                 if (force === false)
                   modalResult = await new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                      let x = new Audio("./assets/alert.wav");
+                      x.volume = 0.75;
+                      x.play();
+                    }, 100);
                     Modal.modal(
                       getString("core_appAccessControl_title"),
                       `${getString("core_appAccessControl_description", {

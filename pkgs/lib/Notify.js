@@ -67,9 +67,11 @@ export default {
             throw new Error("Invalid button configuration");
 
           const b = new L.html("button").text(button.text).on("click", (e) => {
+            a.pause();
             hide();
             setTimeout(() => {
               notify.cleanup();
+              a.remove();
               button.callback(e);
             }, 500);
           });
