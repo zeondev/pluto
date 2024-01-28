@@ -48,6 +48,26 @@ export default {
       .on("click", (e) => {
         toggleBorder();
       });
+    console.log(Root.Lib.icons, Root.Lib.icons.length);
+
+    for (let key in Root.Lib.icons) {
+      console.log(Root.Lib.icons[key]);
+      new Root.Lib.html("div")
+        .html(Root.Lib.icons[key] + "<br><span>Name: </span>" + key)
+        .appendTo(wrapper)
+        .on("click", (e) => {
+          console.log(e);
+        });
+    }
+
+    // Root.Lib.icons.forEach((element) => {
+    //   new Root.Lib.html("div")
+    //     .html(element)
+    //     .appendTo(wrapper)
+    //     .on("click", (e) => {
+    //       console.log(e);
+    //     });
+    // });
 
     return Root.Lib.setupReturns((m) => {
       console.log("Example received message: " + m);

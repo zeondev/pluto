@@ -24,7 +24,7 @@ export default {
     StoreWindow = new Win({
       title: Root.Lib.getString("systemApp_AppStore"),
       pid: Root.PID,
-      width: "500px",
+      width: "620px",
       height: "350px",
       onclose: () => {
         Root.Lib.onEnd();
@@ -45,26 +45,50 @@ export default {
 
     // Hide sidebar (for now)
 
-    // const TextSidebar = await Root.Lib.loadComponent("TextSidebar");
+    const TextSidebar = await Root.Lib.loadComponent("TextSidebar");
 
-    // TextSidebar.new(wrapper, [
-    //   {
-    //     icon: Root.Lib.icons.package,
-    //     text: "Apps",
-    //     title: "Apps",
-    //     onclick() {
-    //       pages.appsList();
-    //     },
-    //   },
-    //   {
-    //     icon: Root.Lib.icons.wrench,
-    //     text: "Settings",
-    //     title: "Settings",
-    //     onclick() {
-    //       pages.settings();
-    //     },
-    //   },
-    // ]);
+    TextSidebar.new(wrapper, [
+      {
+        icon: Root.Lib.icons.package,
+        text: "Discover",
+        title: "Discover",
+        onclick() {
+          pages.appsList();
+        },
+      },
+      {
+        icon: Root.Lib.icons.film,
+        text: "Entertainment",
+        title: "Entertainment",
+        onclick() {
+          pages.appsList("entertainment");
+        },
+      },
+      {
+        icon: Root.Lib.icons.book,
+        text: "Work",
+        title: "Work",
+        onclick() {
+          pages.appsList("work");
+        },
+      },
+      {
+        icon: Root.Lib.icons.gamepad,
+        text: "Play",
+        title: "Play",
+        onclick() {
+          pages.appsList("play");
+        },
+      },
+      // {
+      //   icon: Root.Lib.icons.wrench,
+      //   text: "Settings",
+      //   title: "Settings",
+      //   onclick() {
+      //     pages.settings();
+      //   },
+      // },
+    ]);
 
     const container = new Root.Lib.html("div")
       .class("col", "w-100", "gap", "ovh", "app-store")
@@ -158,7 +182,7 @@ export default {
           async clear() {
             container.elm.innerHTML = "";
           },
-          async appsList() {
+          async appsList(category = "all") {
             this.clear();
 
             const packageList = await appStoreModule.list();
@@ -203,41 +227,46 @@ export default {
                 const { appCompatibleColor, appCompatibleIcon } =
                   getAppCompatibility(app.compatibleWith, sysInfo.version);
 
-                new Html("div")
-                  .class("app")
-                  .appendMany(
-                    new Html("div").class("app-meta").appendMany(
-                      new Html("img").class("app-icon").attr({
-                        src: `${host}pkgs/${pkg}/${app.assets.icon}`,
-                      }),
-                      new Html("div")
-                        .class("app-text")
-                        .appendMany(
-                          new Html("span")
-                            .class("row", "gap", "fc")
-                            .appendMany(
-                              new Html("span").class("h3").text(app.name),
-                              new Html("span")
-                                .class("label")
-                                .text(`by ${app.author}`)
-                            ),
-                          new Html("span").text(app.shortDescription)
-                        ),
-                      new Html("div")
-                        .class("row", "ml-auto")
-                        .append(
-                          new Html("div")
-                            .html(appCompatibleIcon)
-                            .class(appCompatibleColor, "row")
-                        )
-                    ),
-                    new Html("div").class("app-buttons").appendMany(
-                      new Html("button").text("View").on("click", (e) => {
-                        pages.appPage(app, pkg);
-                      })
+                if (
+                  category === "all" ||
+                  String(app.category).toLowerCase() === category
+                ) {
+                  new Html("div")
+                    .class("app")
+                    .appendMany(
+                      new Html("div").class("app-meta").appendMany(
+                        new Html("img").class("app-icon").attr({
+                          src: `${host}pkgs/${pkg}/${app.assets.icon}`,
+                        }),
+                        new Html("div")
+                          .class("app-text")
+                          .appendMany(
+                            new Html("span")
+                              .class("row", "gap", "fc")
+                              .appendMany(
+                                new Html("span").class("h3").text(app.name),
+                                new Html("span")
+                                  .class("label")
+                                  .text(`by ${app.author}`)
+                              ),
+                            new Html("span").text(app.shortDescription)
+                          ),
+                        new Html("div")
+                          .class("row", "ml-auto")
+                          .append(
+                            new Html("div")
+                              .html(appCompatibleIcon)
+                              .class(appCompatibleColor, "row")
+                          )
+                      ),
+                      new Html("div").class("app-buttons").appendMany(
+                        new Html("button").text("View").on("click", (e) => {
+                          pages.appPage(app, pkg);
+                        })
+                      )
                     )
-                  )
-                  .appendTo(appsList);
+                    .appendTo(appsList);
+                }
               }
             }
 
