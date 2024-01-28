@@ -121,7 +121,7 @@ export default {
                 "Folder download is not yet supported.",
                 wrapper
               );
-            let text = await vfs.readFile(selectedItem);
+            let text = await vfs.readFile(selectedItem, undefined, true);
 
             // boilerplate download code
             var element = document.createElement("a");
