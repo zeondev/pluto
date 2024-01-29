@@ -58,12 +58,39 @@
           return this.elm.querySelector(selector);
         }
         /**
-         * querySelector something and get Html access to it.
-         * @param selector The query selector.
-         * @returns The HTML element (as Html)
+         * An easier querySelector method.
+         * @param query The string to query
+         * @returns a new Html
          */
-        queryHtml(selector) {
-          return new Html(this.elm.querySelector(selector));
+        qs(query) {
+          if (this.elm.querySelector(query)) {
+            return Html.from(this.elm.querySelector(query));
+          } else {
+            return null;
+          }
+        }
+        /**
+         * An easier querySelectorAll method.
+         * @param query The string to query
+         * @returns a new Html
+         */
+        qsa(query) {
+          if (this.elm.querySelector(query)) {
+            return Array.from(this.elm.querySelectorAll(query)).map((e) =>
+              Html.from(e)
+            );
+          } else {
+            return null;
+          }
+        }
+        /**
+         * Sets the ID of the element.
+         * @param val The ID to set.
+         * @returns Html
+         */
+        id(val) {
+          this.elm.id = val;
+          return this;
         }
         /**
          * Toggle on/off a class.
@@ -157,6 +184,21 @@
           return this;
         }
         /**
+         * Prepend this element to another element. Uses `prepend()` on the parent.
+         * @param parent Element to append to. HTMLElement, Html, and string (as querySelector) are supported.
+         * @returns Html
+         */
+        prependTo(parent) {
+          if (parent instanceof HTMLElement) {
+            parent.prepend(this.elm);
+          } else if (parent instanceof Html) {
+            parent.elm.prepend(this.elm);
+          } else if (typeof parent === "string") {
+            document.querySelector(parent)?.prepend(this.elm);
+          }
+          return this;
+        }
+        /**
          * Append an element. Typically used as a `.append(new Html(...))` call.
          * @param elem The element to append.
          * @returns Html
@@ -174,6 +216,23 @@
           return this;
         }
         /**
+         * Prepend an element. Typically used as a `.prepend(new Html(...))` call.
+         * @param elem The element to prepend.
+         * @returns Html
+         */
+        prepend(elem) {
+          if (elem instanceof HTMLElement) {
+            this.elm.prepend(elem);
+          } else if (elem instanceof Html) {
+            this.elm.prepend(elem.elm);
+          } else if (typeof elem === "string") {
+            const newElem = document.createElement(elem);
+            this.elm.prepend(newElem);
+            return new Html(newElem.tagName);
+          }
+          return this;
+        }
+        /**
          * Append multiple elements. Typically used as a `.appendMany(new Html(...), new Html(...)` call.
          * @param elements The elements to append.
          * @returns Html
@@ -181,6 +240,17 @@
         appendMany(...elements) {
           for (const elem of elements) {
             this.append(elem);
+          }
+          return this;
+        }
+        /**
+         * Prepend multiple elements. Typically used as a `.prependMany(new Html(...), new Html(...)` call.
+         * @param elements The elements to prepend.
+         * @returns Html
+         */
+        prependMany(...elements) {
+          for (const elem of elements) {
+            this.prepend(elem);
           }
           return this;
         }
@@ -253,7 +323,13 @@
          * @returns Html
          */
         static from(elm) {
-          return new Html(elm);
+          if (typeof elm === "string") {
+            const element = Html.qs(elm);
+            if (element === null) return null;
+            else return element;
+          } else {
+            return new Html(elm);
+          }
         }
         /**
          * An easier querySelector method.
@@ -844,6 +920,7 @@
     window.c = Core;
     window.l = GlobalLib;
     window.h = GlobalLib.html;
+    window.cd = coreDetails;
 
     // If in electron app, don't give away host data
     let host;

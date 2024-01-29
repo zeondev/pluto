@@ -400,7 +400,11 @@ export default {
           .style({ width: "24px", height: "24px" })
           .append(
             new Root.Lib.html("div")
-              .html(Root.Lib.icons[mapping.icon])
+              .html(
+                mapping.icon in Root.Lib.icons
+                  ? Root.Lib.icons[mapping.icon]
+                  : mapping.icon
+              )
               .style({ width: "24px" })
           )
           .appendTo(tableBodyRow);

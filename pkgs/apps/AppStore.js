@@ -24,10 +24,29 @@ export default {
     StoreWindow = new Win({
       title: Root.Lib.getString("systemApp_AppStore"),
       pid: Root.PID,
-      width: "620px",
-      height: "350px",
+      // width: "620px",
+      width: 700,
+      height: 400,
+      // height: "350px",
       onclose: () => {
         Root.Lib.onEnd();
+      },
+      onresize() {
+        if (wrapper.elm.offsetWidth >= 520) {
+          wrapper.qs(".text-sidebar").style({
+            width: "var(--initial-width)",
+          });
+          wrapper.qsa(".text-sidebar .sidebar-text").forEach((t) => {
+            t.styleJs({ opacity: "1", pointerEvents: "none" });
+          });
+        } else {
+          wrapper.qs(".text-sidebar").style({
+            width: "52px",
+          });
+          wrapper.qsa(".text-sidebar .sidebar-text").forEach((t) => {
+            t.styleJs({ opacity: "0", pointerEvents: "none" });
+          });
+        }
       },
     });
 
@@ -39,9 +58,9 @@ export default {
 
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
 
-    wrapper = StoreWindow.window.querySelector(".win-content");
+    wrapper = Html.from(StoreWindow.window.querySelector(".win-content"));
 
-    wrapper.classList.add("row", "o-h", "h-100", "with-sidebar");
+    wrapper.classOn("row", "o-h", "h-100", "with-sidebar");
 
     // Hide sidebar (for now)
 
@@ -90,17 +109,62 @@ export default {
       // },
     ]);
 
+    wrapper.qs(".text-sidebar").style({
+      "--initial-width": wrapper.qs(".text-sidebar").elm.offsetWidth + "px",
+      transition: "width var(--animation-duration) var(--easing-function)",
+      width: "var(--initial-width)",
+    });
+
+    wrapper.qsa(".text-sidebar .sidebar-text").forEach((t) => {
+      t.styleJs({
+        transition: "opacity var(--animation-duration) var(--easing-function)",
+      });
+    });
+
     const container = new Root.Lib.html("div")
       .class("col", "w-100", "gap", "ovh", "app-store")
       .appendTo(wrapper);
 
+    const asFilePath = "Registry/AppStore";
+    let asIndex = {};
+
+    if ((await vfs.whatIs("Registry/AppStore/_AppStoreIndex.json")) !== null) {
+      asIndex = JSON.parse(
+        await vfs.readFile("Registry/AppStore/_AppStoreIndex.json")
+      );
+    }
+
+    async function updateAsIndex() {
+      if ((await vfs.whatIs("Registry/AppStore")) === null) {
+        await vfs.createFolder("Registry/AppStore");
+      }
+
+      const apps = await vfs.list("Registry/AppStore");
+
+      console.log(apps);
+
+      await vfs.writeFile(
+        "Registry/AppStore/_AppStoreIndex.json",
+        JSON.stringify(asIndex)
+      );
+    }
+
+    updateAsIndex();
+
+    function makeAppNameSafe(pkg) {
+      return pkg.replace(/\//g, "--");
+    }
+
     try {
       new Html("div").class("row", "fc").text("Loading...").appendTo(container);
 
-      let host = "https://zeondev.github.io/Pluto-AppStore/";
+      // let host = "https://zeondev.github.io/Pluto-AppStore/";
+      let host = "http://localhost:5501/";
+      let repoHost =
+        "https://github.com/zeondev/Pluto-AppStore/blob/main/pkgs/";
 
       const appStoreModule = (
-        await import(`${host}import.js?t=` + performance.now())
+        await import(`${host}import_new.js?t=` + performance.now())
       ).default;
 
       // Check if this is the right app store module
@@ -110,60 +174,102 @@ export default {
         const sysInfo = Root.Lib.systemInfo;
 
         function getAppCompatibility(appVersion, coreVersion) {
-          let appCompatible, appCompatibleColor, appCompatibleIcon;
+          let appCompatible,
+            appCompatibleColor,
+            appCompatibleIcon,
+            appCompatibleReason;
           if (
             parseFloat(coreVersion.toFixed(1)) <
             parseFloat(appVersion.toFixed(1))
           ) {
             // not compatible
             appCompatible = "err";
+            appCompatibleReason = `Pluto version ${coreVersion.toFixed(
+              1
+            )} < App version ${appVersion.toFixed(1)}`;
           } else if (
             parseFloat(coreVersion.toFixed(1)) >
             parseFloat(appVersion.toFixed(1))
           ) {
             // warn of possible incompatibility
             appCompatible = "warn";
+            appCompatibleReason = `Pluto version ${coreVersion.toFixed(
+              1
+            )} > App version ${appVersion.toFixed(1)}`;
           } else {
             appCompatible = "ok";
+            appCompatibleReason = `Pluto version ${coreVersion.toFixed(
+              1
+            )} = App version ${appVersion.toFixed(1)}`;
           }
 
           if (appCompatible === "ok") {
-            appCompatibleIcon = Root.Lib.icons.circleCheck;
+            appCompatibleIcon = `<span class="row fc">${Root.Lib.icons.circleCheck}</span> Compatible`;
           } else if (appCompatible === "warn") {
-            appCompatibleIcon = Root.Lib.icons.warning;
+            appCompatibleIcon = `<span class="row fc">${Root.Lib.icons.warning}</span> May be incompatible`;
           } else if (appCompatible === "err") {
-            appCompatibleIcon = Root.Lib.icons.circleExclamation;
+            appCompatibleIcon = `<span class="row fc">${Root.Lib.icons.circleExclamation}</span> Not compatible`;
           }
 
           if (appCompatible === "ok") appCompatibleColor = "success";
           else if (appCompatible === "warn") appCompatibleColor = "warning";
           else if (appCompatible === "err") appCompatibleColor = "danger";
 
-          return { appCompatible, appCompatibleColor, appCompatibleIcon };
+          return {
+            appCompatible,
+            appCompatibleColor,
+            appCompatibleIcon,
+            appCompatibleReason,
+          };
         }
 
         async function installApp(pkg, app, force = false) {
+          let appNameSafe = makeAppNameSafe(pkg);
           await fetch(
             `${host}pkgs/${pkg}/${app.assets.path}?t=` + performance.now()
           )
             .then(async (e) => {
-              console.log(await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`));
+              console.log(await vfs.whatIs(`${asFilePath}/${appNameSafe}.app`));
               if (
-                (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) ===
+                (await vfs.whatIs(`${asFilePath}/${appNameSafe}.app`)) ===
                   null ||
                 force == true
               ) {
                 let result = await e.text();
 
-                await vfs.writeFile(`Root/Pluto/apps/${app.name}.app`, result);
+                await vfs.writeFile(`${asFilePath}/${appNameSafe}.app`, result);
+
+                const img = await new Promise((resolve, reject) => {
+                  fetch(`${host}pkgs/${pkg}/${app.assets.icon}`)
+                    .then((response) => response.blob())
+                    .then((blob) => {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        const dataURL = reader.result;
+                        resolve(dataURL);
+                      };
+                      reader.readAsDataURL(blob);
+                    })
+                    .catch((error) => {
+                      reject(error);
+                    });
+                });
+
+                asIndex[appNameSafe] = Object.assign(app, { icon: img });
+
+                // update as index
+                await updateAsIndex();
 
                 pages.appPage(app, pkg);
               } else if (
-                (await vfs.whatIs(`Root/Pluto/apps/${app.name}.app`)) === "file"
+                (await vfs.whatIs(`${asFilePath}/${appNameSafe}.app`)) ===
+                "file"
               ) {
                 await Root.Core.startPkg(
-                  "data:text/javascript;base64," +
-                    btoa(await vfs.readFile(`Root/Pluto/apps/${app.name}.app`)),
+                  "data:text/javascript," +
+                    encodeURIComponent(
+                      await vfs.readFile(`${asFilePath}/${appNameSafe}.app`)
+                    ),
                   false,
                   true
                 );
@@ -184,6 +290,20 @@ export default {
           },
           async appsList(category = "all") {
             this.clear();
+
+            // Visual category name
+            let categoryName = "";
+
+            if (category === "all") {
+              categoryName = "Discover";
+            } else {
+              categoryName = category[0].toUpperCase() + category.substring(1);
+            }
+
+            new Html("h2")
+              .style({ margin: "12px 8px 0 0" })
+              .text(categoryName)
+              .appendTo(container);
 
             const packageList = await appStoreModule.list();
 
@@ -219,10 +339,11 @@ export default {
               .appendTo(container);
 
             async function renderAppsList() {
-              for (let pkg of packageList) {
-                const app = await appStoreModule.fetch(pkg);
-
-                console.log(pkg, "pkgResult", app);
+              for (let appObj of packageList) {
+                let app = Object.assign(appObj, {
+                  repoUrl: repoHost + appObj.id,
+                });
+                const pkg = app.id;
 
                 const { appCompatibleColor, appCompatibleIcon } =
                   getAppCompatibility(app.compatibleWith, sysInfo.version);
@@ -231,40 +352,45 @@ export default {
                   category === "all" ||
                   String(app.category).toLowerCase() === category
                 ) {
+                  let appCompatibleRow = undefined;
+                  if (appCompatibleColor !== "success") {
+                    appCompatibleRow = new Html("div")
+                      .class("row")
+                      .append(
+                        new Html("div")
+                          .html(appCompatibleIcon)
+                          .class(appCompatibleColor, "row", "gap-mid", "fc")
+                      );
+                  }
+
                   new Html("div")
                     .class("app")
                     .appendMany(
-                      new Html("div").class("app-meta").appendMany(
-                        new Html("img").class("app-icon").attr({
-                          src: `${host}pkgs/${pkg}/${app.assets.icon}`,
-                        }),
-                        new Html("div")
-                          .class("app-text")
-                          .appendMany(
-                            new Html("span")
-                              .class("row", "gap", "fc")
-                              .appendMany(
-                                new Html("span").class("h3").text(app.name),
-                                new Html("span")
-                                  .class("label")
-                                  .text(`by ${app.author}`)
-                              ),
-                            new Html("span").text(app.shortDescription)
-                          ),
-                        new Html("div")
-                          .class("row", "ml-auto")
-                          .append(
-                            new Html("div")
-                              .html(appCompatibleIcon)
-                              .class(appCompatibleColor, "row")
-                          )
-                      ),
-                      new Html("div").class("app-buttons").appendMany(
-                        new Html("button").text("View").on("click", (e) => {
-                          pages.appPage(app, pkg);
-                        })
+                      new Html("div").class("col", "gap-mid").appendMany(
+                        new Html("div").class("app-meta").appendMany(
+                          new Html("img").class("app-icon").attr({
+                            src: `${host}pkgs/${pkg}/${app.assets.icon}`,
+                          }),
+                          new Html("div")
+                            .class("app-text")
+                            .appendMany(
+                              new Html("span")
+                                .class("row", "gap", "ac", "row-wrap")
+                                .appendMany(
+                                  new Html("span").class("h3").text(app.name),
+                                  new Html("span")
+                                    .class("label")
+                                    .text(`by ${app.author}`)
+                                ),
+                              new Html("span").text(app.shortDescription)
+                            )
+                        ),
+                        appCompatibleRow
                       )
                     )
+                    .on("click", () => {
+                      pages.appPage(app, pkg);
+                    })
                     .appendTo(appsList);
                 }
               }
@@ -284,8 +410,12 @@ export default {
               ? `${host}pkgs/${pkg}/${app.assets.banner}`
               : `${host}pkgs/${pkg}/${app.assets.icon}`;
 
-            const { appCompatible, appCompatibleColor, appCompatibleIcon } =
-              getAppCompatibility(app.compatibleWith, sysInfo.version);
+            const {
+              appCompatible,
+              appCompatibleColor,
+              appCompatibleIcon,
+              appCompatibleReason,
+            } = getAppCompatibility(app.compatibleWith, sysInfo.version);
 
             new Html("div")
               .class("app-banner", appHasBanner === false ? "no-banner" : null)
@@ -302,9 +432,11 @@ export default {
               )
               .appendTo(container);
 
+            let appNameSafe = makeAppNameSafe(pkg);
+
             async function makeInstallOrOpenButton() {
               let localHash = new Hashes.MD5().hex(
-                await vfs.readFile(`Root/Pluto/apps/${app.name}.app`)
+                await vfs.readFile(`${asFilePath}/${appNameSafe}.app`)
               );
               const appHash = await fetch(
                 `${host}pkgs/${pkg}/${app.assets.path}?t=` + performance.now()
@@ -313,7 +445,7 @@ export default {
               });
 
               const whatIsApp = await vfs.whatIs(
-                `Root/Pluto/apps/${app.name}.app`
+                `${asFilePath}/${appNameSafe}.app`
               );
 
               return [
@@ -362,7 +494,7 @@ export default {
                         );
 
                         if (result === true) {
-                          await vfs.delete(`Root/Pluto/apps/${app.name}.app`);
+                          await vfs.delete(`${asFilePath}/${appNameSafe}.app`);
                           // await Root.Modal.alert(
                           //   "App Deleted!",
                           //   `${app.name} has been successfully deleted!`
@@ -386,7 +518,7 @@ export default {
                     .class("app-text")
                     .appendMany(
                       new Html("span")
-                        .class("row", "gap", "fc")
+                        .class("row", "gap", "ac", "row-wrap")
                         .appendMany(
                           new Html("span").class("h3").text(app.name),
                           new Html("span")
@@ -394,18 +526,89 @@ export default {
                             .text(`by ${app.author}`)
                         ),
                       new Html("span").text(app.description)
-                    ),
-                  new Html("div")
-                    .class("row", "ml-auto")
-                    .append(
-                      new Html("div")
-                        .html(appCompatibleIcon)
-                        .class(appCompatibleColor, "row")
                     )
                 ),
                 new Html("div")
                   .class("app-buttons")
                   .appendMany(...(await makeInstallOrOpenButton()))
+              )
+              .appendTo(container);
+
+            const rtf = new Intl.RelativeTimeFormat("en", { style: "short" });
+
+            new Html("div")
+              .class("app-whats-new")
+              .appendMany(
+                new Html("h2").text("What's new"),
+                new Html("span")
+                  .class("label")
+                  .text(`Version ${app.versions[0].ver}`),
+                new Html("p").class("pre-wrap").text(app.latestVersionInfo)
+              )
+              .appendTo(container);
+
+            new Html("h2").text("More info about this app").appendTo(container);
+
+            new Html("div")
+              .class("app-sub-details")
+              .appendMany(
+                // Compatibility
+                new Html("div")
+                  .class("app-sub-details-item")
+                  .appendMany(
+                    new Html("h3").text("Compatibility"),
+                    new Html("div")
+                      .class("row")
+                      .append(
+                        new Html("div")
+                          .html(appCompatibleIcon)
+                          .class(appCompatibleColor, "row", "fc", "gap")
+                      ),
+                    new Html("span").class("label").text(appCompatibleReason)
+                  ),
+                // Version history
+                new Html("div").class("app-sub-details-item").appendMany(
+                  new Html("h3").text("Versions"),
+                  new Html("div").class("col", "w-100", "gap").appendMany(
+                    new Html("div")
+                      .class("fg", "row", "w-100", "fc")
+                      .appendMany(
+                        new Html("span").text(app.versions[0].ver),
+                        new Html("span")
+                          .class("ml-auto", "label")
+                          .text(
+                            new Date(app.versions[0].date).toLocaleDateString()
+                          )
+                      ),
+                    app.versions.length > 1
+                      ? new Html("details").appendMany(
+                          new Html("summary").text(
+                            "See older versions of this app"
+                          ),
+                          ...app.versions.slice(1).map((v) => {
+                            return new Html("div")
+                              .class("fg", "row", "w-100", "fc")
+                              .appendMany(
+                                new Html("span").text(v.ver),
+                                new Html("span")
+                                  .class("ml-auto", "label")
+                                  .text(new Date(v.date).toLocaleDateString())
+                              );
+                          })
+                        )
+                      : undefined
+                  )
+                ),
+                // Repository URL
+                new Html("div").class("app-sub-details-item").appendMany(
+                  new Html("h3").text("Source code"),
+                  new Html("button")
+                    .style({ margin: 0 })
+                    .on("click", () => {
+                      window.open(app.repoUrl);
+                    })
+                    .text("View on GitHub")
+                )
               )
               .appendTo(container);
           },

@@ -178,7 +178,7 @@ export default {
               .style({ width: "24px", height: "24px" })
               .append(
                 new L.html("div")
-                  .html(L.icons[mapping.icon])
+                  .html(mapping.icon in L.icons ? L.icons[mapping.icon] : mapping.icon)
                   .style({ width: "24px" })
               )
               .appendTo(tableBodyRow);
@@ -253,7 +253,7 @@ export default {
         //       .style({ width: "24px", height: "24px" })
         //       .append(
         //         new L.html("div")
-        //           .html(L.icons[mapping.icon])
+        //           .html(mapping.icon in L.icons ? L.icons[mapping.icon] : mapping.icon)
         //           .style({ width: "24px" })
         //       )
         //       .appendTo(tableBodyRow);
@@ -450,7 +450,7 @@ export default {
               .style({ width: "24px", height: "24px" })
               .append(
                 new L.html("div")
-                  .html(L.icons[mapping.icon])
+                  .html(mapping.icon in L.icons ? L.icons[mapping.icon] : mapping.icon)
                   .style({ width: "24px" })
               )
               .appendTo(tableBodyRow);

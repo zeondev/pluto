@@ -289,30 +289,61 @@ export default {
             .map((f) => {
               return { type: "installed", item: f.item };
             });
+          let asApps = [];
+          const asExists = await vfs.whatIs(
+            "Registry/AppStore/_AppStoreIndex.json"
+          );
+          if (asExists !== null) {
+            console.log(asExists);
+            asApps = (await vfs.list("Registry/AppStore"))
+              .filter((f) => f.item.endsWith(".app"))
+              .map((f) => {
+                return { type: "appStore", item: f.item };
+              });
+          }
 
-          const apps = [...installedApps, ...desktopApps];
+          const apps = [...installedApps, ...asApps, ...desktopApps];
 
           const appsHtml = await Promise.all(
             apps.map(async (app) => {
               // console.log(app);
               let icon = "box",
                 name = app.item,
-                description = null;
+                description = null,
+                mapping = null;
 
               if (app.type === "desktop") {
                 const data = await FileMappings.retrieveAllMIMEdata(
                   "Root/Desktop/" + app.item
                 );
 
+                mapping = data;
+
                 icon = data.icon;
                 name = data.localizedName ?? data.name;
+                description = data.fullName;
+              } else if (app.type === "appStore") {
+                const data = await FileMappings.retrieveAllMIMEdata(
+                  "Registry/AppStore/" + app.item
+                );
+
+                mapping = data;
+
+                if (data.invalid === true) {
+                  return undefined;
+                }
+
+                icon = data.icon;
+                name = data.name;
                 description = data.fullName;
               }
 
               return new Html("div")
                 .class("app")
                 .appendMany(
-                  new Html("div").class("app-icon").html(Root.Lib.icons[icon]),
+                  new Html("div")
+                    .class("app-icon")
+                    .html(icon in Root.Lib.icons ? Root.Lib.icons[icon] : icon),
                   new Html("div")
                     .class("app-text")
                     .appendMany(
@@ -340,6 +371,8 @@ export default {
                     } catch (e) {
                       console.log("Couldn't load the application");
                     }
+                  } else if (app.type === "appStore") {
+                    await mapping.onClick();
                   } else {
                     try {
                       const appData = await vfs.readFile(
@@ -479,7 +512,7 @@ export default {
 
             let appsHtml = await Promise.all(
               trayItems.map(async (app) => {
-                if (app.proc === undefined) {
+                if (app.proc === undefined || app.proc === null) {
                   console.log("Bad app");
                   return;
                 }

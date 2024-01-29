@@ -15,6 +15,15 @@ body {
   color-scheme: dark;
 }
 
+body a {
+  color: var(--primary);
+  text-decoration: underline;
+  cursor: var(--cursor-pointer) 5 0, auto !important;
+}
+body a:hover {
+  filter: brightness(1.5);
+}
+
 *:not(
     .resize-grips,
     .resize-grip,
@@ -23,7 +32,8 @@ body {
     button,
     button *,
     select,
-    select *
+    select *,
+    a
   ) {
   cursor: var(--cursor-default) 2 2, auto !important;
 }
@@ -34,11 +44,17 @@ select,
 select *,
 .desktop .dock .menu .app,
 .desktop .dock .menu .app *,
-.pointer {
+.pointer,
+a {
   cursor: var(--cursor-pointer) 5 0, auto !important;
 }
 
-input:not([type="checkbox"]),
+input[type="range"],
+input[type="range"]:focus {
+  outline: none !important;
+}
+
+input:not([type="checkbox"], [type="range"]),
 textarea,
 .ace_content {
   cursor: var(--cursor-text) 15 6, auto !important;
@@ -163,7 +179,7 @@ a {
   --negative-light: #ea4848;
   --negative-dark: #710d0d;
   --positive: #3dcf5d;
-  --positive-light: #7cf197;
+  --positive-light: #199937;
   --positive-dark: #0d7123;
   --root: #f3f3f3;
   --root-rgb: 243, 243, 243;
@@ -178,6 +194,10 @@ a {
   --neutral: #cccccc;
   --neutral-focus: #aaaaaa;
   --outline: #bbbbbb;
+  --warning: hsla(60, 100%, 30.2%, 0.8);
+  --warning-light: rgb(152, 152, 0);
+  --warning-light-translucent: rgba(247, 247, 120, 0.4);
+  --warning-dark: hsla(60, 96%, 25%, 0.2);
 }
 
 body {
@@ -392,7 +412,7 @@ body {
   flex: 1;
   background: var(--root);
   overflow: auto;
-  touch-action: pan-y;
+  touch-action: pan-y !important;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   position: relative;
@@ -867,7 +887,7 @@ textarea::placeholder {
   min-height: 0;
   overflow: auto;
   margin: 0;
-  touch-action: pan-y;
+  touch-action: pan-y !important;
 }
 
 /* Table */
@@ -1253,7 +1273,7 @@ ul {
   outline: 0;
 }
 
-*:focus:not(.transparent) {
+*:focus:not(.transparent, details, summary) {
   outline: 1px solid white;
 }
 
@@ -2009,7 +2029,7 @@ hr {
   gap: 4px;
   align-self: stretch;
   overflow: auto;
-  touch-action: pan-y;
+  touch-action: pan-y !important;
 }
 
 .desktop .menu > .apps > .app {
@@ -2027,10 +2047,11 @@ hr {
 }
 
 .desktop .menu > .apps > .app > .app-icon,
-.desktop .menu > .apps > .app > .app-icon svg {
-  width: 32px;
-  height: 32px;
-  stroke-width: 1.5px;
+.desktop .menu > .apps > .app > .app-icon svg,
+.desktop .menu > .apps > .app > .app-icon img {
+  width: 42px !important;
+  height: 42px !important;
+  stroke-width: 1.3px;
 }
 
 .desktop .menu > .apps > .app > .app-text {
@@ -2322,6 +2343,10 @@ hr {
   color: var(--text);
 }
 
+.app-store {
+  line-height: 1.25rem;
+}
+
 .app-store .search-bar {
   display: flex;
   padding: 4px;
@@ -2342,6 +2367,19 @@ hr {
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+.app-store .app:not(.in-menu) {
+  margin: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--header);
+}
+.app-store .app:not(.in-menu),
+.app-store .app:not(.in-menu) * {
+  cursor: var(--cursor-pointer) 5 0, auto !important;
+}
+.app-store .app:not(.in-menu):hover {
+  background-color: var(--header);
 }
 
 .app-store .app.in-menu {
@@ -2368,8 +2406,8 @@ hr {
 }
 
 .app-store .app-icon {
-  width: 64px;
-  height: 64px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
 }
 
@@ -2408,6 +2446,45 @@ hr {
   background-position: center;
   background-repeat: no-repeat;
   border-radius: 50%;
+}
+
+.app-store h2 {
+  padding: 0 12px;
+  margin: 8px 0;
+}
+
+.app-store .app-whats-new {
+  padding: 0 12px;
+}
+.app-store .app-whats-new h2 {
+  padding: 0;
+  margin: 8px 0;
+}
+
+.app-store .app-sub-details {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 0 12px;
+  margin-bottom: 1rem;
+}
+
+.app-store .app-sub-details-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 8px;
+  border: 1px solid var(--outline);
+  border-radius: 4px;
+  gap: 8px;
+  min-width: 250px;
+  flex: 1;
+}
+
+.app-store .app-sub-details-item h3 {
+  margin: 4px 0;
 }
 
 .window-box {
