@@ -158,8 +158,8 @@ export default {
     try {
       new Html("div").class("row", "fc").text("Loading...").appendTo(container);
 
-      // let host = "https://zeondev.github.io/Pluto-AppStore/";
-      let host = "http://localhost:5501/";
+      let host = "https://zeondev.github.io/Pluto-AppStore/";
+      // let host = "http://localhost:5501/";
       let repoHost =
         "https://github.com/zeondev/Pluto-AppStore/blob/main/pkgs/";
 
