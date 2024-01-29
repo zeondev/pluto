@@ -283,6 +283,7 @@ export default {
           this.window.dataset.lastHeight = this.window.style.height;
           switch (side) {
             default:
+            // unused
             case "top":
               this.window.classList.toggle("max");
               // this.window.style.top = 0;
@@ -474,6 +475,26 @@ export default {
   },
 };
 
+/** Prevent windows from getting stuck outside the screen */
+function adjustWindow(x) {
+  if (parseInt(x.style.top) < 0) {
+    x.style.top = `${snapBoxMargin + 1}px`;
+  }
+  if (parseInt(x.style.left) < 0) {
+    x.style.left = `${snapBoxMargin + 1}px`;
+  }
+  if (parseInt(x.style.top) + x.offsetHeight > window.innerHeight) {
+    x.style.top = `${
+      window.innerHeight - x.offsetHeight - (snapBoxMargin + 1)
+    }px`;
+  }
+  if (parseInt(x.style.left) + x.offsetWidth > window.innerWidth) {
+    x.style.left = `${
+      window.innerWidth - x.offsetWidth - (snapBoxMargin + 1)
+    }px`;
+  }
+}
+
 function focusWindow(x) {
   let zIn = 0;
   let windows = document.querySelectorAll(".win-window");
@@ -489,10 +510,9 @@ function focusWindow(x) {
       }
     });
   }
+  adjustWindow(x);
   x.style.zIndex = zIn + 2;
   x.classList.add("focus");
-
-  // console.log("[WS]", x.id, windowsList);
 
   core.broadcastEventToProcs({
     type: "wsEvent",
@@ -934,6 +954,14 @@ document.addEventListener("touchend", EndWinDrag);
 
 document.addEventListener("mousemove", WinDrag);
 document.addEventListener("touchmove", WinDrag);
+
+window.addEventListener("resize", () => {
+  if (Html.qs(".window-box") !== null) {
+    Html.qsa(".window-box .win-window").forEach((x) => {
+      adjustWindow(x.elm);
+    });
+  }
+});
 
 function handleFocus(e) {
   var x = e.target.closest(".win-window");
