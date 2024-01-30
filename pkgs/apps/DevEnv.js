@@ -1,7 +1,3 @@
-import * as prettier from "https://unpkg.com/prettier@3.2.4/standalone.mjs";
-import prettierPluginBabel from "https://unpkg.com/prettier@3.2.4/plugins/babel.mjs";
-import prettierPluginEsTree from "https://unpkg.com/prettier@3.2.4/plugins/estree.mjs";
-
 export default {
   name: "DevEnv",
   description: "Develop applications for Pluto smoothly in your browser.",
@@ -116,7 +112,8 @@ export default {
 
     DvWindow = new Win({
       title: Root.Lib.getString("systemApp_DevEnv"),
-      content: "",
+      content:
+        '<div class="row fc">DevEnv is loading external libraries, please wait...</div>',
       width: 540,
       height: 420,
       pid: Root.PID,
@@ -134,6 +131,22 @@ export default {
         Root.Lib.onEnd();
       },
     });
+
+    // import * as prettier from "https://unpkg.com/prettier@3.2.4/standalone.mjs";
+    // import prettierPluginBabel from "https://unpkg.com/prettier@3.2.4/plugins/babel.mjs";
+    // import prettierPluginEsTree from "https://unpkg.com/prettier@3.2.4/plugins/estree.mjs";
+
+    const prettier = await import(
+      "https://unpkg.com/prettier@3.2.4/standalone.mjs"
+    );
+    const prettierPluginBabel = (
+      await import("https://unpkg.com/prettier@3.2.4/plugins/babel.mjs")
+    ).default;
+    const prettierPluginEsTree = (
+      await import("https://unpkg.com/prettier@3.2.4/plugins/estree.mjs")
+    ).default;
+
+    console.log(prettier, prettierPluginBabel, prettierPluginEsTree);
 
     const DvDefaultSettings = {
       wordWrap: true,
@@ -539,7 +552,7 @@ export default {
     window.addEventListener("keydown", keyBindHandler);
 
     wrapper = DvWindow.window.querySelector(".win-content");
-
+    wrapper.innerHTML = "";
     wrapper.classList.add("row", "o-h", "h-100", "with-sidebar");
 
     let currentDocument = {
