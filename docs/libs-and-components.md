@@ -58,14 +58,12 @@ These function are undocumented for now.
 ### CtxMenu
 
 ```js
-new (
-  posX,
-  posY,
-  items = [{ item: "Nothing", select: () => null }],
-  header = "",
-  parent = document.body,
-  isAbsolute = true
-)
+new (posX,
+posY,
+(items = [{ item: "Nothing", select: () => null }]),
+(header = ""),
+(parent = document.body),
+(isAbsolute = true))();
 ```
 
 Show a context menu:
@@ -110,7 +108,7 @@ ctxMenu.new(e.clientX, e.clientY, [
 
 ### Notify
 
-`show(title, description, parent = null, buttons = null, autoHide = null, sound = null)` - Show a notification:
+`show(title, description, parent = null, buttons = null, autoHide = null, sound = null, soundLoops = false, closeCallback = null)` - Show a notification:
 
 ![Notify image](./images/notify.png)
 
@@ -158,6 +156,8 @@ Notify.show("Pluto Messenger", "Rick Astley is calling...", null, [
 ], false, "https://example.com/ringtone.mp3");
 ```
 
+`closeCallback` is a function that returns a single parameter which is the hide function to cloes the notification.
+
 ### ThemeLib
 
 - `validateTheme(theme)`: Parse a theme JSON.
@@ -184,6 +184,7 @@ Here is the list of available components:
 
 [Card](#card)  
 [ImageButton](#imagebutton)  
+[MenuBar](#menubar)
 [SelectList](#selectlist)  
 [Sidebar](#sidebar)  
 [TextSidebar](#textsidebar)  
@@ -203,6 +204,96 @@ Card.new(container, new Html("div").class("flex-group", "col").text("Hello!"));
 ### ImageButton
 
 `new(wrapper, imageUri)` create image button (unused)
+
+### MenuBar
+
+Create a horizontal menu bar, useful if you have a bunch of actions.
+
+<details>
+
+<summary>View code</summary>
+
+```js
+MenuBar.new(wrapper, [
+  {
+    item: "File",
+    items: [
+      {
+        item: "New",
+        select() {
+          alert("New");
+        },
+      },
+      {
+        item: "Open...",
+        select() {
+          alert("Open...");
+        },
+      },
+      {
+        item: "Save",
+        select() {
+          alert("Save");
+        },
+      },
+      {
+        item: "Save As...",
+        select() {
+          alert("Save As");
+        },
+      },
+    ],
+  },
+  {
+    item: "Edit",
+    items: [
+      {
+        item: "Cut",
+        select() {
+          alert("Cut");
+        },
+      },
+      {
+        item: "Copy",
+        select() {
+          alert("Copy");
+        },
+      },
+      {
+        item: "Paste",
+        select() {
+          alert("Paste");
+        },
+      },
+    ],
+  },
+  {
+    item: "View",
+    items: [
+      {
+        item: "Zoom In",
+        select() {
+          alert("Zoom In");
+        },
+      },
+      {
+        item: "Zoom Out",
+        select() {
+          alert("Zoom Out");
+        },
+      },
+      {
+        item: "Reset Zoom",
+        select() {
+          alert("Reset Zoom");
+        },
+      },
+    ],
+  },
+]);
+```
+
+</details>
 
 ### SelectList
 

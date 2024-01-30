@@ -1300,14 +1300,12 @@
 <li><code class="notranslate">async scanForDangerousCode()</code></li>
 </ul>
 <h3 dir="auto">CtxMenu</h3>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">new</span> <span class="pl-kos">(</span>
-  <span class="pl-s1">posX</span><span class="pl-kos">,</span>
-  <span class="pl-s1">posY</span><span class="pl-kos">,</span>
-  <span class="pl-s1">items</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-kos">{</span> <span class="pl-c1">item</span>: <span class="pl-s">"Nothing"</span><span class="pl-kos">,</span> <span class="pl-en">select</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-c1">null</span> <span class="pl-kos">}</span><span class="pl-kos">]</span><span class="pl-kos">,</span>
-  <span class="pl-s1">header</span> <span class="pl-c1">=</span> <span class="pl-s">""</span><span class="pl-kos">,</span>
-  <span class="pl-s1">parent</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-c1">body</span><span class="pl-kos">,</span>
-  <span class="pl-s1">isAbsolute</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span>
-<span class="pl-kos">)</span></pre></div>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">new</span> <span class="pl-kos">(</span><span class="pl-s1">posX</span><span class="pl-kos">,</span>
+<span class="pl-s1">posY</span><span class="pl-kos">,</span>
+<span class="pl-kos">(</span><span class="pl-s1">items</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-kos">{</span> <span class="pl-c1">item</span>: <span class="pl-s">"Nothing"</span><span class="pl-kos">,</span> <span class="pl-en">select</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-c1">null</span> <span class="pl-kos">}</span><span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+<span class="pl-kos">(</span><span class="pl-s1">header</span> <span class="pl-c1">=</span> <span class="pl-s">""</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+<span class="pl-kos">(</span><span class="pl-s1">parent</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-c1">body</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+<span class="pl-kos">(</span><span class="pl-s1">isAbsolute</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 <p dir="auto">Show a context menu:</p>
 <p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/ctxMenu.png"><img src="./images/ctxMenu.png" alt="Context menu" style="max-width: 100%;"></a></p>
 <details>
@@ -1341,7 +1339,7 @@
 <li><code class="notranslate">getLabel(extension)</code> - Ditto function, it does exactly the same thing</li>
 </ul>
 <h3 dir="auto">Notify</h3>
-<p dir="auto"><code class="notranslate">show(title, description, parent = null, buttons = null, autoHide = null, sound = null)</code> - Show a notification:</p>
+<p dir="auto"><code class="notranslate">show(title, description, parent = null, buttons = null, autoHide = null, sound = null, soundLoops = false, closeCallback = null)</code> - Show a notification:</p>
 <p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/notify.png"><img src="./images/notify.png" alt="Notify image" style="max-width: 100%;"></a></p>
 <div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">Notify</span><span class="pl-kos">.</span><span class="pl-en">show</span><span class="pl-kos">(</span><span class="pl-s">"Title"</span><span class="pl-kos">,</span> <span class="pl-s">"Description"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 <p dir="auto">Notifications can also use buttons:</p>
@@ -1375,6 +1373,7 @@
     <span class="pl-en">callback</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span> ... <span class="pl-kos">}</span><span class="pl-kos">,</span>
   <span class="pl-kos">}</span><span class="pl-kos">,</span>
 <span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-c1">false</span><span class="pl-kos">,</span> <span class="pl-s">"https://example.com/ringtone.mp3"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p dir="auto"><code class="notranslate">closeCallback</code> is a function that returns a single parameter which is the hide function to cloes the notification.</p>
 <h3 dir="auto">ThemeLib</h3>
 <ul dir="auto">
 <li><code class="notranslate">validateTheme(theme)</code>: Parse a theme JSON.</li>
@@ -1391,6 +1390,7 @@
 <p dir="auto">Here is the list of available components:</p>
 <p dir="auto"><a href="#card">Card</a><br>
 <a href="#imagebutton">ImageButton</a><br>
+<a href="#menubar">MenuBar</a><br>
 <a href="#selectlist">SelectList</a><br>
 <a href="#sidebar">Sidebar</a><br>
 <a href="#textsidebar">TextSidebar</a><br>
@@ -1402,6 +1402,88 @@
 <div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">Card</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">container</span><span class="pl-kos">,</span> <span class="pl-k">new</span> <span class="pl-v">Html</span><span class="pl-kos">(</span><span class="pl-s">"div"</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">class</span><span class="pl-kos">(</span><span class="pl-s">"flex-group"</span><span class="pl-kos">,</span> <span class="pl-s">"col"</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">text</span><span class="pl-kos">(</span><span class="pl-s">"Hello!"</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 <h3 dir="auto">ImageButton</h3>
 <p dir="auto"><code class="notranslate">new(wrapper, imageUri)</code> create image button (unused)</p>
+<h3 dir="auto">MenuBar</h3>
+<p dir="auto">Create a horizontal menu bar, useful if you have a bunch of actions.</p>
+<details>
+<summary>View code</summary>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">MenuBar</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">wrapper</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">item</span>: <span class="pl-s">"File"</span><span class="pl-kos">,</span>
+    <span class="pl-c1">items</span>: <span class="pl-kos">[</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-s">"New"</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"New"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-s">"Open..."</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Open..."</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-s">"Save"</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Save"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-s">"Save As..."</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Save As"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">]</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">item</span>: <span class="pl-s">"Edit"</span><span class="pl-kos">,</span>
+    <span class="pl-c1">items</span>: <span class="pl-kos">[</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-s">"Cut"</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Cut"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-s">"Copy"</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Copy"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-s">"Paste"</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Paste"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">]</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">item</span>: <span class="pl-s">"View"</span><span class="pl-kos">,</span>
+    <span class="pl-c1">items</span>: <span class="pl-kos">[</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-s">"Zoom In"</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Zoom In"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-s">"Zoom Out"</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Zoom Out"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-s">"Reset Zoom"</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Reset Zoom"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">]</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+</details>
 <h3 dir="auto">SelectList</h3>
 <p dir="auto"><code class="notranslate">buttonList: (wrapper, buttons)</code></p>
 <p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/selectList_row.png"><img src="./images/selectList_row.png" alt="Select buttons" style="max-width: 100%;"></a></p>
