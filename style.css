@@ -958,6 +958,19 @@ td {
   flex-shrink: 0;
 }
 
+.menu-bar {
+  display: flex;
+  width: 100%;
+  gap: 0;
+  flex-wrap: wrap;
+  background-color: var(--unfocused);
+}
+.menu-bar button {
+  margin: 0;
+  border-radius: 0;
+  padding: 6px 16px;
+}
+
 [data-sidebar-type="horizontal"] .sidebar,
 [data-sidebar-type="horizontal"] .text-sidebar {
   flex-direction: row;
