@@ -15,7 +15,9 @@ export default {
       p = null,
       buttons,
       autoDismiss = null,
-      sound = null
+      sound = null,
+      soundLoops = false,
+      closeCallback = null
     ) {
       if (document.querySelector("body>.notify-box") == null) {
         new L.html("div").class("notify-box").appendTo("body");
@@ -39,6 +41,9 @@ export default {
 
       let a = new Audio(sound);
       a.volume = 0.5;
+      if (soundLoops) {
+        a.loop = true;
+      }
       setTimeout(() => {
         a.play();
       }, 100);
@@ -51,10 +56,16 @@ export default {
         );
 
       function hide() {
+        a.pause();
         notify.classOff("slideIn").classOn("slideOut");
         setTimeout(() => {
+          a.remove();
           notify.cleanup();
         }, 500);
+      }
+
+      if (closeCallback !== null && typeof closeCallback === "function") {
+        closeCallback(hide);
       }
 
       // buttons
@@ -67,11 +78,8 @@ export default {
             throw new Error("Invalid button configuration");
 
           const b = new L.html("button").text(button.text).on("click", (e) => {
-            a.pause();
             hide();
             setTimeout(() => {
-              notify.cleanup();
-              a.remove();
               button.callback(e);
             }, 500);
           });
