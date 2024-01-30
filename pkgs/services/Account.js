@@ -4,7 +4,7 @@ export default {
   ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
-     async function login(u, p) {
+    async function login(u, p) {
       return await fetch("https://zeon.dev/api/public/login", {
         method: "POST",
         headers: {
@@ -60,16 +60,54 @@ export default {
       if (sessionStorage.getItem("userData") !== null) {
         try {
           const data = JSON.parse(sessionStorage.getItem("userData"));
-          if (data.user && data.pfp && data.id && data.email) {
-            currentUserData.username = data.user;
-            currentUserData.pfp = data.pfp.replace("/", "https://zeon.dev/");
-            currentUserData.id = data.id;
-            currentUserData.email = data.email;
-            currentUserData.onlineAccount = true;
-          }
-        } catch (e) {}
+          if (data.token === undefined)
+            return Object.assign(currentUserData, stockUserData);
+          fetch("https://zeon.dev/api/public/validate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              // Add any additional headers needed for authentication or other purposes
+            },
+            body: JSON.stringify({
+              // Add your request data in the appropriate format
+              username: data.user,
+              token: data.token,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              if (data.status !== 200) {
+                sessionStorage.removeItem("userData");
+                return Object.assign(currentUserData, stockUserData);
+              }
+            })
+            .catch((error) => {
+              // Handle any errors that occur during the request
+              console.error("the error occurred", error);
+              sessionStorage.removeItem("userData");
+              return Object.assign(currentUserData, stockUserData);
+            })
+            .then(() => {
+              if (data.user && data.pfp && data.id && data.email) {
+                currentUserData.username = data.user;
+                currentUserData.pfp = data.pfp.replace(
+                  "/",
+                  "https://zeon.dev/"
+                );
+                currentUserData.id = data.id;
+                currentUserData.email = data.email;
+                currentUserData.onlineAccount = true;
+                return currentUserData;
+              }
+            });
+        } catch (e) {
+          sessionStorage.removeItem("userData");
+          return Object.assign(currentUserData, stockUserData);
+        }
       } else {
-        Object.assign(currentUserData, stockUserData);
+        sessionStorage.removeItem("userData");
+        return Object.assign(currentUserData, stockUserData);
       }
     }
 
