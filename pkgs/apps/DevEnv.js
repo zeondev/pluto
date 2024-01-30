@@ -631,6 +631,7 @@ export default {
           item: "File",
           items: [
             {
+              icon: Root.Lib.icons.newFile,
               item: Root.Lib.getString("action_newDocument"),
               key: "Alt + N",
               select() {
@@ -638,6 +639,7 @@ export default {
               },
             },
             {
+              icon: Root.Lib.icons.openFolder,
               item: Root.Lib.getString("action_openDocument"),
               key: "Ctrl + O",
               select() {
@@ -645,6 +647,7 @@ export default {
               },
             },
             {
+              icon: Root.Lib.icons.save,
               item: Root.Lib.getString("action_save"),
               key: "Ctrl + S",
               select() {
@@ -653,6 +656,7 @@ export default {
             },
             { type: "separator" },
             {
+              icon: Root.Lib.icons.run,
               item: Root.Lib.getString("action_runApp"),
               key: "CTRL + Enter",
               select() {
@@ -665,6 +669,7 @@ export default {
           item: "Edit",
           items: [
             {
+              icon: Root.Lib.icons.sparkles,
               item: Root.Lib.getString("action_format"),
               key: "Ctrl + Shift + S",
               select() {
@@ -672,6 +677,7 @@ export default {
               },
             },
             {
+              icon: Root.Lib.icons.wrench,
               item: Root.Lib.getString("systemApp_Settings"),
               key: "Ctrl + .",
               select() {
@@ -684,6 +690,7 @@ export default {
           item: "View",
           items: [
             {
+              icon: Root.Lib.icons.zoomIn,
               item: Root.Lib.getString("action_zoomIn"),
               key: "Ctrl + -",
               select() {
@@ -691,6 +698,7 @@ export default {
               },
             },
             {
+              icon: Root.Lib.icons.zoomOut,
               item: Root.Lib.getString("action_zoomOut"),
               key: "Ctrl + =",
               select() {
@@ -703,12 +711,14 @@ export default {
           item: "Help",
           items: [
             {
+              icon: Root.Lib.icons.book,
               item: Root.Lib.getString("appDocumentation"),
               select() {
                 actionHandlers.viewDocs();
               },
             },
             {
+              icon: Root.Lib.icons.help,
               item: Root.Lib.getString("appHelp"),
               select() {
                 actionHandlers.help();

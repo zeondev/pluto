@@ -34,7 +34,7 @@ export default {
                   bcr.left,
                   bcr.bottom,
                   b.items.map((item) => {
-                    const text = `<span>${lib.escapeHtml(item.item)}</span>`;
+                    let text = `<span>${lib.escapeHtml(item.item)}</span>`;
                     if (item.icon) {
                       text = `${item.icon}<span>${lib.escapeHtml(
                         item.item
@@ -56,7 +56,7 @@ export default {
                         select: item.select,
                       };
                     } else {
-                      return item;
+                      return { item: text, select: item.select };
                     }
                   }),
                   null,

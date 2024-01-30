@@ -567,6 +567,8 @@ The Account service has the following methods:
 
 ## Using libraries/components in your apps
 
+[**Read more on the updated components and libraries documentation here.**](libs-and-components.md)
+
 Libraries and components add extra functionality into your apps and make an easy, reusable way to do a certain thing.
 
 For example, the VirtualFS library can be used to read the file system:
@@ -582,7 +584,6 @@ const fileContent = await vfs.readFile("Root/myFile.txt");
 
 More documentation on VirtualFS [can be found here](virtualFS.md).
 
-[**Read more on the updated components and libraries documentation here.**](libs-and-components.md)
 
 ## Recent breaking changes to apps
 

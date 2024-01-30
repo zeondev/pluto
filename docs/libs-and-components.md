@@ -14,6 +14,7 @@
   - [Components](#components)
     - [Card](#card)
     - [ImageButton](#imagebutton)
+    - [MenuBar](#menubar)
     - [SelectList](#selectlist)
     - [Sidebar](#sidebar)
     - [TextSidebar](#textsidebar)
@@ -42,7 +43,7 @@ Here is the list of available libraries:
 [VirtualFS](virtualFS.md)  
 [WindowSystem](README.md#example-app-code)
 
-Below is some vague documentation that should be easy enough to understand. Images are provided to understand what the library creates or does.
+Below is some simple documentation that should be easy enough to understand. Images are provided to understand what the library creates or does.
 
 ---
 
@@ -58,13 +59,18 @@ These function are undocumented for now.
 ### CtxMenu
 
 ```js
-new (posX,
-posY,
-(items = [{ item: "Nothing", select: () => null }]),
-(header = ""),
-(parent = document.body),
-(isAbsolute = true))();
+new (
+  posX,
+  posY,
+  items = [ { item: "Nothing", select: () => null } ],
+  header = "",
+  parent = document.body,
+  isAbsolute = true,
+  isHtml = false
+)
 ```
+
+isHtml can be configured so the items are HTML. See how it is used in the MenuBar component code for examples.
 
 Show a context menu:
 
@@ -184,7 +190,7 @@ Here is the list of available components:
 
 [Card](#card)  
 [ImageButton](#imagebutton)  
-[MenuBar](#menubar)
+[MenuBar](#menubar)   
 [SelectList](#selectlist)  
 [Sidebar](#sidebar)  
 [TextSidebar](#textsidebar)  
@@ -209,9 +215,113 @@ Card.new(container, new Html("div").class("flex-group", "col").text("Hello!"));
 
 Create a horizontal menu bar, useful if you have a bunch of actions.
 
+![MenuBar](./images/menuBar.png)
+
 <details>
 
 <summary>View code</summary>
+
+You can also add the `icon` parameter here along with an icon from Root.Lib.icons into any of the menu items.
+
+```js
+MenuBar.new(sidebarWrapper, [
+  {
+    item: "File",
+    items: [
+      {
+        item: Root.Lib.getString("action_newDocument"),
+        key: "Alt + N",
+        select() {
+          actionHandlers.newDocument();
+        },
+      },
+      {
+        item: Root.Lib.getString("action_openDocument"),
+        key: "Ctrl + O",
+        select() {
+          actionHandlers.openFile();
+        },
+      },
+      {
+        item: Root.Lib.getString("action_save"),
+        key: "Ctrl + S",
+        select() {
+          actionHandlers.save();
+        },
+      },
+      { type: "separator" },
+      {
+        item: Root.Lib.getString("action_runApp"),
+        key: "CTRL + Enter",
+        select() {
+          actionHandlers.run();
+        },
+      },
+    ],
+  },
+  {
+    item: "Edit",
+    items: [
+      {
+        item: Root.Lib.getString("action_format"),
+        key: "Ctrl + Shift + S",
+        select() {
+          actionHandlers.prettify();
+        },
+      },
+      {
+        item: Root.Lib.getString("systemApp_Settings"),
+        key: "Ctrl + .",
+        select() {
+          actionHandlers.settings();
+        },
+      },
+    ],
+  },
+  {
+    item: "View",
+    items: [
+      {
+        item: Root.Lib.getString("action_zoomIn"),
+        key: "Ctrl + -",
+        select() {
+          actionHandlers.zoomIn();
+        },
+      },
+      {
+        item: Root.Lib.getString("action_zoomOut"),
+        key: "Ctrl + =",
+        select() {
+          actionHandlers.zoomOut();
+        },
+      },
+    ],
+  },
+  {
+    item: "Help",
+    items: [
+      {
+        item: Root.Lib.getString("appDocumentation"),
+        select() {
+          actionHandlers.viewDocs();
+        },
+      },
+      {
+        item: Root.Lib.getString("appHelp"),
+        select() {
+          actionHandlers.help();
+        },
+      },
+    ],
+  },
+]);
+```
+
+</details>
+
+<details>
+
+<summary>A more simple example</summary>
 
 ```js
 MenuBar.new(wrapper, [

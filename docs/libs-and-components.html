@@ -1266,6 +1266,7 @@
 <ul dir="auto">
 <li><a href="#card">Card</a></li>
 <li><a href="#imagebutton">ImageButton</a></li>
+<li><a href="#menubar">MenuBar</a></li>
 <li><a href="#selectlist">SelectList</a></li>
 <li><a href="#sidebar">Sidebar</a></li>
 <li><a href="#textsidebar">TextSidebar</a></li>
@@ -1289,7 +1290,7 @@
 <a href="#themelib">ThemeLib</a><br>
 <a href="virtualFS.html">VirtualFS</a><br>
 <a href="README.md#example-app-code">WindowSystem</a></p>
-<p dir="auto">Below is some vague documentation that should be easy enough to understand. Images are provided to understand what the library creates or does.</p>
+<p dir="auto">Below is some simple documentation that should be easy enough to understand. Images are provided to understand what the library creates or does.</p>
 <hr>
 <h3 dir="auto">CodeScanner</h3>
 <p dir="auto">These function are undocumented for now.</p>
@@ -1300,12 +1301,16 @@
 <li><code class="notranslate">async scanForDangerousCode()</code></li>
 </ul>
 <h3 dir="auto">CtxMenu</h3>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">new</span> <span class="pl-kos">(</span><span class="pl-s1">posX</span><span class="pl-kos">,</span>
-<span class="pl-s1">posY</span><span class="pl-kos">,</span>
-<span class="pl-kos">(</span><span class="pl-s1">items</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-kos">{</span> <span class="pl-c1">item</span>: <span class="pl-s">"Nothing"</span><span class="pl-kos">,</span> <span class="pl-en">select</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-c1">null</span> <span class="pl-kos">}</span><span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
-<span class="pl-kos">(</span><span class="pl-s1">header</span> <span class="pl-c1">=</span> <span class="pl-s">""</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
-<span class="pl-kos">(</span><span class="pl-s1">parent</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-c1">body</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
-<span class="pl-kos">(</span><span class="pl-s1">isAbsolute</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">new</span> <span class="pl-kos">(</span>
+  <span class="pl-s1">posX</span><span class="pl-kos">,</span>
+  <span class="pl-s1">posY</span><span class="pl-kos">,</span>
+  <span class="pl-s1">items</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span> <span class="pl-kos">{</span> <span class="pl-c1">item</span>: <span class="pl-s">"Nothing"</span><span class="pl-kos">,</span> <span class="pl-en">select</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-c1">null</span> <span class="pl-kos">}</span> <span class="pl-kos">]</span><span class="pl-kos">,</span>
+  <span class="pl-s1">header</span> <span class="pl-c1">=</span> <span class="pl-s">""</span><span class="pl-kos">,</span>
+  <span class="pl-s1">parent</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-c1">body</span><span class="pl-kos">,</span>
+  <span class="pl-s1">isAbsolute</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">,</span>
+  <span class="pl-s1">isHtml</span> <span class="pl-c1">=</span> <span class="pl-c1">false</span>
+<span class="pl-kos">)</span></pre></div>
+<p dir="auto">isHtml can be configured so the items are HTML. See how it is used in the MenuBar component code for examples.</p>
 <p dir="auto">Show a context menu:</p>
 <p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/ctxMenu.png"><img src="./images/ctxMenu.png" alt="Context menu" style="max-width: 100%;"></a></p>
 <details>
@@ -1404,8 +1409,104 @@
 <p dir="auto"><code class="notranslate">new(wrapper, imageUri)</code> create image button (unused)</p>
 <h3 dir="auto">MenuBar</h3>
 <p dir="auto">Create a horizontal menu bar, useful if you have a bunch of actions.</p>
+<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/menuBar.png"><img src="./images/menuBar.png" alt="MenuBar" style="max-width: 100%;"></a></p>
 <details>
 <summary>View code</summary>
+<p dir="auto">You can also add the <code class="notranslate">icon</code> parameter here along with an icon from Root.Lib.icons into any of the menu items.</p>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">MenuBar</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">sidebarWrapper</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">item</span>: <span class="pl-s">"File"</span><span class="pl-kos">,</span>
+    <span class="pl-c1">items</span>: <span class="pl-kos">[</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"action_newDocument"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-c1">key</span>: <span class="pl-s">"Alt + N"</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-s1">actionHandlers</span><span class="pl-kos">.</span><span class="pl-en">newDocument</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"action_openDocument"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-c1">key</span>: <span class="pl-s">"Ctrl + O"</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-s1">actionHandlers</span><span class="pl-kos">.</span><span class="pl-en">openFile</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"action_save"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-c1">key</span>: <span class="pl-s">"Ctrl + S"</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-s1">actionHandlers</span><span class="pl-kos">.</span><span class="pl-en">save</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span> <span class="pl-c1">type</span>: <span class="pl-s">"separator"</span> <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"action_runApp"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-c1">key</span>: <span class="pl-s">"CTRL + Enter"</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-s1">actionHandlers</span><span class="pl-kos">.</span><span class="pl-en">run</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">]</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">item</span>: <span class="pl-s">"Edit"</span><span class="pl-kos">,</span>
+    <span class="pl-c1">items</span>: <span class="pl-kos">[</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"action_format"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-c1">key</span>: <span class="pl-s">"Ctrl + Shift + S"</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-s1">actionHandlers</span><span class="pl-kos">.</span><span class="pl-en">prettify</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"systemApp_Settings"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-c1">key</span>: <span class="pl-s">"Ctrl + ."</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-s1">actionHandlers</span><span class="pl-kos">.</span><span class="pl-en">settings</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">]</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">item</span>: <span class="pl-s">"View"</span><span class="pl-kos">,</span>
+    <span class="pl-c1">items</span>: <span class="pl-kos">[</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"action_zoomIn"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-c1">key</span>: <span class="pl-s">"Ctrl + -"</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-s1">actionHandlers</span><span class="pl-kos">.</span><span class="pl-en">zoomIn</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"action_zoomOut"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-c1">key</span>: <span class="pl-s">"Ctrl + ="</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-s1">actionHandlers</span><span class="pl-kos">.</span><span class="pl-en">zoomOut</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">]</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+  <span class="pl-kos">{</span>
+    <span class="pl-c1">item</span>: <span class="pl-s">"Help"</span><span class="pl-kos">,</span>
+    <span class="pl-c1">items</span>: <span class="pl-kos">[</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"appDocumentation"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-s1">actionHandlers</span><span class="pl-kos">.</span><span class="pl-en">viewDocs</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">{</span>
+        <span class="pl-c1">item</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"appHelp"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+        <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-s1">actionHandlers</span><span class="pl-kos">.</span><span class="pl-en">help</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span><span class="pl-kos">,</span>
+      <span class="pl-kos">}</span><span class="pl-kos">,</span>
+    <span class="pl-kos">]</span><span class="pl-kos">,</span>
+  <span class="pl-kos">}</span><span class="pl-kos">,</span>
+<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+</details>
+<details>
+<summary>A more simple example</summary>
 <div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">MenuBar</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">wrapper</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
   <span class="pl-kos">{</span>
     <span class="pl-c1">item</span>: <span class="pl-s">"File"</span><span class="pl-kos">,</span>

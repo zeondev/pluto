@@ -2,11 +2,23 @@
 
 [Back to README.md](README.md)
 
+- [CSS Classes](#css-classes)
+  - [Layout](#layout)
+  - [Spacing](#spacing)
+  - [Layout](#layout-1)
+    - [General](#general)
+    - [Flexbox](#flexbox)
+    - [Flexbox Spacing](#flexbox-spacing)
+  - [Display](#display)
+  - [Animation](#animation)
+  - [Color](#color)
+
 There are many CSS classes that are available in Pluto. Until all of them are documented, here are a lot of the utility ones that are commonly used:
 
-## Other
+## Layout
 
 - `with-sidebar` - Applied to a window's wrapper if you want to use a sidebar. Removes padding so that the sidebar is flush with the window edges.
+- `iframe` - Applied to a window wrapper. Bypasses any sidebar position settings. Should be used if you are using in combination with a MenuBar instead of a Sidebar.
 
 ## Spacing
 
