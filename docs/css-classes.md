@@ -67,22 +67,17 @@ There are many CSS classes that are available in Pluto. Until all of them are do
 - `card` - Applies some basic styling to make it look like a card.
 - `card-box` - Make the element look like a container that holds cards.
 - `alert` - Displays a warning alert
-
 - `display-heading` - Very large heading. Useful for fullscreen windows.
 - `display-subheading` - Large heading, used in fullscreen windows
 - `display-padding` - Adds padding relative to viewport.
-
 - `no-ui` - Apply monospace font and some terminal-like styles.
-
 - `h1` - Make it look like a top-level heading.
 - `h2` - Make it look like a second-level heading.
 - `h3` - Make it look like a third-level heading.
-
 - `label` - Make it appear like a label.
 - `label-light` - Make it appear like a brighter-colored label.
 - `small-label` - Another small label.
-- `superscript` - Uses align-self: start
-
+- `superscript` - Uses align-self: start.
 - `spacer` - Used to create a label with a line that stretches to the end:
 
 ```html
