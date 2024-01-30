@@ -539,7 +539,7 @@ export default {
             new Html("div")
               .class("app-whats-new")
               .appendMany(
-                new Html("h2").text("What‘s new"),
+                new Html("h2").text("What’s new"),
                 new Html("span")
                   .class("label")
                   .text(`Version ${app.versions[0].ver}`),
