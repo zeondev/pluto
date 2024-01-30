@@ -12,7 +12,8 @@ export default {
       items = [{ item: "Nothing", select: () => null }],
       header = null,
       parent = document.body,
-      isAbsolute = true
+      isAbsolute = true,
+      isHtml = false
     ) {
       const headerItem = new Html("div").class("header").text(header);
 
@@ -20,13 +21,20 @@ export default {
       const itemsMapped = items
         .filter((i) => i !== null)
         .map((i) => {
-          return new Html("div")
-            .class("item")
-            .text(i.item)
+          if (typeof i.selectable !== undefined) {
+            if (i.selectable === false) {
+              return new Html("div").html(i.item).class("row", "ac");
+            }
+          }
+          const h = new Html("div")
+            .class("item", "row", "ac", "gap")
             .on("click", (_) => {
               ctxMenu.cleanup();
               i.select();
             });
+          if (isHtml === true) h.html(i.item);
+          else h.text(i.item);
+          return h;
         });
 
       let itemList = [];

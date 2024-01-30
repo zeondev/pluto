@@ -173,6 +173,8 @@ export default {
         );
       } else {
         await DvSaveSettings();
+        // first-time help
+        actionHandlers.help();
       }
 
       if (DvSettings["wordWrap"] !== undefined) {
@@ -553,7 +555,7 @@ export default {
 
     wrapper = DvWindow.window.querySelector(".win-content");
     wrapper.innerHTML = "";
-    wrapper.classList.add("row", "o-h", "h-100", "with-sidebar");
+    wrapper.classList.add("col", "o-h", "h-100", "iframe");
 
     let currentDocument = {
       path: "",
@@ -619,64 +621,158 @@ export default {
       .styleJs({ display: "flex" })
       .appendTo(wrapper);
 
+    const MenuBar = await Root.Lib.loadComponent("MenuBar");
+
     function makeSidebar() {
       sidebarWrapper.clear();
-      Sidebar.new(sidebarWrapper, [
+      console.log(MenuBar);
+      MenuBar.new(sidebarWrapper, [
         {
-          onclick: actionHandlers.newDocument,
-          html: Root.Lib.icons.newFile,
-          title: Root.Lib.getString("action_newDocument"),
+          item: "File",
+          items: [
+            {
+              item: Root.Lib.getString("action_newDocument"),
+              key: "Alt + N",
+              select() {
+                actionHandlers.newDocument();
+              },
+            },
+            {
+              item: Root.Lib.getString("action_openDocument"),
+              key: "Ctrl + O",
+              select() {
+                actionHandlers.openFile();
+              },
+            },
+            {
+              item: Root.Lib.getString("action_save"),
+              key: "Ctrl + S",
+              select() {
+                actionHandlers.save();
+              },
+            },
+            { type: "separator" },
+            {
+              item: Root.Lib.getString("action_runApp"),
+              key: "CTRL + Enter",
+              select() {
+                actionHandlers.run();
+              },
+            },
+          ],
         },
         {
-          onclick: actionHandlers.openFile,
-          html: Root.Lib.icons.openFolder,
-          title: Root.Lib.getString("action_openDocument"),
+          item: "Edit",
+          items: [
+            {
+              item: Root.Lib.getString("action_format"),
+              key: "Ctrl + Shift + S",
+              select() {
+                actionHandlers.prettify();
+              },
+            },
+            {
+              item: Root.Lib.getString("systemApp_Settings"),
+              key: "Ctrl + .",
+              select() {
+                actionHandlers.settings();
+              },
+            },
+          ],
         },
         {
-          onclick: actionHandlers.save,
-          html: Root.Lib.icons.save,
-          title: Root.Lib.getString("action_save"),
+          item: "View",
+          items: [
+            {
+              item: Root.Lib.getString("action_zoomIn"),
+              key: "Ctrl + -",
+              select() {
+                actionHandlers.zoomIn();
+              },
+            },
+            {
+              item: Root.Lib.getString("action_zoomOut"),
+              key: "Ctrl + =",
+              select() {
+                actionHandlers.zoomOut();
+              },
+            },
+          ],
         },
         {
-          onclick: actionHandlers.zoomIn,
-          html: Root.Lib.icons.zoomIn,
-          title: Root.Lib.getString("action_zoomIn"),
-        },
-        {
-          onclick: actionHandlers.zoomOut,
-          html: Root.Lib.icons.zoomOut,
-          title: Root.Lib.getString("action_zoomOut"),
-        },
-        {
-          onclick: actionHandlers.prettify,
-          html: Root.Lib.icons.sparkles,
-          title: Root.Lib.getString("action_format"),
-        },
-        {
-          onclick: actionHandlers.help,
-          html: Root.Lib.icons.help,
-          title: Root.Lib.getString("appHelp"),
-        },
-        {
-          onclick: actionHandlers.viewDocs,
-          html: Root.Lib.icons.book,
-          title: Root.Lib.getString("appDocumentation"),
-        },
-        {
-          onclick: actionHandlers.settings,
-          html: Root.Lib.icons.wrench,
-          title: Root.Lib.getString("systemApp_Settings"),
-        },
-        {
-          style: {
-            "margin-top": "auto",
-            "margin-left": "auto",
-          },
-          onclick: actionHandlers.run,
-          html: Root.Lib.icons.run,
-          title: Root.Lib.getString("action_runApp"),
+          item: "Help",
+          items: [
+            {
+              item: Root.Lib.getString("appDocumentation"),
+              select() {
+                actionHandlers.viewDocs();
+              },
+            },
+            {
+              item: Root.Lib.getString("appHelp"),
+              select() {
+                actionHandlers.help();
+              },
+            },
+          ],
         },
       ]);
+      // Sidebar.new(sidebarWrapper, [
+      //   {
+      //     onclick: actionHandlers.newDocument,
+      //     html: Root.Lib.icons.newFile,
+      //     title: Root.Lib.getString("action_newDocument"),
+      //   },
+      //   {
+      //     onclick: actionHandlers.openFile,
+      //     html: Root.Lib.icons.openFolder,
+      //     title: Root.Lib.getString("action_openDocument"),
+      //   },
+      //   {
+      //     onclick: actionHandlers.save,
+      //     html: Root.Lib.icons.save,
+      //     title: Root.Lib.getString("action_save"),
+      //   },
+      //   {
+      //     onclick: actionHandlers.zoomIn,
+      //     html: Root.Lib.icons.zoomIn,
+      //     title: Root.Lib.getString("action_zoomIn"),
+      //   },
+      //   {
+      //     onclick: actionHandlers.zoomOut,
+      //     html: Root.Lib.icons.zoomOut,
+      //     title: Root.Lib.getString("action_zoomOut"),
+      //   },
+      //   {
+      //     onclick: actionHandlers.prettify,
+      //     html: Root.Lib.icons.sparkles,
+      //     title: Root.Lib.getString("action_format"),
+      //   },
+      //   {
+      //     onclick: actionHandlers.help,
+      //     html: Root.Lib.icons.help,
+      //     title: Root.Lib.getString("appHelp"),
+      //   },
+      //   {
+      //     onclick: actionHandlers.viewDocs,
+      //     html: Root.Lib.icons.book,
+      //     title: Root.Lib.getString("appDocumentation"),
+      //   },
+      //   {
+      //     onclick: actionHandlers.settings,
+      //     html: Root.Lib.icons.wrench,
+      //     title: Root.Lib.getString("systemApp_Settings"),
+      //   },
+      //   {
+      //     style: {
+      //       "margin-top": "auto",
+      //       "margin-left": "auto",
+      //     },
+      //     onclick: actionHandlers.run,
+      //     html: Root.Lib.icons.run,
+      //     title: Root.Lib.getString("action_runApp"),
+      //   },
+      // ]);
     }
     makeSidebar();
 

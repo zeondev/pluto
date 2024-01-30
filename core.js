@@ -9,6 +9,7 @@
     const knownLibraries = [];
     const GlobalLib = {
       getString,
+      escapeHtml: escapeHtml,
       html: class Html {
         /** The HTML element referenced in this instance. Change using `.swapRef()`, or remove using `.cleanup()`. */
         elm;
@@ -439,6 +440,7 @@
         var Pid = pid;
         var Token = token;
 
+        this.escapeHtml = escapeHtml;
         this.getString = function (str, replacements = null) {
           return getString(str, replacements, strs);
         };

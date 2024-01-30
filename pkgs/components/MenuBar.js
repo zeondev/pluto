@@ -1,6 +1,4 @@
-let lib;
-let html;
-
+let lib, Html;
 import CtxMenu from "../lib/CtxMenu.js";
 
 export default {
@@ -10,15 +8,15 @@ export default {
   type: "component",
   init: function (l) {
     lib = l;
-    html = l.html;
+    Html = l.html;
   },
   data: {
     new: (wrapper, buttons) => {
-      const sideBar = new html("div").class("row", "menu-bar");
+      const sideBar = new Html("div").class("row", "menu-bar");
 
       let popup;
       buttons.forEach((b) => {
-        let button = new html("button")
+        let button = new Html("button")
           .class("transparent")
           .text(b.item)
           .on("mousedown", () => {
@@ -32,7 +30,43 @@ export default {
             } else {
               const bcr = button.elm.getBoundingClientRect();
               popup = CtxMenu.data
-                .new(bcr.left, bcr.bottom, b.items, null, document.body, true)
+                .new(
+                  bcr.left,
+                  bcr.bottom,
+                  b.items.map((item) => {
+                    const text = `<span>${lib.escapeHtml(item.item)}</span>`;
+                    if (item.icon) {
+                      text = `${item.icon}<span>${lib.escapeHtml(
+                        item.item
+                      )}</span>`;
+                    }
+                    if (item.type !== undefined) {
+                      if (item.type === "separator") {
+                        return {
+                          item: "<hr>",
+                          selectable: false,
+                        };
+                      } else return item;
+                    }
+                    if (item.key !== undefined) {
+                      return {
+                        item:
+                          text +
+                          `<span class="ml-auto label">${item.key}</span>`,
+                        select: item.select,
+                      };
+                    } else {
+                      return item;
+                    }
+                  }),
+                  null,
+                  document.body,
+                  true,
+                  true
+                )
+                .styleJs({
+                  minWidth: "150px",
+                })
                 .appendTo("body");
             }
           })
@@ -41,6 +75,8 @@ export default {
       });
 
       sideBar.appendTo(wrapper);
+
+      return sideBar;
     },
   },
 };
