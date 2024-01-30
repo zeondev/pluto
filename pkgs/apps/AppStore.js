@@ -539,15 +539,21 @@ export default {
             new Html("div")
               .class("app-whats-new")
               .appendMany(
-                new Html("h2").text("What's new"),
+                new Html("h2").text("What‘s new"),
                 new Html("span")
                   .class("label")
                   .text(`Version ${app.versions[0].ver}`),
-                new Html("p").class("pre-wrap").text(app.latestVersionInfo)
+                new Html("p")
+                  .class("pre-wrap")
+                  .text(
+                    app.latestVersionInfo === ""
+                      ? "(none)"
+                      : app.latestVersionInfo
+                  )
               )
               .appendTo(container);
 
-            new Html("h2").text("More info about this app").appendTo(container);
+            new Html("h2").text("More info").appendTo(container);
 
             new Html("div")
               .class("app-sub-details")
