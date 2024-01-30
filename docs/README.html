@@ -1290,7 +1290,8 @@
 <p dir="auto">There are some other docs in this folder that may be useful.</p>
 <p dir="auto"><a href="virtualFS.html">VirtualFS Documentation</a><br>
 <a href="libs-and-components.html">Libraries and Components</a><br>
-<a href="localization.html">Localization</a></p>
+<a href="localization.html">Localization</a><br>
+<a href="css-classes.html">CSS Classes</a></p>
 <h2 dir="auto">How to initialize an application</h2>
 <h3 dir="auto">Export properties</h3>
 <p dir="auto">In every application you must define the following properties in your export:</p>
@@ -1495,30 +1496,30 @@ As an app developer you need to adapt your application to every limitation becau
   <span class="pl-c1">optInToEvents</span>: <span class="pl-c1">true</span><span class="pl-kos">,</span> <span class="pl-c">// &lt;-- Opt in to events</span>
   <span class="pl-c1">privileges</span>: <span class="pl-kos">[</span>
     <span class="pl-kos">{</span>
-      <span class="pl-c1">privilege</span>: <span class="pl-s">'full'</span><span class="pl-kos">,</span>
-      <span class="pl-c1">description</span>: <span class="pl-s">'Allow Spacedesktop to manage your desktop.'</span>
-    <span class="pl-kos">}</span>
+      <span class="pl-c1">privilege</span>: <span class="pl-s">"full"</span><span class="pl-kos">,</span>
+      <span class="pl-c1">description</span>: <span class="pl-s">"Allow Spacedesktop to manage your desktop."</span><span class="pl-kos">,</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
   <span class="pl-kos">]</span><span class="pl-kos">,</span>
   <span class="pl-en">exec</span>: <span class="pl-k">async</span> <span class="pl-k">function</span> <span class="pl-kos">(</span><span class="pl-v">Root</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
     <span class="pl-c">// ...</span>
 
     <span class="pl-k">return</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">setupReturns</span><span class="pl-kos">(</span><span class="pl-kos">(</span><span class="pl-s1">m</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
-      <span class="pl-k">const</span> <span class="pl-kos">{</span>type<span class="pl-kos">,</span> data<span class="pl-kos">}</span> <span class="pl-c1">=</span> <span class="pl-s1">m</span><span class="pl-kos">;</span>
-      
+      <span class="pl-k">const</span> <span class="pl-kos">{</span> type<span class="pl-kos">,</span> data <span class="pl-kos">}</span> <span class="pl-c1">=</span> <span class="pl-s1">m</span><span class="pl-kos">;</span>
+
       <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s1">type</span><span class="pl-kos">,</span> <span class="pl-s1">data</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
-      
+
       <span class="pl-c">// here!</span>
       <span class="pl-k">switch</span> <span class="pl-kos">(</span><span class="pl-s1">type</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
-        <span class="pl-k">case</span> <span class="pl-s">'coreEvent'</span>:
-          <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">data</span><span class="pl-kos">.</span><span class="pl-c1">type</span> <span class="pl-c1">===</span> <span class="pl-s">'pkgStart'</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-k">case</span> <span class="pl-s">"coreEvent"</span>:
+          <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">data</span><span class="pl-kos">.</span><span class="pl-c1">type</span> <span class="pl-c1">===</span> <span class="pl-s">"pkgStart"</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
             <span class="pl-k">const</span> <span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s1">data</span><span class="pl-kos">.</span><span class="pl-c1">data</span><span class="pl-kos">.</span><span class="pl-c1">proc</span><span class="pl-kos">.</span><span class="pl-c1">name</span><span class="pl-kos">;</span>
             <span class="pl-k">const</span> <span class="pl-s1">pid</span> <span class="pl-c1">=</span> <span class="pl-s1">data</span><span class="pl-kos">.</span><span class="pl-c1">data</span><span class="pl-kos">.</span><span class="pl-c1">pid</span><span class="pl-kos">;</span>
-              
+
             <span class="pl-c">// ...</span>
-          <span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">data</span><span class="pl-kos">.</span><span class="pl-c1">type</span> <span class="pl-c1">===</span> <span class="pl-s">'pkgEnd'</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+          <span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">data</span><span class="pl-kos">.</span><span class="pl-c1">type</span> <span class="pl-c1">===</span> <span class="pl-s">"pkgEnd"</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
             <span class="pl-k">const</span> <span class="pl-s1">name</span> <span class="pl-c1">=</span> <span class="pl-s1">data</span><span class="pl-kos">.</span><span class="pl-c1">data</span><span class="pl-kos">.</span><span class="pl-c1">proc</span><span class="pl-kos">.</span><span class="pl-c1">name</span><span class="pl-kos">;</span>
             <span class="pl-k">const</span> <span class="pl-s1">pid</span> <span class="pl-c1">=</span> <span class="pl-s1">data</span><span class="pl-kos">.</span><span class="pl-c1">data</span><span class="pl-kos">.</span><span class="pl-c1">pid</span><span class="pl-kos">;</span>
-            
+
             <span class="pl-c">// ...</span>
           <span class="pl-kos">}</span>
           <span class="pl-k">break</span><span class="pl-kos">;</span>
@@ -1574,7 +1575,7 @@ Add inline styles</p>
   <span class="pl-c">// so you will have to use dashes..</span>
   <span class="pl-s">"font-size"</span>: <span class="pl-s">"18px"</span><span class="pl-kos">,</span>
   <span class="pl-c">// Another example</span>
-  <span class="pl-s">"backdrop-filter"</span>: <span class="pl-s">"blur(4px)"</span>
+  <span class="pl-s">"backdrop-filter"</span>: <span class="pl-s">"blur(4px)"</span><span class="pl-kos">,</span>
 <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 </li>
 <li>
@@ -1583,7 +1584,7 @@ Add inline styles (JS syntax)</p>
 <div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">new</span> <span class="pl-v">Html</span><span class="pl-kos">(</span><span class="pl-s">"span"</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">styleJs</span><span class="pl-kos">(</span><span class="pl-kos">{</span>
   <span class="pl-c1">color</span>: <span class="pl-s">"red"</span><span class="pl-kos">,</span>
   <span class="pl-c1">fontSize</span>: <span class="pl-s">"18px"</span><span class="pl-kos">,</span>
-  <span class="pl-c1">backdropFilter</span>: <span class="pl-s">"blur(4px)"</span>
+  <span class="pl-c1">backdropFilter</span>: <span class="pl-s">"blur(4px)"</span><span class="pl-kos">,</span>
 <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 </li>
 <li>
@@ -1753,15 +1754,13 @@ Ditto, but for the value of an input tag.</p>
   <span class="pl-c1">privileges</span>: <span class="pl-kos">[</span>
     <span class="pl-kos">{</span>
       <span class="pl-c1">privilege</span>: <span class="pl-s">"services"</span><span class="pl-kos">,</span>
-      <span class="pl-c1">description</span>: <span class="pl-s">"Use the Zeon account service"</span>
-    <span class="pl-kos">}</span>
+      <span class="pl-c1">description</span>: <span class="pl-s">"Use the Zeon account service"</span><span class="pl-kos">,</span>
+    <span class="pl-kos">}</span><span class="pl-kos">,</span>
   <span class="pl-kos">]</span><span class="pl-kos">,</span>
   <span class="pl-c">// ...</span>
-<span class="pl-kos">}</span></pre></div>
+<span class="pl-kos">}</span><span class="pl-kos">;</span></pre></div>
 <p dir="auto">You can check in your app code for the service's existence:</p>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">let</span> <span class="pl-s1">service</span> <span class="pl-c1">=</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Core</span><span class="pl-kos">.</span><span class="pl-c1">services</span><span class="pl-kos">.</span><span class="pl-en">find</span><span class="pl-kos">(</span>
-  <span class="pl-kos">(</span><span class="pl-s1">x</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-s1">x</span><span class="pl-kos">.</span><span class="pl-c1">name</span> <span class="pl-c1">===</span> <span class="pl-s">"Account"</span>
-<span class="pl-kos">)</span><span class="pl-kos">;</span>
+<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">let</span> <span class="pl-s1">service</span> <span class="pl-c1">=</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Core</span><span class="pl-kos">.</span><span class="pl-c1">services</span><span class="pl-kos">.</span><span class="pl-en">find</span><span class="pl-kos">(</span><span class="pl-kos">(</span><span class="pl-s1">x</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-s1">x</span><span class="pl-kos">.</span><span class="pl-c1">name</span> <span class="pl-c1">===</span> <span class="pl-s">"Account"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
 <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">service</span> <span class="pl-c1">&amp;&amp;</span> <span class="pl-s1">service</span><span class="pl-kos">.</span><span class="pl-c1">ref</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
   <span class="pl-c">// your code here</span>
 <span class="pl-kos">}</span></pre></div>
