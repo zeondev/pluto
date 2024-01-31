@@ -435,13 +435,13 @@ export default {
             let appNameSafe = makeAppNameSafe(pkg);
 
             async function makeInstallOrOpenButton() {
-              let localHash = new Hashes.MD5().hex(
+              let localHash = new window.Hashes.MD5().hex(
                 await vfs.readFile(`${asFilePath}/${appNameSafe}.app`)
               );
               const appHash = await fetch(
                 `${host}pkgs/${pkg}/${app.assets.path}?t=` + performance.now()
               ).then(async (e) => {
-                return new Hashes.MD5().hex(await e.text());
+                return new window.Hashes.MD5().hex(await e.text());
               });
 
               const whatIsApp = await vfs.whatIs(

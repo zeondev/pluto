@@ -1,5 +1,7 @@
 import ctxMenu from "../lib/CtxMenu.js";
 
+let localforage = window.localforage;
+
 export default {
   name: "File Manager",
   description:

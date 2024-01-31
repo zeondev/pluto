@@ -44,6 +44,8 @@ let templateFsLayout = {
   },
 };
 
+let localforage = window.localforage;
+
 const Vfs = {
   // The file system is represented as a nested object, where each key is a folder or file name
   // and the value is either a string (for file contents) or another object (for a subfolder)

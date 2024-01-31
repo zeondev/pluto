@@ -1,4 +1,4 @@
-let pages;
+let pages, localforage = window.localforage;
 
 export default {
   name: "Settings",
@@ -742,8 +742,9 @@ export default {
               // set the option and do the save
               if (isNaN(parseInt(e.target.value))) {
                 // apply theme
-                desktopConfig.theme = e.target.value;
-                themeLib.setCurrentTheme(thisRef);
+                // desktopConfig.theme = e.target.value;
+                // themeLib.setCurrentTheme(thisRef);
+                // ?
               } else {
                 const x = themeData[parseInt(e.target.value)];
                 console.log(x);

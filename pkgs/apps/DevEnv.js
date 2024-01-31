@@ -26,6 +26,13 @@ export default {
       settings_templateApp: "Startup with example app",
       settings_prettifyOnSave: "Format code on save",
       settings_liveAutocomplete: "Autocomplete while typing",
+      settings_useMenuBar: "Enable the new menu bar",
+      menuFile: "File",
+      menuEdit: "Edit",
+      menuView: "View",
+      menuExtensions: "Extensions",
+      menuHelp: "Help",
+      manageExtensions: "Manage Extensions",
     },
     en_GB: {
       action_zoomOut: "Zoom Out",
@@ -113,7 +120,7 @@ export default {
     DvWindow = new Win({
       title: Root.Lib.getString("systemApp_DevEnv"),
       content:
-        '<div class="row fc">DevEnv is loading external libraries, please wait...</div>',
+        '<div class="row fc h-100">DevEnv is loading external libraries, please wait...</div>',
       width: 540,
       height: 420,
       pid: Root.PID,
@@ -154,6 +161,7 @@ export default {
       templateApp: true,
       prettifyOnSave: true,
       liveAutocomplete: true,
+      useMenuBar: false,
     };
 
     let DvSettings = DvDefaultSettings;
@@ -197,6 +205,7 @@ export default {
           });
         }
       }
+      makeSidebar();
     }
 
     function modal(
@@ -214,22 +223,24 @@ export default {
       });
     }
 
+    // let extensionsWindow = null;
+
     const actionHandlers = {
-      newDocument: async (_) => {
+      newDocument: async () => {
         // clicking the new document button seems buggy, possibly due to dirty check
         const result = await dirtyCheck();
         if (result === false) return;
         newDocument("", "");
       },
-      openFile: async (_) => {
+      openFile: async () => {
         const result = await dirtyCheck();
         if (result === false) return;
         openFile();
       },
-      save: async (_) => {
+      save: async () => {
         await saveFile();
       },
-      zoomIn: async (_) => {
+      zoomIn: async () => {
         editorSize += 2;
         textWrapper.style({
           "font-size": editorSize.toString() + "px",
@@ -237,7 +248,7 @@ export default {
         DvSettings.fontSize = Number(editorSize.toString());
         DvSaveSettings();
       },
-      zoomOut: async (_) => {
+      zoomOut: async () => {
         editorSize -= 2;
         textWrapper.style({
           "font-size": editorSize.toString() + "px",
@@ -245,7 +256,7 @@ export default {
         DvSettings.fontSize = Number(editorSize.toString());
         DvSaveSettings();
       },
-      run: (_) => {
+      run: () => {
         Root.Core.startPkg(
           URL.createObjectURL(
             new Blob([editor.getValue()], { type: "application/javascript" })
@@ -254,7 +265,7 @@ export default {
           false
         );
       },
-      prettify: async (_) => {
+      prettify: async () => {
         try {
           const formatted = await prettier.format(editor.getValue(), {
             parser: "babel",
@@ -275,7 +286,7 @@ export default {
           );
         }
       },
-      help: async (_) => {
+      help: async () => {
         function modal(info, isHtml = false) {
           return new Promise((res, _rej) => {
             Root.Modal.modal(
@@ -374,7 +385,7 @@ export default {
 
         await modal(Root.Lib.getString("thankYou"));
       },
-      viewDocs: async (_) => {
+      viewDocs: async () => {
         const docsWindow = new Win({
           title: Root.Lib.getString("Documentation"),
           content: '<iframe src="./docs/README.html">',
@@ -388,7 +399,7 @@ export default {
           .classOn("iframe")
           .style({ padding: "0px" });
       },
-      settings: async (_) => {
+      settings: async () => {
         const settingsInfo = Object.keys(DvSettings).map((key, num) => {
           switch (typeof DvSettings[key]) {
             case "boolean":
@@ -479,6 +490,48 @@ export default {
           Root.Lib.getString("systemApp_Settings")
         );
       },
+      // manageExtensions: async () => {
+      //   if (extensionsWindow !== null) {
+      //     return extensionsWindow.focus();
+      //   }
+
+      //   extensionsWindow = new Win({
+      //     title: Root.Lib.getString("manageExtensions"),
+      //     content:
+      //       '<div class="row fc h-100">DevEnv is looking for extensions, please wait...</div>',
+      //     pid: Root.PID,
+      //     width: 400,
+      //     height: 360,
+      //     onclose: () => {
+      //       extensionsWindow = null;
+      //     },
+      //   });
+
+      //   const extensionsFolderExists = await vfs.whatIs(
+      //     "Root/Pluto/config/DvExtensions"
+      //   );
+
+      //   if (
+      //     extensionsFolderExists === null ||
+      //     extensionsFolderExists === "file"
+      //   ) {
+      //     await vfs.createFolder("Root/Pluto/config/DvExtensions");
+      //   }
+
+      //   const fileList = await vfs.list("Root/Pluto/config/DvExtensions");
+
+      //   const extensionList = fileList.filter(
+      //     (f) => f.type === "file" && f.item.endsWith(".dvx")
+      //   );
+
+      //   if (extensionList.length > 0) {
+      //     extensionList.forEach((e) => {
+      //       new Html('div').text(e.item);
+      //     });
+      //   } else {
+
+      //   }
+      // },
     };
 
     /**
@@ -555,7 +608,7 @@ export default {
 
     wrapper = DvWindow.window.querySelector(".win-content");
     wrapper.innerHTML = "";
-    wrapper.classList.add("col", "o-h", "h-100", "iframe");
+    wrapper.classList.add("col", "o-h", "h-100");
 
     let currentDocument = {
       path: "",
@@ -623,166 +676,188 @@ export default {
 
     const MenuBar = await Root.Lib.loadComponent("MenuBar");
 
+    // let extensionsList = [];
+
     function makeSidebar() {
       sidebarWrapper.clear();
-      console.log(MenuBar);
-      MenuBar.new(sidebarWrapper, [
-        {
-          item: "File",
-          items: [
-            {
-              icon: Root.Lib.icons.newFile,
-              item: Root.Lib.getString("action_newDocument"),
-              key: "Alt + N",
-              select() {
-                actionHandlers.newDocument();
+
+      if (DvSettings.useMenuBar === true) {
+        wrapper.classList.add("iframe", "col");
+        wrapper.classList.remove("with-sidebar", "row");
+        MenuBar.new(sidebarWrapper, [
+          {
+            item: Root.Lib.getString("menuFile"),
+            items: [
+              {
+                icon: Root.Lib.icons.newFile,
+                item: Root.Lib.getString("action_newDocument"),
+                key: "Alt + N",
+                select() {
+                  actionHandlers.newDocument();
+                },
               },
-            },
-            {
-              icon: Root.Lib.icons.openFolder,
-              item: Root.Lib.getString("action_openDocument"),
-              key: "Ctrl + O",
-              select() {
-                actionHandlers.openFile();
+              {
+                icon: Root.Lib.icons.openFolder,
+                item: Root.Lib.getString("action_openDocument"),
+                key: "Ctrl + O",
+                select() {
+                  actionHandlers.openFile();
+                },
               },
-            },
-            {
-              icon: Root.Lib.icons.save,
-              item: Root.Lib.getString("action_save"),
-              key: "Ctrl + S",
-              select() {
-                actionHandlers.save();
+              {
+                icon: Root.Lib.icons.save,
+                item: Root.Lib.getString("action_save"),
+                key: "Ctrl + S",
+                select() {
+                  actionHandlers.save();
+                },
               },
-            },
-            { type: "separator" },
-            {
-              icon: Root.Lib.icons.run,
-              item: Root.Lib.getString("action_runApp"),
-              key: "CTRL + Enter",
-              select() {
-                actionHandlers.run();
+              { type: "separator" },
+              {
+                icon: Root.Lib.icons.run,
+                item: Root.Lib.getString("action_runApp"),
+                key: "CTRL + Enter",
+                select() {
+                  actionHandlers.run();
+                },
               },
-            },
-          ],
-        },
-        {
-          item: "Edit",
-          items: [
-            {
-              icon: Root.Lib.icons.sparkles,
-              item: Root.Lib.getString("action_format"),
-              key: "Ctrl + Shift + S",
-              select() {
-                actionHandlers.prettify();
+            ],
+          },
+          {
+            item: Root.Lib.getString("menuEdit"),
+            items: [
+              {
+                icon: Root.Lib.icons.sparkles,
+                item: Root.Lib.getString("action_format"),
+                key: "Ctrl + Shift + S",
+                select() {
+                  actionHandlers.prettify();
+                },
               },
-            },
-            {
-              icon: Root.Lib.icons.wrench,
-              item: Root.Lib.getString("systemApp_Settings"),
-              key: "Ctrl + .",
-              select() {
-                actionHandlers.settings();
+              {
+                icon: Root.Lib.icons.wrench,
+                item: Root.Lib.getString("systemApp_Settings"),
+                key: "Ctrl + .",
+                select() {
+                  actionHandlers.settings();
+                },
               },
-            },
-          ],
-        },
-        {
-          item: "View",
-          items: [
-            {
-              icon: Root.Lib.icons.zoomIn,
-              item: Root.Lib.getString("action_zoomIn"),
-              key: "Ctrl + -",
-              select() {
-                actionHandlers.zoomIn();
+            ],
+          },
+          {
+            item: Root.Lib.getString("menuView"),
+            items: [
+              {
+                icon: Root.Lib.icons.zoomIn,
+                item: Root.Lib.getString("action_zoomIn"),
+                key: "Ctrl + -",
+                select() {
+                  actionHandlers.zoomIn();
+                },
               },
-            },
-            {
-              icon: Root.Lib.icons.zoomOut,
-              item: Root.Lib.getString("action_zoomOut"),
-              key: "Ctrl + =",
-              select() {
-                actionHandlers.zoomOut();
+              {
+                icon: Root.Lib.icons.zoomOut,
+                item: Root.Lib.getString("action_zoomOut"),
+                key: "Ctrl + =",
+                select() {
+                  actionHandlers.zoomOut();
+                },
               },
-            },
-          ],
-        },
-        {
-          item: "Help",
-          items: [
-            {
-              icon: Root.Lib.icons.book,
-              item: Root.Lib.getString("appDocumentation"),
-              select() {
-                actionHandlers.viewDocs();
+            ],
+          },
+          // {
+          //   item: Root.Lib.getString("menuExtensions"),
+          //   items: [
+          //     {
+          //       icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="20.1508" cy="14.3551" rx="3.84906" ry="3.81308" fill="white"/><ellipse cx="9.96234" cy="3.81308" rx="3.84906" ry="3.81308" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M0 6.29716C0 5.2968 0.810956 4.48584 1.81132 4.48584H17.8868C18.8872 4.48584 19.6981 5.2968 19.6981 6.29716V22.1885C19.6981 23.1889 18.8872 23.9998 17.8868 23.9998H13.7517C13.7909 23.7815 13.8114 23.5567 13.8114 23.3271C13.8114 21.2212 12.0881 19.514 9.96234 19.514C7.83656 19.514 6.11328 21.2212 6.11328 23.3271C6.11328 23.5567 6.13376 23.7815 6.173 23.9998H1.81132C0.810955 23.9998 0 23.1889 0 22.1885V18.1422C0.14844 18.1594 0.299462 18.1682 0.452572 18.1682C2.57835 18.1682 4.30163 16.4611 4.30163 14.3552C4.30163 12.2493 2.57835 10.5421 0.452572 10.5421C0.299462 10.5421 0.14844 10.5509 0 10.5682V6.29716Z" fill="white"/></svg>`,
+          //       item: Root.Lib.getString("manageExtensions"),
+          //       select() {
+          //         actionHandlers.manageExtensions();
+          //       },
+          //     },
+          //     ...extensionsList,
+          //   ],
+          // },
+          {
+            item: Root.Lib.getString("menuHelp"),
+            items: [
+              {
+                icon: Root.Lib.icons.book,
+                item: Root.Lib.getString("appDocumentation"),
+                select() {
+                  actionHandlers.viewDocs();
+                },
               },
-            },
-            {
-              icon: Root.Lib.icons.help,
-              item: Root.Lib.getString("appHelp"),
-              select() {
-                actionHandlers.help();
+              {
+                icon: Root.Lib.icons.help,
+                item: Root.Lib.getString("appHelp"),
+                select() {
+                  actionHandlers.help();
+                },
               },
+            ],
+          },
+        ]);
+      } else {
+        wrapper.classList.remove("iframe", "col");
+        wrapper.classList.add("with-sidebar", "row");
+        Sidebar.new(sidebarWrapper, [
+          {
+            onclick: actionHandlers.newDocument,
+            html: Root.Lib.icons.newFile,
+            title: Root.Lib.getString("action_newDocument"),
+          },
+          {
+            onclick: actionHandlers.openFile,
+            html: Root.Lib.icons.openFolder,
+            title: Root.Lib.getString("action_openDocument"),
+          },
+          {
+            onclick: actionHandlers.save,
+            html: Root.Lib.icons.save,
+            title: Root.Lib.getString("action_save"),
+          },
+          {
+            onclick: actionHandlers.zoomIn,
+            html: Root.Lib.icons.zoomIn,
+            title: Root.Lib.getString("action_zoomIn"),
+          },
+          {
+            onclick: actionHandlers.zoomOut,
+            html: Root.Lib.icons.zoomOut,
+            title: Root.Lib.getString("action_zoomOut"),
+          },
+          {
+            onclick: actionHandlers.prettify,
+            html: Root.Lib.icons.sparkles,
+            title: Root.Lib.getString("action_format"),
+          },
+          {
+            onclick: actionHandlers.help,
+            html: Root.Lib.icons.help,
+            title: Root.Lib.getString("appHelp"),
+          },
+          {
+            onclick: actionHandlers.viewDocs,
+            html: Root.Lib.icons.book,
+            title: Root.Lib.getString("appDocumentation"),
+          },
+          {
+            onclick: actionHandlers.settings,
+            html: Root.Lib.icons.wrench,
+            title: Root.Lib.getString("systemApp_Settings"),
+          },
+          {
+            style: {
+              "margin-top": "auto",
+              "margin-left": "auto",
             },
-          ],
-        },
-      ]);
-      // Sidebar.new(sidebarWrapper, [
-      //   {
-      //     onclick: actionHandlers.newDocument,
-      //     html: Root.Lib.icons.newFile,
-      //     title: Root.Lib.getString("action_newDocument"),
-      //   },
-      //   {
-      //     onclick: actionHandlers.openFile,
-      //     html: Root.Lib.icons.openFolder,
-      //     title: Root.Lib.getString("action_openDocument"),
-      //   },
-      //   {
-      //     onclick: actionHandlers.save,
-      //     html: Root.Lib.icons.save,
-      //     title: Root.Lib.getString("action_save"),
-      //   },
-      //   {
-      //     onclick: actionHandlers.zoomIn,
-      //     html: Root.Lib.icons.zoomIn,
-      //     title: Root.Lib.getString("action_zoomIn"),
-      //   },
-      //   {
-      //     onclick: actionHandlers.zoomOut,
-      //     html: Root.Lib.icons.zoomOut,
-      //     title: Root.Lib.getString("action_zoomOut"),
-      //   },
-      //   {
-      //     onclick: actionHandlers.prettify,
-      //     html: Root.Lib.icons.sparkles,
-      //     title: Root.Lib.getString("action_format"),
-      //   },
-      //   {
-      //     onclick: actionHandlers.help,
-      //     html: Root.Lib.icons.help,
-      //     title: Root.Lib.getString("appHelp"),
-      //   },
-      //   {
-      //     onclick: actionHandlers.viewDocs,
-      //     html: Root.Lib.icons.book,
-      //     title: Root.Lib.getString("appDocumentation"),
-      //   },
-      //   {
-      //     onclick: actionHandlers.settings,
-      //     html: Root.Lib.icons.wrench,
-      //     title: Root.Lib.getString("systemApp_Settings"),
-      //   },
-      //   {
-      //     style: {
-      //       "margin-top": "auto",
-      //       "margin-left": "auto",
-      //     },
-      //     onclick: actionHandlers.run,
-      //     html: Root.Lib.icons.run,
-      //     title: Root.Lib.getString("action_runApp"),
-      //   },
-      // ]);
+            onclick: actionHandlers.run,
+            html: Root.Lib.icons.run,
+            title: Root.Lib.getString("action_runApp"),
+          },
+        ]);
+      }
     }
     makeSidebar();
 
@@ -792,7 +867,7 @@ export default {
       .style({ height: "100%" })
       .appendTo(text);
 
-    var editor = ace.edit(textWrapper.elm);
+    var editor = window.ace.edit(textWrapper.elm);
     // Custom theme
     editor.setOptions({
       enableBasicAutocompletion: true,
