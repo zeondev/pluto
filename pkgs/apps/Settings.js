@@ -1,4 +1,5 @@
-let pages, localforage = window.localforage;
+let pages,
+  localforage = window.localforage;
 
 export default {
   name: "Settings",
@@ -1015,7 +1016,9 @@ export default {
           await this.clear("applications");
           makeHeading("h1", Root.Lib.getString("applications"));
 
-          let installedApplications = new Html('details').class('gap', 'col').appendTo(container);
+          let installedApplications = new Html("details")
+            .class("gap", "col")
+            .appendTo(container);
 
           new Html("summary")
             .class("mt-1", "pointer")
@@ -1032,40 +1035,73 @@ export default {
                 /** @type array */
                 let splitE = e.split(".");
 
-                let name = splitE.slice(0, splitE.length - 1).join('.');
+                let name = splitE.slice(0, splitE.length - 1).join(".");
                 let extension = splitE.pop();
 
                 if (extension !== "app") return;
 
-                const a = (
-                  await import(
-                    `data:text/javascript,${encodeURIComponent(
-                      await vfs.readFile(`Root/Pluto/apps/${name}.app`)
-                    )}`
-                  )
-                ).default;
+                const secretAppIframe = new Html("iframe")
+                  .style({ opacity: 0 })
+                  .appendTo("body");
 
-                if (a === undefined) return false;
+                let originId = Root.Lib.randomString();
 
-                console.log(a);
+                secretAppIframe.elm.src =
+                  "data:text/html," +
+                  encodeURIComponent(`<!DOCTYPE html>
+              <html>
+                <head><title>hello iframe</title></head>
+                <body>
+                  <script>
+                    window.addEventListener("DOMContentLoaded", async function() {
+                      const a = (
+                        await import(
+                          \`data:text/javascript,${encodeURIComponent(
+                            await vfs.readFile(`Root/Pluto/apps/${name}.app`)
+                          )}\`
+                        )
+                      ).default;
+      
+                      parent.postMessage(JSON.stringify({
+                        originId: "${originId}",
+                        appData: Object.assign(a, { src: "${name}" })
+                      }), "http://127.0.0.1:5500");
+                    });
+                  </script>
+                </body>
+              </html>`);
 
-                Card.new(
-                  installedApplications,
-                  new Html("div").class("flex-group", "col").appendMany(
-                    new Html("span").class("h2").text(a.name), // Actual name
-                    new Html("code")
-                      .class("label")
-                      .style({
-                        "margin-top": "-4px",
-                      })
-                      .text(`${name}.app`), // Type
-                    // Filename and Version
-                    new Html("span").text(a.description), // Description
-                    new Html("span")
-                      .class("label-light")
-                      .text(`(supports core ${a.ver})`) //
-                  )
-                ).class("mt-2");
+                async function messageWatcher(e) {
+                  if (!e.data.startsWith("{")) return;
+
+                  const o = JSON.parse(e.data);
+
+                  if (o.originId !== originId) return;
+
+                  if (!o.appData) return;
+
+                  const app = o.appData;
+
+                  Card.new(
+                    installedApplications,
+                    new Html("div").class("flex-group", "col").appendMany(
+                      new Html("span").class("h2").text(app.name), // Actual name
+                      new Html("code")
+                        .class("label")
+                        .style({
+                          "margin-top": "-4px",
+                        })
+                        .text(`${app.src}.app`), // Type
+                      // Filename and Version
+                      new Html("span").text(app.description), // Description
+                      new Html("span")
+                        .class("label-light")
+                        .text(`(supports core ${app.ver})`) //
+                    )
+                  ).class("mt-2");
+                }
+
+                window.addEventListener("message", messageWatcher);
               })
             );
           } else {
@@ -1074,7 +1110,9 @@ export default {
               .appendTo(installedApplications);
           }
 
-          let knownPackages = new Html('details').class('gap', 'col').appendTo(container);
+          let knownPackages = new Html("details")
+            .class("gap", "col")
+            .appendTo(container);
 
           new Html("summary")
             .class("mt-1", "pointer")
