@@ -60,13 +60,13 @@ export default {
       networkTestMs: "Average response time: {responseTime}ms.",
       networkTestError:
         "Network is not working. Status code: {req1Status}, {req2Status}",
-      noInstalledApps: "There are no installed applications.",
+      noInstalledApps: "There are no local applications.",
       securityCheck: "Security Check",
       securityCheckEveryStartup: "Check every startup?",
       securityTableItemName: "Name",
       securityTableItemSafe: "Safe",
       securityTableItemDelete: "Delete App",
-      installedApplications: "Installed applications",
+      localApps: "Local applications",
       knownPackageList: "Loaded packages",
     },
     de_DE: {
@@ -1016,14 +1016,14 @@ export default {
           await this.clear("applications");
           makeHeading("h1", Root.Lib.getString("applications"));
 
-          let installedApplications = new Html("details")
+          let localApps = new Html("details")
             .class("gap", "col")
             .appendTo(container);
 
           new Html("summary")
             .class("mt-1", "pointer")
-            .text(Root.Lib.getString("installedApplications"))
-            .appendTo(installedApplications);
+            .text(Root.Lib.getString("localApps"))
+            .appendTo(localApps);
 
           let installedApps = (await vfs.list("Root/Pluto/apps"))
             .filter((p) => p.type === "file" && p.item.endsWith(".app"))
@@ -1083,7 +1083,7 @@ export default {
                   const app = o.appData;
 
                   Card.new(
-                    installedApplications,
+                    localApps,
                     new Html("div").class("flex-group", "col").appendMany(
                       new Html("span").class("h2").text(app.name), // Actual name
                       new Html("code")
@@ -1107,7 +1107,7 @@ export default {
           } else {
             new Html("span")
               .text(Root.Lib.getString("noInstalledApps"))
-              .appendTo(installedApplications);
+              .appendTo(localApps);
           }
 
           let knownPackages = new Html("details")
