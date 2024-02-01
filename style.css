@@ -887,7 +887,7 @@ textarea::placeholder {
   min-height: 0;
   overflow: auto;
   margin: 0;
-  touch-action: pan-y !important;
+  touch-action: unset !important;
 }
 
 /* Table */
