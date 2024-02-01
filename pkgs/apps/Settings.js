@@ -487,91 +487,97 @@ export default {
 
           makeHeading("h2", Root.Lib.getString("yourDevice"));
 
+          // Get browser information
+          let browser = {
+            name: "",
+            version: "",
+          };
+
+          // Get operating system information
+          let os = {
+            name: "",
+            version: "",
+          };
+
+          let deviceType = "Unknown";
           const webProtocol = location.protocol.endsWith("s:")
             ? "HTTPS"
             : "HTTP";
           let webHost = location.host;
 
-          // Get user agent string
-          const userAgent = navigator.userAgent;
+          try {
+            // Get user agent string
+            const userAgent = navigator.userAgent;
 
-          if (webHost === "" && userAgent.includes("Electron")) {
-            webHost = "Local (Electron)";
-          } else if (webHost === "") {
-            webHost = "Local";
+            if (webHost === "" && userAgent.includes("Electron")) {
+              webHost = "Local (Electron)";
+            } else if (webHost === "") {
+              webHost = "Local";
+            }
+
+            // Desktop app support
+            if (userAgent.indexOf("pluto") > -1) {
+              browser.name = "Pluto Desktop";
+              browser.version = userAgent.match(/pluto\/([\d.]+)/)[1];
+            } else if (userAgent.indexOf("Firefox") > -1) {
+              browser.name = "Firefox";
+              browser.version = userAgent.match(/Firefox\/([\d.]+)/)[1];
+            } else if (userAgent.indexOf("Chrome") > -1) {
+              browser.name = "Chrome";
+              browser.version = userAgent.match(/Chrome\/([\d.]+)/)[1];
+            } else if (userAgent.indexOf("Safari") > -1) {
+              browser.name = "Safari";
+              browser.version = userAgent.match(/Version\/([\d.]+)/)[1];
+            } else if (userAgent.indexOf("Opera") > -1) {
+              browser.name = "Opera";
+              browser.version = userAgent.match(/Opera\/([\d.]+)/)[1];
+            } else if (userAgent.indexOf("Edge") > -1) {
+              browser.name = "Microsoft Edge";
+              browser.version = userAgent.match(/Edge\/([\d.]+)/)[1];
+            } else {
+              browser.name = "Other";
+              browser.version = "";
+            }
+
+            browser.version = parseFloat(browser.version);
+            if (isNaN(browser.version)) browser.version = "";
+
+            if (userAgent.indexOf("Windows") > -1) {
+              os.name = "Windows";
+              os.version = userAgent.match(/Windows NT ([\d.]+)/)[1];
+            } else if (userAgent.indexOf("Mac") > -1) {
+              os.name = "macOS";
+              os.version = userAgent
+                .match(/Mac OS X ([\d_.]+)/)[1]
+                .replace(/_/g, ".");
+            } else if (userAgent.indexOf("Android") > -1) {
+              os.name = "Android";
+              os.version = userAgent.match(/Android ([\d.]+)/)[1];
+            } else if (userAgent.indexOf("Linux") > -1) {
+              os.name = "Linux";
+            } else if (userAgent.indexOf("iOS") > -1) {
+              os.name = "iOS";
+              os.version = userAgent.match(/OS ([\d_]+)/)[1].replace(/_/g, ".");
+            } else {
+              os.name = "Other";
+              os.version = "";
+            }
+
+            os.version = parseFloat(os.version);
+
+            if (os.name === "macOS" && os.version === "10.15") {
+              os.version = "X";
+            }
+
+            if (isNaN(os.version)) os.version = "";
+
+            // Get device type
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(userAgent);
+            deviceType = isMobile ? "Mobile" : "Desktop";
+          } catch (e) {
+            browser = Object.assign({ name: "Other", version: 0 }, browser);
+            os = Object.assign({ name: "Unknown", version: 0 }, os);
           }
-
-          // Get browser information
-          const browser = {
-            name: "",
-            version: "",
-          };
-
-          // Desktop app support
-          if (userAgent.indexOf("pluto") > -1) {
-            browser.name = "Pluto Desktop";
-            browser.version = userAgent.match(/pluto\/([\d.]+)/)[1];
-          } else if (userAgent.indexOf("Firefox") > -1) {
-            browser.name = "Firefox";
-            browser.version = userAgent.match(/Firefox\/([\d.]+)/)[1];
-          } else if (userAgent.indexOf("Chrome") > -1) {
-            browser.name = "Chrome";
-            browser.version = userAgent.match(/Chrome\/([\d.]+)/)[1];
-          } else if (userAgent.indexOf("Safari") > -1) {
-            browser.name = "Safari";
-            browser.version = userAgent.match(/Version\/([\d.]+)/)[1];
-          } else if (userAgent.indexOf("Opera") > -1) {
-            browser.name = "Opera";
-            browser.version = userAgent.match(/Opera\/([\d.]+)/)[1];
-          } else if (userAgent.indexOf("Edge") > -1) {
-            browser.name = "Microsoft Edge";
-            browser.version = userAgent.match(/Edge\/([\d.]+)/)[1];
-          } else {
-            browser.name = "Other";
-            browser.version = "";
-          }
-
-          browser.version = parseFloat(browser.version);
-          if (isNaN(browser.version)) browser.version = "";
-
-          // Get operating system information
-          const os = {
-            name: "",
-            version: "",
-          };
-
-          if (userAgent.indexOf("Windows") > -1) {
-            os.name = "Windows";
-            os.version = userAgent.match(/Windows NT ([\d.]+)/)[1];
-          } else if (userAgent.indexOf("Mac") > -1) {
-            os.name = "macOS";
-            os.version = userAgent
-              .match(/Mac OS X ([\d_.]+)/)[1]
-              .replace(/_/g, ".");
-          } else if (userAgent.indexOf("Android") > -1) {
-            os.name = "Android";
-            os.version = userAgent.match(/Android ([\d.]+)/)[1];
-          } else if (userAgent.indexOf("Linux") > -1) {
-            os.name = "Linux";
-          } else if (userAgent.indexOf("iOS") > -1) {
-            os.name = "iOS";
-            os.version = userAgent.match(/OS ([\d_]+)/)[1].replace(/_/g, ".");
-          } else {
-            os.name = "Other";
-            os.version = "";
-          }
-
-          os.version = parseFloat(os.version);
-
-          if (os.name === "macOS" && os.version === "10.15") {
-            os.version = "X";
-          }
-
-          if (isNaN(os.version)) os.version = "";
-
-          // Get device type
-          const isMobile = /iPhone|iPad|iPod|Android/i.test(userAgent);
-          const deviceType = isMobile ? "Mobile" : "Desktop";
 
           const yourDevice = new Html("div")
             .class("card-box", "list", "max")
