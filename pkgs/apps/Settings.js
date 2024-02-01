@@ -27,6 +27,10 @@ export default {
       privilege: "host",
       description: "Access host system integrations",
     },
+    {
+      privilege: "startPkg",
+      description: "Used to open links to other apps",
+    },
   ],
   strings: {
     en_US: {
@@ -68,6 +72,7 @@ export default {
       securityTableItemDelete: "Delete App",
       localApps: "Local applications",
       knownPackageList: "Loaded packages",
+      appStoreOpenToSeeApps: "Open the App Store to see installed applications",
     },
     de_DE: {
       thisSystem: "Dieses System",
@@ -1077,6 +1082,10 @@ export default {
                 </body>
               </html>`);
 
+                setTimeout(() => {
+                  secretAppIframe.cleanup();
+                }, 1000);
+
                 async function messageWatcher(e) {
                   if (!e.data.startsWith("{")) return;
 
@@ -1085,6 +1094,8 @@ export default {
                   if (o.originId !== originId) return;
 
                   if (!o.appData) return;
+
+                  secretAppIframe.cleanup();
 
                   const app = o.appData;
 
@@ -1145,6 +1156,13 @@ export default {
               )
               .appendTo(knownPackages);
           });
+
+          new Html("a")
+            .on("click", () => {
+              Root.Core.startPkg("apps:AppStore", true, true);
+            })
+            .text(Root.Lib.getString("appStoreOpenToSeeApps"))
+            .appendTo(container);
         },
         async security() {
           async function performSecurityScan() {
