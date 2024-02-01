@@ -155,6 +155,13 @@ export default {
       return pkg.replace(/\//g, "--");
     }
 
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
     try {
       new Html("div").class("row", "fc").text("Loading...").appendTo(container);
 
@@ -284,6 +291,10 @@ export default {
             });
         }
 
+        const packageList = await appStoreModule.list();
+
+        shuffleArray(packageList);
+
         pages = {
           async clear() {
             container.elm.innerHTML = "";
@@ -304,8 +315,6 @@ export default {
               .style({ margin: "12px 8px 0 0" })
               .text(categoryName)
               .appendTo(container);
-
-            const packageList = await appStoreModule.list();
 
             // const searchBar = new Html("div")
             //   .class("search-bar")
