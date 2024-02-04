@@ -1,4 +1,5 @@
-let pages, localforage = window.localforage;
+let pages,
+  localforage = window.localforage;
 
 export default {
   name: "Settings",
@@ -25,6 +26,10 @@ export default {
     {
       privilege: "host",
       description: "Access host system integrations",
+    },
+    {
+      privilege: "startPkg",
+      description: "Used to open links to other apps",
     },
   ],
   strings: {
@@ -59,14 +64,15 @@ export default {
       networkTestMs: "Average response time: {responseTime}ms.",
       networkTestError:
         "Network is not working. Status code: {req1Status}, {req2Status}",
-      noInstalledApps: "There are no installed applications.",
+      noInstalledApps: "There are no local applications.",
       securityCheck: "Security Check",
       securityCheckEveryStartup: "Check every startup?",
       securityTableItemName: "Name",
       securityTableItemSafe: "Safe",
       securityTableItemDelete: "Delete App",
-      installedApplications: "Installed applications",
+      localApps: "Local applications",
       knownPackageList: "Loaded packages",
+      appStoreOpenToSeeApps: "Open the App Store to see installed applications",
     },
     de_DE: {
       thisSystem: "Dieses System",
@@ -177,6 +183,7 @@ export default {
     const vfs = await Root.Lib.loadLibrary("VirtualFS");
     const themeLib = await Root.Lib.loadLibrary("ThemeLib");
     const codeScanner = await Root.Lib.loadLibrary("CodeScanner");
+    const dropDown = await Root.Lib.loadComponent("DropDown");
     await vfs.importFS();
 
     const defaultDesktopConfig = {
@@ -486,91 +493,97 @@ export default {
 
           makeHeading("h2", Root.Lib.getString("yourDevice"));
 
+          // Get browser information
+          let browser = {
+            name: "",
+            version: "",
+          };
+
+          // Get operating system information
+          let os = {
+            name: "",
+            version: "",
+          };
+
+          let deviceType = "Unknown";
           const webProtocol = location.protocol.endsWith("s:")
             ? "HTTPS"
             : "HTTP";
           let webHost = location.host;
 
-          // Get user agent string
-          const userAgent = navigator.userAgent;
+          try {
+            // Get user agent string
+            const userAgent = navigator.userAgent;
 
-          if (webHost === "" && userAgent.includes("Electron")) {
-            webHost = "Local (Electron)";
-          } else if (webHost === "") {
-            webHost = "Local";
+            if (webHost === "" && userAgent.includes("Electron")) {
+              webHost = "Local (Electron)";
+            } else if (webHost === "") {
+              webHost = "Local";
+            }
+
+            // Desktop app support
+            if (userAgent.indexOf("pluto") > -1) {
+              browser.name = "Pluto Desktop";
+              browser.version = userAgent.match(/pluto\/([\d.]+)/)[1];
+            } else if (userAgent.indexOf("Firefox") > -1) {
+              browser.name = "Firefox";
+              browser.version = userAgent.match(/Firefox\/([\d.]+)/)[1];
+            } else if (userAgent.indexOf("Chrome") > -1) {
+              browser.name = "Chrome";
+              browser.version = userAgent.match(/Chrome\/([\d.]+)/)[1];
+            } else if (userAgent.indexOf("Safari") > -1) {
+              browser.name = "Safari";
+              browser.version = userAgent.match(/Version\/([\d.]+)/)[1];
+            } else if (userAgent.indexOf("Opera") > -1) {
+              browser.name = "Opera";
+              browser.version = userAgent.match(/Opera\/([\d.]+)/)[1];
+            } else if (userAgent.indexOf("Edge") > -1) {
+              browser.name = "Microsoft Edge";
+              browser.version = userAgent.match(/Edge\/([\d.]+)/)[1];
+            } else {
+              browser.name = "Other";
+              browser.version = "";
+            }
+
+            browser.version = parseFloat(browser.version);
+            if (isNaN(browser.version)) browser.version = "";
+
+            if (userAgent.indexOf("Windows") > -1) {
+              os.name = "Windows";
+              os.version = userAgent.match(/Windows NT ([\d.]+)/)[1];
+            } else if (userAgent.indexOf("Mac") > -1) {
+              os.name = "macOS";
+              os.version = userAgent
+                .match(/Mac OS X ([\d_.]+)/)[1]
+                .replace(/_/g, ".");
+            } else if (userAgent.indexOf("Android") > -1) {
+              os.name = "Android";
+              os.version = userAgent.match(/Android ([\d.]+)/)[1];
+            } else if (userAgent.indexOf("Linux") > -1) {
+              os.name = "Linux";
+            } else if (userAgent.indexOf("iOS") > -1) {
+              os.name = "iOS";
+              os.version = userAgent.match(/OS ([\d_]+)/)[1].replace(/_/g, ".");
+            } else {
+              os.name = "Other";
+              os.version = "";
+            }
+
+            os.version = parseFloat(os.version);
+
+            if (os.name === "macOS" && os.version === "10.15") {
+              os.version = "X";
+            }
+
+            if (isNaN(os.version)) os.version = "";
+
+            // Get device type
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(userAgent);
+            deviceType = isMobile ? "Mobile" : "Desktop";
+          } catch (e) {
+            browser = Object.assign({ name: "Other", version: 0 }, browser);
+            os = Object.assign({ name: "Unknown", version: 0 }, os);
           }
-
-          // Get browser information
-          const browser = {
-            name: "",
-            version: "",
-          };
-
-          // Desktop app support
-          if (userAgent.indexOf("pluto") > -1) {
-            browser.name = "Pluto Desktop";
-            browser.version = userAgent.match(/pluto\/([\d.]+)/)[1];
-          } else if (userAgent.indexOf("Firefox") > -1) {
-            browser.name = "Firefox";
-            browser.version = userAgent.match(/Firefox\/([\d.]+)/)[1];
-          } else if (userAgent.indexOf("Chrome") > -1) {
-            browser.name = "Chrome";
-            browser.version = userAgent.match(/Chrome\/([\d.]+)/)[1];
-          } else if (userAgent.indexOf("Safari") > -1) {
-            browser.name = "Safari";
-            browser.version = userAgent.match(/Version\/([\d.]+)/)[1];
-          } else if (userAgent.indexOf("Opera") > -1) {
-            browser.name = "Opera";
-            browser.version = userAgent.match(/Opera\/([\d.]+)/)[1];
-          } else if (userAgent.indexOf("Edge") > -1) {
-            browser.name = "Microsoft Edge";
-            browser.version = userAgent.match(/Edge\/([\d.]+)/)[1];
-          } else {
-            browser.name = "Other";
-            browser.version = "";
-          }
-
-          browser.version = parseFloat(browser.version);
-          if (isNaN(browser.version)) browser.version = "";
-
-          // Get operating system information
-          const os = {
-            name: "",
-            version: "",
-          };
-
-          if (userAgent.indexOf("Windows") > -1) {
-            os.name = "Windows";
-            os.version = userAgent.match(/Windows NT ([\d.]+)/)[1];
-          } else if (userAgent.indexOf("Mac") > -1) {
-            os.name = "macOS";
-            os.version = userAgent
-              .match(/Mac OS X ([\d_.]+)/)[1]
-              .replace(/_/g, ".");
-          } else if (userAgent.indexOf("Android") > -1) {
-            os.name = "Android";
-            os.version = userAgent.match(/Android ([\d.]+)/)[1];
-          } else if (userAgent.indexOf("Linux") > -1) {
-            os.name = "Linux";
-          } else if (userAgent.indexOf("iOS") > -1) {
-            os.name = "iOS";
-            os.version = userAgent.match(/OS ([\d_]+)/)[1].replace(/_/g, ".");
-          } else {
-            os.name = "Other";
-            os.version = "";
-          }
-
-          os.version = parseFloat(os.version);
-
-          if (os.name === "macOS" && os.version === "10.15") {
-            os.version = "X";
-          }
-
-          if (isNaN(os.version)) os.version = "";
-
-          // Get device type
-          const isMobile = /iPhone|iPad|iPod|Android/i.test(userAgent);
-          const deviceType = isMobile ? "Mobile" : "Desktop";
 
           const yourDevice = new Html("div")
             .class("card-box", "list", "max")
@@ -702,7 +715,9 @@ export default {
           const check = await vfs.whatIs("Root/Pluto/config/themes");
 
           let themes = [];
-          let themeData = [];
+          let themeData = {};
+
+          let selectedTheme = "dark.theme";
 
           if (check === null) {
             // non exist
@@ -722,13 +737,17 @@ export default {
                 );
                 const result = themeLib.validateTheme(theme);
                 if (result.success === true) {
-                  themes.push(
-                    new Html("option").text(result.data.name).attr({
-                      value: themes.length,
-                      selected: desktopConfig.theme === itm ? true : null,
-                    })
+                  themes.push({
+                    id: itm,
+                    item: result.data.name,
+                  });
+                  if (desktopConfig.theme === itm) {
+                    selectedTheme = itm;
+                  }
+                  themeData[itm] = Object.assign(
+                    { fileName: itm },
+                    result.data
                   );
-                  themeData.push(Object.assign({ fileName: itm }, result.data));
                 } else {
                   alert("failed parsing theme data due to " + result.message);
                 }
@@ -736,25 +755,25 @@ export default {
             );
           }
 
-          new Html("select")
-            .appendMany(...themes)
-            .on("input", (e) => {
-              // set the option and do the save
-              if (isNaN(parseInt(e.target.value))) {
-                // apply theme
-                // desktopConfig.theme = e.target.value;
-                // themeLib.setCurrentTheme(thisRef);
-                // ?
-              } else {
-                const x = themeData[parseInt(e.target.value)];
-                console.log(x);
-                desktopConfig.theme = x.fileName;
-                themeLib.setCurrentTheme(x);
-              }
-              save();
-            })
-            .class("if", "mc")
-            .appendTo(themeSelectSpan);
+          console.log(selectedTheme);
+
+          dropDown
+            .new(
+              themeSelectSpan,
+              themes,
+              (e) => {
+                // set the option and do the save
+                if (e === undefined) {
+                  return;
+                }
+
+                desktopConfig.theme = e;
+                themeLib.setCurrentTheme(themeData[e]);
+                save();
+              },
+              selectedTheme
+            )
+            .class("if", "mc");
 
           new Html("span")
             .appendMany(
@@ -806,28 +825,30 @@ export default {
 
           sidebarTypeSpan.appendMany(
             new Html("span").text(Root.Lib.getString("toolbarPosition")),
-            new Html("select")
-              .appendMany(
-                new Html("option")
-                  .text(Root.Lib.getString("toolbarPositionVertical"))
-                  .attr({
-                    value: "vertical",
+            dropDown
+              .new(
+                undefined,
+                [
+                  {
+                    item: Root.Lib.getString("toolbarPositionVertical"),
+                    id: "vertical",
                     selected:
-                      desktopConfig.sidebarType === "vertical" ? true : null,
-                  }),
-                new Html("option")
-                  .text(Root.Lib.getString("toolbarPositionHorizontal"))
-                  .attr({
-                    value: "horizontal",
+                      desktopConfig.sidebarType === "vertical" ? true : false,
+                  },
+                  {
+                    item: Root.Lib.getString("toolbarPositionHorizontal"),
+                    id: "horizontal",
                     selected:
-                      desktopConfig.sidebarType === "horizontal" ? true : null,
-                  })
+                      desktopConfig.sidebarType === "horizontal" ? true : false,
+                  },
+                ],
+                (e) => {
+                  desktopConfig.sidebarType = e;
+                  document.documentElement.dataset.sidebarType = e;
+                  save();
+                },
+                desktopConfig.sidebarType
               )
-              .on("input", (e) => {
-                desktopConfig.sidebarType = e.target.value;
-                document.documentElement.dataset.sidebarType = e.target.value;
-                save();
-              })
               .class("if", "mc")
           );
 
@@ -837,42 +858,43 @@ export default {
 
           dockStyleSpan.appendMany(
             new Html("span").text(Root.Lib.getString("dockStyle")),
-            new Html("select")
-              .appendMany(
-                new Html("option")
-                  .text(Root.Lib.getString("dockStyleFull"))
-                  .attr({
-                    value: "full",
-                    selected: desktopConfig.dockStyle === "full" ? true : null,
-                  }),
-                new Html("option")
-                  .text(Root.Lib.getString("dockStyleCompact"))
-                  .attr({
-                    value: "compact",
+            dropDown
+              .new(
+                undefined,
+                [
+                  {
+                    item: Root.Lib.getString("dockStyleFull"),
+                    id: "full",
+                    selected: desktopConfig.dockStyle === "full" ? true : false,
+                  },
+                  {
+                    item: Root.Lib.getString("dockStyleCompact"),
+                    id: "compact",
                     selected:
-                      desktopConfig.dockStyle === "compact" ? true : null,
-                  }),
-                new Html("option")
-                  .text(Root.Lib.getString("dockStyleMinimal"))
-                  .attr({
-                    value: "minimal",
+                      desktopConfig.dockStyle === "compact" ? true : false,
+                  },
+                  {
+                    item: Root.Lib.getString("dockStyleMinimal"),
+                    id: "minimal",
                     selected:
-                      desktopConfig.dockStyle === "minimal" ? true : null,
-                  })
+                      desktopConfig.dockStyle === "minimal" ? true : false,
+                  },
+                ],
+                (e) => {
+                  desktopConfig.dockStyle = e;
+
+                  Html.qs(".desktop .dock").classOn("hiding");
+
+                  setTimeout(() => {
+                    // a bit hacky to do the animation
+                    Html.qs(".desktop .dock").classOff("hiding");
+                    document.documentElement.dataset.dockStyle = e;
+                  }, 600);
+
+                  save();
+                },
+                desktopConfig.dockStyle
               )
-              .on("input", (e) => {
-                desktopConfig.dockStyle = e.target.value;
-
-                Html.qs(".desktop .dock").classOn("hiding");
-
-                setTimeout(() => {
-                  // a bit hacky to do the animation
-                  Html.qs(".desktop .dock").classOff("hiding");
-                  document.documentElement.dataset.dockStyle = e.target.value;
-                }, 600);
-
-                save();
-              })
               .class("if", "mc")
           );
 
@@ -912,22 +934,23 @@ export default {
 
           languageSelectSpan.appendMany(
             new Html("span").text(Root.Lib.getString("Language")),
-            new Html("select")
-              .appendMany(
-                ...Root.Lib.langs.map((l) => {
-                  return new Html("option")
-                    .text(Root.Lib.getString("lang_" + l))
-                    .attr({
-                      value: l,
-                      selected: desktopConfig.language === l ? true : null,
-                    });
-                })
+            dropDown
+              .new(
+                undefined,
+                Root.Lib.langs.map((l) => {
+                  return {
+                    item: Root.Lib.getString("lang_" + l),
+                    id: l,
+                    selected: desktopConfig.language === l ? true : false,
+                  };
+                }),
+                (e) => {
+                  desktopConfig.language = e;
+                  Root.Core.setLanguage(e);
+                  save();
+                },
+                desktopConfig.language
               )
-              .on("input", (e) => {
-                desktopConfig.language = e.target.value;
-                Root.Core.setLanguage(e.target.value);
-                save();
-              })
               .class("if", "mc")
           );
         },
@@ -1015,12 +1038,14 @@ export default {
           await this.clear("applications");
           makeHeading("h1", Root.Lib.getString("applications"));
 
-          let installedApplications = new Html('details').class('gap', 'col').appendTo(container);
+          let localApps = new Html("details")
+            .class("gap", "col")
+            .appendTo(container);
 
           new Html("summary")
             .class("mt-1", "pointer")
-            .text(Root.Lib.getString("installedApplications"))
-            .appendTo(installedApplications);
+            .text(Root.Lib.getString("localApps"))
+            .appendTo(localApps);
 
           let installedApps = (await vfs.list("Root/Pluto/apps"))
             .filter((p) => p.type === "file" && p.item.endsWith(".app"))
@@ -1032,49 +1057,90 @@ export default {
                 /** @type array */
                 let splitE = e.split(".");
 
-                let name = splitE.slice(0, splitE.length - 1).join('.');
+                let name = splitE.slice(0, splitE.length - 1).join(".");
                 let extension = splitE.pop();
 
                 if (extension !== "app") return;
 
-                const a = (
-                  await import(
-                    `data:text/javascript,${encodeURIComponent(
-                      await vfs.readFile(`Root/Pluto/apps/${name}.app`)
-                    )}`
-                  )
-                ).default;
+                const secretAppIframe = new Html("iframe")
+                  .style({ opacity: 0 })
+                  .appendTo("body");
 
-                if (a === undefined) return false;
+                let originId = Root.Lib.randomString();
 
-                console.log(a);
+                secretAppIframe.elm.src =
+                  "data:text/html," +
+                  encodeURIComponent(`<!DOCTYPE html>
+              <html>
+                <head><title>hello iframe</title></head>
+                <body>
+                  <script>
+                    window.addEventListener("DOMContentLoaded", async function() {
+                      const a = (
+                        await import(
+                          \`data:text/javascript,${encodeURIComponent(
+                            await vfs.readFile(`Root/Pluto/apps/${name}.app`)
+                          )}\`
+                        )
+                      ).default;
+      
+                      parent.postMessage(JSON.stringify({
+                        originId: "${originId}",
+                        appData: Object.assign(a, { src: "${name}" })
+                      }), "http://127.0.0.1:5500");
+                    });
+                  </script>
+                </body>
+              </html>`);
 
-                Card.new(
-                  installedApplications,
-                  new Html("div").class("flex-group", "col").appendMany(
-                    new Html("span").class("h2").text(a.name), // Actual name
-                    new Html("code")
-                      .class("label")
-                      .style({
-                        "margin-top": "-4px",
-                      })
-                      .text(`${name}.app`), // Type
-                    // Filename and Version
-                    new Html("span").text(a.description), // Description
-                    new Html("span")
-                      .class("label-light")
-                      .text(`(supports core ${a.ver})`) //
-                  )
-                ).class("mt-2");
+                setTimeout(() => {
+                  secretAppIframe.cleanup();
+                }, 1000);
+
+                async function messageWatcher(e) {
+                  if (!e.data.startsWith("{")) return;
+
+                  const o = JSON.parse(e.data);
+
+                  if (o.originId !== originId) return;
+
+                  if (!o.appData) return;
+
+                  secretAppIframe.cleanup();
+
+                  const app = o.appData;
+
+                  Card.new(
+                    localApps,
+                    new Html("div").class("flex-group", "col").appendMany(
+                      new Html("span").class("h2").text(app.name), // Actual name
+                      new Html("code")
+                        .class("label")
+                        .style({
+                          "margin-top": "-4px",
+                        })
+                        .text(`${app.src}.app`), // Type
+                      // Filename and Version
+                      new Html("span").text(app.description), // Description
+                      new Html("span")
+                        .class("label-light")
+                        .text(`(supports core ${app.ver})`) //
+                    )
+                  ).class("mt-2");
+                }
+
+                window.addEventListener("message", messageWatcher);
               })
             );
           } else {
             new Html("span")
               .text(Root.Lib.getString("noInstalledApps"))
-              .appendTo(installedApplications);
+              .appendTo(localApps);
           }
 
-          let knownPackages = new Html('details').class('gap', 'col').appendTo(container);
+          let knownPackages = new Html("details")
+            .class("gap", "col")
+            .appendTo(container);
 
           new Html("summary")
             .class("mt-1", "pointer")
@@ -1101,6 +1167,13 @@ export default {
               )
               .appendTo(knownPackages);
           });
+
+          new Html("a")
+            .on("click", () => {
+              Root.Core.startPkg("apps:AppStore", true, true);
+            })
+            .text(Root.Lib.getString("appStoreOpenToSeeApps"))
+            .appendTo(container);
         },
         async security() {
           async function performSecurityScan() {

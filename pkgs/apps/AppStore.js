@@ -122,7 +122,7 @@ export default {
     });
 
     const container = new Root.Lib.html("div")
-      .class("col", "w-100", "gap", "ovh", "app-store")
+      .class("w-100", "ovh", "app-store")
       .appendTo(wrapper);
 
     const asFilePath = "Registry/AppStore";
@@ -153,6 +153,13 @@ export default {
 
     function makeAppNameSafe(pkg) {
       return pkg.replace(/\//g, "--");
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
     }
 
     try {
@@ -284,6 +291,10 @@ export default {
             });
         }
 
+        const packageList = await appStoreModule.list();
+
+        shuffleArray(packageList);
+
         pages = {
           async clear() {
             container.elm.innerHTML = "";
@@ -301,11 +312,23 @@ export default {
             }
 
             new Html("h2")
-              .style({ margin: "12px 8px 0 0" })
+              // .style({ margin: "12px 8px 0 0" })
+              .style({
+                margin: "12px 8px 0px 0px",
+                "background-image":
+                  "linear-gradient(to bottom, var(--root) 65%, rgba(var(--root-rgb), 0))",
+                padding: "8px 12px 8px 12px",
+                margin: "0",
+                position: "sticky",
+                height: "48px",
+                "background-color": "transparent",
+                "z-index": "1",
+                top: "0",
+                display: "flex",
+                "align-items": "center",
+              })
               .text(categoryName)
               .appendTo(container);
-
-            const packageList = await appStoreModule.list();
 
             // const searchBar = new Html("div")
             //   .class("search-bar")
