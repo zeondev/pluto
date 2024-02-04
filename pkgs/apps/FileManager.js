@@ -123,7 +123,20 @@ export default {
                 "Folder download is not yet supported.",
                 wrapper
               );
-            let text = await vfs.readFile(selectedItem, undefined, true);
+            let text = await vfs.readFile(selectedItem, undefined);
+
+            if (text.startsWith('blob:')) {
+              var element = document.createElement("a");
+              element.setAttribute("href", text);
+              element.setAttribute("download", selectedItem.split("/").pop());
+              element.style.display = "none";
+              document.body.appendChild(element);
+              element.click();
+              document.body.removeChild(element);
+
+              renderFileList(path);
+              return;
+            }
 
             // boilerplate download code
             var element = document.createElement("a");
