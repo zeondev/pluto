@@ -116,6 +116,43 @@ export default {
         await Root.Core.startPkg("ui:Desktop", true, true);
       }
 
+      const searchParams = new URLSearchParams(location.search);
+
+      async function checkPackageBoot() {
+        if (searchParams.has("pkg")) {
+          const pkg = searchParams.get("pkg");
+          if (pkg.startsWith("app:")) {
+            // load custom app from fs
+            const appExists = await vfs.exists(pkg.slice(4));
+
+            if (!appExists) return;
+
+            const app = await vfs.readFile(pkg.slice(4));
+
+            const p = await Root.Core.startPkg(
+              "data:text/javascript," + encodeURIComponent(app),
+              false,
+              true
+            );
+
+            if (searchParams.has("data")) {
+              p.proc.send(JSON.parse(data));
+            }
+          } else {
+            // load system app
+            const p = await Root.Core.startPkg(pkg, true, true);
+
+            if (searchParams.has("data")) {
+              try {
+                p.proc.send(JSON.parse(searchParams.get("data")));
+              } catch (e) {}
+            }
+          }
+        }
+      }
+
+      await checkPackageBoot();
+
       let themeLib = await Root.Core.startPkg("lib:ThemeLib");
 
       if (appearanceConfig.theme && appearanceConfig.theme.endsWith(".theme")) {
