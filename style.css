@@ -148,6 +148,30 @@ a {
   --outline: hsl(131, 23%, 22%);
 }
 
+:root[data-theme="purple"] {
+  color-scheme: dark;
+  --primary: hsl(270, 84%, 21%);
+  --negative: #b81414;
+  --negative-light: #f18383;
+  --negative-dark: #710d0d;
+  --positive: #14b838;
+  --positive-light: #7cf197;
+  --positive-dark: #0d7123;
+  --root: hsl(270, 30%, 8%);
+  --root-rgb: 15, 18, 25;
+  --header: hsl(270, 31%, 12%);
+  --unfocused: hsl(270, 34%, 5%);
+  --text: #ffffff;
+  --text-rgb: 255, 255, 255;
+  --text-alt: #bbc5dd;
+  --text-light: #ffffff;
+  --label: hsl(270, 19%, 38%);
+  --label-light: hsl(270, 18%, 50%);
+  --neutral: hsl(270, 29%, 18%);
+  --neutral-focus: hsl(270, 30%, 20%);
+  --outline: hsl(270, 26%, 22%);
+}
+
 :root[data-theme="grey"] {
   color-scheme: dark;
   --primary: #124b31;
@@ -167,10 +191,11 @@ a {
   --text-light: #ffffff;
   --label: #acd3a6;
   --label-light: #acd3a6;
-  --neutral: #222222;
-  --neutral-focus: #252525;
+  --neutral: #252525;
+  --neutral-focus: #282828;
   --outline: #fff3;
 }
+
 
 :root[data-theme="light"] {
   color-scheme: light;

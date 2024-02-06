@@ -27,6 +27,8 @@ let templateFsLayout = {
             '{"version":1,"name":"Red","description":"A built-in theme.","values":null,"cssThemeDataset":"red","wallpaper":"./assets/wallpapers/red.png"}',
           "green.theme":
             '{"version":1,"name":"Green","description":"A built-in theme.","values":null,"cssThemeDataset":"green","wallpaper":"./assets/wallpapers/green.jpg"}',
+          "purple.theme":
+            '{"version":1,"name":"Purple","description":"A built-in theme.","values":null,"cssThemeDataset":"purple","wallpaper":"./assets/wallpapers/purple.svg"}',
         },
       },
       apps: {
