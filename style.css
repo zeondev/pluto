@@ -157,8 +157,8 @@ a {
   --positive: #14b838;
   --positive-light: #7cf197;
   --positive-dark: #0d7123;
-  --root: hsl(270, 30%, 8%);
-  --root-rgb: 15, 18, 25;
+  --root: hsl(268, 32%, 8%);
+  --root-rgb: 20, 14, 27;
   --header: hsl(270, 31%, 12%);
   --unfocused: hsl(270, 34%, 5%);
   --text: #ffffff;
