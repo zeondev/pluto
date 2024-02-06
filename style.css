@@ -890,6 +890,11 @@ textarea::placeholder {
   touch-action: unset !important;
 }
 
+/* Scroll ovh surfaces on mobile */
+.ovh * {
+  touch-action: unset !important;
+}
+
 /* Table */
 table {
   border-collapse: collapse;
