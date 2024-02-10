@@ -513,8 +513,8 @@ export default {
             let appsHtml = await Promise.all(
               trayItems.map(async (app) => {
                 if (app.proc === undefined || app.proc === null) {
-                  console.log("Bad app");
-                  return;
+                  console.log("Bad app", app);
+                  return false;
                 }
                 const t = app.proc.trayInfo;
                 if (t === null || t === undefined) {

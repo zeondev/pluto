@@ -847,6 +847,17 @@
                   });
                 } else if (modalResult === false) {
                   result = null;
+                  // Report the app was improperly quit
+                  broadcastEventToProcs({
+                    type: "coreEvent",
+                    data: {
+                      type: "pkgEnd",
+                      detail: "forceStop",
+                      data: Core.processList[PID],
+                    },
+                  });
+                  // End the process
+                  Core.processList[PID] = null;
                   return;
                 }
               }
