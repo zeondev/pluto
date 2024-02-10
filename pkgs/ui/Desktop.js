@@ -499,8 +499,6 @@ export default {
 
       trayMenuState = !trayMenuState;
 
-      let prevItems = [];
-
       if (trayMenuState === true) {
         window.addEventListener("mousedown", onClickDetect);
         window.addEventListener("click", onFullClickDetect);
