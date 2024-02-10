@@ -84,12 +84,16 @@ export default {
         this.elementsArray[0].focus();
       });
 
+      requestAnimationFrame(() => {
+        modalBody.elm.querySelector("input,button").focus();
+      });
+
       return x;
     },
     alert: function (title, content, parent = "body") {
       return new Promise((res, _rej) => {
         this.modal(title, content, parent, false, {
-          text: lib.getString('ok'),
+          text: lib.getString("ok"),
           callback: (_) => res(true),
         });
       });
@@ -102,12 +106,12 @@ export default {
           parent,
           false,
           {
-            text: lib.getString('yes'),
+            text: lib.getString("yes"),
             type: "primary",
             callback: (_) => res(true),
           },
           {
-            text: lib.getString('no'),
+            text: lib.getString("no"),
             callback: (_) => res(false),
           }
         );
@@ -129,14 +133,14 @@ export default {
           parent,
           true,
           {
-            text: lib.getString('ok'),
+            text: lib.getString("ok"),
             type: "primary",
             callback: (_) => {
               res(input.elm.value);
             },
           },
           {
-            text: lib.getString('cancel'),
+            text: lib.getString("cancel"),
             callback: (_) => res(false),
           }
         );

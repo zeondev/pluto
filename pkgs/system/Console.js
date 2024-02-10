@@ -154,6 +154,7 @@ export default {
       title: "Console",
     });
 
+    MyWindow.window.style.display = "none";
     wrapper = MyWindow.window.querySelector(".win-content");
 
     wrapper.classList.add("col", "h-100");
