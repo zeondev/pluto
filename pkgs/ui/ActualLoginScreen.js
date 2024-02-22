@@ -120,8 +120,8 @@ export default {
                 )
                 .attr({ tabindex: "0" })
                 .on("click", (e) => {
-                  x.classOff("fadeIn")
-                    .classOn("fadeOut")
+                  x.classOff("fadeInLong")
+                    .classOn("fadeOutLong")
                     .on("animationend", () => {
                       x.cleanup();
                       resolve(true);
@@ -187,8 +187,8 @@ export default {
                       passInput.styleJs({
                         borderColor: "var(--positive)",
                       });
-                      x.classOff("fadeIn")
-                        .classOn("fadeOut")
+                      x.classOff("fadeInLong")
+                        .classOn("fadeOutLong")
                         .on("animationend", () => {
                           x.cleanup();
                           resolve(true);
@@ -277,7 +277,7 @@ export default {
 
         initialScreen();
 
-        x.classOn("fadeIn");
+        x.classOn("fadeInLong");
 
         updateDate();
 

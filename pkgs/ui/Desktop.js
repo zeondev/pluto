@@ -61,6 +61,10 @@ export default {
 
     const iconsWrapper = new Root.Lib.html("div")
       .class("desktop-apps")
+      .style({
+        transition:
+          "opacity var(--long-animation-duration) var(--easing-function)",
+      })
       .appendTo(wrapper);
 
     if (localStorage.getItem("oldVFS")) {
@@ -245,10 +249,7 @@ export default {
 
       if (ev.target.closest(".menu")) {
         if (ev.button === 0) {
-          if (
-            ev.target.closest(".menu button") ||
-            ev.target.closest(".menu .app")
-          ) {
+          if (ev.target.closest(".menu .app")) {
             toggleMenu();
           }
         }
@@ -391,6 +392,110 @@ export default {
             })
           );
 
+          let powerBtnPopup;
+          let powerBtnItems = [
+            {
+              item: "Refresh",
+              async select() {
+                toggleMenu();
+
+                const result = await Root.Modal.prompt(
+                  "Are you sure you want to refresh? You will lose all unsaved changes."
+                );
+
+                if (result) location.reload();
+              },
+            },
+            {
+              item: "Lock Screen",
+              async select() {
+                let lockScreen = await Root.Core.startPkg("ui:LockScreen");
+                toggleMenu();
+                await lockScreen.loader();
+              },
+            },
+            {
+              item: "Exit Session",
+              async select() {
+                toggleMenu();
+
+                const result = await Root.Modal.prompt(
+                  "Are you sure you want to end this session? You will lose all unsaved changes."
+                );
+
+                if (!result) return;
+                sessionStorage.removeItem("userData");
+
+                wrapper.elm.style.setProperty(
+                  "pointer-events",
+                  "none",
+                  "important"
+                );
+                background.style({ opacity: 0 });
+                iconsWrapper.style({ opacity: 0 });
+                dock.classOn("hiding");
+
+                const appsToClose = Root.Core.processList
+                  .filter((f) => f !== null)
+                  .filter(
+                    (f) =>
+                      f.name.startsWith("apps:") || f.name.startsWith("none:")
+                  );
+
+                // cloe all apps!!!
+                const x = await new Promise(async (resolve, reject) => {
+                  resolve(
+                    await Promise.all(
+                      appsToClose.map((a) => {
+                        return new Promise((resolve, reject) => {
+                          a.proc.end();
+                          resolve(true);
+                        });
+                      })
+                    )
+                  );
+                });
+
+                console.log("closed all apps");
+
+                setTimeout(async () => {
+                  Root.Lib.onEnd();
+                  sessionStorage.removeItem("skipLogin");
+                  const lgs = await Root.Core.startPkg("ui:ActualLoginScreen");
+
+                  let themeLib = await Root.Core.startPkg("lib:ThemeLib");
+
+                  await lgs.launch();
+                  await Root.Core.startPkg("ui:Desktop", true, true);
+
+                  if (
+                    appearanceConfig.theme &&
+                    appearanceConfig.theme.endsWith(".theme")
+                  ) {
+                    const x = themeLib.validateTheme(
+                      await vfs.readFile(
+                        "Root/Pluto/config/themes/" + appearanceConfig.theme
+                      )
+                    );
+
+                    if (x !== undefined && x.success === true) {
+                      console.log(x);
+
+                      themeLib.setCurrentTheme(x.data);
+                    } else {
+                      console.log(x.message);
+                      document.documentElement.dataset.theme = "dark";
+                    }
+                  } else {
+                    themeLib.setCurrentTheme(
+                      '{"version":1,"name":"Dark","description":"A built-in theme.","values":null,"cssThemeDataset":"dark","wallpaper":"./assets/wallpapers/space.png"}'
+                    );
+                  }
+                }, 2000);
+              },
+            },
+          ];
+
           menuElm = new Html("div").class("menu").appendMany(
             new Html("div").class("me").appendMany(
               new Html("div").class("pfp").style({
@@ -411,19 +516,65 @@ export default {
               new Root.Lib.html("button")
                 .class("small")
                 .html(Root.Lib.icons.wrench)
-                .on("click", (e) => {
-                  Root.Core.startPkg("apps:Settings", true, true);
+                .on("click", async () => {
+                  await Root.Core.startPkg("apps:Settings", true, true);
+                  toggleMenu();
                 }),
               new Root.Lib.html("button")
                 .class("small")
-                .html(Root.Lib.icons.lock)
-                .on("click", async (e) => {
-                  let ls = await Root.Core.startPkg(
-                    "ui:LockScreen",
-                    true,
-                    true
-                  );
-                  ls.loader();
+                .html(Root.Lib.icons.power)
+                .on("mousedown", () => {
+                  powerBtnPopup.cleanup();
+                  powerBtnPopup = null;
+                })
+                .on("click", (e) => {
+                  if (powerBtnPopup) {
+                    powerBtnPopup.cleanup();
+                    powerBtnPopup = null;
+                  } else {
+                    const bcr = e.target.getBoundingClientRect();
+                    powerBtnPopup = ctxMenu.data
+                      .new(
+                        bcr.left,
+                        bcr.bottom,
+                        powerBtnItems.map((item) => {
+                          let text = `<span>${Root.Lib.escapeHtml(
+                            item.item
+                          )}</span>`;
+                          if (item.icon) {
+                            text = `${item.icon}<span>${Root.Lib.escapeHtml(
+                              item.item
+                            )}</span>`;
+                          }
+                          if (item.type !== undefined) {
+                            if (item.type === "separator") {
+                              return {
+                                item: "<hr>",
+                                selectable: false,
+                              };
+                            } else return item;
+                          }
+                          if (item.key !== undefined) {
+                            return {
+                              item:
+                                text +
+                                `<span class="ml-auto label">${item.key}</span>`,
+                              select: item.select,
+                            };
+                          } else {
+                            return { item: text, select: item.select };
+                          }
+                        }),
+                        null,
+                        document.body,
+                        true,
+                        true
+                      )
+                      .styleJs({
+                        minWidth: "150px",
+                      })
+                      .appendTo("body");
+                  }
                 })
             ),
             new Html("div")
