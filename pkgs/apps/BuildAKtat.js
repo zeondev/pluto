@@ -15,7 +15,7 @@ export default {
 
     MyWindow = new Win({
       title: "Build A Ktat",
-      content: '<iframe src="https://ktat.cherries.to">',
+      content: '<iframe src="https://build-a-ktat.thats-the.name">',
       pid: Root.PID,
       width: 800,
       height: 600,
