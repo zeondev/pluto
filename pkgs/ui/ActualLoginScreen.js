@@ -86,7 +86,6 @@ export default {
         let middleDiv = new Html("div")
           .class("row", "fc", "gap")
           .style({ margin: "auto" });
-        let bottomText = [];
 
         let service = core.services.find((x) => x.name === "Account");
 
@@ -94,11 +93,15 @@ export default {
           middleDiv.clear();
 
           if (!service && !service.ref) {
-            bottomText.push(
+            bottomText.append(
               new Html("span").text(lib.getString("lockScreen_tapAnywhere"))
             );
           } else {
             const account = service.ref.getUserData();
+
+            bottomText.append(
+              new Html("span").text("Select a method to log in.")
+            );
 
             middleDiv.appendMany(
               new Html("button")
@@ -115,6 +118,7 @@ export default {
                     .text("Local User")
                     .styleJs({ fontSize: "18px" })
                 )
+                .attr({ tabindex: "0" })
                 .on("click", (e) => {
                   x.classOff("fadeIn")
                     .classOn("fadeOut")
@@ -141,7 +145,10 @@ export default {
                     .text("Zeon Account")
                     .styleJs({ fontSize: "18px" })
                 )
+                .attr({ tabindex: "0" })
                 .on("click", (e) => {
+                  bottomText.clear();
+
                   const userInput = new Html("input")
                     .attr({
                       type: "text",
@@ -214,6 +221,7 @@ export default {
                       new Html("button")
                         .html("&larr; Back")
                         .on("click", initialScreen)
+                        .attr({ tabindex: "0" })
                         .styleJs({ transitionDuration: "0.25s" }),
                       new Html("img")
                         .attr({ src: "https://zeon.dev/imgs/zeonfull.png" })
@@ -233,21 +241,26 @@ export default {
                       new Html("button")
                         .class("primary")
                         .text("Login")
-                        .on("click", checkLogin)
+                        .attr({ tabindex: "0" })
+                        .on("click", checkLogin),
+                      new Html("button")
+                        .html("Don't have an account?")
+                        .styleJs({ border: "1px solid var(--outline)" })
+                        .attr({ tabindex: "0" })
+                        .on("click", async () => {
+                          window.open("https://zeon.dev/signup");
+                        })
+                        .styleJs({ transitionDuration: "0.25s" })
                     );
 
                   middleDiv.clear().appendMany(bigDiv);
                 })
                 .styleJs({ marginTop: "auto", marginBottom: "auto" })
             );
-
-            bottomText.push(
-              new Html("span").text("Select a method to log in.")
-            );
           }
         }
 
-        initialScreen();
+        let bottomText = new Html("span").class("mt-auto", "col", "fc", "gap");
 
         const x = new Html("div")
           .class("blur", "col", "gap", "display-padding")
@@ -258,11 +271,11 @@ export default {
           .appendMany(
             new Html("div").class("col", "fc", "gap").appendMany(time, date),
             middleDiv,
-            new Html("span")
-              .class("mt-auto", "col", "fc", "gap")
-              .appendMany(...bottomText)
+            bottomText
           )
           .appendTo("body");
+
+        initialScreen();
 
         x.classOn("fadeIn");
 
