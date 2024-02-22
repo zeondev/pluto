@@ -152,6 +152,11 @@ export default {
 
     MyWindow = new Win({
       title: "Console",
+      onclose: function () {
+        consoleState = false;
+        MyWindow.hide();
+        return false;
+      },
     });
 
     MyWindow.window.style.display = "none";
@@ -169,7 +174,12 @@ export default {
       .style({ padding: "4px" })
       .appendTo(wrapper);
     let consoleInput = new Root.Lib.html("input")
-      .attr({ placeholder: "Command" })
+      .attr({
+        placeholder: "Command",
+        autocorrect: "off",
+        autocomplete: "off",
+        autofill: "off",
+      })
       .class("fg", "monospace")
       .style({ "min-width": "0" })
       .appendTo(inputRow)
@@ -191,14 +201,14 @@ export default {
 
       if (html === null) html = text;
 
-      const tolerance = 10;
-      const lastChildRect = list.elm.lastElementChild
-        ? list.elm.lastElementChild.getBoundingClientRect()
-        : null;
-      const isAtBottom =
-        lastChildRect &&
-        lastChildRect.bottom - list.elm.getBoundingClientRect().bottom <=
-          tolerance;
+      // const tolerance = 10;
+      // const lastChildRect = list.elm.lastElementChild
+      //   ? list.elm.lastElementChild.getBoundingClientRect()
+      //   : null;
+      // const isAtBottom =
+      //   lastChildRect &&
+      //   lastChildRect.bottom - list.elm.getBoundingClientRect().bottom <=
+      //     tolerance;
 
       list.append(
         new Root.Lib.html("div").class("list-item", "log-" + type).html(html)
@@ -258,7 +268,6 @@ export default {
       const { type, data } = m;
       switch (type) {
         case "toggle":
-          console.log("h");
           consoleState = !consoleState;
           consoleState === true ? MyWindow.show() : MyWindow.hide();
           if (consoleState === true) {

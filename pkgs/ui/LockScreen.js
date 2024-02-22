@@ -127,6 +127,10 @@ export default {
 
       updateDate();
 
+      setInterval(() => {
+        updateDate();
+      }, 1000);
+
       return x;
     },
   },

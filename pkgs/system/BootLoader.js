@@ -88,6 +88,52 @@ export default {
         Root.Core.setLanguage(appearanceConfig.language);
       }
 
+      let themeLib = await Root.Core.startPkg("lib:ThemeLib");
+
+      async function checkTheme() {
+        if (
+          appearanceConfig.theme &&
+          appearanceConfig.theme.endsWith(".theme")
+        ) {
+          const x = themeLib.validateTheme(
+            await vfs.readFile(
+              "Root/Pluto/config/themes/" + appearanceConfig.theme
+            )
+          );
+
+          if (x !== undefined && x.success === true) {
+            console.log(x);
+
+            themeLib.setCurrentTheme(x.data);
+          } else {
+            console.log(x.message);
+            document.documentElement.dataset.theme = "dark";
+          }
+        } else {
+          themeLib.setCurrentTheme(
+            '{"version":1,"name":"Dark","description":"A built-in theme.","values":null,"cssThemeDataset":"dark","wallpaper":"./assets/wallpapers/space.png"}'
+          );
+        }
+      }
+
+      await checkTheme();
+
+      lsg.cleanup();
+
+      if (
+        appearanceConfig["wantsLoginScreen"] === undefined ||
+        (appearanceConfig["wantsLoginScreen"] === true &&
+          sessionStorage.getItem("skipLogin") !== "true")
+      ) {
+        const lgs = await Root.Core.startPkg(
+          "ui:ActualLoginScreen",
+          true,
+          true
+        );
+
+        await lgs.launch();
+      }
+
       if (await vfs.exists("Root/Pluto/config/settingsConfig.json")) {
         let settingsConfig = JSON.parse(
           await vfs.readFile("Root/Pluto/config/settingsConfig.json")
@@ -153,28 +199,7 @@ export default {
 
       await checkPackageBoot();
 
-      let themeLib = await Root.Core.startPkg("lib:ThemeLib");
-
-      if (appearanceConfig.theme && appearanceConfig.theme.endsWith(".theme")) {
-        const x = themeLib.validateTheme(
-          await vfs.readFile(
-            "Root/Pluto/config/themes/" + appearanceConfig.theme
-          )
-        );
-
-        if (x !== undefined && x.success === true) {
-          console.log(x);
-
-          themeLib.setCurrentTheme(x.data);
-        } else {
-          console.log(x.message);
-          document.documentElement.dataset.theme = "dark";
-        }
-      } else {
-        themeLib.setCurrentTheme(
-          '{"version":1,"name":"Dark","description":"A built-in theme.","values":null,"cssThemeDataset":"dark","wallpaper":"./assets/wallpapers/space.png"}'
-        );
-      }
+      await checkTheme();
 
       if (
         appearanceConfig["hasSetupSystem"] === undefined ||
@@ -184,7 +209,6 @@ export default {
       }
       // await Root.Core.startPkg("apps:TaskManager", true, true);
       // destroy loading screen
-      lsg.cleanup();
 
       // ply startup stound
       let a = new Audio("./assets/startup.wav");
@@ -197,6 +221,7 @@ export default {
       document.addEventListener("keydown", (e) => {
         if (e.key === "~") {
           e.preventDefault();
+          if (e.repeat) return;
           consoleApp.proc.send({ type: "toggle" });
         }
       });

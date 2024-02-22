@@ -49,6 +49,7 @@ export default {
       loginWithZeon: "Login with Zeon Account",
       logOut: "Log out",
       zeonAccount: "Zeon Account",
+      wantsLoginScreen: "Show the login screen when not logged in",
       useThemeWallpaper: "Use the theme's wallpaper",
       toolbarPosition: "Toolbar position",
       toolbarPositionVertical: "Vertical",
@@ -404,6 +405,7 @@ export default {
                   );
                   if (service && service.ref) {
                     service.ref.logout();
+                    sessionStorage.removeItem("skipLogin");
                   }
                   this.account();
                 }
@@ -433,6 +435,32 @@ export default {
               Root.Modal.alert("Something went wrong loading your user data.");
             }
           }
+
+          // TOOD AAA
+          new Html("span")
+            .appendMany(
+              new Html("input")
+                .attr({
+                  type: "checkbox",
+                  id: Root.PID + "wls",
+                  checked:
+                    desktopConfig.wantsLoginScreen === undefined
+                      ? true
+                      : desktopConfig.wantsLoginScreen === true
+                      ? true
+                      : null,
+                })
+                .on("input", async (e) => {
+                  desktopConfig.wantsLoginScreen = e.target.checked;
+                  save();
+                }),
+              new Html("label")
+                .attr({
+                  for: Root.PID + "wls",
+                })
+                .text(Root.Lib.getString("wantsLoginScreen"))
+            )
+            .appendTo(container);
         },
         async system() {
           await this.clear("system");
