@@ -121,9 +121,9 @@ export default {
       lsg.cleanup();
 
       if (
-        appearanceConfig["wantsLoginScreen"] === undefined ||
-        (appearanceConfig["wantsLoginScreen"] === true &&
-          sessionStorage.getItem("skipLogin") !== "true")
+        (appearanceConfig["wantsLoginScreen"] === undefined ||
+          appearanceConfig["wantsLoginScreen"] === true) &&
+        sessionStorage.getItem("skipLogin") !== "true"
       ) {
         const lgs = await Root.Core.startPkg(
           "ui:ActualLoginScreen",
