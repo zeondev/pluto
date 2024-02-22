@@ -194,19 +194,19 @@ export default {
               } catch (e) {}
             }
           }
+        } else {
+          if (
+            appearanceConfig["hasSetupSystem"] === undefined ||
+            appearanceConfig["hasSetupSystem"] === false
+          ) {
+            await Root.Core.startPkg("apps:Welcome", true, true);
+          }
         }
       }
 
       await checkPackageBoot();
 
       await checkTheme();
-
-      if (
-        appearanceConfig["hasSetupSystem"] === undefined ||
-        appearanceConfig["hasSetupSystem"] === false
-      ) {
-        await Root.Core.startPkg("apps:Welcome", true, true);
-      }
       // await Root.Core.startPkg("apps:TaskManager", true, true);
       // destroy loading screen
 
