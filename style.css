@@ -2588,13 +2588,17 @@ hr {
     left 0.25s var(--easing-function);
 }
 
+.blur [class^="display-"] {
+  text-align: center;
+}
+
 .display-heading {
-  font-size: 5vmax;
+  font-size: min(64px, max(48px, 5vmax));
   font-weight: 600;
 }
 
 .display-subheading {
-  font-size: 1.5vmax;
+  font-size: min(48px, max(18px, 1.5vmax));
   font-weight: 550;
 }
 

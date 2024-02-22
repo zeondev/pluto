@@ -124,8 +124,8 @@ export default {
                     .classOn("fadeOut")
                     .on("animationend", () => {
                       x.cleanup();
+                      resolve(true);
                     });
-                  resolve(true);
                   sessionStorage.setItem("skipLogin", true);
                 })
                 .styleJs({ marginTop: "auto", marginBottom: "auto" }),
@@ -191,8 +191,8 @@ export default {
                         .classOn("fadeOut")
                         .on("animationend", () => {
                           x.cleanup();
+                          resolve(true);
                         });
-                      resolve(true);
                       sessionStorage.setItem("skipLogin", true);
                     } else {
                       passInput
