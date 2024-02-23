@@ -162,6 +162,9 @@ const Vfs = {
           }
         }
       }
+      document.dispatchEvent(new CustomEvent("pluto.vfs-read"), {
+        detail: { path },
+      });
       return resolve(current);
     });
   },
@@ -205,6 +208,10 @@ const Vfs = {
       }
     }
     this.save("write " + path);
+
+    document.dispatchEvent(new CustomEvent("pluto.vfs-write"), {
+      detail: { path, contents },
+    });
   },
   // Function to create a new folder at a given path
   async createFolder(path, fsObject = this.fileSystem) {
@@ -220,6 +227,10 @@ const Vfs = {
     }
     if (!current[foldername]) current[foldername] = {};
     this.save("mkdir " + path);
+
+    document.dispatchEvent(new CustomEvent("pluto.vfs-newFolder"), {
+      detail: { path },
+    });
   },
   // Function to delete a file or folder at a given path
   async delete(path, fsObject = this.fileSystem) {
@@ -250,6 +261,10 @@ const Vfs = {
     delete parent[filename];
 
     this.save("delete " + path);
+
+    document.dispatchEvent(new CustomEvent("pluto.vfs-delete"), {
+      detail: { path },
+    });
   },
   // Function to list all files and folders at a given path
   async list(path, fsObject = this.fileSystem) {
@@ -298,6 +313,9 @@ const Vfs = {
     delete current[oldName];
     current[newName] = temp;
     this.save(`rename ${path} to ${newName}`);
+    document.dispatchEvent(new CustomEvent("pluto.vfs-rename"), {
+      detail: { path, newName },
+    });
   },
   async exists(path, fsObject = this.fileSystem) {
     const parts = path.split("/");
