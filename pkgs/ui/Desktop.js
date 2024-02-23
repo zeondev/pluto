@@ -419,11 +419,21 @@ export default {
               async select() {
                 toggleMenu();
 
-                const result = await Root.Modal.prompt(
-                  "Are you sure you want to end this session? You will lose all unsaved changes."
-                );
+                const appsToClose = Root.Core.processList
+                  .filter((f) => f !== null)
+                  .filter(
+                    (f) =>
+                      f.name.startsWith("apps:") || f.name.startsWith("none:")
+                  );
 
-                if (!result) return;
+                if (appsToClose.length > 0) {
+                  const result = await Root.Modal.prompt(
+                    "Are you sure you want to end this session? You will lose all unsaved changes."
+                  );
+
+                  if (!result) return;
+                }
+
                 sessionStorage.removeItem("userData");
 
                 wrapper.elm.style.setProperty(
@@ -434,13 +444,6 @@ export default {
                 background.style({ opacity: 0 });
                 iconsWrapper.style({ opacity: 0 });
                 dock.classOn("hiding");
-
-                const appsToClose = Root.Core.processList
-                  .filter((f) => f !== null)
-                  .filter(
-                    (f) =>
-                      f.name.startsWith("apps:") || f.name.startsWith("none:")
-                  );
 
                 // cloe all apps!!!
                 const x = await new Promise(async (resolve, reject) => {
