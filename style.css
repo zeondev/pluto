@@ -1964,27 +1964,27 @@ hr {
 }
 
 .fadeIn {
-  animation: fadeIn var(--animation-duration) var(--easing-function) forwards;
+  animation: fadeIn var(--animation-duration) linear forwards;
 }
 
 .fadeOut {
-  animation: fadeOut var(--animation-duration) var(--easing-function) forwards;
+  animation: fadeOut var(--animation-duration) linear forwards;
 }
 
 .fadeInShort {
-  animation: fadeIn var(--short-animation-duration) var(--easing-function) forwards;
+  animation: fadeIn var(--short-animation-duration) linear forwards;
 }
 
 .fadeOutShort {
-  animation: fadeOut var(--short-animation-duration) var(--easing-function) forwards;
+  animation: fadeOut var(--short-animation-duration) linear forwards;
 }
 
 .fadeInLong {
-  animation: fadeIn var(--long-animation-duration) var(--easing-function) forwards;
+  animation: fadeIn var(--long-animation-duration) linear forwards;
 }
 
 .fadeOutLong {
-  animation: fadeOut var(--long-animation-duration) var(--easing-function) forwards;
+  animation: fadeOut var(--long-animation-duration) linear forwards;
 }
 
 .desktop .menu {
