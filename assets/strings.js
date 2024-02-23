@@ -36,6 +36,7 @@ export default {
     open: "Open",
     error: "Error",
     refresh: "Refresh",
+    details: "View details",
     action_newDocument: "New Document",
     action_openDocument: "Open Document",
     action_save: "Save",
@@ -79,6 +80,7 @@ export default {
     systemApp_Weather: "Weather",
     systemApp_Terminal: "Terminal",
     systemApp_Calculator: "Calculator",
+    systemApp_EventViewer: "Event Viewer",
   },
   en_GB: {
     action_newDocument: "New Document",
