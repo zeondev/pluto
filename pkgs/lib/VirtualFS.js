@@ -297,7 +297,7 @@ const Vfs = {
   },
   // Function to rename a file
   // newName MUST be the new exact name of the file
-  // NOT absolute
+  // HAS TO BE NOT absolute
   async rename(path, newName, fsObject = this.fileSystem) {
     const parts = path.split("/");
     const oldName = parts.pop(); // remove last item from path to get dirname
