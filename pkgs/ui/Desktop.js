@@ -395,7 +395,7 @@ export default {
           let powerBtnPopup;
           let powerBtnItems = [
             {
-              item: "Refresh",
+              item: Root.Lib.getString("refresh"),
               async select() {
                 toggleMenu();
 
@@ -407,7 +407,7 @@ export default {
               },
             },
             {
-              item: "Lock Screen",
+              item: Root.Lib.getString("lockScreen"),
               async select() {
                 let lockScreen = await Root.Core.startPkg("ui:LockScreen");
                 toggleMenu();
@@ -415,7 +415,7 @@ export default {
               },
             },
             {
-              item: "Exit Session",
+              item: Root.Lib.getString("logoutSession"),
               async select() {
                 toggleMenu();
 

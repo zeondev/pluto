@@ -100,7 +100,7 @@ export default {
             const account = service.ref.getUserData();
 
             bottomText.append(
-              new Html("span").text("Select a method to log in.")
+              new Html("span").text(lib.getString("lockScreenSelectMethod"))
             );
 
             middleDiv.appendMany(
@@ -152,13 +152,13 @@ export default {
                   const userInput = new Html("input")
                     .attr({
                       type: "text",
-                      placeholder: "Username",
+                      placeholder: lib.getString("username"),
                     })
                     .styleJs({ transitionDuration: "0.25s" });
                   const passInput = new Html("input")
                     .attr({
                       type: "password",
-                      placeholder: "Password",
+                      placeholder: lib.getString("password"),
                     })
                     .styleJs({ transitionDuration: "0.25s" });
 
@@ -219,7 +219,7 @@ export default {
                     .classOn("col", "gap", "fc", "transparent", "padding")
                     .appendMany(
                       new Html("button")
-                        .html("&larr; Back")
+                        .html(`&larr; ${lib.getString("back")}`)
                         .on("click", initialScreen)
                         .attr({ tabindex: "0" })
                         .styleJs({ transitionDuration: "0.25s" }),
@@ -240,11 +240,11 @@ export default {
                       passInput,
                       new Html("button")
                         .class("primary")
-                        .text("Login")
+                        .text(lib.getString("login"))
                         .attr({ tabindex: "0" })
                         .on("click", checkLogin),
                       new Html("button")
-                        .html("Don't have an account?")
+                        .html(lib.getString("dontHaveZeonAccount"))
                         .styleJs({ border: "1px solid var(--outline)" })
                         .attr({ tabindex: "0" })
                         .on("click", async () => {
