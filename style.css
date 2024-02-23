@@ -57,7 +57,7 @@ input[type="range"]:focus {
 input:not([type="checkbox"], [type="range"]),
 textarea,
 .ace_content {
-  cursor: var(--cursor-text) 15 6, auto !important;
+  cursor: var(--cursor-text) 10 9, auto !important;
 }
 
 /* p,
