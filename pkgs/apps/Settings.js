@@ -1126,6 +1126,11 @@ export default {
                 }, 1000);
 
                 async function messageWatcher(e) {
+                  // Some extensions may send a message as an object, e.g.
+                  /*
+                  { source: "react-devtools-content-script", hello: true }
+                  */
+                  if (typeof data !== 'string') return;
                   if (!e.data.startsWith("{")) return;
 
                   const o = JSON.parse(e.data);
@@ -1309,8 +1314,6 @@ export default {
 
       setTimeout((_) => pages[currentPage]());
     }
-
-    console.log("loading settings pap", pages);
 
     setupSettingsApp();
 
