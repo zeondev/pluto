@@ -88,6 +88,7 @@ export default {
     password: "Password",
     login: "Login",
     dontHaveZeonAccount: "Don't have an account?",
+    devSettings: "Developer",
   },
   en_GB: {
     action_newDocument: "New Document",

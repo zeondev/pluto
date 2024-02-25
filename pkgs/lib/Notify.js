@@ -92,7 +92,7 @@ export default {
 
       notify.appendTo(parent);
 
-      console.log(notify, parent);
+      if (window.__DEBUG === true) console.log(notify, parent);
 
       window.nf = notify;
       window.np = parent;

@@ -201,7 +201,8 @@ export default {
             await vfs.readFile("Registry/AppStore/_AppStoreIndex.json")
           );
 
-          console.log(fileName, as);
+          if (window.__DEBUG === true)
+            console.log(fileName, as);
 
           if (fileName in as) {
             return {

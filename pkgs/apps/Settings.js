@@ -58,7 +58,8 @@ export default {
       dockStyleFull: "Full",
       dockStyleCompact: "Compact",
       dockStyleMinimal: "Minimal",
-      dockShowTray: "Show the dock's tray",
+      dockShowTray: "Show the application tray in the dock",
+      dockShowAssistant: "Show the assistant in the dock",
       testNetwork: "Test Network",
       networkTestSuccess: "You're online and good to go!",
       networkTestResult: "Your internet is {status}",
@@ -185,6 +186,7 @@ export default {
     const themeLib = await Root.Lib.loadLibrary("ThemeLib");
     const codeScanner = await Root.Lib.loadLibrary("CodeScanner");
     const dropDown = await Root.Lib.loadComponent("DropDown");
+    const Notify = await Root.Lib.loadLibrary("Notify");
     await vfs.importFS();
 
     const defaultDesktopConfig = {
@@ -194,6 +196,7 @@ export default {
       sidebarType: "vertical",
       dockStyle: "full",
       dockShowTray: true,
+      dockShowAssistant: true,
     };
 
     let desktopConfig = Object.assign(
@@ -220,7 +223,7 @@ export default {
       onclose: () => {
         Root.Lib.onEnd();
       },
-      width: 480,
+      width: 520,
       height: 360,
       pid: Root.PID,
     });
@@ -237,8 +240,9 @@ export default {
 
     function setupSettingsApp() {
       wrapper.innerHTML = "";
+      let nb = new Html("div").classOn("notify-box").appendTo(wrapper);
 
-      TextSidebar.new(wrapper, [
+      const pagesList = [
         {
           icon: Root.Lib.icons.cpu,
           text: Root.Lib.getString("system"),
@@ -287,7 +291,23 @@ export default {
             pages.security();
           },
         },
-      ]);
+      ];
+
+      if (desktopConfig["shh"]) {
+        pagesList.push({
+          icon: Root.Lib.icons.debug,
+          text: Root.Lib.getString("devSettings"),
+          title: Root.Lib.getString("devSettings"),
+          onclick() {
+            pages.secret();
+          },
+        });
+        window.__DEBUG = true;
+      } else {
+        window.__DEBUG = false;
+      }
+
+      TextSidebar.new(wrapper, pagesList);
 
       container = new Root.Lib.html("div")
         .class("container", "col", "w-100", "gap", "padded", "ovh")
@@ -660,6 +680,59 @@ export default {
 
           makeHeading("h2", Root.Lib.getString("plutoInfo"));
 
+          let coreClicks = 0;
+          let text = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+          let secretIsEnabled = desktopConfig["shh"] || false;
+          // 🤫
+          async function increaseCoreCount() {
+            coreClicks++;
+
+            if (coreClicks > 7) {
+              coreClicks = 0;
+              secretIsEnabled = !secretIsEnabled;
+              desktopConfig["shh"] = secretIsEnabled;
+              const { nb } = setupSettingsApp();
+              await save();
+              Notify.show(
+                text[48] + text[14] + text[0] + text[7],
+                text[50] +
+                  text[14] +
+                  text[20] +
+                  text[52] +
+                  text[5] +
+                  text[14] +
+                  text[20] +
+                  text[13] +
+                  text[3] +
+                  text[52] +
+                  text[19] +
+                  text[7] +
+                  text[4] +
+                  text[52] +
+                  text[3] +
+                  text[4] +
+                  text[21] +
+                  text[52] +
+                  text[12] +
+                  text[14] +
+                  text[3] +
+                  text[4] +
+                  text[52] +
+                  text[4] +
+                  text[0] +
+                  text[18] +
+                  text[19] +
+                  text[4] +
+                  text[17] +
+                  text[52] +
+                  text[4] +
+                  text[6] +
+                  text[6],
+                nb
+              );
+            }
+          }
+
           const plutoDetails = new Html("div")
             .class("card-box", "list", "max")
             .appendMany(
@@ -675,7 +748,10 @@ export default {
                 .class("item")
                 .appendMany(
                   new Html().text(Root.Lib.getString("coreVersion")),
-                  new Html().class("label").text(sysInfo.versionString)
+                  new Html()
+                    .class("label")
+                    .text(sysInfo.versionString)
+                    .on("click", increaseCoreCount)
                 ),
               // Supported Versions
               new Html()
@@ -956,6 +1032,37 @@ export default {
             )
             .appendTo(container);
 
+          new Html("span")
+            .appendMany(
+              new Html("input")
+                .attr({
+                  type: "checkbox",
+                  id: Root.PID + "da",
+                  checked:
+                    desktopConfig.dockShowAssistant === true ? true : null,
+                })
+                .on("input", async (e) => {
+                  desktopConfig.dockShowAssistant = e.target.checked;
+
+                  Html.qs(".desktop .dock").classOn("hiding");
+
+                  setTimeout(() => {
+                    // a bit hacky to do the animation
+                    Html.qs(".desktop .dock").classOff("hiding");
+                    document.documentElement.dataset.dockShowAssistant =
+                      e.target.checked;
+                  }, 600);
+
+                  save();
+                }),
+              new Html("label")
+                .attr({
+                  for: Root.PID + "da",
+                })
+                .text(Root.Lib.getString("dockShowAssistant"))
+            )
+            .appendTo(container);
+
           const languageSelectSpan = new Html("span")
             .class("row", "ac", "js", "gap")
             .appendTo(container);
@@ -1130,7 +1237,7 @@ export default {
                   /*
                   { source: "react-devtools-content-script", hello: true }
                   */
-                  if (typeof data !== 'string') return;
+                  if (typeof data !== "string") return;
                   if (!e.data.startsWith("{")) return;
 
                   const o = JSON.parse(e.data);
@@ -1310,9 +1417,23 @@ export default {
             )
             .appendTo(container);
         },
+        async secret() {
+          await this.clear("devSettings");
+          makeHeading("h1", Root.Lib.getString("devSettings"));
+
+          // add debug launch option
+          new Html("button")
+            .text("Launch Debug")
+            .on("click", (_) => {
+              Root.Core.startPkg("apps:Debug", true, true);
+            })
+            .appendTo(container);
+        },
       };
 
       setTimeout((_) => pages[currentPage]());
+
+      return { nb };
     }
 
     setupSettingsApp();

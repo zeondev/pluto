@@ -30,7 +30,7 @@ export default {
       let popup = null;
       let selectedId = selectedItem;
 
-      console.log(items, selectedId);
+      if (window.__DEBUG) console.log(items, selectedId);
 
       const sItem = items.find((i) => i.id === selectedId);
 

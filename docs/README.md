@@ -1,6 +1,6 @@
-# Pluto Documentation for version 1.5 (Elysium)
+# Pluto Documentation for version 1.6 (Elysium)
 
-- [Pluto Documentation for version 1.5 (Elysium)](#pluto-documentation-for-version-15-elysium)
+- [Pluto Documentation for version 1.6 (Elysium)](#pluto-documentation-for-version-15-elysium)
   - [Links to other useful documentation](#links-to-other-useful-documentation)
   - [How to initialize an application](#how-to-initialize-an-application)
     - [Export properties](#export-properties)
@@ -601,7 +601,7 @@ More documentation on VirtualFS [can be found here](virtualFS.md).
 
 ### Tray usage
 
-- Early 1.5 core uses the second parameter of `setupReturns` to declare tray items.
+- Early 1.6 core uses the second parameter of `setupReturns` to declare tray items.
 
   Pass in an argument as follows:
 

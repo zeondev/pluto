@@ -68,9 +68,25 @@ export default {
     let remakeTable;
 
     Root.Lib.setOnEnd(function () {
-      TaskManagerWindow.close();
+      if (TaskManagerWindow) TaskManagerWindow.close();
       clearInterval(remakeTable);
     });
+
+    if (
+      !Root.Core ||
+      (Root.Core &&
+        Root.Core.processList &&
+        Root.Core.processList
+          .filter((x) => x !== null)
+          .find(
+            (x) => x.name && x.name === "apps:EventViewer" && x.proc !== null
+          ) !== undefined)
+    ) {
+      Root.Lib.onEnd();
+      return Root.Lib.setupReturns((m) => {
+        console.log("Example received message: " + m);
+      });
+    }
 
     const Win = (await Root.Lib.loadLibrary("WindowSystem")).win;
 

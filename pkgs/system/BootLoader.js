@@ -81,6 +81,10 @@ export default {
         document.documentElement.dataset.dockShowTray =
           appearanceConfig.dockShowTray;
       }
+      if (appearanceConfig.dockShowAssistant !== undefined) {
+        document.documentElement.dataset.dockShowAssistant =
+          appearanceConfig.dockShowAssistant;
+      }
       if (
         appearanceConfig.language &&
         Root.Lib.langs.includes(appearanceConfig.language)
@@ -119,6 +123,10 @@ export default {
       await checkTheme();
 
       lsg.cleanup();
+
+      if (appearanceConfig["shh"] === true) {
+        window.__DEBUG = true;
+      }
 
       if (
         (appearanceConfig["wantsLoginScreen"] === undefined ||
@@ -182,7 +190,7 @@ export default {
             );
 
             if (searchParams.has("data")) {
-              p.proc.send(JSON.parse(data));
+              p.proc.send(JSON.parse(searchParams.get("data")));
             }
           } else {
             // load system app

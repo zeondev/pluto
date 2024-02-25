@@ -262,11 +262,21 @@ export default {
 
         let bottomText = new Html("span").class("mt-auto", "col", "fc", "gap");
 
+        let bgString = `url(${image}), linear-gradient(to bottom, #000a, #000a)`;
+
+        if (window.__DEBUG) {
+          console.log("wallpaper", document.documentElement.dataset.wallpaper);
+          console.log("bgString", bgString);
+        }
+
         const x = new Html("div")
           .class("blur", "col", "gap", "display-padding")
           .styleJs({
             zIndex: "99999999",
-            background: `url(${image}), linear-gradient(to bottom, var(--unfocused), var(--neutral-focus))`,
+          })
+          .style({
+            "--below-wallpaper": `url(${document.documentElement.dataset.wallpaper})`,
+            "--above-wallpaper": bgString
           })
           .appendMany(
             new Html("div").class("col", "fc", "gap").appendMany(time, date),

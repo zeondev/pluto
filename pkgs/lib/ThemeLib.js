@@ -138,6 +138,7 @@ export default {
         ) {
           if (theme.wallpaper) {
             // Securely tell the desktop to change wallpaper
+            document.documentElement.dataset.wallpaper = theme.wallpaper;
             const d = Core.processList.find((p) => p.name === "ui:Desktop");
             if (d !== undefined) {
               d.proc.send({
@@ -184,6 +185,9 @@ export default {
           break;
         case "green":
           fill = "hsl(131, 81%, 21%)";
+          break;
+        case "purple":
+          fill = "hsl(270, 84%, 21%)";
           break;
         case "grey":
           // fill = "#124b31";
