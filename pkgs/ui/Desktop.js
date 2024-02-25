@@ -913,10 +913,11 @@ export default {
 
     let trayWrapper = new Root.Lib.html("div")
       .style({ position: "relative" })
+      .class("border-left")
       .appendTo(dock);
 
     const trayMenuButton = new Root.Lib.html("button")
-      .class("toolbar-button", "tray", "border-left")
+      .class("toolbar-button", "tray")
       .html(Root.Lib.icons.chevronUp)
       .appendTo(trayWrapper);
 

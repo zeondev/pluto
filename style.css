@@ -1214,10 +1214,10 @@ td {
   border-radius: 8px 0 0 8px;
 }
 
-.desktop .dock > .toolbar-button.border-left {
+.desktop .dock > .border-left {
   border-left: 1px solid var(--outline);
 }
-.desktop .dock > .toolbar-button.border-right {
+.desktop .dock > .border-right {
   border-right: 1px solid var(--outline);
 }
 
