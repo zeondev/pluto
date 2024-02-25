@@ -2707,9 +2707,10 @@ hr {
   color: var(--text);
   border-radius: 6px;
   user-select: none;
-
   min-width: 120px;
   min-height: 16px;
+  max-height: 80vh;
+  overflow: auto;
   z-index: 9999999;
 }
 
