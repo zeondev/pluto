@@ -3,7 +3,7 @@
   try {
     const coreDetails = {
       version: 1.6,
-      versionString: 1.6.toString(),
+      versionString: (1.6).toString(),
       codename: "Elysium",
     };
     const knownLibraries = [];
@@ -359,7 +359,7 @@
           }
         }
       },
-      randomString: (_) => {
+      randomString: () => {
         if (crypto && crypto.randomUUID) return crypto.randomUUID();
         else {
           var d = new Date().getTime();
@@ -1043,6 +1043,18 @@
         window.bootUpCore = null;
       }, 1000);
     }
+
+    Core.processList.push({
+      name: "system:Core",
+      pid: 0,
+      proc: {
+        name: `Pluto Core (${coreDetails.codename})`,
+        description: "Handles core system functionality and package loading.",
+        trayInfo: null,
+        end: null
+      },
+      token: GlobalLib.randomString(),
+    });
 
     await Core.startPkg("system:BootLoader");
   } catch (e) {

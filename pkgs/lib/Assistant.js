@@ -173,6 +173,23 @@ const verbs = [
     verb: "cheers",
     action: "thanks",
   },
+
+  {
+    verb: "bye",
+    action: "bye",
+  },
+  {
+    verb: "goodbye",
+    action: "bye",
+  },
+  {
+    verb: "cya",
+    action: "bye",
+  },
+  {
+    verb: "see ya",
+    action: "bye",
+  },
 ];
 
 const Fuse = (await import("../../assets/fuse.mjs")).default;
@@ -209,7 +226,7 @@ async function parseString(str, apps) {
       currAction = verb[0].item;
     }
 
-    let ignoreList = ["viewer", "manager"];
+    let ignoreList = ["viewer", "manager", "store"];
 
     string.forEach((word) => {
       const verb = kwSearch.search(word);
@@ -344,6 +361,20 @@ const howAmIs = [
   "I'm doing phenomenal, {U}!",
   "I'm doing terrific, {U}!",
 ];
+// Bot responses to "bye"
+const goodByes = [
+  "Goodbye!",
+  "See you later!",
+  "Bye!",
+  "Cya!",
+  "See ya!",
+  "Goodbye, {U}!",
+  "See you later, {U}!",
+  "Bye, {U}!",
+  "Cya, {U}!",
+  "See ya, {U}!",
+  "Goodbye, {U}! Have a great day!",
+];
 // bot responses to "how do you work" / "what can you do"
 const howDoIWorks = [
   "I can help you launch apps, answer questions, and more!",
@@ -422,6 +453,11 @@ async function ask(what) {
           yourWelcomes[Math.floor(Math.random() * yourWelcomes.length)],
           u
         ),
+      };
+    case "bye":
+      return {
+        type: "response",
+        text: replace(goodByes[Math.floor(Math.random() * goodByes.length)], u),
       };
     case "startPkg":
       if (data.app === undefined)

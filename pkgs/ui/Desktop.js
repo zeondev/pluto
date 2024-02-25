@@ -791,9 +791,11 @@ export default {
                 Root.Lib.icons.plutoAssistant.replace(/"24"/g, '"48"')
               ),
               new Html("span").class("h2").text("Pluto Assistant"),
-              new Html("span").html(
-                "Assistant is currently a work in progress.<br>It can help you perform some actions on Pluto."
-              ),
+              new Html("span")
+                .styleJs({ textAlign: "center" })
+                .html(
+                  "Assistant is currently a work in progress.<br>It can help you perform some actions on Pluto."
+                ),
               new Html("div").class("space"),
               new Html("span").text("Try asking:"),
               ...randomQuestions
