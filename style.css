@@ -2731,7 +2731,7 @@ hr {
 
 .ctx-menu .item:hover,
 .ctx-menu .item.over {
-  background-color: var(--header);
+  background-color: var(--neutral-focus);
 }
 
 .win-content .modal {
