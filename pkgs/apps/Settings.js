@@ -1222,7 +1222,7 @@ export default {
                       parent.postMessage(JSON.stringify({
                         originId: "${originId}",
                         appData: Object.assign(a, { src: "${name}" })
-                      }), "http://127.0.0.1:5500");
+                      }), "${location.protocol}//${location.host}");
                     });
                   </script>
                 </body>
