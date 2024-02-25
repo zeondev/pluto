@@ -209,7 +209,7 @@ async function parseString(str, apps) {
       currAction = verb[0].item;
     }
 
-    let ignoreList = ["viewer"];
+    let ignoreList = ["viewer", "manager"];
 
     string.forEach((word) => {
       const verb = kwSearch.search(word);
