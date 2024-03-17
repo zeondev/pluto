@@ -5,6 +5,10 @@ export default {
   type: "process",
   privileges: [
     {
+      privilege: "processList",
+      description: "Send messages to applications",
+    },
+    {
       privilege: "startPkg",
       description: "Run applications",
     },
@@ -129,10 +133,12 @@ export default {
     });
 
     function appendOutput(text, breakLine = true) {
-      document.querySelector(".no-ui .output").insertAdjacentHTML(
-        "beforeend",
-        text.trim() // + (breakLine === true ? "<br>" : "")
-      );
+      document
+        .querySelector(".no-ui .output")
+        .insertAdjacentHTML(
+          "beforeend",
+          text.trim() + (breakLine === true ? "<br>" : "")
+        );
     }
 
     function GetObject(obj) {
@@ -349,8 +355,34 @@ export default {
             await vfs.writeFile(path + "/" + file3, "");
             break;
           default:
-            if (cmd !== "") appendOutput(cmd + ": command not found");
-            break;
+            if (cmd !== "") {
+              console.log(cmd);
+              let appPath = `Root/Pluto/apps/${cmd}.app`;
+              let process = null;
+              const appExists = await vfs.exists(appPath);
+              if (!appExists) {
+                appendOutput(cmd + ": command not found");
+                break;
+              }
+              console.log(cmd + " app exists... Executing");
+              const curApp = await Root.Core.startPkg(
+                "data:text/javascript;base64," +
+                  btoa(await vfs.readFile(appPath)),
+                false,
+                true
+              );
+              if (curApp != false) {
+                process = curApp;
+              }
+              if (!process) {
+                appendOutput(cmd + " failed executing :(");
+              }
+              process.proc.send({
+                type: "command",
+                arguments: argsStr.trim().split(" "),
+                pid: Root.PID,
+              });
+            }
         }
       }
       document.querySelector(".no-ui").scrollTop =
@@ -374,6 +406,12 @@ export default {
           Root.Lib.getString = m.data;
           MyWindow.setTitle(Root.Lib.getString("systemApp_Terminal"));
           Root.Lib.updateProcTitle(Root.Lib.getString("systemApp_Terminal"));
+        }
+        if (m.type == "append") {
+          appendOutput(m.data);
+        }
+        if (m.type == "exec_finish") {
+          Root.Core.processList[m.pid].proc.end();
         }
       }
     });
