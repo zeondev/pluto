@@ -10,7 +10,8 @@
   <br>
   <br>
   <a href="https://discord.gg/axUqK8CN2n"><img src="assets/images/thewebosalliancebanner.png" height="50"></a>
-    <a href="https://discord.gg/wvd8ChpD8t"><img src="assets/images/zeoncommunitybanner.png" height="50"></a><br/>
+    <a href="https://discord.gg/wvd8ChpD8t"><img src="assets/images/zeoncommunitybanner.png" height="50"></a>
+      <a href="https://zeon.dev"><img src="assets/images/zeonbanner.png" height="50"></a><br/>
 </div>
 <br>
 
