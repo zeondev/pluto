@@ -29,7 +29,7 @@ Pluto is a minimal but functional "web OS" that aims to provide a desktop enviro
 
 ## Features
 
-Pluto has several key features:
+Pluto has several key features some of which include:
 
 - Clean and minimal UI design, focused on personalization
 - Simple file system
