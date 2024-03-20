@@ -7,6 +7,12 @@ export default {
   description: "Backdrop user interface",
   ver: 1, // Compatible with core v1
   type: "process",
+  privileges: [
+    {
+      privilege: "processList",
+      description: "Send messages to applications",
+    },
+  ],
   optInToEvents: true,
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
@@ -901,6 +907,16 @@ export default {
     let timeInterval = -1;
     let pastMinute = 0;
 
+    function isEmpty(obj) {
+      for (const prop in obj) {
+        if (Object.hasOwn(obj, prop)) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
     function updateTime() {
       let x = new Date();
       let hours = x.getHours().toString().padStart(2, "0");
@@ -910,6 +926,128 @@ export default {
       let timeString = `${hours}:${minutes}`;
       quickAccessButtonText.text(timeString);
     }
+
+    let playerElm = new Html("div")
+      .styleJs({
+        background: "var(--neutral)",
+        width: "350px",
+        height: "150px",
+        position: "fixed",
+        bottom: "60px",
+        right: "14px",
+        borderRadius: "0.32rem",
+        display: "none",
+        padding: "8px",
+        gap: "8px",
+      })
+      .appendTo(wrapper);
+
+    let left = new Html("div")
+      .styleJs({
+        width: "50%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        display: "none",
+      })
+      .appendTo(playerElm);
+    let right = new Html("div")
+      .styleJs({
+        width: "50%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        gap: "5px",
+      })
+      .appendTo(playerElm);
+
+    let albumCover = new Html("img")
+      .attr({ src: "" })
+      .styleJs({
+        objectFit: "cover",
+        width: "110px",
+        height: "110px",
+        aspectRatio: "1 / 1",
+        borderRadius: "5px",
+      })
+      .appendTo(left);
+
+    let playerName = new Html("p")
+      .text("App Name")
+      .styleJs({ margin: "0px", padding: "0px", fontSize: "12px" })
+      .appendTo(right);
+    let songName = new Html("h4")
+      .text("Song Name")
+      .styleJs({ margin: "0px", padding: "0px" })
+      .appendTo(right);
+    let artistName = new Html("p")
+      .text("Artist Name")
+      .styleJs({ margin: "0px", padding: "0px", fontSize: "12px" })
+      .appendTo(right);
+    let controls = new Html("div")
+      .styleJs({
+        display: "none",
+        width: "100%",
+        gap: "8px",
+      })
+      .appendTo(right);
+
+    let prevControls = [];
+
+    async function updatePlayer() {
+      let player = {};
+      if (sessionStorage.getItem("player")) {
+        player = JSON.parse(sessionStorage.getItem("player"));
+      }
+      if (!isEmpty(player)) {
+        playerElm.styleJs({ display: "flex" });
+      } else {
+        playerElm.styleJs({ display: "none" });
+      }
+      if (player.appName) {
+        playerName.text(player.appName);
+      }
+      if (player.coverArt) {
+        albumCover.elm.src = player.coverArt;
+        left.styleJs({ display: "flex" });
+      }
+      if (player.mediaName) {
+        songName.text(player.mediaName);
+      }
+      if (player.mediaAuthor) {
+        artistName.text(player.mediaAuthor);
+      }
+      if (player.controls) {
+        if (JSON.stringify(prevControls) == JSON.stringify(player.controls)) {
+          return;
+        }
+        controls.styleJs({ display: "flex" });
+        controls.clear();
+        player.controls.forEach((control) => {
+          new Html("button")
+            .styleJs({
+              background: "transparent",
+              padding: "0",
+              margin: "0",
+              width: "20px",
+              height: "20px",
+            })
+            .html(control.icon)
+            .appendTo(controls)
+            .on("click", () => {
+              Root.Core.processList[player.pid].proc.send({
+                type: "mediaPlayerAction",
+                command: control.callbackEvent,
+              });
+            });
+        });
+        prevControls = player.controls;
+      }
+    }
+
+    setInterval(updatePlayer, 1000);
 
     let trayWrapper = new Root.Lib.html("div")
       .style({ position: "relative" })
