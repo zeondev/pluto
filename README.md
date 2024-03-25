@@ -1,4 +1,4 @@
-# Pluto v1.6.2
+<h1 align="center">Pluto v1.6.2</h1>
 
 ![Pluto banner](assets/images/banner.svg)
 
@@ -17,20 +17,19 @@
 </div>
 <br>
 
-Pluto is a minimal but functional "web OS" that aims to provide a desktop environment-like experience inside of a website.
+<p align="center">Pluto is a minimal but functional "web OS" that aims to provide a desktop environment-like experience inside of a website.</p>
 
 <picture>
   <source media="(prefers-color-scheme: light)" srcset="assets/images/ss_light.png">
-  <img src="assets/images/ss_dark.png">
+  <img align="center" src="assets/images/ss_dark.png">
 </picture>
 
 ## Table of Contents
 
-- [Pluto v1.6.2](#pluto-v162)
-  - [Table of Contents](#table-of-contents)
-  - [Features](#features)
-  - [Documentation](#documentation)
-  - [Contributing](#contributing)
+- [Table of Contents](#table-of-contents)
+- [Features](#features)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
 
 ## Features
 
