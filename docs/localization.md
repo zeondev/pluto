@@ -8,7 +8,14 @@ You can add localized strings to your app by adding a `strings` property to your
 export default {
   // ...
   strings: {
-    // Your strings
+    // Your strings...
+    // Example:
+    en_US: {
+      myCustomString: "This is my custom string",
+    },
+    // etc for other languages...
+    es_ES: { ... },
+    de_DE: { ... },
   },
   // ...
 }

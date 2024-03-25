@@ -1246,9 +1246,9 @@
         <h6 dir="auto">Generated with <code class="notranslate">pluto-docs</code> running on node v18.19.0.</h6>
         <hr />
       </div>
-      <div class="content"><h1 dir="auto">Pluto Documentation for version 1.5 (Elysium)</h1>
+      <div class="content"><h1 dir="auto">Pluto Documentation for v1.6.2 (Elysium)</h1>
 <ul dir="auto">
-<li><a href="#pluto-documentation-for-version-15-elysium">Pluto Documentation for version 1.5 (Elysium)</a>
+<li><a href="#pluto-documentation-for-v162-elysium">Pluto Documentation for v1.6.2 (Elysium)</a>
 <ul dir="auto">
 <li><a href="#links-to-other-useful-documentation">Links to other useful documentation</a></li>
 <li><a href="#how-to-initialize-an-application">How to initialize an application</a>
@@ -1288,10 +1288,10 @@
 <p dir="auto">This guide may change often, so to help you in making applications, use the latest documentation for your version.</p>
 <h2 dir="auto">Links to other useful documentation</h2>
 <p dir="auto">There are some other docs in this folder that may be useful.</p>
-<p dir="auto"><a href="virtualFS.html">VirtualFS Documentation</a><br>
-<a href="libs-and-components.html">Libraries and Components</a><br>
-<a href="localization.html">Localization</a><br>
-<a href="css-classes.html">CSS Classes</a></p>
+<p dir="auto"><a href="virtualFS.html">VirtualFS Documentation ↗</a><br>
+<a href="libs-and-components.html">Libraries and Components ↗</a><br>
+<a href="localization.html">Localization ↗</a><br>
+<a href="css-classes.html">CSS Classes ↗</a></p>
 <h2 dir="auto">How to initialize an application</h2>
 <h3 dir="auto">Export properties</h3>
 <p dir="auto">In every application you must define the following properties in your export:</p>
@@ -1635,9 +1635,6 @@ Add an event listener</p>
 <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
 </li>
 <li>
-<p dir="auto"><code class="notranslate">.un(eventName, eventHandler)</code></p>
-</li>
-<li>
 <p dir="auto"><code class="notranslate">.prepend(elm)</code><br>
 Add a new element to the beginning of the element</p>
 <div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-s1">container</span> <span class="pl-c1">=</span> <span class="pl-k">new</span> <span class="pl-v">Html</span><span class="pl-kos">(</span><span class="pl-s">"div"</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">prepend</span><span class="pl-kos">(</span>
@@ -1669,7 +1666,10 @@ Prepend the element to the beginning of another element</p>
 <span class="pl-c">  &lt;p&gt;Hello&lt;/p&gt;</span>
 <span class="pl-c">&lt;/body&gt;</span>
 <span class="pl-c">*/</span></pre></div>
-<p dir="auto">Remove an event listener (if a function is available)</p>
+</li>
+<li>
+<p dir="auto"><code class="notranslate">.un(eventName, eventHandler)</code><br>
+Remove an event listener (if a function is available)</p>
 <div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">function</span> <span class="pl-en">myEvent</span><span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
   <span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
 <span class="pl-kos">}</span>

@@ -1,6 +1,6 @@
-# Pluto Documentation for version 1.6 (Elysium)
+# Pluto Documentation for v1.6.2 (Elysium)
 
-- [Pluto Documentation for version 1.6 (Elysium)](#pluto-documentation-for-version-15-elysium)
+- [Pluto Documentation for v1.6.2 (Elysium)](#pluto-documentation-for-v162-elysium)
   - [Links to other useful documentation](#links-to-other-useful-documentation)
   - [How to initialize an application](#how-to-initialize-an-application)
     - [Export properties](#export-properties)
@@ -26,10 +26,10 @@ This guide may change often, so to help you in making applications, use the late
 
 There are some other docs in this folder that may be useful.
 
-[VirtualFS Documentation](virtualFS.md)
-[Libraries and Components](libs-and-components.md)
-[Localization](localization.md)
-[CSS Classes](css-classes.md)
+[VirtualFS Documentation &nearr;](virtualFS.md)   
+[Libraries and Components &nearr;](libs-and-components.md)    
+[Localization &nearr;](localization.md)   
+[CSS Classes &nearr;](css-classes.md)   
 
 ## How to initialize an application
 
@@ -403,15 +403,14 @@ There are a few more advanced methods to how the Html class works:
   });
   ```
 
-- `.un(eventName, eventHandler)`
-- `.prepend(elm)`
+- `.prepend(elm)`   
   Add a new element to the beginning of the element
   ```js
   const container = new Html("div").prepend(
     new Html("span").text("Hello, world!")
   );
   ```
-- `.prependMany(...elms)`
+- `.prependMany(...elms)`   
   Add multiple elements to the start
   ```js
   new Html("div").prependMany(
@@ -425,7 +424,7 @@ There are a few more advanced methods to how the Html class works:
   </div>
   */
   ```
-- `.prependTo()`
+- `.prependTo()`  
   Prepend the element to the beginning of another element
 
   ```js
@@ -439,6 +438,7 @@ There are a few more advanced methods to how the Html class works:
   */
   ```
 
+- `.un(eventName, eventHandler)`  
   Remove an event listener (if a function is available)
 
   ```js
@@ -449,14 +449,14 @@ There are a few more advanced methods to how the Html class works:
   new Html("span").un("click", myEvent);
   ```
 
-- `.append(elm)`
+- `.append(elm)`    
   Add a new element inside the element
   ```js
   const container = new Html("div").append(
     new Html("span").text("Hello, world!")
   );
   ```
-- `.appendMany(...elms)`
+- `.appendMany(...elms)`    
   Add multiple elements
   ```js
   new Html("div").appendMany(
@@ -470,7 +470,7 @@ There are a few more advanced methods to how the Html class works:
   </div>
   */
   ```
-- `.appendTo()`
+- `.appendTo()`   
   Append the element to another element
 
   ```js
@@ -484,7 +484,7 @@ There are a few more advanced methods to how the Html class works:
   */
   ```
 
-- `.cleanup()`  
+- `.cleanup()`   
   Destroy the element
 
   ```js
@@ -514,7 +514,7 @@ There are a few more advanced methods to how the Html class works:
   div.getText(); // 'This is my text...'
   ```
 
-- `.getHtml()`
+- `.getHtml()`    
   Get HTML content of the element
 
   ```js
@@ -523,7 +523,7 @@ There are a few more advanced methods to how the Html class works:
   div.getHtml(); // '<p>This is my <b>HTML</b> content...</p>'
   ```
 
-- `.getValue()`
+- `.getValue()`   
   Ditto, but for the value of an input tag.
 
 ## Using Services in your apps
@@ -601,7 +601,7 @@ More documentation on VirtualFS [can be found here](virtualFS.md).
 
 ### Tray usage
 
-- Early 1.6 core uses the second parameter of `setupReturns` to declare tray items.
+- Early 1.5 core uses the second parameter of `setupReturns` to declare tray items.
 
   Pass in an argument as follows:
 
