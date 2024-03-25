@@ -758,7 +758,9 @@ export default {
                 .class("item")
                 .appendMany(
                   new Html().text(Root.Lib.getString("supportedVersions")),
-                  new Html().class("label").text("<" + sysInfo.versionString)
+                  new Html()
+                    .class("label")
+                    .text(sysInfo.minSupported.replace("<=", "≤"))
                 )
             )
             .appendTo(container);
