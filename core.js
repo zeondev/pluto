@@ -1,11 +1,14 @@
 // Pluto
 (async () => {
+  const semver = (await import("./assets/semver.min.js")).default;
   try {
     const coreDetails = {
-      version: 1.6,
-      versionString: (1.6).toString(),
+      version: "v1.6.2",
       codename: "Elysium",
     };
+    // for compatibility
+    coreDetails.versionString = coreDetails.version;
+    coreDetails.minSupported = `<=${coreDetails.version}`;
     const knownLibraries = [];
     const GlobalLib = {
       getString,
@@ -767,7 +770,19 @@
             Core.knownPackageList.push({ url, pkg });
 
           // system:BootLoader
-          if (pkg.name && pkg.type === "process" && pkg.ver <= Core.version) {
+
+          // semver support
+          let pkgSatisfies = false;
+
+          if (pkg.ver !== undefined) {
+            if (typeof pkg.ver === "number" || typeof pkg.ver === "string") {
+              if (semver.satisfies(Core.version, `<=${pkg.ver}`)) {
+                pkgSatisfies = true;
+              }
+            }
+          }
+
+          if (pkg.name && pkg.type === "process" && pkgSatisfies === true) {
             console.group("Running " + url);
             console.log(
               `Core version: ${Core.version}\nPackage version: ${pkg.ver}`
@@ -1051,7 +1066,7 @@
         name: `Pluto Core (${coreDetails.codename})`,
         description: "Handles core system functionality and package loading.",
         trayInfo: null,
-        end: null
+        end: null,
       },
       token: GlobalLib.randomString(),
     });
