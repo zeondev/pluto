@@ -1,4 +1,4 @@
-# Pluto v1.6
+# Pluto v1.6.2
 
 ![Pluto banner](assets/images/banner.svg)
 
@@ -26,7 +26,7 @@ Pluto is a minimal but functional "web OS" that aims to provide a desktop enviro
 
 ## Table of Contents
 
-- [Pluto v1.6](#pluto-v16)
+- [Pluto v1.6.2](#pluto-v162)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Documentation](#documentation)
