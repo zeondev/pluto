@@ -393,6 +393,8 @@ function replace(str, u) {
 }
 
 async function ask(what) {
+  const vfs = await lib.loadLibrary("VirtualFS");
+
   // get all apps
   what = what
     .toLowerCase()
@@ -462,11 +464,27 @@ async function ask(what) {
     case "startPkg":
       if (data.app === undefined)
         return { type: "response", text: "I don't know what app to launch." };
-      if (data.app.mapping === null)
-        return {
-          type: "response",
-          text: `I am unable to start ${data.app.name}.`,
-        };
+      if (data.app.mapping === null) {
+        if (data.app.source === "local") {
+          const appPath = "Root/Pluto/apps/" + data.app.name;
+          let appName = data.app.name.split(".");
+
+          appName.pop();
+          appName = appName.join(".");
+
+          core.startPkg(
+            "data:text/javascript," +
+              encodeURIComponent(await vfs.readFile(appPath)),
+            false,
+            false
+          );
+          return {
+            type: "response",
+            text: `Launching local app ${appName}.`,
+          };
+        }
+      }
+
       await data.app.mapping.onClick(core);
 
       return {
