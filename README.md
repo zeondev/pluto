@@ -11,7 +11,9 @@
   <br>
   <a href="https://discord.gg/axUqK8CN2n"><img src="assets/images/thewebosalliancebanner.png" height="50"></a>
     <a href="https://discord.gg/wvd8ChpD8t"><img src="assets/images/zeoncommunitybanner.png" height="50"></a>
-      <a href="https://zeon.dev"><img src="assets/images/zeonbanner.png" height="50"></a><br/>
+      <a href="https://zeon.dev"><img src="assets/images/zeonbanner.png" height="50"></a><br/><br/>
+
+  <a href="https://pluto-app.zeon.dev/">Try the live demo &nearr;</a>
 </div>
 <br>
 
@@ -24,9 +26,11 @@ Pluto is a minimal but functional "web OS" that aims to provide a desktop enviro
 
 ## Table of Contents
 
-- [Features](#features)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
+- [Pluto v1.6](#pluto-v16)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Documentation](#documentation)
+  - [Contributing](#contributing)
 
 ## Features
 
