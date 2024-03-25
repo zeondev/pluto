@@ -4,7 +4,7 @@ let core = {};
 export default {
   name: "Now Playing",
   description: "Now Playing status for media player",
-  ver: 1,
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "library",
   init: function (l, c) {
     lib = l;

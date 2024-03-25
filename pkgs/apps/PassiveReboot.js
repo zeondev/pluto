@@ -1,7 +1,7 @@
 export default {
   name: "Passive Reboot",
   description: "Quickly 'refresh' the apps without fully restarting.",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "process",
   privileges: [
     {

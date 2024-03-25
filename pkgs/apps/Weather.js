@@ -1,7 +1,7 @@
 export default {
   name: "Weather",
   description: "An epic weather app to check radar and more!",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "process",
   privileges: [
     {

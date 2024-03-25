@@ -3,7 +3,7 @@ import ctxMenu from "../lib/CtxMenu.js";
 export default {
   name: "Task Manager",
   description: "Examine and manage processes",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "process",
   optInToEvents: true,
   privileges: [

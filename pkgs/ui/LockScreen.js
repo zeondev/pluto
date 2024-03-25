@@ -33,7 +33,7 @@ function generateNoiseImage(width, height) {
 export default {
   name: "Lock Screen",
   description: "Displays a background and locks the screen",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "library",
   init: function (l, c) {
     lib = l;

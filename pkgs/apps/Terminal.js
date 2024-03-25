@@ -1,7 +1,7 @@
 export default {
   name: "Terminal",
   description: "Terminal for Pluto",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "process",
   privileges: [
     {

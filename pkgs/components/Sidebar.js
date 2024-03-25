@@ -6,7 +6,7 @@ import Tooltip from "./Tooltip.js";
 export default {
   name: "Sidebar",
   description: "Create sidebars used in GUI apps.",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "component",
   init: function (l) {
     lib = l;

@@ -1,7 +1,7 @@
 export default {
   name: "FPS",
   description: "Counts frame per seconds. Debug stuff.",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "process",
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined

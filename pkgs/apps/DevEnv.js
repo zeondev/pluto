@@ -96,7 +96,7 @@ export default {
       appHelp_string4: "Ito ay mga keyboard shortcuts:",
     },
   },
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "process",
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
@@ -891,7 +891,7 @@ export default {
       defaultText = `export default {
   name: "Example",
   description: "Example app",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "process",
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined

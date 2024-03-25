@@ -1,7 +1,7 @@
 export default {
   name: "App Store",
   description: "Pluto App Store",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "process",
   privileges: [
     {
@@ -187,6 +187,7 @@ export default {
         externalMessageQueue.forEach((m) => handleMessage(m));
 
         const sysInfo = Root.Lib.systemInfo;
+        const semver = Root.Lib.semver;
 
         function getAppCompatibility(appVersion, coreVersion) {
           let appCompatible,
@@ -194,28 +195,30 @@ export default {
             appCompatibleIcon,
             appCompatibleReason;
           if (
-            parseFloat(coreVersion.toFixed(1)) <
-            parseFloat(appVersion.toFixed(1))
+            // parseFloat(coreVersion.toFixed(1)) <
+            // parseFloat(appVersion.toFixed(1))
+            semver.satisfies(coreVersion, `<${appVersion}`)
           ) {
             // not compatible
             appCompatible = "err";
-            appCompatibleReason = `Pluto version ${coreVersion.toFixed(
+            appCompatibleReason = `Pluto version ${coreVersion} < App version ${appVersion.toFixed(
               1
-            )} < App version ${appVersion.toFixed(1)}`;
+            )}`;
           } else if (
-            parseFloat(coreVersion.toFixed(1)) >
-            parseFloat(appVersion.toFixed(1))
+            // parseFloat(coreVersion.toFixed(1)) >
+            // parseFloat(appVersion.toFixed(1))
+            semver.satisfies(coreVersion, `>${appVersion}`)
           ) {
             // warn of possible incompatibility
             appCompatible = "warn";
-            appCompatibleReason = `Pluto version ${coreVersion.toFixed(
+            appCompatibleReason = `Pluto version ${coreVersion} > App version ${appVersion.toFixed(
               1
-            )} > App version ${appVersion.toFixed(1)}`;
+            )}`;
           } else {
             appCompatible = "ok";
-            appCompatibleReason = `Pluto version ${coreVersion.toFixed(
+            appCompatibleReason = `Pluto version ${coreVersion} = App version ${appVersion.toFixed(
               1
-            )} = App version ${appVersion.toFixed(1)}`;
+            )}`;
           }
 
           if (appCompatible === "ok") {

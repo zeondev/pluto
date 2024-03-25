@@ -3,7 +3,7 @@ let html;
 export default {
   name: "Image button component",
   description: "Image button",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "component",
   init: function (l) {
     html = l.html;

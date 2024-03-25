@@ -12,7 +12,7 @@ export default {
       description: "Run applications from files",
     },
   ],
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "process",
   exec: async function (Root) {
     let win;

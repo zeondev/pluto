@@ -3,7 +3,7 @@ import Html from "../../assets/html.js";
 export default {
   name: "Tooltip",
   description: "Create hover effects used in GUI apps.",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "component",
   init: function (l) {
     lib = l;

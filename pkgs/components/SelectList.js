@@ -4,7 +4,7 @@ let html;
 export default {
   name: "Select list",
   description: "Creates a select list in table or button list format.",
-  ver: 1,
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "component",
   init: function (l) {
     lib = l;

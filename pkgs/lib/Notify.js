@@ -3,7 +3,7 @@ let L = {};
 export default {
   name: "Toast Library",
   description: "Allows toast popup creation",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "library",
   init: (l) => {
     L = l;

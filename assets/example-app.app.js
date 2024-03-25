@@ -3,7 +3,7 @@
 export default {
   name: "Gamepad",
   description: "game pad app",
-  ver: 0.1, // Compatible with core 0.1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "process",
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined

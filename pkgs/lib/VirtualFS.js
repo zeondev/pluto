@@ -372,7 +372,7 @@ export default {
   name: "Virtual File System",
   description:
     "A file system based in the browsers local storage. This library includes many function to help loading and executing of files.",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "library",
   data: Vfs,
 };

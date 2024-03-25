@@ -515,7 +515,7 @@ let lib, core;
 export default {
   name: "Assistant Library",
   description: "Handles assistant asking questions and stuff",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "library",
   init(l, c) {
     lib = l;

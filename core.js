@@ -12,6 +12,7 @@
     const knownLibraries = [];
     const GlobalLib = {
       getString,
+      semver,
       escapeHtml: escapeHtml,
       html: class Html {
         /** The HTML element referenced in this instance. Change using `.swapRef()`, or remove using `.cleanup()`. */
@@ -461,6 +462,7 @@
         this.randomString = GlobalLib.randomString;
         this.icons = GlobalLib.icons;
         this.systemInfo = coreDetails;
+        this.semver = GlobalLib.semver;
         this.updateProcTitle = function (newTitle) {
           broadcastEventToProcs({
             type: "procEvent",

@@ -5,7 +5,7 @@ let vfs = {};
 export default {
   name: "Code Scanner",
   description: "Scans application files for dangerous code.",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "library",
   init: async (l, c) => {
     L = l;

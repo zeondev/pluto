@@ -42,7 +42,7 @@ export default {
   name: "Window System",
   description:
     "This is the base window system for Pluto. This library includes function to create and destroy windows.",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "library",
   init: function (l, c) {
     lib = l;

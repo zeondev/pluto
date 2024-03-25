@@ -14,7 +14,7 @@ const CURSOR_NOT_ALLOWED = `data:image/svg+xml,%3Csvg width='27' height='27' vie
 export default {
   name: "Theme Lib",
   description: "Manages theme parsing and handling",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "library",
   init: function (l, c) {
     lib = l;

@@ -1,7 +1,7 @@
 // export default {
 //   name: "OpenWeatherMap",
 //   description: "A service that fetches the current weather when requested",
-//   ver: 1, // Compatible with core v1
+//   ver: "v1.6.2", // Supports minimum Core version of v1.6.2
 //   type: "process",
 //   exec: async function (Root) {
 //     const WWO_CODE = {

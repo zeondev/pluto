@@ -5,7 +5,7 @@ import icons from "../../assets/icons.js";
 export default {
   name: "DropDown",
   description: "Create vertical select lists used in GUI apps.",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "component",
   init: function (l) {
     lib = l;

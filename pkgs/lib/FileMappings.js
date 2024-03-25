@@ -5,7 +5,7 @@ export default {
   name: "MIME File Mapping Library",
   description:
     "This library maps MIME types with applications and labels in order to fulfill launching files from desktop and FileManager use cases.",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "library",
   init: (l, c) => {
     L = l;

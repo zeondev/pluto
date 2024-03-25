@@ -5,7 +5,7 @@ import * as htmlClass from "../../assets/html.js";
 export default {
   name: "Desktop",
   description: "Backdrop user interface",
-  ver: 1, // Compatible with core v1
+  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "process",
   privileges: [
     {
