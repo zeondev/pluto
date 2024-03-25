@@ -38,55 +38,6 @@ const verbs = [
   },
 
   {
-    verb: "logout",
-    action: "exitSession",
-  },
-  {
-    verb: "log out",
-    action: "exitSession",
-  },
-  {
-    verb: "end session",
-    action: "exitSession",
-  },
-  {
-    verb: "exit session",
-    action: "exitSession",
-  },
-  {
-    verb: "can you logout",
-    action: "exitSession",
-  },
-  {
-    verb: "can you log out",
-    action: "exitSession",
-  },
-  {
-    verb: "can you end session",
-    action: "exitSession",
-  },
-  {
-    verb: "can you exit session",
-    action: "exitSession",
-  },
-  {
-    verb: "could you logout",
-    action: "exitSession",
-  },
-  {
-    verb: "could you log out",
-    action: "exitSession",
-  },
-  {
-    verb: "could you end session",
-    action: "exitSession",
-  },
-  {
-    verb: "could you exit session",
-    action: "exitSession",
-  },
-
-  {
     verb: "what can you do",
     action: "howWorks",
   },
@@ -189,6 +140,55 @@ const verbs = [
   {
     verb: "see ya",
     action: "bye",
+  },
+
+  {
+    verb: "logout",
+    action: "exitSession",
+  },
+  {
+    verb: "log out",
+    action: "exitSession",
+  },
+  {
+    verb: "end session",
+    action: "exitSession",
+  },
+  {
+    verb: "exit session",
+    action: "exitSession",
+  },
+  {
+    verb: "can you logout",
+    action: "exitSession",
+  },
+  {
+    verb: "can you log out",
+    action: "exitSession",
+  },
+  {
+    verb: "can you end session",
+    action: "exitSession",
+  },
+  {
+    verb: "can you exit session",
+    action: "exitSession",
+  },
+  {
+    verb: "could you logout",
+    action: "exitSession",
+  },
+  {
+    verb: "could you log out",
+    action: "exitSession",
+  },
+  {
+    verb: "could you end session",
+    action: "exitSession",
+  },
+  {
+    verb: "could you exit session",
+    action: "exitSession",
   },
 ];
 
@@ -383,9 +383,9 @@ const howDoIWorks = [
 ];
 
 const youAreRunning = [
-  "You are running {plutoVersion} ({codeName}).",
-  "You're on version {plutoVersion}!",
-  "You are using Pluto version {plutoVersion}, codenamed {codeName}.",
+  "You are running Pluto {plutoVersion} (codeName}.",
+  "You're on {plutoVersion}! This version is known as {codeName}.",
+  "You are using Pluto {plutoVersion}, codenamed {codeName}.",
 ];
 
 function replace(str, u) {
