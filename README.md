@@ -3,10 +3,10 @@
 ![Pluto banner](assets/images/banner.svg)
 
 <div align="center">
-  <img src="https://img.shields.io/github/stars/zeondev/pluto?style=for-the-badge" />
-  <img src="https://img.shields.io/github/forks/zeondev/pluto?style=for-the-badge&color=orange" />
-  <img src="https://img.shields.io/github/issues-pr/zeondev/pluto?style=for-the-badge" />
-  <img src="https://img.shields.io/github/commit-activity/t/zeondev/pluto?style=for-the-badge&color=violet" />
+  <a href="https://github.com/zeondev/pluto/stargazers"><img src="https://img.shields.io/github/stars/zeondev/pluto?style=for-the-badge" /></a>
+  <a href="https://github.com/zeondev/pluto/forks"><img src="https://img.shields.io/github/forks/zeondev/pluto?style=for-the-badge&color=orange" /></a>
+  <a href="https://github.com/zeondev/pluto/pulls"><img src="https://img.shields.io/github/issues-pr/zeondev/pluto?style=for-the-badge" /></a>
+  <a href="https://github.com/zeondev/pluto/commits"><img src="https://img.shields.io/github/commit-activity/t/zeondev/pluto?style=for-the-badge&color=violet" /></a>
   <br>
   <br>
   <a href="https://discord.gg/axUqK8CN2n"><img src="assets/images/thewebosalliancebanner.png" height="50"></a>
@@ -15,7 +15,6 @@
 
   <a href="https://pluto-app.zeon.dev/">Try the live demo &nearr;</a>
 </div>
-<br>
 
 <p align="center">Pluto is a minimal but functional "web OS" that aims to provide a desktop environment-like experience inside of a website.</p>
 
