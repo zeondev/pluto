@@ -178,7 +178,11 @@ export default {
               .style({ width: "24px", height: "24px" })
               .append(
                 new L.html("div")
-                  .html(mapping.icon in L.icons ? L.icons[mapping.icon] : mapping.icon)
+                  .html(
+                    mapping.icon in L.icons
+                      ? L.icons[mapping.icon]
+                      : mapping.icon
+                  )
                   .style({ width: "24px" })
               )
               .appendTo(tableBodyRow);
@@ -328,6 +332,12 @@ export default {
         let pathInput = new L.html("input")
           .class("fg")
           .attr({ placeholder: "Path", value: path + "/" || "Root/" })
+          .on("keydown", async (e) => {
+            if (e.key === "Enter") {
+              await attemptClose();
+              return resolve(selectedItem);
+            }
+          })
           .on("keyup", async (e) => {
             let toBeSavedItem = e.target.value;
             if (!toBeSavedItem.startsWith("Root/")) e.target.value = "Root/";
@@ -450,7 +460,11 @@ export default {
               .style({ width: "24px", height: "24px" })
               .append(
                 new L.html("div")
-                  .html(mapping.icon in L.icons ? L.icons[mapping.icon] : mapping.icon)
+                  .html(
+                    mapping.icon in L.icons
+                      ? L.icons[mapping.icon]
+                      : mapping.icon
+                  )
                   .style({ width: "24px" })
               )
               .appendTo(tableBodyRow);
