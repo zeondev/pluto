@@ -777,7 +777,6 @@
           let pkgSatisfies = false;
 
           if (pkg.ver !== undefined) {
-            console.log("ok");
             if (typeof pkg.ver === "number" || typeof pkg.ver === "string") {
               if (semver.satisfies(Core.version, `>=${pkg.ver}`)) {
                 pkgSatisfies = true;
