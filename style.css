@@ -237,6 +237,15 @@ body {
   flex-direction: column;
 }
 
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-panel {
+  background-color: var(--neutral-focus);
+}
+
+audio::-webkit-media-controls-enclosure {
+  border-radius: 10px;
+}
+
 .win-window.closing {
   animation: slide-down var(--animation-duration) var(--easing-function)
     forwards;
@@ -2792,16 +2801,20 @@ hr {
   animation: slideOut var(--animation-duration) var(--easing-function) forwards;
 }
 .slideInFromLeft {
-  animation: slideInFromLeft var(--animation-duration) var(--easing-function) forwards;
+  animation: slideInFromLeft var(--animation-duration) var(--easing-function)
+    forwards;
 }
 .slideInFromRight {
-  animation: slideInFromRight var(--animation-duration) var(--easing-function) forwards;
+  animation: slideInFromRight var(--animation-duration) var(--easing-function)
+    forwards;
 }
 .shortSlideInFromLeft {
-  animation: slideInFromLeft var(--short-animation-duration) var(--easing-function) forwards;
+  animation: slideInFromLeft var(--short-animation-duration)
+    var(--easing-function) forwards;
 }
 .shortSlideInFromRight {
-  animation: slideInFromRight var(--short-animation-duration) var(--easing-function) forwards;
+  animation: slideInFromRight var(--short-animation-duration)
+    var(--easing-function) forwards;
 }
 @keyframes slideInFromLeft {
   from {
