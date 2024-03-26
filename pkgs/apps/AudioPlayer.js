@@ -11,7 +11,11 @@ export default {
 
     console.log("Hello from example package", Root.Lib);
 
+    const NowPlaying = await Root.Lib.loadLibrary("NowPlaying");
     Root.Lib.setOnEnd(function () {
+      setTimeout(() => {
+        NowPlaying.disposePlayer();
+      }, 1000);
       MyWindow.close();
     });
 
@@ -136,8 +140,15 @@ export default {
       })
       .attr({ draggable: "false", controls: "on" });
 
+    let playerCover = null;
+    let playerSong = "";
+    let playerArtist = "Unknown artist";
+
     // updates the video on the next load
     async function updateAudio(content) {
+      playerSong = "";
+      playerArtist = "Unknown artist";
+      1;
       if (!content.startsWith("data:audio/") && !content.startsWith("blob:")) {
         Root.Modal.alert("Error", "This does not look like an audio file").then(
           (_) => {
@@ -148,22 +159,79 @@ export default {
       }
       setTimeout(async () => {
         console.log(fileName);
+        playerSong = fileName;
         texts.clear();
-        new Root.Lib.html("h1").appendTo(texts).text("Now Playing");
-        new Root.Lib.html("p").appendTo(texts).text(fileName);
+        new Root.Lib.html("p").appendTo(texts).text("Now playing");
+        let songName = new Root.Lib.html("h1").appendTo(texts).text(playerSong);
+        let songArtist = new Root.Lib.html("p")
+          .appendTo(texts)
+          .text(playerArtist);
         const audioBlob = await (await fetch(content)).blob();
         jsmediatags.read(audioBlob, {
           onSuccess: function (tag) {
-            // console.log(tag);
+            console.log(tag);
+            if ("title" in tag.tags) {
+              playerSong = tag.tags.title;
+            }
+            if ("artist" in tag.tags) {
+              playerArtist = tag.tags.artist;
+            }
+            if ("album" in tag.tags) {
+              playerArtist = playerArtist + " • " + tag.tags.album;
+            }
+            if ("year" in tag.tags) {
+              playerArtist = playerArtist + " • " + tag.tags.year;
+            }
             if ("picture" in tag.tags) {
-              console.log(tag.tags.picture);
               let buf = new Uint8Array(tag.tags.picture.data);
               let blob = new Blob([buf]);
               console.log(blob);
               img.elm.src = URL.createObjectURL(blob);
+              playerCover = URL.createObjectURL(blob);
               img.styleJs({ display: "flex" });
             } else {
               img.styleJs({ display: "none" });
+            }
+            songName.text(playerSong);
+            songArtist.text(playerArtist);
+            function isPlaying() {
+              NowPlaying.setStatus({
+                pid: Root.PID,
+                coverArt: playerCover,
+                mediaName: playerSong,
+                mediaAuthor: playerArtist.split(" • ")[0],
+                appName: "Audio Player",
+                controls: [
+                  {
+                    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pause"><rect width="4" height="16" x="6" y="4"/><rect width="4" height="16" x="14" y="4"/></svg>',
+                    callbackEvent: "pausePlay",
+                  },
+                ],
+              });
+            }
+            function isPaused() {
+              NowPlaying.setStatus({
+                pid: Root.PID,
+                coverArt: playerCover,
+                mediaName: playerSong,
+                mediaAuthor: playerArtist.split(" • ")[0],
+                appName: "Audio Player",
+                controls: [
+                  {
+                    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play"><polygon points="6 3 20 12 6 21 6 3"/></svg>',
+                    callbackEvent: "pausePlay",
+                  },
+                ],
+              });
+            }
+            audio.on("playing", () => {
+              isPlaying();
+            });
+            audio.on("pause", () => {
+              isPaused();
+            });
+            if (!audio.elm.paused) {
+              isPlaying();
             }
           },
           onError: function (error) {
@@ -179,6 +247,19 @@ export default {
     return Root.Lib.setupReturns((m) => {
       if (typeof m === "object" && m.type && m.type === "loadFile" && m.path) {
         openFile(m.path);
+      }
+      if (
+        typeof m === "object" &&
+        m.type &&
+        m.type === "mediaPlayerAction" &&
+        m.command &&
+        m.command === "pausePlay"
+      ) {
+        if (audio.elm.paused) {
+          audio.elm.play();
+        } else {
+          audio.elm.pause();
+        }
       }
     });
   },
