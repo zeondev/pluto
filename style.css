@@ -1405,7 +1405,7 @@ ul {
 }
 
 .ace-tm .ace_constant {
-  color: rgb(197, 6, 11);
+  color: rgb(6, 156, 197);
 }
 
 .ace-tm .ace_constant.ace_buildin {
@@ -1464,6 +1464,10 @@ ul {
 
 .ace-tm .ace_comment.ace_doc.ace_tag {
   color: rgb(128, 159, 191);
+}
+
+.ace-tm .ace_tag {
+  color: rgb(128, 159, 191) !important;
 }
 
 .ace-tm .ace_constant.ace_numeric {

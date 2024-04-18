@@ -120,7 +120,7 @@ export default {
     DvWindow = new Win({
       title: Root.Lib.getString("systemApp_DevEnv"),
       content:
-        '<div class="row fc h-100">DevEnv is loading external libraries, please wait...</div>',
+        '<div class="col fc h-100">DevEnv is loading external libraries, please wait...</div>',
       width: 540,
       height: 420,
       pid: Root.PID,
@@ -139,6 +139,44 @@ export default {
       },
     });
 
+    wrapper = DvWindow.window.querySelector(".win-content");
+
+    function loadScript(url, scriptId) {
+      return new Promise((resolve) => {
+        if (Html.qs('script[id="' + scriptId + '"]')) {
+          return resolve(false);
+        }
+
+        new Html("script")
+          .attr({ id: scriptId, src: url })
+          .on("load", () => {
+            resolve(true);
+          })
+          .appendTo("head");
+      });
+    }
+
+    let counter = new Html("div")
+      .text("0 / 5")
+      .appendTo(wrapper.querySelector(".col"));
+
+    let count = 0;
+    function increaseCount() {
+      count++;
+      counter.text(`${count} / 5`);
+    }
+
+    await loadScript(
+      "https://cdnjs.cloudflare.com/ajax/libs/ace/1.22.0/ace.min.js",
+      "ace"
+    );
+    increaseCount();
+    await loadScript(
+      "https://cdnjs.cloudflare.com/ajax/libs/ace/1.22.0/ext-language_tools.js",
+      "ace_language_tools"
+    );
+    increaseCount();
+
     // import * as prettier from "https://unpkg.com/prettier@3.2.4/standalone.mjs";
     // import prettierPluginBabel from "https://unpkg.com/prettier@3.2.4/plugins/babel.mjs";
     // import prettierPluginEsTree from "https://unpkg.com/prettier@3.2.4/plugins/estree.mjs";
@@ -146,12 +184,15 @@ export default {
     const prettier = await import(
       "https://unpkg.com/prettier@3.2.4/standalone.mjs"
     );
+    increaseCount();
     const prettierPluginBabel = (
       await import("https://unpkg.com/prettier@3.2.4/plugins/babel.mjs")
     ).default;
+    increaseCount();
     const prettierPluginEsTree = (
       await import("https://unpkg.com/prettier@3.2.4/plugins/estree.mjs")
     ).default;
+    increaseCount();
 
     console.log(prettier, prettierPluginBabel, prettierPluginEsTree);
 
@@ -267,6 +308,23 @@ export default {
       },
       prettify: async () => {
         try {
+          if (
+            currentDocument.path.endsWith(".js") === false &&
+            currentDocument.path.endsWith(".ts") === false &&
+            currentDocument.path.endsWith(".app") === false &&
+            currentDocument.path !== ""
+          ) {
+            modal(
+              new Html("div").appendMany(
+                new Html("span").html(
+                  "You currently cannot format a file of this type. Use <code>.js</code>, <code>.ts</code>, or <code>.app</code> file extensions for formatting support."
+                )
+              ),
+              true,
+              Root.Lib.getString("error")
+            );
+            return;
+          }
           const formatted = await prettier.format(editor.getValue(), {
             parser: "babel",
             plugins: [prettierPluginBabel, prettierPluginEsTree],
@@ -278,7 +336,7 @@ export default {
         } catch (e) {
           modal(
             new Html("div").appendMany(
-              new Html("span").text("Something went wrong when formatting"),
+              new Html("span").text("An error occurred while formatting:"),
               new Html("pre").text(e.message)
             ),
             true,
@@ -606,7 +664,6 @@ export default {
 
     window.addEventListener("keydown", keyBindHandler);
 
-    wrapper = DvWindow.window.querySelector(".win-content");
     wrapper.innerHTML = "";
     wrapper.classList.add("col", "o-h", "h-100");
 
@@ -615,15 +672,33 @@ export default {
       dirty: false,
     };
 
-    const updateTitle = (_) =>
-      (DvWindow.window.querySelector(".win-titlebar .title").innerText = `${
+    const updateTitle = (_) => {
+      // Display title
+      DvWindow.window.querySelector(".win-titlebar .title").innerText = `${
         currentDocument.dirty === true ? "•" : ""
       } DevEnv - ${
         currentDocument.path === ""
           ? "Untitled"
           : currentDocument.path.split("/").pop()
-      }`.trim());
+      }`.trim();
 
+      // Correct language mode
+      if (currentDocument.path === "") {
+        editor.session.setMode("ace/mode/typescript");
+      } else {
+        const dots = currentDocument.path.split(".");
+        if (dots.length > 0) {
+          let currentFileExtension = dots.pop();
+          if (currentFileExtension in appFileTypes) {
+            editor.session.setMode(
+              `ace/mode/${appFileTypes[currentFileExtension]}`
+            );
+          } else {
+            editor.session.setMode("ace/mode/plain_text");
+          }
+        }
+      }
+    };
     function newDocument(path, content) {
       currentDocument.path = path;
       currentDocument.dirty = false;
@@ -675,6 +750,16 @@ export default {
       .appendTo(wrapper);
 
     const MenuBar = await Root.Lib.loadComponent("MenuBar");
+
+    const appFileTypes = {
+      app: "typescript",
+      css: "css",
+      html: "html",
+      pml: "html",
+      xml: "xml",
+      js: "typescript",
+    };
+    const defaultFileType = null;
 
     // let extensionsList = [];
 
