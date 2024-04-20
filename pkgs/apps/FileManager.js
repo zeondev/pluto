@@ -125,7 +125,7 @@ export default {
               );
             let text = await vfs.readFile(selectedItem, undefined);
 
-            if (text.startsWith('blob:')) {
+            if (text.startsWith('blob:') || text.startsWith('data:')) {
               var element = document.createElement("a");
               element.setAttribute("href", text);
               element.setAttribute("download", selectedItem.split("/").pop());
@@ -164,11 +164,7 @@ export default {
               var file = e.target.files[0];
               var reader = new FileReader();
 
-              if (
-                file.type.startsWith("image") ||
-                file.type.startsWith("audio") ||
-                file.type.startsWith("video")
-              ) {
+              if (!file.type.startsWith("text")) {
                 console.log(file);
                 // read as arraybuffer; store as base64
                 // reader.readAsDataURL(file);
