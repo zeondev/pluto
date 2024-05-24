@@ -1246,127 +1246,40 @@
         <h6 dir="auto">Generated with <code class="notranslate">pluto-docs</code> running on node v20.13.1.</h6>
         <hr />
       </div>
-      <div class="content"><h1 dir="auto">CSS Classes</h1>
+      <div class="content"><h1 dir="auto">Pluto Markup Language Documentation</h1>
 <p dir="auto"><a href="README.html">Back to README.md</a></p>
 <ul dir="auto">
-<li><a href="#css-classes">CSS Classes</a>
+<li><a href="#pluto-markup-language-documentation">Pluto Markup Language Documentation</a>
 <ul dir="auto">
-<li><a href="#layout">Layout</a></li>
-<li><a href="#spacing">Spacing</a></li>
-<li><a href="#layout-1">Layout</a>
-<ul dir="auto">
-<li><a href="#general">General</a></li>
-<li><a href="#flexbox">Flexbox</a></li>
-<li><a href="#flexbox-spacing">Flexbox Spacing</a></li>
-</ul>
-</li>
-<li><a href="#display">Display</a></li>
-<li><a href="#animation">Animation</a></li>
-<li><a href="#color">Color</a></li>
+<li><a href="#pml-example-app-code">PML example app code</a></li>
+<li><a href="#how-to-use-pml">How to use PML</a></li>
+<li><a href="#info-about-pml">Info about PML</a></li>
 </ul>
 </li>
 </ul>
-<p dir="auto">There are many CSS classes that are available in Pluto. Until all of them are documented, here are a lot of the utility ones that are commonly used:</p>
-<h2 dir="auto">Layout</h2>
-<ul dir="auto">
-<li><code class="notranslate">with-sidebar</code> - Applied to a window's wrapper if you want to use a sidebar. Removes padding so that the sidebar is flush with the window edges.</li>
-<li><code class="notranslate">iframe</code> - Applied to a window wrapper. Bypasses any sidebar position settings. Should be used if you are using in combination with a MenuBar instead of a Sidebar.</li>
-</ul>
-<h2 dir="auto">Spacing</h2>
-<ul dir="auto">
-<li><code class="notranslate">ml-auto</code> - Applied to any div. Pushes content to the right.</li>
-<li><code class="notranslate">mr-auto</code> - Applied to any div. Pushes content to the left.</li>
-<li><code class="notranslate">mt-auto</code> - Applied to any div. Pushes content to the bottom.</li>
-<li><code class="notranslate">mb-auto</code> - Applied to any div. Pushes content to the top.</li>
-<li><code class="notranslate">m-0</code> - Disables margin.</li>
-<li><code class="notranslate">mt-0</code> - Disables margin for the top only.</li>
-<li><code class="notranslate">ml-0</code> - Disables margin for the left only.</li>
-<li><code class="notranslate">mr-0</code> - Disables margin for the right only.</li>
-<li><code class="notranslate">mt-1</code> - Adds 4px of margin to the top.</li>
-<li><code class="notranslate">mt-2</code> - Adds 8px of margin to the top.</li>
-<li><code class="notranslate">mb-0</code> - Disables margin for the bottom only.</li>
-<li><code class="notranslate">mb-2</code> - Adds 8px of margin to the bottom.</li>
-<li><code class="notranslate">mb-1</code> - Adds 4px of margin to the bottom.</li>
-<li><code class="notranslate">o-h</code> - Hides overflow for the content.</li>
-<li><code class="notranslate">ovh</code> - Allows overflow for the content.</li>
-<li><code class="notranslate">separator</code> - Space nearby elements as far apart as they can be.</li>
-<li><code class="notranslate">padded</code> - Applies large horizontal and vertical padding.</li>
-<li><code class="notranslate">container</code> - Applies 10px padding.</li>
-<li><code class="notranslate">padding</code> - Apply a padding of 8px.</li>
-<li><code class="notranslate">padding-mid</code> - Apply a padding of 6px.</li>
-<li><code class="notranslate">padding-small</code> - Apply a padding of 4px.</li>
-</ul>
-<h2 dir="auto">Layout</h2>
-<h3 dir="auto">General</h3>
-<ul dir="auto">
-<li><code class="notranslate">w-100</code> - Sets the width to 100%.</li>
-<li><code class="notranslate">h-100</code> - Sets the height to 100%.</li>
-<li><code class="notranslate">mc</code> - Set the width to max content.</li>
-<li><code class="notranslate">mhc</code> - Set the height to max content.</li>
-</ul>
-<h3 dir="auto">Flexbox</h3>
-<ul dir="auto">
-<li><code class="notranslate">row</code> - Applied to any div. Turns it into a flexbox row.</li>
-<li><code class="notranslate">row-wrap</code> - Applied to any div. Turns it into a flexbox row that wraps.</li>
-<li><code class="notranslate">col</code> - Applied to any div. Turns it into a flexbox column.</li>
-<li><code class="notranslate">fg</code> - Expand the element to fill the remaining area. May work better with <code class="notranslate">w-100</code> or <code class="notranslate">h-100</code>.</li>
-<li><code class="notranslate">fc</code> - Justify content to the center and align items to the center.</li>
-<li><code class="notranslate">jc</code> - Justify content to the center.</li>
-<li><code class="notranslate">js</code> - Justify content to the start.</li>
-<li><code class="notranslate">ac</code> - Align items to the center.</li>
-<li><code class="notranslate">as</code> - Align items to the start.</li>
-<li><code class="notranslate">if</code> - Display the element as inline-flex.</li>
-</ul>
-<h3 dir="auto">Flexbox Spacing</h3>
-<ul dir="auto">
-<li><code class="notranslate">gap</code> - Apply a gap of 8px.</li>
-<li><code class="notranslate">gap-mid</code> - Apply a gap of 6px.</li>
-<li><code class="notranslate">gap-small</code> - Apply a gap of 4px.</li>
-</ul>
-<h2 dir="auto">Display</h2>
-<ul dir="auto">
-<li><code class="notranslate">list-item</code> - Makes it fill the screen and have pre-formatted spacing.</li>
-<li><code class="notranslate">nf</code> - Display the element as a block.</li>
-<li><code class="notranslate">card</code> - Applies some basic styling to make it look like a card.</li>
-<li><code class="notranslate">card-box</code> - Make the element look like a container that holds cards.</li>
-<li><code class="notranslate">alert</code> - Displays a warning alert</li>
-<li><code class="notranslate">display-heading</code> - Very large heading. Useful for fullscreen windows.</li>
-<li><code class="notranslate">display-subheading</code> - Large heading, used in fullscreen windows</li>
-<li><code class="notranslate">display-padding</code> - Adds padding relative to viewport.</li>
-<li><code class="notranslate">no-ui</code> - Apply monospace font and some terminal-like styles.</li>
-<li><code class="notranslate">h1</code> - Make it look like a top-level heading.</li>
-<li><code class="notranslate">h2</code> - Make it look like a second-level heading.</li>
-<li><code class="notranslate">h3</code> - Make it look like a third-level heading.</li>
-<li><code class="notranslate">label</code> - Make it appear like a label.</li>
-<li><code class="notranslate">label-light</code> - Make it appear like a brighter-colored label.</li>
-<li><code class="notranslate">small-label</code> - Another small label.</li>
-<li><code class="notranslate">superscript</code> - Uses align-self: start.</li>
-<li><code class="notranslate">spacer</code> - Used to create a label with a line that stretches to the end:</li>
-</ul>
-<div class="highlight highlight-text-html-basic" dir="auto"><pre class="notranslate"><span class="pl-kos">&lt;</span><span class="pl-ent">div</span> <span class="pl-c1">class</span>="<span class="pl-s">spacer</span>"<span class="pl-kos">&gt;</span>
-  <span class="pl-kos">&lt;</span><span class="pl-ent">span</span><span class="pl-kos">&gt;</span>Text<span class="pl-kos">&lt;/</span><span class="pl-ent">span</span><span class="pl-kos">&gt;</span>
-  <span class="pl-kos">&lt;</span><span class="pl-ent">span</span> <span class="pl-c1">class</span>="<span class="pl-s">space</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">span</span><span class="pl-kos">&gt;</span>
-<span class="pl-kos">&lt;/</span><span class="pl-ent">div</span><span class="pl-kos">&gt;</span></pre></div>
-<ul dir="auto">
-<li><code class="notranslate">badge</code> - Create a inline rounded badge with text.</li>
-</ul>
-<h2 dir="auto">Animation</h2>
-<ul dir="auto">
-<li><code class="notranslate">fadeIn</code> - Make the element fade in.</li>
-<li><code class="notranslate">fadeOut</code> - Make the element fade out.</li>
-<li><code class="notranslate">slideIn</code> - Make the element slide in.</li>
-<li><code class="notranslate">slideOut</code> - Make the element slide out.</li>
-</ul>
-<h2 dir="auto">Color</h2>
-<ul dir="auto">
-<li><code class="notranslate">blur</code> - Applies backdrop filter to the element, blurring things behind it.</li>
-<li><code class="notranslate">success</code> - Turns the colo to the positive color- usually green.</li>
-<li><code class="notranslate">danger</code> - Turns the color to the negative color, usually red.</li>
-<li><code class="notranslate">warning</code> - Turns the color to the warning-light color, usually yellow.</li>
-<li><code class="notranslate">info</code> - Turns the color to the primary color, usually blue.</li>
-<li><code class="notranslate">transparent</code> - Hides the content's background and border colors.</li>
-<li><code class="notranslate">muted</code> - Apply label-light color and make the text look muted.</li>
-</ul></div>
+<h2 dir="auto">PML example app code</h2>
+<p dir="auto">Here is a template for a PML example app.</p>
+<p dir="auto">You can copy this code.</p>
+<div class="highlight highlight-text-html-basic" dir="auto"><pre class="notranslate"><span class="pl-kos">&lt;</span><span class="pl-ent">document</span><span class="pl-kos">&gt;</span>
+  <span class="pl-kos">&lt;</span><span class="pl-ent">info</span><span class="pl-kos">&gt;</span>
+    <span class="pl-kos">&lt;</span><span class="pl-ent">title</span><span class="pl-kos">&gt;</span>Pluto Markup Language<span class="pl-kos">&lt;/</span><span class="pl-ent">title</span><span class="pl-kos">&gt;</span>
+  <span class="pl-kos">&lt;/</span><span class="pl-ent">info</span><span class="pl-kos">&gt;</span>
+  <span class="pl-kos">&lt;</span><span class="pl-ent">content</span><span class="pl-kos">&gt;</span>
+    <span class="pl-kos">&lt;</span><span class="pl-ent">h1</span><span class="pl-kos">&gt;</span>Hello<span class="pl-kos">&lt;/</span><span class="pl-ent">h1</span><span class="pl-kos">&gt;</span>
+    <span class="pl-kos">&lt;</span><span class="pl-ent">p</span><span class="pl-kos">&gt;</span>PML example app.<span class="pl-kos">&lt;/</span><span class="pl-ent">p</span><span class="pl-kos">&gt;</span>
+  <span class="pl-kos">&lt;/</span><span class="pl-ent">content</span><span class="pl-kos">&gt;</span>
+  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>
+    <span class="pl-c">// JavaScript in here</span>
+  <span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>
+  <span class="pl-kos">&lt;</span><span class="pl-ent">style</span><span class="pl-kos">&gt;</span>
+    /* CSS in here */
+  <span class="pl-kos">&lt;/</span><span class="pl-ent">style</span><span class="pl-kos">&gt;</span>
+<span class="pl-kos">&lt;/</span><span class="pl-ent">document</span><span class="pl-kos">&gt;</span></pre></div>
+<h2 dir="auto">How to use PML</h2>
+<p dir="auto">PML is a markup language that is used to create apps in Pluto. It is similar to HTML but with a few differences.<br>
+To make a PML file, create a file with the extension <code class="notranslate">.pml</code> and use the structure above <a href="#pml-example-app-code">PML example app code</a>.</p>
+<h2 dir="auto">Info about PML</h2>
+<p dir="auto">PML can only be currently launched through the Start Menu, Desktop and the File Manager. You can currently not launch PML files through the Terminal or DevEnv.</p></div>
     </div>
 
     <script>
