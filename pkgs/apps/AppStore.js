@@ -293,16 +293,24 @@ export default {
                   `${asFilePath}/${appNameSafe}${fileExtension}`
                 )) === "file"
               ) {
-                await Root.Core.startPkg(
-                  "data:text/javascript," +
-                    encodeURIComponent(
-                      await vfs.readFile(
-                        `${asFilePath}/${appNameSafe}${fileExtension}`
-                      )
-                    ),
-                  false,
-                  true
-                );
+                if (fileExtension === ".app") {
+                  await Root.Core.startPkg(
+                    "data:text/javascript," +
+                      encodeURIComponent(
+                        await vfs.readFile(
+                          `${asFilePath}/${appNameSafe}${fileExtension}`
+                        )
+                      ),
+                    false,
+                    true
+                  );
+                } else {
+                  let x = await Root.Core.startPkg("apps:PML", true, true);
+                  x.proc.send({
+                    type: "loadFile",
+                    path: `${asFilePath}/${appNameSafe}${fileExtension}`,
+                  });
+                }
               }
             })
             .catch((e) => {
