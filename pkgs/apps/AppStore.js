@@ -446,6 +446,8 @@ export default {
           },
           async appPage(app, pkg) {
             this.clear();
+            let fileExtension = "." + app.assets.path.split(".").pop();
+            if (fileExtension === ".js") fileExtension = ".app";
             console.log("loading new app page");
 
             console.log(app, pkg);
@@ -482,7 +484,9 @@ export default {
 
             async function makeInstallOrOpenButton() {
               let localHash = new window.Hashes.MD5().hex(
-                await vfs.readFile(`${asFilePath}/${appNameSafe}.app`)
+                await vfs.readFile(
+                  `${asFilePath}/${appNameSafe}${fileExtension}`
+                )
               );
               const appHash = await fetch(
                 `${host}pkgs/${pkg}/${app.assets.path}?t=` + performance.now()
@@ -491,7 +495,7 @@ export default {
               });
 
               const whatIsApp = await vfs.whatIs(
-                `${asFilePath}/${appNameSafe}.app`
+                `${asFilePath}/${appNameSafe}${fileExtension}`
               );
 
               return [
@@ -540,7 +544,9 @@ export default {
                         );
 
                         if (result === true) {
-                          await vfs.delete(`${asFilePath}/${appNameSafe}.app`);
+                          await vfs.delete(
+                            `${asFilePath}/${appNameSafe}${fileExtension}`
+                          );
                           // await Root.Modal.alert(
                           //   "App Deleted!",
                           //   `${app.name} has been successfully deleted!`
