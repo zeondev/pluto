@@ -370,7 +370,7 @@ export default {
               return { type: "desktop", item: f.item };
             });
           const installedApps = (await vfs.list("Root/Pluto/apps"))
-            .filter((f) => f.item.endsWith(".app"))
+            .filter((f) => f.item.endsWith(".app") || f.item.endsWith(".pml"))
             .map((f) => {
               return { type: "installed", item: f.item };
             });
@@ -381,7 +381,7 @@ export default {
           if (asExists !== null) {
             console.log(asExists);
             asApps = (await vfs.list("Registry/AppStore"))
-              .filter((f) => f.item.endsWith(".app"))
+              .filter((f) => f.item.endsWith(".app") || f.item.endsWith(".pml"))
               .map((f) => {
                 return { type: "appStore", item: f.item };
               });
