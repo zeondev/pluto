@@ -34,7 +34,17 @@ export default {
       app: {
         type: "executable",
         label: "Executable Application",
-        opensWith: "custom",
+        opensWith: "evaluate",
+        ctxMenuApp: {
+          launch: "apps:DevEnv",
+          name: "systemApp_DevEnv",
+        },
+        icon: "box",
+      },
+      pml: {
+        type: "executable",
+        label: "PML Application",
+        opensWith: "apps:PML",
         ctxMenuApp: {
           launch: "apps:DevEnv",
           name: "systemApp_DevEnv",
@@ -182,7 +192,10 @@ export default {
             c.startPkg(shrtFile.fullName, true, true);
           },
         };
-      } else if (ext === "app" && path.startsWith("Registry/AppStore/")) {
+      } else if (
+        (ext === "app" && path.startsWith("Registry/AppStore/")) ||
+        (ext === "pml" && path.startsWith("Registry/AppStore/"))
+      ) {
         const asExists = await vfs.whatIs(
           "Registry/AppStore/_AppStoreIndex.json"
         );
@@ -201,25 +214,38 @@ export default {
             await vfs.readFile("Registry/AppStore/_AppStoreIndex.json")
           );
 
-          if (window.__DEBUG === true)
-            console.log(fileName, as);
+          if (window.__DEBUG === true) console.log(fileName, as);
 
           if (fileName in as) {
-            return {
-              name: as[fileName].name,
-              icon: `<img style="border-radius:50%;width:24px;height:24px" src="${as[fileName].icon}">`,
-              fullName: as[fileName].shortDescription,
-              ctxMenuApp: undefined,
-              invalid: false,
-              async onClick() {
-                C.startPkg(
-                  "data:text/javascript," +
-                    encodeURIComponent(await vfs.readFile(path)),
-                  false,
-                  false
-                );
-              },
-            };
+            if (ext === "app") {
+              return {
+                name: as[fileName].name,
+                icon: `<img style="border-radius:50%;width:24px;height:24px" src="${as[fileName].icon}">`,
+                fullName: as[fileName].shortDescription,
+                ctxMenuApp: undefined,
+                invalid: false,
+                async onClick() {
+                  C.startPkg(
+                    "data:text/javascript," +
+                      encodeURIComponent(await vfs.readFile(path)),
+                    false,
+                    false
+                  );
+                },
+              };
+            } else {
+              return {
+                name: as[fileName].name,
+                icon: `<img style="border-radius:50%;width:24px;height:24px" src="${as[fileName].icon}">`,
+                fullName: as[fileName].shortDescription,
+                ctxMenuApp: undefined,
+                invalid: false,
+                async onClick() {
+                  let x = await c.startPkg("apps:PML", true, true);
+                  x.proc.send({ type: "loadFile", path });
+                },
+              };
+            }
           } else {
             return {
               name: "App Store App (unknown)",
@@ -265,7 +291,7 @@ export default {
           ctxMenuApp: map.ctxMenuApp,
           onClick: async (c) => {
             if (map.opensWith === null) return;
-            if (map.opensWith === "custom") {
+            if (map.opensWith === "evaluate") {
               c.startPkg(
                 "data:text/javascript," +
                   encodeURIComponent(await vfs.readFile(path)),

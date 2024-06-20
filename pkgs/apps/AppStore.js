@@ -243,19 +243,28 @@ export default {
 
         async function installApp(pkg, app, force = false) {
           let appNameSafe = makeAppNameSafe(pkg);
+          let fileExtension = "." + app.assets.path.split(".").pop();
+          if (fileExtension === ".js") fileExtension = ".app";
+
           await fetch(
             `${host}pkgs/${pkg}/${app.assets.path}?t=` + performance.now()
           )
             .then(async (e) => {
-              console.log(await vfs.whatIs(`${asFilePath}/${appNameSafe}.app`));
+              console.log(
+                await vfs.whatIs(`${asFilePath}/${appNameSafe}${fileExtension}`)
+              );
               if (
-                (await vfs.whatIs(`${asFilePath}/${appNameSafe}.app`)) ===
-                  null ||
+                (await vfs.whatIs(
+                  `${asFilePath}/${appNameSafe}${fileExtension}`
+                )) === null ||
                 force == true
               ) {
                 let result = await e.text();
 
-                await vfs.writeFile(`${asFilePath}/${appNameSafe}.app`, result);
+                await vfs.writeFile(
+                  `${asFilePath}/${appNameSafe}${fileExtension}`,
+                  result
+                );
 
                 const img = await new Promise((resolve, reject) => {
                   fetch(`${host}pkgs/${pkg}/${app.assets.icon}`)
@@ -280,17 +289,28 @@ export default {
 
                 pages.appPage(app, pkg);
               } else if (
-                (await vfs.whatIs(`${asFilePath}/${appNameSafe}.app`)) ===
-                "file"
+                (await vfs.whatIs(
+                  `${asFilePath}/${appNameSafe}${fileExtension}`
+                )) === "file"
               ) {
-                await Root.Core.startPkg(
-                  "data:text/javascript," +
-                    encodeURIComponent(
-                      await vfs.readFile(`${asFilePath}/${appNameSafe}.app`)
-                    ),
-                  false,
-                  true
-                );
+                if (fileExtension === ".app") {
+                  await Root.Core.startPkg(
+                    "data:text/javascript," +
+                      encodeURIComponent(
+                        await vfs.readFile(
+                          `${asFilePath}/${appNameSafe}${fileExtension}`
+                        )
+                      ),
+                    false,
+                    true
+                  );
+                } else {
+                  let x = await Root.Core.startPkg("apps:PML", true, true);
+                  x.proc.send({
+                    type: "loadFile",
+                    path: `${asFilePath}/${appNameSafe}${fileExtension}`,
+                  });
+                }
               }
             })
             .catch((e) => {
@@ -434,6 +454,8 @@ export default {
           },
           async appPage(app, pkg) {
             this.clear();
+            let fileExtension = "." + app.assets.path.split(".").pop();
+            if (fileExtension === ".js") fileExtension = ".app";
             console.log("loading new app page");
 
             console.log(app, pkg);
@@ -470,7 +492,9 @@ export default {
 
             async function makeInstallOrOpenButton() {
               let localHash = new window.Hashes.MD5().hex(
-                await vfs.readFile(`${asFilePath}/${appNameSafe}.app`)
+                await vfs.readFile(
+                  `${asFilePath}/${appNameSafe}${fileExtension}`
+                )
               );
               const appHash = await fetch(
                 `${host}pkgs/${pkg}/${app.assets.path}?t=` + performance.now()
@@ -479,7 +503,7 @@ export default {
               });
 
               const whatIsApp = await vfs.whatIs(
-                `${asFilePath}/${appNameSafe}.app`
+                `${asFilePath}/${appNameSafe}${fileExtension}`
               );
 
               return [
@@ -528,7 +552,9 @@ export default {
                         );
 
                         if (result === true) {
-                          await vfs.delete(`${asFilePath}/${appNameSafe}.app`);
+                          await vfs.delete(
+                            `${asFilePath}/${appNameSafe}${fileExtension}`
+                          );
                           // await Root.Modal.alert(
                           //   "App Deleted!",
                           //   `${app.name} has been successfully deleted!`

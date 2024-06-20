@@ -26,10 +26,11 @@ This guide may change often, so to help you in making applications, use the late
 
 There are some other docs in this folder that may be useful.
 
-[VirtualFS Documentation &nearr;](virtualFS.md)   
-[Libraries and Components &nearr;](libs-and-components.md)    
-[Localization &nearr;](localization.md)   
-[CSS Classes &nearr;](css-classes.md)   
+[VirtualFS Documentation &nearr;](virtualFS.md)  
+[Libraries and Components &nearr;](libs-and-components.md)  
+[Localization &nearr;](localization.md)  
+[CSS Classes &nearr;](css-classes.md)  
+[Pluto Markup Language (PML) &nearr;](pluto-markup-language.md)
 
 ## How to initialize an application
 
@@ -63,7 +64,7 @@ You are allowed to copy this example app.
 export default {
   name: "Example",
   description: "Example application. Boilerplate.",
-  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
+  ver: 1, // Compatible with core v1
   type: "process",
   exec: async function (Root) {
     let wrapper;
@@ -226,7 +227,7 @@ Here's an example of it in use in an app:
 export default {
   name: "Spacedesktop",
   description: "A desktop replacement for Pluto",
-  ver: "v1.6.2", // Supports minimum Core version of v1.6.2
+  ver: 1, // Compatible with core v1
   type: "process",
   optInToEvents: true, // <-- Opt in to events
   privileges: [
@@ -403,14 +404,14 @@ There are a few more advanced methods to how the Html class works:
   });
   ```
 
-- `.prepend(elm)`   
+- `.prepend(elm)`  
   Add a new element to the beginning of the element
   ```js
   const container = new Html("div").prepend(
     new Html("span").text("Hello, world!")
   );
   ```
-- `.prependMany(...elms)`   
+- `.prependMany(...elms)`  
   Add multiple elements to the start
   ```js
   new Html("div").prependMany(
@@ -449,14 +450,14 @@ There are a few more advanced methods to how the Html class works:
   new Html("span").un("click", myEvent);
   ```
 
-- `.append(elm)`    
+- `.append(elm)`  
   Add a new element inside the element
   ```js
   const container = new Html("div").append(
     new Html("span").text("Hello, world!")
   );
   ```
-- `.appendMany(...elms)`    
+- `.appendMany(...elms)`  
   Add multiple elements
   ```js
   new Html("div").appendMany(
@@ -470,7 +471,7 @@ There are a few more advanced methods to how the Html class works:
   </div>
   */
   ```
-- `.appendTo()`   
+- `.appendTo()`  
   Append the element to another element
 
   ```js
@@ -484,7 +485,7 @@ There are a few more advanced methods to how the Html class works:
   */
   ```
 
-- `.cleanup()`   
+- `.cleanup()`  
   Destroy the element
 
   ```js
@@ -514,7 +515,7 @@ There are a few more advanced methods to how the Html class works:
   div.getText(); // 'This is my text...'
   ```
 
-- `.getHtml()`    
+- `.getHtml()`  
   Get HTML content of the element
 
   ```js
@@ -523,7 +524,7 @@ There are a few more advanced methods to how the Html class works:
   div.getHtml(); // '<p>This is my <b>HTML</b> content...</p>'
   ```
 
-- `.getValue()`   
+- `.getValue()`  
   Ditto, but for the value of an input tag.
 
 ## Using Services in your apps
@@ -583,7 +584,6 @@ const fileContent = await vfs.readFile("Root/myFile.txt");
 ```
 
 More documentation on VirtualFS [can be found here](virtualFS.md).
-
 
 ## Recent breaking changes to apps
 

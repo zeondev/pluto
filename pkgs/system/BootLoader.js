@@ -237,15 +237,15 @@ export default {
       window.err = e;
       lsg.cleanup();
       Root.Core.startPkg("system:Basic");
-      Root.Modal.alert(
-        "BootLoader Error",
-        "Something went wrong while loading...\n\n" +
-          e +
-          "\n\n" +
-          e.stack +
-          "\n\n" +
-          "Launching Basic Mode"
-      );
+      // Root.Modal.alert(
+      //   "BootLoader Error",
+      //   "Something went wrong while loading...\n\n" +
+      //     e +
+      //     "\n\n" +
+      //     e.stack +
+      //     "\n\n" +
+      //     "Launching Basic Mode"
+      // );
     }
 
     return Root.Lib.setupReturns((m) => {

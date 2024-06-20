@@ -872,7 +872,7 @@ iframe {
 }
 
 .m-0 {
-  margin: 0;
+  margin: 0 !important;
 }
 
 .mt-0 {

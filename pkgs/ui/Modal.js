@@ -50,6 +50,7 @@ export default {
         });
 
         if (button.type && button.type === "primary") b.class("primary");
+        if (button.type && button.type === "danger") b.class("danger");
 
         b.appendTo(modalContent.elm.querySelector(".flex-group"));
       }
@@ -98,7 +99,7 @@ export default {
         });
       });
     },
-    prompt: function (title, content, parent = "body") {
+    prompt: function (title, content, parent = "body", dangerous = false) {
       return new Promise((res, _rej) => {
         this.modal(
           title,
@@ -107,7 +108,7 @@ export default {
           false,
           {
             text: lib.getString("yes"),
-            type: "primary",
+            type: dangerous ? "danger" : "primary",
             callback: (_) => res(true),
           },
           {
