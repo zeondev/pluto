@@ -297,14 +297,35 @@ export default {
         DvSettings.fontSize = Number(editorSize.toString());
         DvSaveSettings();
       },
-      run: () => {
-        Root.Core.startPkg(
-          URL.createObjectURL(
-            new Blob([editor.getValue()], { type: "application/javascript" })
-          ),
-          // URL.createObjectURL(["data:text/javascript," + encodeURIComponent(`/*${currentDocument.path}*/` +editor.getValue())], {type:'text/plain'}),
-          false
-        );
+      run: async () => {
+        if (currentDocument.dirty === true) {
+          modal(
+            new Html("div").appendMany(
+              new Html("span").text(
+                "You have unsaved changes. Save your work before running the app."
+              )
+            ),
+            true,
+            Root.Lib.getString("error")
+          );
+          return;
+        }
+
+        if (currentDocument.path.endsWith(".app")) {
+          Root.Core.startPkg(
+            URL.createObjectURL(
+              new Blob([editor.getValue()], { type: "application/javascript" })
+            ),
+            // URL.createObjectURL(["data:text/javascript," + encodeURIComponent(`/*${currentDocument.path}*/` +editor.getValue())], {type:'text/plain'}),
+            false
+          );
+        } else if (currentDocument.path.endsWith(".pml")) {
+          let x = await Root.Core.startPkg("apps:PML", true, true);
+          x.proc.send({
+            type: "loadFile",
+            path: currentDocument.path,
+          });
+        }
       },
       prettify: async () => {
         try {
