@@ -33,6 +33,9 @@ export default {
       menuExtensions: "Extensions",
       menuHelp: "Help",
       manageExtensions: "Manage Extensions",
+      openTerminal: "Open Terminal",
+      line: "Ln",
+      column: "Col",
     },
     en_GB: {
       action_zoomOut: "Zoom Out",
@@ -967,7 +970,7 @@ export default {
     }
     makeSidebar();
 
-    let text = new Root.Lib.html("div").class("fg").appendTo(wrapper);
+    let text = new Root.Lib.html("div").class("fg", "col").appendTo(wrapper);
 
     let textWrapper = new Root.Lib.html("div")
       .style({ height: "100%" })
@@ -984,11 +987,76 @@ export default {
     editor.session.setUseWrapMode(true);
     editor.session.setMode("ace/mode/typescript");
 
+    const editorRef = text.qs(".ace_editor");
+
+    if (editorRef) {
+      editorRef.classOn("fg", "row");
+    }
+
+    let statusBar = new Root.Lib.html("div")
+      .styleJs({
+        display: "flex",
+        justifyContent: "flex-end",
+        alignItems: "center",
+        textAlign: "right",
+        background: "var(--unfocused)",
+        flexShrink: 0,
+        minHeight: "1.4rem",
+        padding: "0.25rem 1rem",
+        gap: "1rem",
+      })
+      .appendTo(text);
+
+    let statusBarLineColNumber = new Root.Lib.html("span")
+        .text("Ln 0")
+        .appendTo(statusBar),
+      statusBarTerminalOption = new Root.Lib.html("button")
+        .class("row", "ac", "gap-small", "transparent")
+        .style({
+          margin: "0",
+          padding: "0.2em 0.75em",
+        })
+        .appendMany(
+          new Root.Lib.html("span")
+            .class("icon")
+            .style({ width: "16px", height: "16px" })
+            .html(Root.Lib.icons.terminal),
+          new Root.Lib.html("span").text(
+            Root.Lib.getString("systemApp_Terminal")
+          )
+        )
+        .on('click', () => {
+          Root.Core.startPkg('apps:Terminal');
+        })
+        .appendTo(statusBar);
+
     await DvReadSettings();
+
+    function updateStatusBar() {
+      let cursor = editor.selection.getCursor();
+      let selectionRange = editor.getSelectedText().length;
+
+      let text = `${Root.Lib.getString("line")} ${
+        cursor.row + 1
+      }, ${Root.Lib.getString("column")} ${cursor.column + 1}`;
+
+      if (selectionRange > 0) {
+        text += `&nbsp;(${selectionRange} selected)`;
+      }
+
+      statusBarLineColNumber.html(text);
+    }
 
     text.on("input", (e) => {
       currentDocument.dirty = true;
       updateTitle();
+    });
+
+    editor.session.selection.on("changeCursor", (e) => {
+      updateStatusBar();
+    });
+    editor.session.selection.on("changeSelection", (e) => {
+      updateStatusBar();
     });
 
     let defaultText = "";
