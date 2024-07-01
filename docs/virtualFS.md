@@ -58,6 +58,8 @@ Vfs functions are found as below. Some are documented, others are not
   function to tell you if stored data is a file or a folder
 - `async readFile(path, fsObject = this.fileSystem, bypass = false)`
   Function to get the contents of a file at a given path
+- `async readFileAsBuffer(path, fsObject = this.fileSystem)`
+  Same as readFile but for non-text objects (uploaded with non text/ mime type) returns Uint8Array.
 - `async writeFile(path, contents, fsObject = this.fileSystem)`
   Function to write to a file at a given path
 - `async createFolder(path, fsObject = this.fileSystem)`
