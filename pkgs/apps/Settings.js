@@ -1086,7 +1086,8 @@ export default {
                   Root.Core.setLanguage(e);
                   save();
                 },
-                desktopConfig.language
+                desktopConfig.language,
+                "unset"
               )
               .class("if", "mc")
           );

@@ -176,6 +176,8 @@ export default {
 
       let FileMappings = await Root.Lib.loadLibrary("FileMappings");
 
+      let mappings = [];
+
       for (let i = 0; i < fileList.length; i++) {
         let file = fileList[i];
 
@@ -184,6 +186,27 @@ export default {
           vfs
         );
 
+        // console.log("HERE MAPIONG", mapping);
+
+        mappings.push(
+          Object.assign(
+            {
+              type: file.type,
+            },
+            mapping
+          )
+        );
+      }
+
+      mappings.sort((a, b) => {
+        if (a.type === "dir" && b.type === "file") return -1;
+        if (a.type === "file" && b.type === "dir") return 1;
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+      });
+
+      for (const mapping of mappings) {
         createDesktopIcon(mapping.name, mapping.icon, mapping.onClick);
       }
     }

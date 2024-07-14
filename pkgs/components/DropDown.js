@@ -12,13 +12,13 @@ export default {
     Html = l.html;
   },
   data: {
-    new: (wrapper, items, onSelect, selectedItem) => {
+    new: (wrapper, items, onSelect, selectedItem, maxWidth = "180px") => {
       const textSpan = new Html("span").text("Select...");
 
       const dropDown = new Html("button")
         .attr({ "tab-index": "0" })
         .class("row", "gap")
-        .styleJs({ alignItems: "flex-end", maxWidth: "180px" })
+        .styleJs({ alignItems: "flex-end", maxWidth })
         .appendMany(
           textSpan,
           new Html("span")

@@ -52,14 +52,14 @@ export default {
     de_DE: {
       action_zoomOut: "Rauszoomen",
       action_zoomIn: "Hineinzoomen",
-      action_format: "Verschönern Sie Ihren Code",
+      action_format: "Hübsch Code",
       action_runApp: "App ausführen",
       appHelp_string1:
         "Willkommen in DevEnv, einer Entwicklerumgebung für die Entwicklung von Pluto-Apps.",
       appHelp_string2:
         "Sie können die Seitenleistenelemente verwenden, um in der App unterschiedliche Aktionen auszuführen.\nEs gibt auch eine Reihe nützlicher Tastaturkürzel.",
       appHelp_string3: "Möchten Sie mehr über Tastaturkürzel erfahren?",
-      appHelp_string4: "Hier sind die Tastaturverknüpfungen:",
+      appHelp_string4: "Hier sind die Tastaturkürzel:",
     },
     es_ES: {
       action_zoomOut: "Disminuir el zoom",
@@ -67,7 +67,7 @@ export default {
       action_format: "Embellece tu código",
       action_runApp: "Ejecutar la aplicación",
       appHelp_string1:
-        "Bienvenido a DevPEnv, un entorno de desarrollador para desarrollar aplicaciones Pluto.",
+        "Bienvenido a DevEnv, un entorno de desarrollador para desarrollar aplicaciones Pluto.",
       appHelp_string2:
         "Puede usar los elementos de la barra lateral para realizar diferentes acciones en la aplicación.\nTambién hay un útil conjunto de atajos de teclado.",
       appHelp_string3: "¿Le gustaría aprender sobre los atajos de teclado?",
@@ -956,15 +956,6 @@ export default {
             html: Root.Lib.icons.wrench,
             title: Root.Lib.getString("systemApp_Settings"),
           },
-          {
-            style: {
-              "margin-top": "auto",
-              "margin-left": "auto",
-            },
-            onclick: actionHandlers.run,
-            html: Root.Lib.icons.run,
-            title: Root.Lib.getString("action_runApp"),
-          },
         ]);
       }
     }
@@ -1007,6 +998,24 @@ export default {
       })
       .appendTo(text);
 
+    let statusBarRunAppButton = new Root.Lib.html("button")
+      .class("row", "ac", "gap-small", "transparent")
+      .style({
+        margin: "0 auto 0 0",
+        padding: "0.2em 0.75em",
+      })
+      .appendMany(
+        new Root.Lib.html("i")
+          .class("icon")
+          .style({ width: "16px", height: "16px" })
+          .html(Root.Lib.icons.run),
+        new Root.Lib.html("span").text(Root.Lib.getString("action_runApp"))
+      )
+      .on("click", () => {
+        actionHandlers.run();
+      })
+      .appendTo(statusBar);
+
     let statusBarLineColNumber = new Root.Lib.html("span")
         .text("Ln 0")
         .appendTo(statusBar),
@@ -1025,8 +1034,8 @@ export default {
             Root.Lib.getString("systemApp_Terminal")
           )
         )
-        .on('click', () => {
-          Root.Core.startPkg('apps:Terminal');
+        .on("click", () => {
+          Root.Core.startPkg("apps:Terminal");
         })
         .appendTo(statusBar);
 
@@ -1134,6 +1143,8 @@ export default {
           DvWindow.setTitle(Root.Lib.getString("systemApp_DevEnv"));
           Root.Lib.updateProcTitle(Root.Lib.getString("systemApp_DevEnv"));
           makeSidebar();
+          statusBarRunAppButton.elm.querySelector("span").textContent =
+            Root.Lib.getString("action_runApp");
         }
       }
       if (typeof m === "object" && m.type && m.type === "loadFile" && m.path) {

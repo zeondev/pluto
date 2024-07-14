@@ -313,12 +313,12 @@ export default {
     },
     getType: function (extension) {
       if (extension in this.mappings) {
-        return this.mappings[extension].text;
+        return this.mappings[extension].type;
       } else return false;
     },
     getLabel: function (extension) {
       if (extension in this.mappings) {
-        return this.mappings[extension].text;
+        return this.mappings[extension].label;
       } else return false;
     },
   },
