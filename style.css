@@ -20,21 +20,20 @@ body a {
   text-decoration: underline;
   cursor: var(--cursor-pointer) 5 0, auto !important;
 }
+
 body a:hover {
   filter: brightness(1.5);
 }
 
-*:not(
-    .resize-grips,
-    .resize-grip,
-    input,
-    textarea,
-    button,
-    button *,
-    select,
-    select *,
-    a
-  ) {
+*:not(.resize-grips,
+  .resize-grip,
+  input,
+  textarea,
+  button,
+  button *,
+  select,
+  select *,
+  a) {
   cursor: var(--cursor-default) 2 2, auto !important;
 }
 
@@ -247,8 +246,8 @@ audio::-webkit-media-controls-enclosure {
 }
 
 .win-window.closing {
-  animation: slide-down var(--animation-duration) var(--easing-function)
-    forwards;
+  animation: slide-down var(--animation-duration) var(--easing-function) forwards;
+  pointer-events: none !important;
 }
 
 .win-window.dragging {
@@ -290,15 +289,19 @@ input.shake {
   0% {
     transform: translateX(0);
   }
+
   25% {
     transform: translateX(5%);
   }
+
   50% {
     transform: translateX(-5%);
   }
+
   75% {
     transform: translateX(5%);
   }
+
   100% {
     transform: translateX(0);
   }
@@ -315,20 +318,20 @@ input.shake {
   box-shadow: none;
 }
 
-.win-window.max > .win-titlebar > .buttons > .win-btn.win-minimize {
+.win-window.max>.win-titlebar>.buttons>.win-btn.win-minimize {
   visibility: collapse;
 }
 
-.desktop ~ .win-window.max {
+.desktop~.win-window.max {
   height: calc(100% - 42px - 12px) !important;
 }
 
-.win-window.max > .win-titlebar,
-.win-window.max > .win-content {
+.win-window.max>.win-titlebar,
+.win-window.max>.win-content {
   border-radius: 0;
 }
 
-.win-window.max > .resize-grips {
+.win-window.max>.resize-grips {
   display: none;
 }
 
@@ -338,7 +341,7 @@ input.shake {
   border-radius: 5px;
 }
 
-.win-window.min > .win-titlebar {
+.win-window.min>.win-titlebar {
   border-radius: 5px;
 }
 
@@ -361,18 +364,18 @@ input.shake {
   flex-shrink: 0;
 }
 
-.win-window:not(.focus) > .win-titlebar .title,
-.win-window-decorative:not(.focus) > .win-titlebar .title {
+.win-window:not(.focus)>.win-titlebar .title,
+.win-window-decorative:not(.focus)>.win-titlebar .title {
   opacity: 0.5;
 }
 
-.win-window:not(.focus) > .win-titlebar button,
-.win-window-decorative:not(.focus) > .win-titlebar button {
+.win-window:not(.focus)>.win-titlebar button,
+.win-window-decorative:not(.focus)>.win-titlebar button {
   filter: brightness(0.5);
 }
 
-.win-window.focus > .win-titlebar,
-.win-window-decorative.focus > .win-titlebar {
+.win-window.focus>.win-titlebar,
+.win-window-decorative.focus>.win-titlebar {
   background-color: var(--header);
 }
 
@@ -608,11 +611,11 @@ input.shake {
 
 .modal.closing {
   animation: fadeOut var(--animation-duration) linear;
+  pointer-events: none !important;
 }
 
 .modal.closing .modal-content {
-  animation: shortSlideDown var(--animation-duration) var(--easing-function)
-    forwards;
+  animation: shortSlideDown var(--animation-duration) var(--easing-function) forwards;
 }
 
 .modal-content {
@@ -631,6 +634,7 @@ input.shake {
 .win-window .win-content .modal {
   padding: 16px;
 }
+
 .win-window .win-content .modal-content {
   max-width: 100%;
   max-height: 100%;
@@ -657,12 +661,12 @@ input.shake {
   overflow: auto;
 }
 
-.modal-body > :first-child {
+.modal-body> :first-child {
   flex: 1;
   white-space: pre-wrap;
 }
 
-.modal-body > :first-child table {
+.modal-body> :first-child table {
   white-space: normal;
 }
 
@@ -694,9 +698,11 @@ button {
 button.transparent {
   background-color: transparent;
 }
+
 button.transparent:hover {
   background-color: rgba(var(--text-rgb), 0.25);
 }
+
 button.transparent:active {
   background-color: rgba(var(--text-rgb), 0.5);
 }
@@ -960,7 +966,7 @@ table {
   border-spacing: 0;
 }
 
-table > tbody > tr > td div {
+table>tbody>tr>td div {
   width: 24px;
   display: flex;
   justify-content: center;
@@ -1029,6 +1035,7 @@ td {
   flex-wrap: wrap;
   background-color: var(--unfocused);
 }
+
 .menu-bar button {
   margin: 0;
   border-radius: 0;
@@ -1167,43 +1174,36 @@ td {
   border: 1px solid var(--outline);
   box-shadow: 0px 0px 28px 2px rgba(0, 0, 0, 0.41);
 
-  animation: simpleSlideUp var(--long-animation-duration) var(--easing-function)
-    forwards;
+  animation: simpleSlideUp var(--long-animation-duration) var(--easing-function) forwards;
 }
 
 .desktop .dock.hiding {
-  animation: simpleSlideDown var(--long-animation-duration)
-    var(--easing-function) forwards;
+  animation: simpleSlideDown var(--long-animation-duration) var(--easing-function) forwards;
 }
 
 [data-dock-style="compact"] .desktop .dock {
   max-width: 680px;
   left: 50%;
-  animation: compactSimpleSlideUp var(--long-animation-duration)
-    var(--easing-function) forwards;
+  animation: compactSimpleSlideUp var(--long-animation-duration) var(--easing-function) forwards;
 }
 
 [data-dock-style="compact"] .desktop .dock.hiding {
-  animation: compactSimpleSlideDown var(--long-animation-duration)
-    var(--easing-function) forwards;
+  animation: compactSimpleSlideDown var(--long-animation-duration) var(--easing-function) forwards;
 }
 
 [data-dock-style="minimal"] .desktop .dock {
   width: max-content;
   max-width: 680px;
   left: 50%;
-  animation: compactSimpleSlideUp var(--long-animation-duration)
-    var(--easing-function) forwards;
+  animation: compactSimpleSlideUp var(--long-animation-duration) var(--easing-function) forwards;
 }
 
 [data-dock-style="minimal"] .desktop .dock.hiding {
-  animation: compactSimpleSlideDown var(--long-animation-duration)
-    var(--easing-function) forwards;
+  animation: compactSimpleSlideDown var(--long-animation-duration) var(--easing-function) forwards;
 }
 
 .desktop .dock.collapse {
-  animation: slideLeft var(--long-animation-duration) var(--easing-function)
-    forwards;
+  animation: slideLeft var(--long-animation-duration) var(--easing-function) forwards;
 }
 
 .desktop .dock .toolbar-button {
@@ -1218,19 +1218,20 @@ td {
   border-radius: 0;
 }
 
-.desktop .dock > .toolbar-button:first-child {
+.desktop .dock>.toolbar-button:first-child {
   border-right: 1px solid var(--outline);
   border-radius: 8px 0 0 8px;
 }
 
-.desktop .dock > .border-left {
+.desktop .dock>.border-left {
   border-left: 1px solid var(--outline);
 }
-.desktop .dock > .border-right {
+
+.desktop .dock>.border-right {
   border-right: 1px solid var(--outline);
 }
 
-.desktop .dock > .toolbar-button:last-child {
+.desktop .dock>.toolbar-button:last-child {
   border-left: 1px solid var(--outline);
   border-radius: 0 8px 8px 0;
 }
@@ -1602,6 +1603,7 @@ ul {
   background: var(--neutral);
   border: 1px solid var(--outline);
 }
+
 .ace_optionsMenuEntry button:hover {
   background: var(--neutral-focus);
   border: 1px solid var(--outline);
@@ -1741,8 +1743,7 @@ svg.lucide:not(.ignore-css) {
   max-width: 140px;
   border-radius: 8px;
   padding: 8px;
-  animation: shortSlideUp var(--long-animation-duration) var(--easing-function)
-    forwards;
+  animation: shortSlideUp var(--long-animation-duration) var(--easing-function) forwards;
 }
 
 .desktop-icon:hover {
@@ -1832,11 +1833,9 @@ svg.lucide:not(.ignore-css) {
   flex-direction: column;
   height: 174px;
   padding: 10% 8%;
-  background-image: linear-gradient(
-      0deg,
+  background-image: linear-gradient(0deg,
       rgba(var(--root-rgb), 0.8),
-      rgba(var(--root-rgb), 0.8)
-    ),
+      rgba(var(--root-rgb), 0.8)),
     var(--bg);
   background-size: cover;
   background-position: center;
@@ -2048,32 +2047,33 @@ hr {
 .desktop .menu.tray .tray-item {
   padding: 4px;
 }
+
 .desktop .menu.tray .tray-item,
 .desktop .menu.tray .tray-item .app-icon {
   display: flex;
   justify-content: center;
   align-content: center;
 }
+
 .desktop .menu.tray .tray-item .app-icon svg {
   width: 100%;
   height: 100%;
 }
+
 .icon svg {
   width: 100% !important;
   height: 100% !important;
 }
 
 .desktop .menu.tray.opening {
-  animation: minimalMenuOpen var(--animation-duration) var(--easing-function)
-    forwards !important;
+  animation: minimalMenuOpen var(--animation-duration) var(--easing-function) forwards !important;
 }
 
 .desktop .menu.tray.closing {
-  animation: minimalMenuClose var(--animation-duration) var(--easing-function)
-    forwards !important;
+  animation: minimalMenuClose var(--animation-duration) var(--easing-function) forwards !important;
 }
 
-.desktop .menu > .me {
+.desktop .menu>.me {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -2081,7 +2081,7 @@ hr {
   margin-top: 12px;
 }
 
-.desktop .menu > .me .pfp {
+.desktop .menu>.me .pfp {
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -2091,7 +2091,7 @@ hr {
   --url: url("./assets/user-avatar.svg");
 }
 
-.desktop .menu > .me > .text {
+.desktop .menu>.me>.text {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -2099,7 +2099,7 @@ hr {
   flex: 1 0 0;
 }
 
-.desktop .menu > .me > .text > .subheading {
+.desktop .menu>.me>.text>.subheading {
   color: var(--label-light);
   font-size: 12px;
   font-style: normal;
@@ -2131,7 +2131,7 @@ hr {
   background: var(--label);
 }
 
-.desktop .menu > .apps {
+.desktop .menu>.apps {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -2141,7 +2141,7 @@ hr {
   touch-action: pan-y !important;
 }
 
-.desktop .menu > .apps > .app {
+.desktop .menu>.apps>.app {
   display: flex;
   padding: 8px;
   align-items: center;
@@ -2151,26 +2151,26 @@ hr {
   cursor: pointer;
 }
 
-.desktop .menu > .apps > .app:hover {
+.desktop .menu>.apps>.app:hover {
   background-color: var(--header);
 }
 
-.desktop .menu > .apps > .app > .app-icon,
-.desktop .menu > .apps > .app > .app-icon svg,
-.desktop .menu > .apps > .app > .app-icon img {
+.desktop .menu>.apps>.app>.app-icon,
+.desktop .menu>.apps>.app>.app-icon svg,
+.desktop .menu>.apps>.app>.app-icon img {
   width: 42px !important;
   height: 42px !important;
   stroke-width: 1.3px;
 }
 
-.desktop .menu > .apps > .app > .app-text {
+.desktop .menu>.apps>.app>.app-text {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
 }
 
-.desktop .menu > .apps > .app > .app-text > .app-heading {
+.desktop .menu>.apps>.app>.app-text>.app-heading {
   color: var(--text);
   font-size: 14px;
   font-style: normal;
@@ -2178,7 +2178,7 @@ hr {
   line-height: normal;
 }
 
-.desktop .menu > .apps > .app > .app-text > .app-description {
+.desktop .menu>.apps>.app>.app-text>.app-description {
   color: var(--text-alt);
   font-size: 12px;
   font-style: normal;
@@ -2303,13 +2303,11 @@ hr {
 }
 
 [data-dock-style="compact"] .desktop .menu.opening {
-  animation: compactMenuOpen var(--animation-duration) var(--easing-function)
-    forwards;
+  animation: compactMenuOpen var(--animation-duration) var(--easing-function) forwards;
 }
 
 [data-dock-style="compact"] .desktop .menu.closing {
-  animation: compactMenuClose var(--animation-duration) var(--easing-function)
-    forwards;
+  animation: compactMenuClose var(--animation-duration) var(--easing-function) forwards;
 }
 
 [data-dock-style="compact"] .desktop .menu {
@@ -2325,13 +2323,11 @@ hr {
 }
 
 [data-dock-style="minimal"] .desktop .menu.opening {
-  animation: minimalMenuOpen var(--animation-duration) var(--easing-function)
-    forwards;
+  animation: minimalMenuOpen var(--animation-duration) var(--easing-function) forwards;
 }
 
 [data-dock-style="minimal"] .desktop .menu.closing {
-  animation: minimalMenuClose var(--animation-duration) var(--easing-function)
-    forwards;
+  animation: minimalMenuClose var(--animation-duration) var(--easing-function) forwards;
 }
 
 [data-dock-style="minimal"] .desktop .menu {
@@ -2516,10 +2512,12 @@ hr {
   border-radius: 6px;
   border: 1px solid var(--header);
 }
+
 .app-store .app:not(.in-menu),
 .app-store .app:not(.in-menu) * {
   cursor: var(--cursor-pointer) 5 0, auto !important;
 }
+
 .app-store .app:not(.in-menu):hover {
   background-color: var(--header);
 }
@@ -2598,6 +2596,7 @@ hr {
 .app-store .app-whats-new {
   padding: 0 12px;
 }
+
 .app-store .app-whats-new h2 {
   padding: 0;
   margin: 8px 0;
@@ -2759,10 +2758,11 @@ hr {
   pointer-events: none;
 }
 
-.desktop ~ .notify-box {
+.desktop~.notify-box {
   bottom: 54px;
   right: 14px;
 }
+
 .notify-box {
   display: flex;
   flex-direction: column-reverse;
@@ -2783,7 +2783,7 @@ hr {
   padding: 0.5rem;
 }
 
-.notify-box > .notify {
+.notify-box>.notify {
   background-color: var(--root);
   border: 0.125rem solid var(--outline);
   border-radius: 0.32rem;
@@ -2794,71 +2794,82 @@ hr {
   flex-direction: column;
   gap: 0.5rem;
 }
-.notify-box > .notify .notify-title {
+
+.notify-box>.notify .notify-title {
   font-size: 1.1rem;
   font-weight: bold;
 }
-.notify-box > .notify .notify-description {
+
+.notify-box>.notify .notify-description {
   opacity: 1;
 }
 
 .slideIn {
   animation: slideIn var(--animation-duration) var(--easing-function) forwards;
 }
+
 .slideOut {
   animation: slideOut var(--animation-duration) var(--easing-function) forwards;
 }
+
 .slideInFromLeft {
-  animation: slideInFromLeft var(--animation-duration) var(--easing-function)
-    forwards;
+  animation: slideInFromLeft var(--animation-duration) var(--easing-function) forwards;
 }
+
 .slideInFromRight {
-  animation: slideInFromRight var(--animation-duration) var(--easing-function)
-    forwards;
+  animation: slideInFromRight var(--animation-duration) var(--easing-function) forwards;
 }
+
 .shortSlideInFromLeft {
-  animation: slideInFromLeft var(--short-animation-duration)
-    var(--easing-function) forwards;
+  animation: slideInFromLeft var(--short-animation-duration) var(--easing-function) forwards;
 }
+
 .shortSlideInFromRight {
-  animation: slideInFromRight var(--short-animation-duration)
-    var(--easing-function) forwards;
+  animation: slideInFromRight var(--short-animation-duration) var(--easing-function) forwards;
 }
+
 @keyframes slideInFromLeft {
   from {
     transform: translateX(-100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
   }
 }
+
 @keyframes slideInFromRight {
   from {
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
   }
 }
+
 @keyframes slideIn {
   from {
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
   }
 }
+
 @keyframes slideOut {
   from {
     transform: translateX(0);
     opacity: 1;
   }
+
   to {
     transform: translateX(50%);
     opacity: 0;
@@ -2886,6 +2897,7 @@ hr {
 .calc-buttons.one {
   width: 75%;
 }
+
 .calc-buttons.two {
   width: 25%;
   margin-left: 15px;
