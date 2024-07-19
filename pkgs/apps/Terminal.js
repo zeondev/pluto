@@ -265,7 +265,8 @@ export default {
   pwd          Print the current directory
   rm [file]    Delete a file
   rmdir [dir]  Delete a directory
-  touch [file] Create a file<br>`
+  touch [file] Create a file
+  uname        <br>`
             );
             break;
           case "clear":
@@ -354,6 +355,66 @@ export default {
             let file3 = argsStr.trim();
             await vfs.writeFile(path + "/" + file3, "");
             break;
+          case "uname":
+            console.log(Root);
+            let KernelName = "Pluto-Core";
+            let HostName = window.location.hostname;
+            let KernelRelease = Root.Lib.systemInfo.version + " Browser";
+            let KernelVersion =
+              "#1 " +
+              Root.Lib.systemInfo.codename +
+              " " +
+              Root.Lib.systemInfo.version;
+            let Machine = "Browser";
+            let OsName = "Pluto";
+            let args2 = argsStr.trim();
+            switch (args2) {
+              case "-a":
+                appendOutput(
+                  `${KernelName} ${HostName} ${KernelRelease} ${KernelVersion} ${Machine} ${OsName}`
+                );
+                break;
+              case "-s":
+                appendOutput(`${KernelName}`);
+                break;
+              case "-n":
+                appendOutput(`${HostName}`);
+                break;
+              case "-r":
+                appendOutput(`${KernelRelease}`);
+                break;
+              case "-v":
+                appendOutput(`${KernelVersion}`);
+                break;
+              case "-m":
+                appendOutput(`${Machine}`);
+                break;
+              case "-o":
+                appendOutput(`${OsName}`);
+                break;
+              case "-p":
+                appendOutput(`${Machine}`);
+                break;
+              case "-u":
+                appendOutput(`${navigator.userAgent}`);
+                break;
+              default:
+                appendOutput(
+                  `uname: invalid option ${args2}
+usage: uname [OPTION]
+uname -a   List all information
+uname -s   Kernel name
+uname -n   Host name
+uname -r   Kernel release
+uname -v   Kernel version
+uname -m   Machine
+uname -o   OS name
+uname -p   Machine
+uname -u   User agent`
+                );
+                break;
+            }
+            break;
           default:
             if (cmd !== "") {
               console.log(cmd);
@@ -383,6 +444,7 @@ export default {
                 pid: Root.PID,
               });
             }
+            break;
         }
       }
       document.querySelector(".no-ui").scrollTop =
