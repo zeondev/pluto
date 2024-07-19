@@ -9,6 +9,10 @@ export default {
       description: "Send messages to applications",
     },
     {
+      privilege: "services",
+      description: "Access services",
+    },
+    {
       privilege: "startPkg",
       description: "Run applications",
     },
@@ -30,6 +34,7 @@ export default {
     const vfs = await L.loadLibrary("VirtualFS");
     vfs.importFS();
     const FileMappings = await L.loadLibrary("FileMappings");
+    let service = Root.Core.services.find((x) => x.name === "Account");
 
     MyWindow = new Win({
       title: Root.Lib.getString("systemApp_Terminal"),
@@ -253,20 +258,25 @@ export default {
           case "help":
             appendOutput(
               `No-UI commands:
-  cat [file]   Print the contents of a file
-  cd [dir]     Change directory
-  clear        Clear the screen
-  echo [msg]   Print something to the screen
-  exit         Quit this mode
-  help         Displays this menu
-  js           Switch to JavaScript mode
-  ls           List files in the current directory
-  mkdir [dir]  Create a directory
-  pwd          Print the current directory
-  rm [file]    Delete a file
-  rmdir [dir]  Delete a directory
-  touch [file] Create a file
-  uname        <br>`
+  cat [file]    Print the contents of a file
+  cd [dir]      Change directory
+  clear         Clear the screen
+  echo [msg]    Print something to the screen
+  exit          Quit this mode
+  help          Displays this menu
+  js            Switch to JavaScript mode
+  ls            List files in the current directory
+  mkdir [dir]   Create a directory
+  pwd           Print the current directory
+  rm [file]     Delete a file
+  rmdir [dir]   Delete a directory
+  touch [file]  Create a file
+  uname         Lists system information
+  curl [url]    Fetch a URL
+  wget [url]    Download a URL
+  install [url] Install an app from a URL
+  whoami        Print the current username<br>
+  `
             );
             break;
           case "clear":
@@ -336,7 +346,13 @@ export default {
           case "cat":
             let file = argsStr.trim();
             let content = await vfs.readFile(path + "/" + file);
+
             console.log(content, path + "/" + file);
+            content = content.replace(/&/g, "&amp;");
+            content = content.replace(/</g, "&lt;");
+            content = content.replace(/>/g, "&gt;");
+            content = content.replace(/"/g, "&quot;");
+            content = content.replace(/'/g, "&apos;");
             appendOutput(content);
             break;
           case "pwd":
@@ -414,6 +430,47 @@ uname -u   User agent`
                 );
                 break;
             }
+            break;
+          case "curl":
+            let url = argsStr.trim();
+            let res = await fetch(url);
+            let text = await res.text();
+            // escape the html in text
+            text = text.replace(/&/g, "&amp;");
+            text = text.replace(/</g, "&lt;");
+            text = text.replace(/>/g, "&gt;");
+            text = text.replace(/"/g, "&quot;");
+            text = text.replace(/'/g, "&apos;");
+            appendOutput(text);
+            break;
+          case "wget":
+            let url2 = argsStr.trim();
+            let res2 = await fetch(url2);
+            let text2 = await res2.text();
+            let filename = url2.split("/").pop();
+            if (!filename || filename === "") {
+              // if filename is empty then make a random id
+              filename = Math.random().toString(36).substring(2);
+            }
+            await vfs.writeFile(path + "/" + filename, text2);
+            appendOutput(`Downloaded ${filename}`);
+            break;
+          case "install":
+            let url3 = argsStr.trim();
+            let res3 = await fetch(url3);
+            let text3 = await res3.text();
+            let filename2 = url3.split("/").pop();
+            if (!filename2 || filename2 === "") {
+              // if filename is empty then make a random id
+              filename2 = Math.random().toString(36).substring(2);
+            }
+            await vfs.writeFile("Root/Pluto/apps/" + filename2, text3);
+            appendOutput(`Downloaded ${filename2}`);
+            break;
+          case "whoami":
+            const userData = service.ref.getUserData();
+            let username = userData.username;
+            appendOutput(username);
             break;
           default:
             if (cmd !== "") {
