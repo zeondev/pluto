@@ -168,6 +168,19 @@ const Vfs = {
       return resolve(current);
     });
   },
+  // Read a file and return it as an uint8array
+  async readFileAsBuffer(path, fsObject = this.fileSystem) {
+    return new Promise(async (resolve, reject) => {
+      let data = await this.readFile(path, fsObject);
+      if (data === null) return resolve(null);
+      if (data.startsWith("data:") || data.startsWith("blob:")) {
+        let blob = await fetch(data).then((r) => r.blob()); // This works and I dont like it.
+        let buffer = await blob.arrayBuffer();
+        return resolve(new Uint8Array(buffer));
+      }
+      return resolve(null);
+    })
+  },
   // Function to write to a file at a given path
   async writeFile(path, contents, fsObject = this.fileSystem) {
     if (typeof contents !== "string")

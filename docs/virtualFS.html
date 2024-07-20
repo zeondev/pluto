@@ -1306,6 +1306,8 @@ Helper function to get the parent folder of a given path</li>
 function to tell you if stored data is a file or a folder</li>
 <li><code class="notranslate">async readFile(path, fsObject = this.fileSystem, bypass = false)</code><br>
 Function to get the contents of a file at a given path</li>
+<li><code class="notranslate">async readFileAsBuffer(path, fsObject = this.fileSystem)</code><br>
+Same as readFile but for non-text objects (uploaded with non text/ mime type) returns Uint8Array</li>
 <li><code class="notranslate">async writeFile(path, contents, fsObject = this.fileSystem)</code><br>
 Function to write to a file at a given path</li>
 <li><code class="notranslate">async createFolder(path, fsObject = this.fileSystem)</code><br>
