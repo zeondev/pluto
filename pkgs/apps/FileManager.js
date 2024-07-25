@@ -125,7 +125,7 @@ export default {
               );
             let text = await vfs.readFile(selectedItem, undefined);
 
-            if (text.startsWith('blob:')) {
+            if (text.startsWith("blob:")) {
               var element = document.createElement("a");
               element.setAttribute("href", text);
               element.setAttribute("download", selectedItem.split("/").pop());
@@ -286,21 +286,25 @@ export default {
 
     async function renderFileList(folder) {
       const isFolder = await vfs.whatIs(folder);
-
-      if (isFolder !== "dir") {
-        path = "Root/";
+      console.log(isFolder);
+      if (isFolder === null || isFolder !== "dir") {
+        path = "Root";
         return renderFileList(path);
       }
-      // return renderFileList(await vfs.getParentFolder(folder));
 
       setTitle(appName + " - " + folder);
       let fileList = await vfs.list(folder);
-
-      const mappings = await Promise.all(
-        fileList.map(async (e) => {
-          return await FileMappings.retrieveAllMIMEdata(path + "/" + e.item);
-        })
-      );
+      let mappings;
+      if (fileList !== null) {
+        mappings = await Promise.all(
+          fileList.map(async (e) => {
+            return await FileMappings.retrieveAllMIMEdata(path + "/" + e.item);
+          })
+        );
+      } else {
+        path = "Root/";
+        return renderFileList(path);
+      }
 
       tableBody.html("");
 

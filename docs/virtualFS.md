@@ -3,12 +3,19 @@
 [Back to README.md](README.md)
 
 - [Virtual File System Documentation](#virtual-file-system-documentation)
+  - [NEW: Registry API](#new-registry-api)
   - [Default file structure](#default-file-structure)
   - [Functions](#functions)
   - [Secret File Tips](#secret-file-tips)
   - [File Location Tips](#file-location-tips)
     - [Configuration files](#configuration-files)
     - [Storing external libraries](#storing-external-libraries)
+
+## NEW: Registry API
+
+The brand new Registry API provides a simple way to create a Key/Value store for your app.
+
+See [Libraries and Components &rarr; Registry](libs-and-components.md#registry).
 
 ## Default file structure
 
@@ -86,17 +93,19 @@ await Vfs.importFS();
 The file `Root/Pluto/startup` allows you to configure startup apps. Use newlines to change which apps are launched at boot.
 
 Example:
+
 ```
 Root/Desktop/Settings.shrt
 Root/Pluto/Apps/Example.js
 ```
+
 launches Settings and Example at startup.
 
 ## File Location Tips
 
-### Configuration files 
+### Configuration files
 
-For config files, use the Registry path instead of Root. The files will be hidden from the end-user by default.     
+For config files, use the Registry path instead of Root. The files will be hidden from the end-user by default.  
 Here's an example:
 
 ```js
@@ -111,4 +120,3 @@ vfs.writeFile("Registry/MyConfig.json", JSON.stringify(config));
 ### Storing external libraries
 
 Use the `Root/Pluto/cache/lib` folder for storing external libraries.
-

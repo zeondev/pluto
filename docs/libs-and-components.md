@@ -9,6 +9,7 @@
     - [FileDialog](#filedialog)
     - [FileMappings](#filemappings)
     - [Notify](#notify)
+    - [Registry](#registry)
     - [ThemeLib](#themelib)
     - [VirtualFS](#virtualfs)
   - [Components](#components)
@@ -39,6 +40,7 @@ Here is the list of available libraries:
 [FileDialog](#filedialog)  
 [FileMappings](#filemappings)  
 [Notify](#notify)  
+[Registry](#registry)
 [ThemeLib](#themelib)  
 [VirtualFS](virtualFS.md)  
 [WindowSystem](README.md#example-app-code)
@@ -164,6 +166,40 @@ Notify.show("Pluto Messenger", "Rick Astley is calling...", null, [
 
 `closeCallback` is a function that returns a single parameter which is the hide function to cloes the notification.
 
+### Registry
+
+This is a new API to create a simple file system registry key/value store.
+
+**(It is highly recommended use the first argument as the developer name and the second argument as your app name.)**
+
+- `createStore(parent, name)` - Create a registry store.
+
+Registry store:
+
+- `async set(key, value)` - Set the key to the value
+- `async get(key)` - Get the value of a key
+- `async delete(key)` - Deletes the key
+
+As the Registry KV api depends on the VirtualFS, it is async. You have to await every entry to it.
+
+Example code:
+
+```js
+let KV = await Root.Lib.loadLibrary("Registry");
+
+const store = await KV.createStore("MyName", "Example"); // creates Registry/MyName/Example
+
+// Setting
+await store.set("test", { real: true, number: 1234, string: "hi" });
+// stored as Registry/MyName/Example/test
+
+// Retrieving
+console.log(await store.get("test")); // { real: true, number: 1234, string: "hi" }
+
+// delete the test key
+await store.delete("test");
+```
+
 ### ThemeLib
 
 - `validateTheme(theme)`: Parse a theme JSON.
@@ -190,7 +226,7 @@ Here is the list of available components:
 
 [Card](#card)  
 [ImageButton](#imagebutton)  
-[MenuBar](#menubar)   
+[MenuBar](#menubar)  
 [SelectList](#selectlist)  
 [Sidebar](#sidebar)  
 [TextSidebar](#textsidebar)  
@@ -578,11 +614,13 @@ TextSidebar.new(wrapper, [
 ### Tooltip
 
 ```js
-new ((posX = 0),
-(posY = 0),
-(text = "Action"),
-(parent = document.body),
-(isAbsolute = true))();
+new (
+  posX = 0,
+  posY = 0,
+  text = "Action",
+  parent = document.body,
+  isAbsolute = true
+)
 ```
 
 Example

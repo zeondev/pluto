@@ -1243,65 +1243,95 @@
   <body>
     <div class="markdown-body">
       <div class="version-info">
-        <h6 dir="auto">Generated with <code class="notranslate">pluto-docs</code> running on node v20.13.1.</h6>
+        <h6 dir="auto">
+          Generated with <code class="notranslate">pluto-docs</code> running on
+          node v21.5.0.
+        </h6>
         <hr />
       </div>
-      <div class="content"><h1 dir="auto">Libraries and Components</h1>
-<p dir="auto"><a href="README.html">Back to README.md</a></p>
-<ul dir="auto">
-<li><a href="#libraries-and-components">Libraries and Components</a>
-<ul dir="auto">
-<li><a href="#libraries">Libraries</a>
-<ul dir="auto">
-<li><a href="#codescanner">CodeScanner</a></li>
-<li><a href="#ctxmenu">CtxMenu</a></li>
-<li><a href="#filedialog">FileDialog</a></li>
-<li><a href="#filemappings">FileMappings</a></li>
-<li><a href="#notify">Notify</a></li>
-<li><a href="#themelib">ThemeLib</a></li>
-<li><a href="#virtualfs">VirtualFS</a></li>
-</ul>
-</li>
-<li><a href="#components">Components</a>
-<ul dir="auto">
-<li><a href="#card">Card</a></li>
-<li><a href="#imagebutton">ImageButton</a></li>
-<li><a href="#menubar">MenuBar</a></li>
-<li><a href="#selectlist">SelectList</a></li>
-<li><a href="#sidebar">Sidebar</a></li>
-<li><a href="#textsidebar">TextSidebar</a></li>
-<li><a href="#tooltip">Tooltip</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p dir="auto">There are a selection of libraries and components available.</p>
-<h2 dir="auto">Libraries</h2>
-<p dir="auto">You can load a library into your app with the following code:</p>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-s1">lib</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadLibrary</span><span class="pl-kos">(</span><span class="pl-s">"libraryName"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-<p dir="auto">Library names are treated as <strong>case sensitive</strong>!</p>
-<p dir="auto">Here is the list of available libraries:</p>
-<p dir="auto"><a href="#codescanner">CodeScanner</a><br>
-<a href="#ctxmenu">CtxMenu</a><br>
-<a href="#filedialog">FileDialog</a><br>
-<a href="#filemappings">FileMappings</a><br>
-<a href="#notify">Notify</a><br>
-<a href="#themelib">ThemeLib</a><br>
-<a href="virtualFS.html">VirtualFS</a><br>
-<a href="README.md#example-app-code">WindowSystem</a></p>
-<p dir="auto">Below is some simple documentation that should be easy enough to understand. Images are provided to understand what the library creates or does.</p>
-<hr>
-<h3 dir="auto">CodeScanner</h3>
-<p dir="auto">These function are undocumented for now.</p>
-<ul dir="auto">
-<li><code class="notranslate">isCodeDangerous(code)</code></li>
-<li><code class="notranslate">async scanFolder(folder = "Root")</code></li>
-<li><code class="notranslate">getFileExtension(filename)</code></li>
-<li><code class="notranslate">async scanForDangerousCode()</code></li>
-</ul>
-<h3 dir="auto">CtxMenu</h3>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">new</span> <span class="pl-kos">(</span>
+      <div class="content">
+        <h1 dir="auto">Libraries and Components</h1>
+        <p dir="auto"><a href="README.html">Back to README.md</a></p>
+        <ul dir="auto">
+          <li>
+            <a href="#libraries-and-components">Libraries and Components</a>
+            <ul dir="auto">
+              <li>
+                <a href="#libraries">Libraries</a>
+                <ul dir="auto">
+                  <li><a href="#codescanner">CodeScanner</a></li>
+                  <li><a href="#ctxmenu">CtxMenu</a></li>
+                  <li><a href="#filedialog">FileDialog</a></li>
+                  <li><a href="#filemappings">FileMappings</a></li>
+                  <li><a href="#notify">Notify</a></li>
+                  <li><a href="#registry">Registry</a></li>
+                  <li><a href="#themelib">ThemeLib</a></li>
+                  <li><a href="#virtualfs">VirtualFS</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="#components">Components</a>
+                <ul dir="auto">
+                  <li><a href="#card">Card</a></li>
+                  <li><a href="#imagebutton">ImageButton</a></li>
+                  <li><a href="#menubar">MenuBar</a></li>
+                  <li><a href="#selectlist">SelectList</a></li>
+                  <li><a href="#sidebar">Sidebar</a></li>
+                  <li><a href="#textsidebar">TextSidebar</a></li>
+                  <li><a href="#tooltip">Tooltip</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <p dir="auto">
+          There are a selection of libraries and components available.
+        </p>
+        <h2 dir="auto">Libraries</h2>
+        <p dir="auto">
+          You can load a library into your app with the following code:
+        </p>
+        <div class="highlight highlight-source-js" dir="auto">
+          <pre
+            class="notranslate"
+          ><span class="pl-k">const</span> <span class="pl-s1">lib</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadLibrary</span><span class="pl-kos">(</span><span class="pl-s">"libraryName"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+        </div>
+        <p dir="auto">
+          Library names are treated as <strong>case sensitive</strong>!
+        </p>
+        <p dir="auto">Here is the list of available libraries:</p>
+        <p dir="auto">
+          <a href="#codescanner">CodeScanner</a><br />
+          <a href="#ctxmenu">CtxMenu</a><br />
+          <a href="#filedialog">FileDialog</a><br />
+          <a href="#filemappings">FileMappings</a><br />
+          <a href="#notify">Notify</a><br />
+          <a href="#registry">Registry</a><br />
+          <a href="#themelib">ThemeLib</a><br />
+          <a href="virtualFS.html">VirtualFS</a><br />
+          <a href="README.md#example-app-code">WindowSystem</a>
+        </p>
+        <p dir="auto">
+          Below is some simple documentation that should be easy enough to
+          understand. Images are provided to understand what the library creates
+          or does.
+        </p>
+        <hr />
+        <h3 dir="auto">CodeScanner</h3>
+        <p dir="auto">These function are undocumented for now.</p>
+        <ul dir="auto">
+          <li><code class="notranslate">isCodeDangerous(code)</code></li>
+          <li>
+            <code class="notranslate">async scanFolder(folder = "Root")</code>
+          </li>
+          <li><code class="notranslate">getFileExtension(filename)</code></li>
+          <li><code class="notranslate">async scanForDangerousCode()</code></li>
+        </ul>
+        <h3 dir="auto">CtxMenu</h3>
+        <div class="highlight highlight-source-js" dir="auto">
+          <pre
+            class="notranslate"
+          ><span class="pl-k">new</span> <span class="pl-kos">(</span>
   <span class="pl-s1">posX</span><span class="pl-kos">,</span>
   <span class="pl-s1">posY</span><span class="pl-kos">,</span>
   <span class="pl-s1">items</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span> <span class="pl-kos">{</span> <span class="pl-c1">item</span>: <span class="pl-s">"Nothing"</span><span class="pl-kos">,</span> <span class="pl-en">select</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-c1">null</span> <span class="pl-kos">}</span> <span class="pl-kos">]</span><span class="pl-kos">,</span>
@@ -1309,13 +1339,30 @@
   <span class="pl-s1">parent</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-c1">body</span><span class="pl-kos">,</span>
   <span class="pl-s1">isAbsolute</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">,</span>
   <span class="pl-s1">isHtml</span> <span class="pl-c1">=</span> <span class="pl-c1">false</span>
-<span class="pl-kos">)</span></pre></div>
-<p dir="auto">isHtml can be configured so the items are HTML. See how it is used in the MenuBar component code for examples.</p>
-<p dir="auto">Show a context menu:</p>
-<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/ctxMenu.png"><img src="./images/ctxMenu.png" alt="Context menu" style="max-width: 100%;"></a></p>
-<details>
-<summary>View code</summary>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-s1">ctxMenu</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadLibrary</span><span class="pl-kos">(</span><span class="pl-s">"CtxMenu"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">)</span></pre>
+        </div>
+        <p dir="auto">
+          isHtml can be configured so the items are HTML. See how it is used in
+          the MenuBar component code for examples.
+        </p>
+        <p dir="auto">Show a context menu:</p>
+        <p dir="auto">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="./images/ctxMenu.png"
+            ><img
+              src="./images/ctxMenu.png"
+              alt="Context menu"
+              style="max-width: 100%"
+          /></a>
+        </p>
+        <details>
+          <summary>View code</summary>
+          <div class="highlight highlight-source-js" dir="auto">
+            <pre
+              class="notranslate"
+            ><span class="pl-k">const</span> <span class="pl-s1">ctxMenu</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadLibrary</span><span class="pl-kos">(</span><span class="pl-s">"CtxMenu"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
 
 <span class="pl-s1">ctxMenu</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">.</span><span class="pl-c1">clientX</span><span class="pl-kos">,</span> <span class="pl-s1">e</span><span class="pl-kos">.</span><span class="pl-c1">clientY</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
   <span class="pl-kos">{</span>
@@ -1330,26 +1377,75 @@
     <span class="pl-c1">item</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"systemApp_Settings"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
     <span class="pl-k">async</span> <span class="pl-en">select</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span> ... <span class="pl-kos">}</span><span class="pl-kos">,</span>
   <span class="pl-kos">}</span><span class="pl-kos">,</span>
-<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-</details>
-<h3 dir="auto">FileDialog</h3>
-<ul dir="auto">
-<li><code class="notranslate">async pickFile(path)</code> - Show a file picker</li>
-<li><code class="notranslate">saveFile(path)</code> - Show a save file picker</li>
-</ul>
-<h3 dir="auto">FileMappings</h3>
-<ul dir="auto">
-<li><code class="notranslate">async retrieveAllMIMEData(path)</code> - Get metadata information for a file</li>
-<li><code class="notranslate">getType(extension)</code> - Get information about a file extension</li>
-<li><code class="notranslate">getLabel(extension)</code> - Ditto function, it does exactly the same thing</li>
-</ul>
-<h3 dir="auto">Notify</h3>
-<p dir="auto"><code class="notranslate">show(title, description, parent = null, buttons = null, autoHide = null, sound = null, soundLoops = false, closeCallback = null)</code> - Show a notification:</p>
-<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/notify.png"><img src="./images/notify.png" alt="Notify image" style="max-width: 100%;"></a></p>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">Notify</span><span class="pl-kos">.</span><span class="pl-en">show</span><span class="pl-kos">(</span><span class="pl-s">"Title"</span><span class="pl-kos">,</span> <span class="pl-s">"Description"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-<p dir="auto">Notifications can also use buttons:</p>
-<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/notificationWithButtons.png"><img src="./images/notificationWithButtons.png" alt="Notification with buttons" style="max-width: 100%;"></a></p>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">Notify</span><span class="pl-kos">.</span><span class="pl-en">show</span><span class="pl-kos">(</span><span class="pl-s">"Title"</span><span class="pl-kos">,</span> <span class="pl-s">"Description"</span><span class="pl-kos">,</span> <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
+<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+          </div>
+        </details>
+        <h3 dir="auto">FileDialog</h3>
+        <ul dir="auto">
+          <li>
+            <code class="notranslate">async pickFile(path)</code> - Show a file
+            picker
+          </li>
+          <li>
+            <code class="notranslate">saveFile(path)</code> - Show a save file
+            picker
+          </li>
+        </ul>
+        <h3 dir="auto">FileMappings</h3>
+        <ul dir="auto">
+          <li>
+            <code class="notranslate">async retrieveAllMIMEData(path)</code> -
+            Get metadata information for a file
+          </li>
+          <li>
+            <code class="notranslate">getType(extension)</code> - Get
+            information about a file extension
+          </li>
+          <li>
+            <code class="notranslate">getLabel(extension)</code> - Ditto
+            function, it does exactly the same thing
+          </li>
+        </ul>
+        <h3 dir="auto">Notify</h3>
+        <p dir="auto">
+          <code class="notranslate"
+            >show(title, description, parent = null, buttons = null, autoHide =
+            null, sound = null, soundLoops = false, closeCallback = null)</code
+          >
+          - Show a notification:
+        </p>
+        <p dir="auto">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="./images/notify.png"
+            ><img
+              src="./images/notify.png"
+              alt="Notify image"
+              style="max-width: 100%"
+          /></a>
+        </p>
+        <div class="highlight highlight-source-js" dir="auto">
+          <pre
+            class="notranslate"
+          ><span class="pl-v">Notify</span><span class="pl-kos">.</span><span class="pl-en">show</span><span class="pl-kos">(</span><span class="pl-s">"Title"</span><span class="pl-kos">,</span> <span class="pl-s">"Description"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+        </div>
+        <p dir="auto">Notifications can also use buttons:</p>
+        <p dir="auto">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="./images/notificationWithButtons.png"
+            ><img
+              src="./images/notificationWithButtons.png"
+              alt="Notification with buttons"
+              style="max-width: 100%"
+          /></a>
+        </p>
+        <div class="highlight highlight-source-js" dir="auto">
+          <pre
+            class="notranslate"
+          ><span class="pl-v">Notify</span><span class="pl-kos">.</span><span class="pl-en">show</span><span class="pl-kos">(</span><span class="pl-s">"Title"</span><span class="pl-kos">,</span> <span class="pl-s">"Description"</span><span class="pl-kos">,</span> <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
   <span class="pl-kos">{</span>
     <span class="pl-c1">text</span>: <span class="pl-s">"Button 1"</span><span class="pl-kos">,</span>
     <span class="pl-c1">type</span>: <span class="pl-s">"primary"</span><span class="pl-kos">,</span>
@@ -1363,9 +1459,13 @@
       <span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-c1">2</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
     <span class="pl-kos">}</span><span class="pl-kos">,</span>
   <span class="pl-kos">}</span><span class="pl-kos">,</span>
-<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-<p dir="auto">You can also customize the notification sound:</p>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">Notify</span><span class="pl-kos">.</span><span class="pl-en">show</span><span class="pl-kos">(</span><span class="pl-s">"Pluto Messenger"</span><span class="pl-kos">,</span> <span class="pl-s">"Rick Astley is calling..."</span><span class="pl-kos">,</span> <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
+<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+        </div>
+        <p dir="auto">You can also customize the notification sound:</p>
+        <div class="highlight highlight-source-js" dir="auto">
+          <pre
+            class="notranslate"
+          ><span class="pl-v">Notify</span><span class="pl-kos">.</span><span class="pl-en">show</span><span class="pl-kos">(</span><span class="pl-s">"Pluto Messenger"</span><span class="pl-kos">,</span> <span class="pl-s">"Rick Astley is calling..."</span><span class="pl-kos">,</span> <span class="pl-c1">null</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
   <span class="pl-kos">{</span>
     <span class="pl-c1">text</span>: <span class="pl-s">"Accept"</span><span class="pl-kos">,</span>
     <span class="pl-c1">type</span>: <span class="pl-s">"primary"</span><span class="pl-kos">,</span>
@@ -1377,43 +1477,155 @@
     <span class="pl-c1">text</span>: <span class="pl-s">"Decline"</span><span class="pl-kos">,</span>
     <span class="pl-en">callback</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span> ... <span class="pl-kos">}</span><span class="pl-kos">,</span>
   <span class="pl-kos">}</span><span class="pl-kos">,</span>
-<span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-c1">false</span><span class="pl-kos">,</span> <span class="pl-s">"https://example.com/ringtone.mp3"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-<p dir="auto"><code class="notranslate">closeCallback</code> is a function that returns a single parameter which is the hide function to cloes the notification.</p>
-<h3 dir="auto">ThemeLib</h3>
-<ul dir="auto">
-<li><code class="notranslate">validateTheme(theme)</code>: Parse a theme JSON.</li>
-<li><code class="notranslate">async setCurrentTheme(theme)</code>: Apply the theme to the DOM.</li>
-<li><code class="notranslate">async setWallpaper(wallpaper)</code>: If a desktop is running, tell it to set the wallpaper.</li>
-</ul>
-<h3 dir="auto">VirtualFS</h3>
-<p dir="auto"><a href="virtualFS.html">See VirtualFS</a></p>
-<hr>
-<h2 dir="auto">Components</h2>
-<p dir="auto">Components are similar to libraries, but act like reusable functions to generate HTML elements.</p>
-<p dir="auto">You can load a component into your app with the following code:</p>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-s1">cmp</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"componentName"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-<p dir="auto">Here is the list of available components:</p>
-<p dir="auto"><a href="#card">Card</a><br>
-<a href="#imagebutton">ImageButton</a><br>
-<a href="#menubar">MenuBar</a><br>
-<a href="#selectlist">SelectList</a><br>
-<a href="#sidebar">Sidebar</a><br>
-<a href="#textsidebar">TextSidebar</a><br>
-<a href="#tooltip">Tooltip</a></p>
-<hr>
-<h3 dir="auto">Card</h3>
-<p dir="auto"><code class="notranslate">new(wrapper, content) =&gt; Html</code>;<br>
-<a target="_blank" rel="noopener noreferrer" href="./images/card.png"><img src="./images/card.png" alt="Card image" style="max-width: 100%;"></a></p>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">Card</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">container</span><span class="pl-kos">,</span> <span class="pl-k">new</span> <span class="pl-v">Html</span><span class="pl-kos">(</span><span class="pl-s">"div"</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">class</span><span class="pl-kos">(</span><span class="pl-s">"flex-group"</span><span class="pl-kos">,</span> <span class="pl-s">"col"</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">text</span><span class="pl-kos">(</span><span class="pl-s">"Hello!"</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-<h3 dir="auto">ImageButton</h3>
-<p dir="auto"><code class="notranslate">new(wrapper, imageUri)</code> create image button (unused)</p>
-<h3 dir="auto">MenuBar</h3>
-<p dir="auto">Create a horizontal menu bar, useful if you have a bunch of actions.</p>
-<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/menuBar.png"><img src="./images/menuBar.png" alt="MenuBar" style="max-width: 100%;"></a></p>
-<details>
-<summary>View code</summary>
-<p dir="auto">You can also add the <code class="notranslate">icon</code> parameter here along with an icon from Root.Lib.icons into any of the menu items.</p>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">MenuBar</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">sidebarWrapper</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
+<span class="pl-kos">]</span><span class="pl-kos">,</span> <span class="pl-c1">false</span><span class="pl-kos">,</span> <span class="pl-s">"https://example.com/ringtone.mp3"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+        </div>
+        <p dir="auto">
+          <code class="notranslate">closeCallback</code> is a function that
+          returns a single parameter which is the hide function to cloes the
+          notification.
+        </p>
+        <h3 dir="auto">Registry</h3>
+        <p dir="auto">
+          This is a new API to create a simple file system registry key/value
+          store.
+        </p>
+        <p dir="auto">
+          <strong
+            >(It is highly recommended use the first argument as the developer
+            name and the second argument as your app name.)</strong
+          >
+        </p>
+        <ul dir="auto">
+          <li>
+            <code class="notranslate">createStore(parent, name)</code> - Create
+            a registry store.
+          </li>
+        </ul>
+        <p dir="auto">Registry store:</p>
+        <ul dir="auto">
+          <li>
+            <code class="notranslate">async set(key, value)</code> - Set the key
+            to the value
+          </li>
+          <li>
+            <code class="notranslate">async get(key)</code> - Get the value of a
+            key
+          </li>
+          <li>
+            <code class="notranslate">async delete(key)</code> - Deletes the key
+          </li>
+        </ul>
+        <p dir="auto">
+          As the Registry KV api depends on the VirtualFS, it is async. You have
+          to await every entry to it.
+        </p>
+        <p dir="auto">Example code:</p>
+        <div class="highlight highlight-source-js" dir="auto">
+          <pre
+            class="notranslate"
+          ><span class="pl-k">let</span> <span class="pl-c1">KV</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadLibrary</span><span class="pl-kos">(</span><span class="pl-s">"Registry"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-k">const</span> <span class="pl-s1">store</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-c1">KV</span><span class="pl-kos">.</span><span class="pl-en">createStore</span><span class="pl-kos">(</span><span class="pl-s">"MyName"</span><span class="pl-kos">,</span> <span class="pl-s">"Example"</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// creates Registry/MyName/Example</span>
+
+<span class="pl-c">// Setting</span>
+<span class="pl-k">await</span> <span class="pl-s1">store</span><span class="pl-kos">.</span><span class="pl-en">set</span><span class="pl-kos">(</span><span class="pl-s">"test"</span><span class="pl-kos">,</span> <span class="pl-kos">{</span> <span class="pl-c1">real</span>: <span class="pl-c1">true</span><span class="pl-kos">,</span> <span class="pl-c1">number</span>: <span class="pl-c1">1234</span><span class="pl-kos">,</span> <span class="pl-c1">string</span>: <span class="pl-s">"hi"</span> <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-c">// stored as Registry/MyName/Example/test</span>
+
+<span class="pl-c">// Retrieving</span>
+<span class="pl-smi">console</span><span class="pl-kos">.</span><span class="pl-en">log</span><span class="pl-kos">(</span><span class="pl-k">await</span> <span class="pl-s1">store</span><span class="pl-kos">.</span><span class="pl-en">get</span><span class="pl-kos">(</span><span class="pl-s">"test"</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span> <span class="pl-c">// { real: true, number: 1234, string: "hi" }</span>
+
+<span class="pl-c">// delete the test key</span>
+<span class="pl-k">await</span> <span class="pl-s1">store</span><span class="pl-kos">.</span><span class="pl-en">delete</span><span class="pl-kos">(</span><span class="pl-s">"test"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+        </div>
+        <h3 dir="auto">ThemeLib</h3>
+        <ul dir="auto">
+          <li>
+            <code class="notranslate">validateTheme(theme)</code>: Parse a theme
+            JSON.
+          </li>
+          <li>
+            <code class="notranslate">async setCurrentTheme(theme)</code>: Apply
+            the theme to the DOM.
+          </li>
+          <li>
+            <code class="notranslate">async setWallpaper(wallpaper)</code>: If a
+            desktop is running, tell it to set the wallpaper.
+          </li>
+        </ul>
+        <h3 dir="auto">VirtualFS</h3>
+        <p dir="auto"><a href="virtualFS.html">See VirtualFS</a></p>
+        <hr />
+        <h2 dir="auto">Components</h2>
+        <p dir="auto">
+          Components are similar to libraries, but act like reusable functions
+          to generate HTML elements.
+        </p>
+        <p dir="auto">
+          You can load a component into your app with the following code:
+        </p>
+        <div class="highlight highlight-source-js" dir="auto">
+          <pre
+            class="notranslate"
+          ><span class="pl-k">const</span> <span class="pl-s1">cmp</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"componentName"</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+        </div>
+        <p dir="auto">Here is the list of available components:</p>
+        <p dir="auto">
+          <a href="#card">Card</a><br />
+          <a href="#imagebutton">ImageButton</a><br />
+          <a href="#menubar">MenuBar</a><br />
+          <a href="#selectlist">SelectList</a><br />
+          <a href="#sidebar">Sidebar</a><br />
+          <a href="#textsidebar">TextSidebar</a><br />
+          <a href="#tooltip">Tooltip</a>
+        </p>
+        <hr />
+        <h3 dir="auto">Card</h3>
+        <p dir="auto">
+          <code class="notranslate">new(wrapper, content) =&gt; Html</code
+          >;<br />
+          <a target="_blank" rel="noopener noreferrer" href="./images/card.png"
+            ><img
+              src="./images/card.png"
+              alt="Card image"
+              style="max-width: 100%"
+          /></a>
+        </p>
+        <div class="highlight highlight-source-js" dir="auto">
+          <pre
+            class="notranslate"
+          ><span class="pl-v">Card</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">container</span><span class="pl-kos">,</span> <span class="pl-k">new</span> <span class="pl-v">Html</span><span class="pl-kos">(</span><span class="pl-s">"div"</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">class</span><span class="pl-kos">(</span><span class="pl-s">"flex-group"</span><span class="pl-kos">,</span> <span class="pl-s">"col"</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">text</span><span class="pl-kos">(</span><span class="pl-s">"Hello!"</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+        </div>
+        <h3 dir="auto">ImageButton</h3>
+        <p dir="auto">
+          <code class="notranslate">new(wrapper, imageUri)</code> create image
+          button (unused)
+        </p>
+        <h3 dir="auto">MenuBar</h3>
+        <p dir="auto">
+          Create a horizontal menu bar, useful if you have a bunch of actions.
+        </p>
+        <p dir="auto">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="./images/menuBar.png"
+            ><img
+              src="./images/menuBar.png"
+              alt="MenuBar"
+              style="max-width: 100%"
+          /></a>
+        </p>
+        <details>
+          <summary>View code</summary>
+          <p dir="auto">
+            You can also add the <code class="notranslate">icon</code> parameter
+            here along with an icon from Root.Lib.icons into any of the menu
+            items.
+          </p>
+          <div class="highlight highlight-source-js" dir="auto">
+            <pre
+              class="notranslate"
+            ><span class="pl-v">MenuBar</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">sidebarWrapper</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
   <span class="pl-kos">{</span>
     <span class="pl-c1">item</span>: <span class="pl-s">"File"</span><span class="pl-kos">,</span>
     <span class="pl-c1">items</span>: <span class="pl-kos">[</span>
@@ -1503,11 +1715,15 @@
       <span class="pl-kos">}</span><span class="pl-kos">,</span>
     <span class="pl-kos">]</span><span class="pl-kos">,</span>
   <span class="pl-kos">}</span><span class="pl-kos">,</span>
-<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-</details>
-<details>
-<summary>A more simple example</summary>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">MenuBar</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">wrapper</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
+<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+          </div>
+        </details>
+        <details>
+          <summary>A more simple example</summary>
+          <div class="highlight highlight-source-js" dir="auto">
+            <pre
+              class="notranslate"
+            ><span class="pl-v">MenuBar</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">wrapper</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
   <span class="pl-kos">{</span>
     <span class="pl-c1">item</span>: <span class="pl-s">"File"</span><span class="pl-kos">,</span>
     <span class="pl-c1">items</span>: <span class="pl-kos">[</span>
@@ -1583,14 +1799,30 @@
       <span class="pl-kos">}</span><span class="pl-kos">,</span>
     <span class="pl-kos">]</span><span class="pl-kos">,</span>
   <span class="pl-kos">}</span><span class="pl-kos">,</span>
-<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-</details>
-<h3 dir="auto">SelectList</h3>
-<p dir="auto"><code class="notranslate">buttonList: (wrapper, buttons)</code></p>
-<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/selectList_row.png"><img src="./images/selectList_row.png" alt="Select buttons" style="max-width: 100%;"></a></p>
-<details>
-<summary>View code</summary>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-v">SelectList</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"SelectList"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+          </div>
+        </details>
+        <h3 dir="auto">SelectList</h3>
+        <p dir="auto">
+          <code class="notranslate">buttonList: (wrapper, buttons)</code>
+        </p>
+        <p dir="auto">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="./images/selectList_row.png"
+            ><img
+              src="./images/selectList_row.png"
+              alt="Select buttons"
+              style="max-width: 100%"
+          /></a>
+        </p>
+        <details>
+          <summary>View code</summary>
+          <div class="highlight highlight-source-js" dir="auto">
+            <pre
+              class="notranslate"
+            ><span class="pl-k">const</span> <span class="pl-v">SelectList</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"SelectList"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
 
 <span class="pl-c">// . . .</span>
 
@@ -1604,13 +1836,29 @@
     <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Modal</span><span class="pl-kos">.</span><span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Option 2 clicked!"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
   <span class="pl-kos">}</span><span class="pl-kos">,</span>
   <span class="pl-c">// ...</span>
-<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-</details>
-<p dir="auto"><code class="notranslate">table: (wrapper, buttons)</code></p>
-<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/selectList_table.png"><img src="./images/selectList_table.png" alt="Select buttons" style="max-width: 100%;"></a></p>
-<details>
-<summary>View code</summary>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-v">SelectList</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"SelectList"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+          </div>
+        </details>
+        <p dir="auto">
+          <code class="notranslate">table: (wrapper, buttons)</code>
+        </p>
+        <p dir="auto">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="./images/selectList_table.png"
+            ><img
+              src="./images/selectList_table.png"
+              alt="Select buttons"
+              style="max-width: 100%"
+          /></a>
+        </p>
+        <details>
+          <summary>View code</summary>
+          <div class="highlight highlight-source-js" dir="auto">
+            <pre
+              class="notranslate"
+            ><span class="pl-k">const</span> <span class="pl-v">SelectList</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"SelectList"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
 
 <span class="pl-c">// . . .</span>
 
@@ -1624,14 +1872,25 @@
     <span class="pl-en">onclick</span>: <span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-c1">=&gt;</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Modal</span><span class="pl-kos">.</span><span class="pl-en">alert</span><span class="pl-kos">(</span><span class="pl-s">"Option 2 clicked!"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
   <span class="pl-kos">}</span><span class="pl-kos">,</span>
   <span class="pl-c">// ...</span>
-<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-</details>
-<h3 dir="auto">Sidebar</h3>
-<p dir="auto"><code class="notranslate">new(wrapper, buttons)</code></p>
-<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/sidebar.png"><img src="./images/sidebar.png" alt="" style="max-width: 100%;"></a></p>
-<details>
-<summary>View code</summary>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-v">Sidebar</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"Sidebar"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+          </div>
+        </details>
+        <h3 dir="auto">Sidebar</h3>
+        <p dir="auto"><code class="notranslate">new(wrapper, buttons)</code></p>
+        <p dir="auto">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="./images/sidebar.png"
+            ><img src="./images/sidebar.png" alt="" style="max-width: 100%"
+          /></a>
+        </p>
+        <details>
+          <summary>View code</summary>
+          <div class="highlight highlight-source-js" dir="auto">
+            <pre
+              class="notranslate"
+            ><span class="pl-k">const</span> <span class="pl-v">Sidebar</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"Sidebar"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
 
 <span class="pl-v">Sidebar</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">sidebarWrapper</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
   <span class="pl-kos">{</span>
@@ -1662,14 +1921,25 @@
     <span class="pl-c1">html</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-c1">icons</span><span class="pl-kos">.</span><span class="pl-c1">help</span><span class="pl-kos">,</span>
     <span class="pl-c1">title</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"appHelp"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
   <span class="pl-kos">}</span><span class="pl-kos">,</span>
-<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-</details>
-<h3 dir="auto">TextSidebar</h3>
-<p dir="auto"><code class="notranslate">new(wrapper, buttons)</code></p>
-<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/textSidebar.png"><img src="./images/textSidebar.png" alt="" style="max-width: 100%;"></a></p>
-<details>
-<summary>View code</summary>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-v">TextSidebar</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">wrapper</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
+<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+          </div>
+        </details>
+        <h3 dir="auto">TextSidebar</h3>
+        <p dir="auto"><code class="notranslate">new(wrapper, buttons)</code></p>
+        <p dir="auto">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="./images/textSidebar.png"
+            ><img src="./images/textSidebar.png" alt="" style="max-width: 100%"
+          /></a>
+        </p>
+        <details>
+          <summary>View code</summary>
+          <div class="highlight highlight-source-js" dir="auto">
+            <pre
+              class="notranslate"
+            ><span class="pl-v">TextSidebar</span><span class="pl-kos">.</span><span class="pl-en">new</span><span class="pl-kos">(</span><span class="pl-s1">wrapper</span><span class="pl-kos">,</span> <span class="pl-kos">[</span>
   <span class="pl-kos">{</span>
     <span class="pl-c1">icon</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-c1">icons</span><span class="pl-kos">.</span><span class="pl-c1">cpu</span><span class="pl-kos">,</span>
     <span class="pl-c1">text</span>: <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">getString</span><span class="pl-kos">(</span><span class="pl-s">"system"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
@@ -1718,19 +1988,34 @@
       <span class="pl-s1">pages</span><span class="pl-kos">.</span><span class="pl-en">security</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
     <span class="pl-kos">}</span><span class="pl-kos">,</span>
   <span class="pl-kos">}</span><span class="pl-kos">,</span>
-<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-</details>
-<h3 dir="auto">Tooltip</h3>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">new</span> <span class="pl-kos">(</span><span class="pl-kos">(</span><span class="pl-s1">posX</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
+<span class="pl-kos">]</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+          </div>
+        </details>
+        <h3 dir="auto">Tooltip</h3>
+        <div class="highlight highlight-source-js" dir="auto">
+          <pre
+            class="notranslate"
+          ><span class="pl-k">new</span> <span class="pl-kos">(</span><span class="pl-kos">(</span><span class="pl-s1">posX</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
 <span class="pl-kos">(</span><span class="pl-s1">posY</span> <span class="pl-c1">=</span> <span class="pl-c1">0</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
 <span class="pl-kos">(</span><span class="pl-s1">text</span> <span class="pl-c1">=</span> <span class="pl-s">"Action"</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
 <span class="pl-kos">(</span><span class="pl-s1">parent</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-c1">body</span><span class="pl-kos">)</span><span class="pl-kos">,</span>
-<span class="pl-kos">(</span><span class="pl-s1">isAbsolute</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-<p dir="auto">Example</p>
-<p dir="auto"><a target="_blank" rel="noopener noreferrer" href="./images/tooltip.png"><img src="./images/tooltip.png" alt="" style="max-width: 100%;"></a></p>
-<details>
-<summary>View code</summary>
-<div class="highlight highlight-source-js" dir="auto"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-v">Tooltip</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"Tooltip"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">(</span><span class="pl-s1">isAbsolute</span> <span class="pl-c1">=</span> <span class="pl-c1">true</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+        </div>
+        <p dir="auto">Example</p>
+        <p dir="auto">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="./images/tooltip.png"
+            ><img src="./images/tooltip.png" alt="" style="max-width: 100%"
+          /></a>
+        </p>
+        <details>
+          <summary>View code</summary>
+          <div class="highlight highlight-source-js" dir="auto">
+            <pre
+              class="notranslate"
+            ><span class="pl-k">const</span> <span class="pl-v">Tooltip</span> <span class="pl-c1">=</span> <span class="pl-k">await</span> <span class="pl-v">Root</span><span class="pl-kos">.</span><span class="pl-c1">Lib</span><span class="pl-kos">.</span><span class="pl-en">loadComponent</span><span class="pl-kos">(</span><span class="pl-s">"Tooltip"</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
 
 <span class="pl-k">const</span> <span class="pl-s1">bcr</span> <span class="pl-c1">=</span> <span class="pl-s1">button</span><span class="pl-kos">.</span><span class="pl-c1">elm</span><span class="pl-kos">.</span><span class="pl-en">getBoundingClientRect</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
 
@@ -1740,8 +2025,10 @@
   <span class="pl-s">"Example"</span><span class="pl-kos">,</span>
   <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-c1">body</span><span class="pl-kos">,</span>
   <span class="pl-c1">true</span>
-<span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
-</details></div>
+<span class="pl-kos">)</span><span class="pl-kos">;</span></pre>
+          </div>
+        </details>
+      </div>
     </div>
 
     <script>
