@@ -67,6 +67,15 @@ export default {
         'Mag-import ng mga larawan sa folder na "Mga Larawan" sa File Manager upang maipakita ang mga ito.',
       pageOverview: "Gallery",
     },
+    en_GB: {
+      imageLoadError: "Bu bir resim gibi görünmüyor",
+      backToOverview: "Galeriye Dön",
+      noPictures: "Resim bulunamadı",
+      noPicturesTitle: "Hiç resminiz yok",
+      noPicturesDescription:
+        '"Resimler" klasörüne fotoğraflar ekleyin ve bunların görünmesini sağlamak için Dosya Yöneticisi\'nde yer almasını sağlayın.',
+      pageOverview: "Galeri",
+    },
   },
   exec: async function (Root) {
     let wrapper;

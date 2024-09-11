@@ -720,6 +720,7 @@
       "es_ES",
       "pt_BR",
       "fil_PH",
+      "tr_TR",
     ];
 
     let language = "en_US";

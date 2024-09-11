@@ -61,6 +61,14 @@ export default {
       input_appId: "App ID (apps:...)",
       endProcess: "I-tigil ang Task",
     },
+    tr_TR: {
+      table_type: "Tür",
+      table_appId: "Uygulama ID",
+      table_details: "Ayrıntılar",
+      table_pid: "PID",
+      input_appId: "Uygulama ID (apps:...)",
+      endProcess: "Görevi Sonlandır",
+    },
   },
   exec: async function (Root) {
     let wrapper; // Lib.html | undefined
