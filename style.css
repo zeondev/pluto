@@ -2912,3 +2912,11 @@ hr {
 .calc-row * {
   width: 100%;
 }
+
+.desktop.welcome-mode * {
+  display: none;
+}
+
+.desktop.welcome-mode .bg {
+  display: inherit !important;
+}

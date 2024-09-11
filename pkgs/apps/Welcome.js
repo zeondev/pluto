@@ -142,11 +142,21 @@ export default {
       },
     });
 
-    Root.Lib.setOnEnd((_) => MyWindow.close());
+    Root.Lib.setOnEnd((_) => {
+      MyWindow.window.parentElement.parentElement
+        .querySelector(".desktop")
+        .classList.remove("welcome-mode");
+      MyWindow.close();
+    });
 
     wrapper = MyWindow.window.querySelector(".win-content");
+    console.log("HERE", MyWindow);
 
     wrapper.classList.add("col", "o-h");
+
+    MyWindow.window.parentElement.parentElement
+      .querySelector(".desktop")
+      .classList.add("welcome-mode");
 
     const Html = Root.Lib.html;
 

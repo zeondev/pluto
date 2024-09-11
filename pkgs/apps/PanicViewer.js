@@ -13,7 +13,7 @@ export default {
 
     MyWindow = new Win({
       title: "Panic Viewer",
-      content: "Hello",
+      content: "",
       pid: Root.PID,
       width: 480,
       height: 480,

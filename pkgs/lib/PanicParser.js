@@ -3,8 +3,8 @@ let C = {};
 let vfs = {};
 
 export default {
-  name: "Code Scanner",
-  description: "Scans application files for dangerous code.",
+  name: "Panic Parser",
+  description: "Scans for panic files in the Pluto panics folder",
   ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "library",
   init: async (l, c) => {

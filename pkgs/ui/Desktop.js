@@ -46,6 +46,7 @@ export default {
     }
 
     let background = new Html()
+      .class("bg")
       .style({
         "background-image": "url(" + wallpaper + ")",
         "background-size": "cover",
