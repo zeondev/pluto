@@ -98,6 +98,18 @@ export default {
         "Gusto mo bang matuto ng mga iba't ibang keyboard shortcuts?",
       appHelp_string4: "Ito ay mga keyboard shortcuts:",
     },
+    tr_TR: {
+      action_zoomOut: "Uzaklaştır",
+      action_zoomIn: "Yakınlaştır",
+      action_format: "Biçimlendir",
+      action_runApp: "Uygulamayı Başlat",
+      appHelp_string1:
+        "DevEnv'e hoş geldiniz. Bu, Pluto'da uygulama geliştirmek için bir geliştirici ortamıdır.",
+      appHelp_string2:
+        "Uygulamadaki çeşitli eylemleri gerçekleştirmek için yan menüdeki düğmeleri kullanabilirsiniz.\nFarklı klavye kısayolları da mevcuttur.",
+      appHelp_string3: "Farklı klavye kısayollarını öğrenmek ister misiniz?",
+      appHelp_string4: "İşte klavye kısayolları:",
+    },
   },
   ver: "v1.6.2", // Supports minimum Core version of v1.6.2
   type: "process",
