@@ -141,6 +141,15 @@ const verbs = [
     verb: "see ya",
     action: "bye",
   },
+  {
+    verb: "sleep well",
+    action: "bye",
+  },
+  { verb: "night", action: "bye" },
+  {
+    verb: "good night",
+    action: "bye",
+  },
 
   {
     verb: "logout",

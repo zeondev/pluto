@@ -81,6 +81,7 @@ export default {
     systemApp_Terminal: "Terminal",
     systemApp_Calculator: "Calculator",
     systemApp_EventViewer: "Event Viewer",
+    systemApp_Camera: "Camera",
     lockScreen: "Lock Screen",
     lockScreenSelectMethod: "Choose a way to log in.",
     logoutSession: "Logout",
@@ -190,6 +191,7 @@ export default {
     systemApp_Weather: "Meteorologisch",
     systemApp_Terminal: "Terminal",
     systemApp_Calculator: "Calculator",
+    systemApp_Camera: "Kamera",
   },
   es_ES: {
     plutoName: "Pluto",
@@ -257,6 +259,7 @@ export default {
     systemApp_Weather: "Meteorológica",
     systemApp_Terminal: "Terminal",
     systemApp_Calculator: "Calculadora",
+    systemApp_Camera: "Cámara",
   },
   pt_BR: {
     plutoName: "Pluto",
@@ -321,6 +324,7 @@ export default {
     systemApp_Weather: "Meteorológico",
     systemApp_Terminal: "Terminal",
     systemApp_Calculator: "Calculadora",
+    systemApp_Camera: "Câmera",
   },
   fil_PH: {
     plutoName: "Pluto",
@@ -395,5 +399,6 @@ export default {
     systemApp_Weather: "Weather",
     systemApp_Terminal: "Terminal",
     systemApp_Calculator: "Calculator",
+    systemApp_Camera: "Camera",
   },
 };

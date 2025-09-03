@@ -91,6 +91,12 @@ export default {
         icon: "monitor",
         fullName: "apps:EventViewer",
       },
+      {
+        localizedName: "systemApp_Camera",
+        name: "Camera",
+        icon: "camera",
+        fullName: "apps:Camera",
+      },
     ];
     console.log(shortcutsList.length);
     for (let i = 0; i < shortcutsList.length; i++) {

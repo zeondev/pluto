@@ -438,6 +438,10 @@ export default {
       close() {
         return new Promise((res, _rej) => {
           this.window.classList.add("closing");
+          core.windowsList = core.windowsList
+            .filter((n) => n !== null)
+            .filter((a) => a.options.pid !== this.options.pid);
+
           setTimeout(() => {
             this.window.remove();
             res(true);
