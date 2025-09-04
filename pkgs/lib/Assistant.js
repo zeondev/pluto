@@ -201,7 +201,7 @@ const verbs = [
   },
 ];
 
-const Fuse = (await import("../../assets/fuse.mjs")).default;
+const Fuse = (await import("../../assets/fuse.js")).default;
 
 async function parseString(str, apps) {
   const string = str.toLowerCase().split(" ");
